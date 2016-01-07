@@ -18,7 +18,7 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please submit them back for inclusion.
 
-Contribution
+==Contribution==
 
 We appreciate all contributions. If you want to contribute then here are a few guidelines:
 
@@ -36,7 +36,7 @@ The basic principles of contributing using github are:
 
 If you have any questions or queries then please contact via http://www.flipwebapps.com/contact/
 
-License
+==License==
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please submit them back for inclusion.
 
