@@ -1,4 +1,6 @@
-# GameFramework
+# Work in Progress. Check back 01.02.2016
+
+# Game Framework
 FWA Game Framework is a free, community supported open source framework that will help drastically increase development speed and feature set of Unity games. The aim is to provide the features most games need in a flexible manner with a minimum of coding
 
 Features include:
@@ -18,14 +20,14 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please submit them back for inclusion.
 
-==Contribution==
+## Contribution
 
 We appreciate all contributions. If you want to contribute then here are a few guidelines:
 
 * If you want to add a feature, post an issue about it first. Some features are intentionally left out, others may already be in the works, or I may have some advice on how I think it should be done.
 * If you want to do a bug fix, it might not be a bad idea to post about it too. I've had the same bug fixed by multiple people at the same time before.
 * Pull requests should have a single commit. If you have multiple commits, squash them into a single commit before requesting a pull.
-* Try and follow the code styling already in place. If you have ReSharper this is broadly based upon the default settings.
+* Try and follow the code styling already in place.
 
 The basic principles of contributing using github are:
 * Fork the codebase
@@ -36,7 +38,7 @@ The basic principles of contributing using github are:
 
 If you have any questions or queries then please contact via http://www.flipwebapps.com/contact/
 
-==License==
+## License
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please submit them back for inclusion.
 
