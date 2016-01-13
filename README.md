@@ -18,14 +18,24 @@ Features include:
 * Debugging and test functions
 * Many helper classes and components from Animation through UI
 
-The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please submit them back for inclusion.
+The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
+
+## Help and Tutorials
+We are gradually adding tutorials and more help to [our website](http://www.flipwebapps.com/game-framework/)
+
+We have also created a package on the [Unity Asset Store](http://u3d.as/mtk) that includes the framework code and also additional samples and tutorials that show you how to get the most out of the framework. Please consider supporting our efforts by downloading this.
+
+## Background
+While developing games, we have slowly built up our own internal framework that lets us quickly and easily create and release new games. It is our wish to contribute and make this available to the community to help others. It is freely available so even those with little or no budget can use it. We appreciate however if you are able to download and rate the [Asset Store Package](http://u3d.as/mtk) to help support the effort needed to maintain this framework.
+
+If you have any questions then please [Contact Us](http://www.flipwebapps.com/contact/)
 
 ## Contribution
 
 We appreciate all contributions. If you want to contribute then here are a few guidelines:
 
 * If you want to add a feature, post an issue about it first. Some features are intentionally left out, others may already be in the works, or I may have some advice on how I think it should be done.
-* If you want to do a bug fix, it might not be a bad idea to post about it too. I've had the same bug fixed by multiple people at the same time before.
+* If you want to do a bug fix, please post about it too incase others are already working on it.
 * Pull requests should have a single commit. If you have multiple commits, squash them into a single commit before requesting a pull.
 * Try and follow the code styling already in place.
 
@@ -36,7 +46,7 @@ The basic principles of contributing using github are:
 * Push to the branch
 * Open a pull request.
 
-If you have any questions or queries then please contact via http://www.flipwebapps.com/contact/
+If you have any questions or queries then please contact us via http://www.flipwebapps.com/contact/
 
 ## License
 
