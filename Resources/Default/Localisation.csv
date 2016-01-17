@@ -1,0 +1,80 @@
+KEY,English,Other
+Advertising.UnityAds.WatchForCoins.Button,Free Coins,x
+Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,
+Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,
+Advertising.UnityAds.UnableToShow,"Unable to load adverts!
+Please try again later.",
+Billing.NotInitialised,Billing not accessible. Please check settings and try again later.,x
+Billing.NotAvailable,"Unable to purchase.
+
+Either the item is not found or is not currently available for purchase.
+
+Please try again later.",x
+Billing.RestoreSucceeded,Purchases have been restored.,x
+Billing.RestoreFailed,Unable to restore purchases.,x
+Facebook.Logout,Logout,x
+Facebook.Reconnect,Reconnect,x
+Facebook.Connect,"Facebook
+Connect",x
+Facebook.Connecting,Connecting…,x
+Facebook.Share.Caption,Come play the new hit game,x
+Facebook.Share.Description,Try out {0},x
+Facebook.Invite.Caption,{0} is great! Check it out.,x
+Facebook.Invite.Description,Join me and play Space Minesweeper!,x
+Facebook.Error.Login.Description,"We were unable to log into Facebook and will continue in offline mode.
+Try connecting again later.",x
+FreePrize,Free Prize,x
+FreePrize.NewPrize,New prize in {0:D2}:{1:D2}:{2:D2},x
+FreePrize.Title,FREE PRIZE,x
+FreePrize.Text1,You won {0} coins,x
+FreePrize.Text2,New prize available soon.,x
+GameFeedback.FeedbackTitle,Feedback,x
+GameFeedback.RateTitle,Rate us!,x
+GameFeedback.RateThanks,Thank you for any positive feedback and for rating our app!,x
+GameFeedback.Unsure,Are you enjoying '{0}'?,x
+GameFeedback.Unsure.No,We're sorry that you don't like our game. Please leave your comments and suggestions on our support site at www.flipwebapps.com so we can improve.,x
+GameFeedback.AssumeLike,"Thanks you for choosing to rate '{0}'.
+Your support is much appreciated.",x
+GameFeedback.AssumeLikeOptionalAndroid,"We hope that you like '{0}'.
+
+It'd be really helpful if you rated us in the Play store.
+Many thanks for your support.",x
+GameFeedback.AssumeLikeOptionaliOS,"We hope that you like '{0}'.
+
+It'd be really helpful if you rated us in the App store.
+Many thanks for your support.",x
+GeneralMessage.Ok,Ok,x
+GeneralMessage.Cancel,Cancel,x
+GeneralMessage.Error.Title,Error,x
+GeneralMessage.Info.Title,Info,x
+GeneralMessage.Error.GeneralError,An error occurred: {0},x
+GameOver.Title,GAME OVER,x
+GameOver.Won,CONGRATULATIONS,x
+GameOver.Lost,YOU LOST,x
+GameOver.Achievement,x,x
+GameOver.HighScoreText,x,x
+GameOver.Time,Time,x
+GameOver.Coins,Coins,x
+GameOver.TargetCoins,Get {0} more coins to unlock a new level,x
+GameOver.TargetCoinsGot,New level available,x
+GameOver.FacebookPost,"Facebook",x
+GameOver.Rate,Rate,x
+GameOver.Retry,Retry,x
+GameOver.Continue,Continue,x
+Settings.Title,Settings,x
+Settings.Music,MUSIC,x
+Settings.FX,FX,x
+Settings.RestorePurchases,Restore Purchases,x
+P0.Name,Player 1,x
+Level.Buy.Title,BUY,x
+Level.Buy.Text1,Purchase this level?,x
+Level.Buy.Text2,You can also collect coins to unlock,x
+Level.Buy.NotEnabled,Collect coins to unlock this level,
+Level.Unlock,Unlock,x
+Level.Unlock.Title,UNLOCK LEVEL,x
+Level.Unlock.New.Text1,"Congratulations!
+New level Unlocked",x
+Level.Unlock.New.Text2,Collect more coins to unlock others.,x
+Level.Unlock.Existing.Text1,"Bad Luck!
+Level Already Unlocked.",x
+Level.Unlock.Existing.Text2,Collect more coins to try again.,x
