@@ -1,0 +1,182 @@
+﻿//----------------------------------------------
+// Flip Web Apps: Game Framework
+// Copyright © 2016 Flip Web Apps / Mark Hewitt
+//----------------------------------------------
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using UnityEngine;
+using UnityEngine.Networking;
+
+namespace FlipWebApps.GameFramework.Scripts.Networking
+{
+    /// <summary>
+    /// 
+    /// NOTE: This class is beta and subject to changebreaking change without warning.
+    /// </summary>
+    public class NetworkPlayManager : Singleton<NetworkPlayManager>
+    {
+        public NetworkDiscovery NetworkDiscovery;
+        public Dictionary<string, NetworkGame> NetworkDiscoveryServers;
+
+        public Action<string, string> OnReceivedBroadcast;
+        public Action OnServerListChanged;
+        public Action OnClientConnect;
+        public Action OnServerConnect;
+        public Action OnClientDisconnect;
+        public Action OnServerDisconnect;
+
+        public NetworkClient Client;
+
+        protected override void GameSetup()
+        {
+            NetworkDiscoveryServers = new Dictionary<string, NetworkGame>(5);
+
+            OnReceivedBroadcast += _OnReceivedBroadcast;
+        }
+
+
+        protected override void GameDestroy()
+        {
+            OnReceivedBroadcast -= _OnReceivedBroadcast;
+        }
+
+        //
+        // GENERIC FUNCTIONS
+        //
+        public void StopNetworking()
+        {
+            HostGameStop();
+            JoinGameStop();
+            StopGameDiscovery();
+        }
+
+        void StopGameDiscovery()
+        {
+            if (NetworkDiscovery.running)
+            {
+                NetworkDiscovery.StopBroadcast();
+            }
+        }
+
+        //
+        // HOSTING OF A GAME
+        //
+        public bool HostGame()
+        {
+            StartHost();
+            //UnityEngine.Networking.NetworkManager.singleton.StartServer();
+
+            if (NetworkDiscovery.Initialize())
+            {
+                if (NetworkDiscovery.StartAsServer())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public NetworkClient StartHost()
+        {
+            Client = UnityEngine.Networking.NetworkManager.singleton.StartHost();
+            return Client;
+        }
+
+        public void HostGameStop()
+        {
+            StopGameDiscovery();
+            UnityEngine.Networking.NetworkManager.singleton.StopHost();
+        }
+
+
+        //
+        // JOINING A GAME
+        //
+        public bool JoinGame()
+        {
+            NetworkDiscoveryServers.Clear();
+
+            try
+            {
+                if (NetworkDiscovery.Initialize())
+                {
+                    if (NetworkDiscovery.StartAsClient())
+                    {
+                        StartCoroutine(RefreshServers());
+                        return true;
+                    }
+                }
+            }
+            catch (Exception) { }
+            return false;
+        }
+
+        public void JoinGameStop()
+        {
+            StopGameDiscovery();
+            UnityEngine.Networking.NetworkManager.singleton.StopClient();
+        }
+
+        public void StartClient(string address)
+        {
+            if (UnityEngine.Networking.NetworkManager.singleton != null && UnityEngine.Networking.NetworkManager.singleton.client == null)
+            {
+                UnityEngine.Networking.NetworkManager.singleton.networkAddress = address;
+                //UnityEngine.Networking.NetworkManager.singleton.networkPort = Convert.ToInt32(items[2]);
+                Client = UnityEngine.Networking.NetworkManager.singleton.StartClient();
+            }
+        }
+
+        IEnumerator RefreshServers()
+        {
+            do
+            {
+                bool itemsRemoved = false;
+                Dictionary<string, NetworkGame> updatedServers = new Dictionary<string, NetworkGame>(5);
+                foreach (KeyValuePair<string, NetworkGame> networkGame in Instance.NetworkDiscoveryServers)
+                {
+                    if (networkGame.Value.LastDetected.AddSeconds(2) > DateTime.Now)
+                        updatedServers.Add(networkGame.Key, networkGame.Value);
+                    else
+                        itemsRemoved = true;
+                }
+                NetworkDiscoveryServers = updatedServers;
+                if (itemsRemoved && OnServerListChanged != null)
+                    OnServerListChanged();
+
+                yield return new WaitForSeconds(1);
+            } while (NetworkDiscovery.running);
+        }
+
+        void _OnReceivedBroadcast(string fromAddress, string data)
+        {
+            //       base.OnReceivedBroadcast(fromAddress, data);
+            //MyDebug.LogF("Received Join Game From: {0} ({1}).", fromAddress, data);
+
+            // add to the list of possible servers.
+            NetworkGame networkGame;
+            if (NetworkDiscoveryServers.TryGetValue(fromAddress, out networkGame))
+            {
+                networkGame.LastDetected = DateTime.Now;
+            }
+            else
+            {
+                NetworkDiscoveryServers.Add(fromAddress, new NetworkGame { Address = fromAddress, Name = data, LastDetected = DateTime.Now });
+
+                if (OnServerListChanged != null)
+                    OnServerListChanged();
+            }
+        }
+
+        public class NetworkGame
+        {
+            public string Address;
+            public string Name;
+            public DateTime LastDetected;
+        }
+    }
+}
