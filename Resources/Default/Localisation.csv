@@ -43,7 +43,7 @@ GameFeedback.AssumeLikeOptionaliOS,"We hope that you like '{0}'.
 
 It'd be really helpful if you rated us in the App store.
 Many thanks for your support.",x
-GeneralMessage.Ok,Ok,x
+GeneralMessage.Ok,OK,x
 GeneralMessage.Cancel,Cancel,x
 GeneralMessage.Error.Title,Error,x
 GeneralMessage.Info.Title,Info,x
@@ -52,9 +52,12 @@ GameOver.Title,GAME OVER,x
 GameOver.Won,CONGRATULATIONS,x
 GameOver.Lost,YOU LOST,x
 GameOver.Achievement,x,x
-GameOver.HighScoreText,x,x
 GameOver.Time,Time,x
 GameOver.Coins,Coins,x
+GameOver.Score,Score,
+GameOver.ScoreResult,{0},
+GameOver.HighScoreText,x,x
+GameOver.NewHighScore,New High Score,x
 GameOver.TargetCoins,Get {0} more coins to unlock a new level,x
 GameOver.TargetCoinsGot,New level available,x
 GameOver.FacebookPost,"Facebook",x

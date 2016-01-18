@@ -119,8 +119,8 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                 {
                     foreach (var level in GameManager.Instance.Levels.Items)
                     {
-                        level.IsUnlocked = true;
-                        level.IsUnlockedAnimationShown = true;
+                        level.IsUnlocked = false;
+                        level.IsUnlockedAnimationShown = false;
                         level.UpdatePlayerPrefs();
                     }
                 }

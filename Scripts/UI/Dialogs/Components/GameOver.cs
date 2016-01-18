@@ -69,10 +69,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(gameObject, "StarWon", true), newStarsWon != 0);
 
             //show high score
-            string distanceText = LocaliseText.Format(LocalisationBase + ".HighScoreText", currentLevel.Score.ToString());
+            string distanceText = LocaliseText.Format(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString());
             if (currentLevel.HighScore > currentLevel.OldHighScore)
                 distanceText += "\n" + LocaliseText.Get(LocalisationBase + ".NewHighScore");
-            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "HighScoreResult", distanceText, true);
+            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "ScoreResult", distanceText, true);
 
             // set time
             TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;

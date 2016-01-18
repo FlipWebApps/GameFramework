@@ -55,7 +55,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             int minimumCoinsToOpenLevel = GetGameItemsManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
             bool canUnlock = minimumCoinsToOpenLevel != -1 && minimumCoinsToOpenLevel == 0;
             _button.interactable = canUnlock;
-            _animation.enabled = canUnlock;
+            if (_animation != null)
+                _animation.enabled = canUnlock;
         }
 
         protected abstract GameItemsManager<T, GameItem> GetGameItemsManager();
