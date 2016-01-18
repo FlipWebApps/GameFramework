@@ -14,19 +14,19 @@ namespace FlipWebApps.GameFramework.Scripts.Editor {
 
     public class FlipWebApps : MonoBehaviour {
 
-        [MenuItem("Window/Flip Web Apps/Homepage")]
+        [MenuItem("Window/Flip Web Apps/Homepage", false, 1100)]
         static void ShowHomepage()
-        {
+        { 
             Process.Start(@"http://www.flipwebapps.com/");
         }
 
-        [MenuItem("Window/Flip Web Apps/Documentation")]
+        [MenuItem("Window/Flip Web Apps/Documentation", false, 1101)]
         static void ShowDocumentation()
         {
             Process.Start(@"http://www.flipwebapps.com/game-framework/");
         }
 
-        [MenuItem("Window/Flip Web Apps/Contact")]
+        [MenuItem("Window/Flip Web Apps/Contact", false, 1101)]
         static void ShowContact()
         {
             Process.Start(@"http://www.flipwebapps.com/contact/");

@@ -191,6 +191,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             }
         }
 
+        public void RemovePoint()
+        {
+            RemovePoints(1);
+        }
+
+        public void RemovePoints(int points)
+        {
+            Score -= points;
+            Score = Mathf.Max(Score, 0);
+        }
+
         public void AddCoin()
         {
             AddCoins(1);
