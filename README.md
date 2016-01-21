@@ -18,17 +18,20 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
-## Help and Tutorials
-We are gradually adding tutorials and more help to [our website](http://www.flipwebapps.com/game-framework/)
+* [Download Current Release](https://github.com/FlipWebApps/GameFramework/releases)
+* [Documentation and Tutorials](http://www.flipwebapps.com/game-framework/)
 
-We have also created a package on the [Unity Asset Store](http://u3d.as/mtk) that includes the framework code and also additional samples and tutorials that show you how to get the most out of the framework. Please consider supporting our efforts by downloading this.
+## Your Support
+We have created a package on the [Unity Asset Store](http://u3d.as/mtk) that includes the same framework code, but also additional samples, tutorial files, themes and other content that show you how to get the most out of the framework. Please consider supporting our efforts by downloading this.
+
+* [Download from Unity Asset Store](https://www.assetstore.unity3d.com/#!/content/50893)
 
 ## Background
 While developing games, we have slowly built up our own internal framework that lets us quickly and easily create and release new games. It is our wish to contribute and make this available to the community to help others. It is freely available so even those with little or no budget can use it. We appreciate however if you are able to download and rate the [Asset Store Package](http://u3d.as/mtk) to help support the effort needed to maintain this framework.
 
-If you have any questions then please [Contact Us](http://www.flipwebapps.com/contact/)
+If you have any questions then please [contact Us](http://www.flipwebapps.com/contact/).
 
-## Contribution
+## Your Submissions
 
 We appreciate all contributions. If you want to contribute then here are a few guidelines:
 
@@ -44,7 +47,7 @@ The basic principles of contributing using github are:
 * Push to the branch
 * Open a pull request.
 
-If you have any questions or queries then please contact us via http://www.flipwebapps.com/contact/
+If you have any questions or queries then please  [contact Us](http://www.flipwebapps.com/contact/).
 
 ## License
 
