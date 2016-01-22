@@ -1,8 +1,12 @@
 fileFormatVersion: 2
 guid: 9c3276d4e98e5be49bc668475dfb830e
+labels:
+- FreePrize
 MonoImporter:
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,8 +1,12 @@
 fileFormatVersion: 2
 guid: 3d061a03e02dc5f4cb75bf05a31a2156
+labels:
+- Facebook
 MonoImporter:
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

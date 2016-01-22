@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 932351cd6d1cabb4683faa926ece6514
+labels:
+- UI
 folderAsset: yes
 timeCreated: 1450806848
 licenseType: Free

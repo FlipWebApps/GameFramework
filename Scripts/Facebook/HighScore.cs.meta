@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: cdd1576b6e5b2a044989c971f4314c0a
+labels:
+- Facebook
 timeCreated: 1444396112
 licenseType: Free
 MonoImporter:
