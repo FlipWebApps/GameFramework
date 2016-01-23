@@ -3,6 +3,7 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
+using System;
 using FlipWebApps.GameFramework.Scripts.Display.Other;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Localisation;
@@ -35,7 +36,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public GameObject DialogGameObject { get; set; }
         public GameObject Content { get; set; }
-        public GameObject ContentItem { get; set; }
+        public Animator ContentAnimator { get; set; }
+        public GameObject CustomContentItem { get; set; }
         public bool IsShown { get; set; }
 
         public enum DialogResultType
@@ -70,6 +72,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             Assert.IsNotNull(GetComponent<Animator>(), "A DialogInstance component must always have an attached Animator");
 
             Content = GameObjectHelper.GetChildNamedGameObject(gameObject, "Content", true);
+            ContentAnimator = Content.GetComponent<Animator>();
             IsShown = false;
         }
 
@@ -135,27 +138,25 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                     childGameObject.SetActive(false);
             }
 
-            if (DialogButtons == DialogButtonsType.Ok)
+            switch (DialogButtons)
             {
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
-            }
-            else if (DialogButtons == DialogButtonsType.OkCancel)
-            {
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
-            }
-            else if (DialogButtons == DialogButtonsType.Cancel)
-            {
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
-            }
-            else if (DialogButtons == DialogButtonsType.YesNo)
-            {
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true).SetActive(true);
-                GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true).SetActive(true);
+                case DialogButtonsType.Ok:
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
+                    break;
+                case DialogButtonsType.OkCancel:
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
+                    break;
+                case DialogButtonsType.Cancel:
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
+                    break;
+                case DialogButtonsType.YesNo:
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true).SetActive(true);
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true).SetActive(true);
+                    break;
             }
 
-            StartCoroutine(CoRoutines.ShowPanel(gameObject, callback: ShowFinished,
-                    animationState: DisplayMode + "In"));
+            StartCoroutine(CoRoutines.ShowPanel(gameObject, callback: ShowFinished, animationState: DisplayMode + "In"));
         }
 
         public void ShowFinished()
@@ -201,8 +202,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Done()
         {
-            StartCoroutine(CoRoutines.HidePanel(gameObject, callback: DoneFinished,
-                    animationState: DisplayMode + "Out"));
+            if (ContentAnimator != null && ContentAnimator.runtimeAnimatorController != null)
+                ContentAnimator.Play("Done");
+
+            StartCoroutine(CoRoutines.HidePanel(gameObject, callback: DoneFinished, animationState: DisplayMode + "Out"));
         }
 
         public void DoneFinished()

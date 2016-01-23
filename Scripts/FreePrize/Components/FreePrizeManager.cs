@@ -4,13 +4,10 @@
 //----------------------------------------------
 
 using System;
-using System.Collections;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
@@ -18,13 +15,17 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     public class FreePrizeManager : SingletonPersistantSavedState<FreePrizeManager>
     {
         [Header("Time")]
-        public MinMax DelayRangeToNextCountdown = new MinMax() {Min= 0, Max = 0};       // default to no wait
-        public MinMax TimeRangeToNextPrize = new MinMax() { Min = 600, Max = 1800 };    // 10 minutes to 30 minutes
-        public float DialogShowButtonDelay;
+        public MinMax DelayRangeToNextCountdown = new MinMax {Min= 0, Max = 0};       // wait range before starting next countdown. 0 = no wait
+        public MinMax TimeRangeToNextPrize = new MinMax { Min = 600, Max = 1800 };    // countdown range to next prize. 10 minutes to 30 minutes
 
         [Header("Prize")]
-        public MinMax ValueRange = new MinMax() { Min = 10, Max = 20 };                // value detaults
+        public MinMax ValueRange = new MinMax { Min = 10, Max = 20 };                // value defaults
         public AudioClip PrizeDialogClosedAudioClip;
+
+        [Header("Display")]
+        public GameObject ContentPrefab;
+        public RuntimeAnimatorController ContentAnimatorController;
+        public bool ContentShowsButtons;
 
         public DateTime NextCountdownStart { get; set; }
         public DateTime NextFreePrizeAvailable { get; set; }
@@ -61,27 +62,16 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         {
             CurrentPrizeAmount = UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
 
-            CalculateNextCountdownStart();
-            CalculateNextFreePrizeAvailable();
+            NextCountdownStart = DateTime.UtcNow.AddSeconds(UnityEngine.Random.Range(DelayRangeToNextCountdown.Min, DelayRangeToNextCountdown.Max + 1));
+
+            NextFreePrizeAvailable = NextCountdownStart.AddSeconds(UnityEngine.Random.Range(TimeRangeToNextPrize.Min, TimeRangeToNextPrize.Max + 1));
 
             SaveState();
         }
 
-        void CalculateNextCountdownStart()
-        {
-            DateTime newCountdownStart = DateTime.UtcNow;
-            NextCountdownStart = newCountdownStart.AddSeconds(UnityEngine.Random.Range(DelayRangeToNextCountdown.Min, DelayRangeToNextCountdown.Max + 1));
-        }
-
-        void CalculateNextFreePrizeAvailable()
-        {
-            DateTime newPrizeDateTime = NextCountdownStart;
-            NextFreePrizeAvailable = newPrizeDateTime.AddSeconds(UnityEngine.Random.Range(TimeRangeToNextPrize.Min, TimeRangeToNextPrize.Max + 1));
-        }
-
         public bool IsCountingDown()
         {
-            return GetTimeToPrize().TotalSeconds > 0 && GetTimeToCountDown().TotalSeconds <= 0;
+            return GetTimeToPrize().TotalSeconds > 0 && GetTimeToCountdown().TotalSeconds <= 0;
         }
 
         public bool IsPrizeAvailable()
@@ -89,7 +79,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             return GetTimeToPrize().TotalSeconds <= 0;
         }
 
-        TimeSpan GetTimeToCountDown()
+        TimeSpan GetTimeToCountdown()
         {
             return NextCountdownStart.Subtract(DateTime.UtcNow);
         }
@@ -99,27 +89,16 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             return NextFreePrizeAvailable.Subtract(DateTime.UtcNow);
         }
 
-        //
-        // FOR FREE PRIZE THAT GIVES THE PLAYER COINS
-        //
-        public void ShowFreePrizeDialog(string prefab = null, string contentPrefab = "FreePrizePlaceHolder")
+        /// <summary>
+        /// Free prize dialog that giges the user coins. We default to the standard General Message window, adding any additional
+        /// content as setup in the FreePrizeManager configuration.
+        /// </summary>
+        public void ShowFreePrizeDialog()
         {
-            StartCoroutine(ShowFreePrizeCoRoutine(prefab, contentPrefab));
-        }
-
-        IEnumerator ShowFreePrizeCoRoutine(string prefab, string contentPrefab)
-        {
-            DialogInstance dialogInstance = DialogManager.Instance.Create(prefab, contentPrefab, 2);
-
+            var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController);
             string text = LocaliseText.Format("FreePrize.Text1", CurrentPrizeAmount);
-            UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "fpph_Text", text, true);
-            UIHelper.SetTextOnChildGameObjectLocalised(dialogInstance.Content, "fpph_Text2", "FreePrize.Text2", true);
 
-            dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), doneCallback: ShowFreePrizeDone);
-
-            yield return new WaitForSeconds(DialogShowButtonDelay);
-
-            GameObjectHelper.GetChildNamedGameObject(dialogInstance.gameObject, "OkButton", true).SetActive(true);
+            dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), text: text, text2Key: "FreePrize.Text2", doneCallback: ShowFreePrizeDone, dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
         }
 
         public virtual void ShowFreePrizeDone(DialogInstance dialogInstance)

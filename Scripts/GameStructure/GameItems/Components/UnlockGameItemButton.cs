@@ -68,7 +68,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
         IEnumerator UnlockCoRoutine()
         {
-            DialogInstance dialogInstance = DialogManager.Instance.Create(null, "UnlockLevelPlaceHolder");
+            var dialogInstance = DialogManager.Instance.Create(null, null, null, "UnlockLevelPlaceHolder");
 
             // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
             T[] gameItems;

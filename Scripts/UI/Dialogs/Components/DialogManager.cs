@@ -9,6 +9,7 @@ using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
@@ -16,6 +17,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     {
         public int Count;
         public Camera UiCamera;
+
         /// <summary>
         /// Use the dialog overrides for setting what prefabs should be used. We do this rather than loading from resources so that we don't
         /// unclude unnecessary assets.
@@ -28,7 +30,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public DialogPrefabOverride[] DialogContentPrefabOverrides =
         {
-            new DialogPrefabOverride { Path = "FreePrizePlaceHolder"},
             new DialogPrefabOverride { Path = "UnlockLevelPlaceHolder"}
         };
 
@@ -63,46 +64,88 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         }
 
 
-        public DialogInstance Create(string prefab = null)
+        /// <summary>
+        /// Create an instance of the given dialog prefab
+        /// </summary>
+        /// <param name="dialogPrefab"></param>
+        /// <returns></returns>
+        public DialogInstance Create(GameObject dialogPrefab = null)
         {
-            if (string.IsNullOrEmpty(prefab))
-                prefab = "GeneralMessage";
-            GameObject messageWindow = GetPrefab(prefab);
-            messageWindow.transform.SetParent(transform);
-            messageWindow.transform.localPosition = Vector3.zero;
+            if (dialogPrefab == null) dialogPrefab = GetPrefab("GeneralMessage");
 
-            Canvas canvas = messageWindow.GetComponent<Canvas>();
+            var dialogPrefabInstance = Instantiate(dialogPrefab);
+            dialogPrefabInstance.transform.SetParent(transform);
+            dialogPrefabInstance.transform.localPosition = Vector3.zero;
+
+            var canvas = dialogPrefabInstance.GetComponentInChildren<Canvas>(true);
             if (canvas != null)
                 canvas.worldCamera = UiCamera;
 
-            DialogInstance generalMessage = messageWindow.GetComponent<DialogInstance>();
-            return generalMessage;
+            return dialogPrefabInstance.GetComponent<DialogInstance>();
         }
 
-        public DialogInstance Create(string prefab, string contentPrefab, int siblingIndex = -1)
-        {
-            DialogInstance generalMessage = Create(prefab);
-            generalMessage.ContentItem = GetPrefab("Content/" + contentPrefab);
-                //Instantiate(Resources.Load("Dialog/Content/" + contentPrefab, typeof(GameObject))) as GameObject ??
-                //                       Instantiate(Resources.Load("Dialog/Content/" + contentPrefab + "-Default", typeof(GameObject))) as GameObject;
-            generalMessage.ContentItem.transform.SetParent(generalMessage.Content.transform, false);
-            generalMessage.ContentItem.transform.localPosition = Vector3.zero;
 
-            if (siblingIndex != -1)
-                generalMessage.ContentItem.transform.SetSiblingIndex(siblingIndex);
-            
-            return generalMessage;
+        /// <summary>
+        /// Create an instance of the specified named prefab, or use the default GeneralMessage prefab if nothing is specified.
+        /// </summary>
+        /// <param name="prefabName"></param>
+        /// <returns></returns>
+        public DialogInstance Create(string prefabName)
+        {
+            return Create(GetPrefab(prefabName));
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefabName"></param>
+        /// <param name="contentPrefabName"></param>
+        /// <param name="contentPrefab"></param>
+        /// <param name="contentSiblingIndex"></param>
+        /// <param name="runtimeAnimatorController"></param>
+        /// <param name="prefab"></param>
+        /// <returns></returns>
+        public DialogInstance Create(GameObject prefab, string prefabName, GameObject contentPrefab, string contentPrefabName, int contentSiblingIndex = 2, RuntimeAnimatorController runtimeAnimatorController = null)
+        {
+            // create and get dialog Instance
+            var dialogInstance = prefab != null ? Create(prefab) : Create(prefabName);
+
+            // if no content prefab then get from name if specified.
+            if (contentPrefab == null && contentPrefabName != null)
+            {
+                contentPrefab = GetPrefab("Content/" + contentPrefabName);
+                Assert.IsNotNull(contentPrefab, "Unable to find named content prefab 'Content/" + contentPrefabName + "'");
+            }
+
+            // add custom content
+            if (contentPrefab != null)
+            {
+                dialogInstance.CustomContentItem = Instantiate(contentPrefab);
+                dialogInstance.CustomContentItem.name = contentPrefab.name;                           // copy name so animation work.
+                dialogInstance.CustomContentItem.transform.SetParent(dialogInstance.Content.transform, false);
+                dialogInstance.CustomContentItem.transform.localPosition = Vector3.zero;
+                if (contentSiblingIndex != -1)
+                    dialogInstance.CustomContentItem.transform.SetSiblingIndex(contentSiblingIndex);
+            }
+
+            // add custom content animator
+            if (runtimeAnimatorController != null)
+            {
+                dialogInstance.ContentAnimator.runtimeAnimatorController = runtimeAnimatorController;
+            }
+
+            return dialogInstance;
         }
 
         GameObject GetPrefab(string prefab)
         {
             foreach (var dialogOverride in DialogPrefabOverrides.Where(dialogOverride => dialogOverride.Path == prefab && dialogOverride.Prefab != null))
-                return Instantiate(dialogOverride.Prefab);
-            foreach (var dialogOverride in DialogPrefabOverrides.Where(dialogOverride => ("Content/" + dialogOverride.Path) == prefab && dialogOverride.Prefab != null))
-                return Instantiate(dialogOverride.Prefab);
+                return dialogOverride.Prefab;
+            foreach (var dialogOverride in DialogContentPrefabOverrides.Where(dialogOverride => ("Content/" + dialogOverride.Path) == prefab && dialogOverride.Prefab != null))
+                return dialogOverride.Prefab;
 
-            var prefabGameObject = GameManager.LoadResource<GameObject>("Dialog/" + prefab);
-            return prefabGameObject == null ? null : Instantiate(prefabGameObject);
+            return GameManager.LoadResource<GameObject>("Dialog/" + prefab);
         }
     }
 
