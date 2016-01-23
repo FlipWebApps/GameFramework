@@ -3,6 +3,7 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.FreePrize.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEditor;
 using UnityEngine;
@@ -183,6 +184,33 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
             }
             GUILayout.EndHorizontal();
 
+            FreePrizeMenuOptions();
+        }
+
+        static void FreePrizeMenuOptions()
+        {
+            GUI.enabled = Application.isPlaying && FreePrizeManager.IsActive;
+
+            GUILayout.BeginHorizontal();
+            if (Application.isPlaying && FreePrizeManager.IsActive)
+                GUILayout.Label("Free Prize (prize in " + FreePrizeManager.Instance.GetTimeToPrize() + ")",
+                    EditorStyles.boldLabel);
+            else if (Application.isPlaying && !FreePrizeManager.IsActive)
+                GUILayout.Label("Free Prize (no FreePrizeMaanger detected)", EditorStyles.boldLabel);
+            else
+                GUILayout.Label("Free Prize", EditorStyles.boldLabel);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Make Prize Available", GUILayout.Width(150)))
+            {
+                FreePrizeManager.Instance.MakePrizeAvailable();
+            }
+            if (GUILayout.Button("Reset Counter", GUILayout.Width(150)))
+            {
+                FreePrizeManager.Instance.StartNewCountdown();
+            }
+            GUILayout.EndHorizontal();
         }
 
         private static void UpdatePlayerScore(int amount)
