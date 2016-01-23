@@ -37,13 +37,13 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public int TimesPlayedBeforeRatingPrompt = -1;
         public float PeriodicUpdateDelay = 1f;
 
-        DialogInstance _dialogInstance;
+        protected DialogInstance DialogInstance;
 
         protected override void GameSetup()
         {
-            _dialogInstance = GetComponent<DialogInstance>();
+            DialogInstance = GetComponent<DialogInstance>();
 
-            Assert.IsNotNull(_dialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
+            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
         }
 
         public virtual void Show(bool isWon)
@@ -51,11 +51,11 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             Level currentLevel = GameManager.Instance.Levels.Selected;
 
             // show won / lost game objects as appropriate
-            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(_dialogInstance.gameObject, "Won", true), isWon);
-            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(_dialogInstance.gameObject, "Lost", true), !isWon);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), isWon);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Lost", true), !isWon);
 
             // set some text based upon the result
-            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "AchievementText", LocaliseText.Format(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name));
+            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "AchievementText", LocaliseText.Format(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name));
 
             // setup stars
             int newStarsWon = GetNewStarsWon();
@@ -72,14 +72,14 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             string distanceText = LocaliseText.Format(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString());
             if (currentLevel.HighScore > currentLevel.OldHighScore)
                 distanceText += "\n" + LocaliseText.Get(LocalisationBase + ".NewHighScore");
-            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "ScoreResult", distanceText, true);
+            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "ScoreResult", distanceText, true);
 
             // set time
             TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
-            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "TimeResult", difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
+            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TimeResult", difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
 
             // set count
-            UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "CoinsResult", currentLevel.Coins.ToString(), true);
+            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "CoinsResult", currentLevel.Coins.ToString(), true);
 
             UpdateNeededCoins();
 
@@ -89,7 +89,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             PlayerPrefs.Save();
 
             //show dialog
-            _dialogInstance.Show();
+            DialogInstance.Show();
 
             //TODO bug - as we increase TimesPlayedForRatingPrompt on both game start (GameManager) and level finish we can miss this comparison.
             if (GameManager.Instance.TimesPlayedForRatingPrompt == TimesPlayedBeforeRatingPrompt)
@@ -150,9 +150,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             int minimumCoins = GameManager.Instance.Levels.ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
             if (minimumCoins == 0)
-                UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoinsGot", minimumCoins), true);
+                UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoinsGot", minimumCoins), true);
             else
-                UIHelper.SetTextOnChildGameObject(_dialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoins", minimumCoins), true);
+                UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoins", minimumCoins), true);
         }
 
         public void FacebookShare()

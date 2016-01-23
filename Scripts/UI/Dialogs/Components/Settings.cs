@@ -25,17 +25,17 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     {
         GameObject _canvas;
         UnityEngine.UI.Slider _musicVolume, _sfxVolume;
-        DialogInstance _dialogInstance;
+        protected DialogInstance DialogInstance;
         float _oldBackGroundAudioVolume;
 
         protected override void GameSetup()
         {
-            _dialogInstance = GetComponent<DialogInstance>();
+            DialogInstance = GetComponent<DialogInstance>();
 
-            Assert.IsNotNull(_dialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
+            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
 
-            _musicVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(_dialogInstance.DialogGameObject, "MusicSlider", true);
-            _sfxVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(_dialogInstance.DialogGameObject, "SfxSlider", true);
+            _musicVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "MusicSlider", true);
+            _sfxVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "SfxSlider", true);
         }
 
         public virtual void Show()
@@ -45,12 +45,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             _musicVolume.value = GameManager.Instance.BackGroundAudioVolume;
             _sfxVolume.value = GameManager.Instance.EffectAudioVolume;
 
-            _dialogInstance.Show(doneCallback: DoneCallback, destroyOnClose: false);
+            DialogInstance.Show(doneCallback: DoneCallback, destroyOnClose: false);
         }
 
         public virtual void DoneCallback(DialogInstance dialogInstance)
         {
-            if (_dialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
+            if (DialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
             {
                 // set values
                 GameManager.Instance.BackGroundAudioVolume = _musicVolume.value;
