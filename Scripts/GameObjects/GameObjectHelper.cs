@@ -42,6 +42,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         }
 
         /// <summary>
+        /// Note uses transform
+        /// </summary>
+        /// <param name="thisGameObject"></param>
+        /// <param name="name"></param>
+        /// <param name="includeInactive"></param>
+        /// <returns></returns>
+        public static GameObject GetParentNamedGameObject(GameObject thisGameObject, string name)
+        {
+            while (true)
+            {
+                if (thisGameObject.name == name) return thisGameObject;
+                if (thisGameObject.transform.parent == null) return null;
+                thisGameObject = thisGameObject.transform.parent.gameObject;
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="gameObject"></param>
