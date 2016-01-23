@@ -72,7 +72,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             Assert.IsNotNull(GetComponent<Animator>(), "A DialogInstance component must always have an attached Animator");
 
             Content = GameObjectHelper.GetChildNamedGameObject(gameObject, "Content", true);
-            ContentAnimator = Content.GetComponent<Animator>();
+            if (Content != null)
+                ContentAnimator = Content.GetComponent<Animator>();
             IsShown = false;
         }
 
