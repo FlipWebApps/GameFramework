@@ -14,6 +14,7 @@ using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
+using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 

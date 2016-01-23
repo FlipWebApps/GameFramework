@@ -76,8 +76,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
             else
             {
 #if ITWEEN
-                iTween.ValueTo(_mScrollRect.gameObject, iTween.Hash(
-                    "from", _mScrollRect.normalizedPosition,
+                iTween.ValueTo(_scrollRect.gameObject, iTween.Hash(
+                    "from", _scrollRect.normalizedPosition,
                     "to", newNormalizedPosition,
                     "time", AnimTime,
                     "easetype", "easeInOutBack",
