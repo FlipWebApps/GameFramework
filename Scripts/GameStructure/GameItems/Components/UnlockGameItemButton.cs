@@ -29,7 +29,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     {
         [Header("Settings")]
         public int MaxFailedUnlocks = 999;      // number of failed unlock attmepts before we actually unlock something for them
-        public float DialogShowButtonDelay;
 
         [Header("Display")]
         public GameObject ContentPrefab;

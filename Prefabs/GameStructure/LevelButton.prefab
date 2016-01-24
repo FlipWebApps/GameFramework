@@ -82,7 +82,6 @@ GameObject:
   - 114: {fileID: 11452904}
   - 114: {fileID: 11427994}
   - 114: {fileID: 11491556}
-  - 95: {fileID: 9545584}
   m_Layer: 5
   m_Name: LevelButton
   m_TagString: Untagged
@@ -261,23 +260,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &9545584
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123302}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d72905dcdb287dd4e963848d6c646856, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11403778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -801,7 +783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6084dd38cc5418e4b9873e4de3d37bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 1
+  Number: 10
   SelectionMode: 0
   CoinColorCheckInterval: 1
   CoinColorCanUnlock: {r: 0, g: 1, b: 0, a: 1}
