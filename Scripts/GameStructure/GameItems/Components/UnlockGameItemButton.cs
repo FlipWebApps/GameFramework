@@ -27,8 +27,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     [RequireComponent(typeof(Button))]
     public abstract class UnlockGameItemButton<T> : MonoBehaviour where T : GameItem
     {
+        [Header("Settings")]
         public int MaxFailedUnlocks = 999;      // number of failed unlock attmepts before we actually unlock something for them
         public float DialogShowButtonDelay;
+
+        [Header("Display")]
+        public GameObject ContentPrefab;
+        public RuntimeAnimatorController ContentAnimatorController;
+        public bool ContentShowsButtons;
 
         Button _button;
         UnityEngine.Animation _animation;
@@ -63,12 +69,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
         public void Unlock()
         {
-            StartCoroutine(UnlockCoRoutine());
-        }
-
-        IEnumerator UnlockCoRoutine()
-        {
-            var dialogInstance = DialogManager.Instance.Create(null, null, null, "UnlockLevelPlaceHolder");
+            var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController, contentSiblingIndex: 1);
 
             // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
             T[] gameItems;
@@ -86,34 +87,37 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
                 _gameItemToUnlock = gameItems[Random.Range(0, gameItems.Length)];
                 _alreadyUnlocked = _gameItemToUnlock.IsUnlocked;
 
-                string text, text2;
+                string textKey, text2Key;
                 if (!_alreadyUnlocked)
                 {
                     _failedUnlockAttempts = 0;       // reset counter
-                    text = LocaliseText.Get(_localisationBase + ".Unlock.New.Text1");
-                    text2 = LocaliseText.Get(_localisationBase + ".Unlock.New.Text2");
+                    textKey = _localisationBase + ".Unlock.New.Text1";
+                    text2Key = _localisationBase + ".Unlock.New.Text2";
                 }
                 else
                 {
                     _failedUnlockAttempts++;         // increase counter
 
-                    text = LocaliseText.Get(_localisationBase + ".Unlock.Existing.Text1");
-                    text2 = LocaliseText.Get(_localisationBase + ".Unlock.Existing.Text2");
+                    textKey = _localisationBase + ".Unlock.Existing.Text1";
+                    text2Key = _localisationBase + ".Unlock.Existing.Text2";
                 }
 
                 // save updated counter for later.
                 GameManager.Instance.Player.SetSetting(_localisationBase + ".FailedUnlockAttempts", _failedUnlockAttempts);
                 GameManager.Instance.Player.UpdatePlayerPrefs();
 
-                UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text", text, true);
-                UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text2", text2, true);
-                UIHelper.SetSpriteOnChildGameObject(dialogInstance.Content, "ulph_Image", _gameItemToUnlock.Sprite, true);// SceneManager.Instance.ChoosePantsButtons[LevelToUnlock.Number-1].DisplayImage.sprite, true);
+                //UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text", text, true);
+                //UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text2", text2, true);
+                //UIHelper.SetSpriteOnChildGameObject(dialogInstance.Content, "ulph_Image", _gameItemToUnlock.Sprite, true);// SceneManager.Instance.ChoosePantsButtons[LevelToUnlock.Number-1].DisplayImage.sprite, true);
 
-                dialogInstance.Show(titleKey: _localisationBase + ".Unlock.Title", doneCallback: UnlockedCallback);
+                dialogInstance.Show(titleKey: _localisationBase + ".Unlock.Title",
+                    textKey: textKey,
+                    text2Key: text2Key,
+                    sprite: _gameItemToUnlock.Sprite,
+                    doneCallback: UnlockedCallback,
+                    dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
 
-                yield return new WaitForSeconds(DialogShowButtonDelay);
-
-                GameObjectHelper.GetChildNamedGameObject(dialogInstance.gameObject, "OkButton", true).SetActive(true);
+                //StartCoroutine(UnlockCoRoutine(dialogInstance));
             }
             else
             {

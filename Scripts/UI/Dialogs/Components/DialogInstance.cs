@@ -203,7 +203,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Done()
         {
-            if (ContentAnimator != null && ContentAnimator.runtimeAnimatorController != null)
+            if (ContentAnimator != null && ContentAnimator.runtimeAnimatorController != null && ContentAnimator.HasState(0, Animator.StringToHash("Done")))
                 ContentAnimator.Play("Done");
 
             StartCoroutine(CoRoutines.HidePanel(gameObject, callback: DoneFinished, animationState: DisplayMode + "Out"));
