@@ -19,7 +19,8 @@ Features include:
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
 * [Download Current Release](https://github.com/FlipWebApps/GameFramework/releases)
-* [Documentation and Tutorials](http://www.flipwebapps.com/game-framework/)
+* [Documentation](http://www.flipwebapps.com/game-framework/)
+* [Tutorials](http://www.flipwebapps.com/game-framework/tutorials/)
 
 ## Your Support
 We have created a package on the [Unity Asset Store](http://u3d.as/mtk) that includes the same framework code, but also additional samples, tutorial files, themes and other content that show you how to get the most out of the framework. Please consider supporting our efforts by downloading this.
