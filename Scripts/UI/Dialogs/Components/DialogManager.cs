@@ -28,11 +28,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             new DialogPrefabOverride { Path = "GameFeedbackDialog"}
         };
 
-        public DialogPrefabOverride[] DialogContentPrefabOverrides =
-        {
-            new DialogPrefabOverride { Path = "UnlockLevelPlaceHolder"}
-        };
-
         public DialogInstance ShowOnce(string dialogKey, string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
             // show hint panel first time only
@@ -141,8 +136,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         GameObject GetPrefab(string prefab)
         {
             foreach (var dialogOverride in DialogPrefabOverrides.Where(dialogOverride => dialogOverride.Path == prefab && dialogOverride.Prefab != null))
-                return dialogOverride.Prefab;
-            foreach (var dialogOverride in DialogContentPrefabOverrides.Where(dialogOverride => ("Content/" + dialogOverride.Path) == prefab && dialogOverride.Prefab != null))
                 return dialogOverride.Prefab;
 
             return GameManager.LoadResource<GameObject>("Dialog/" + prefab);

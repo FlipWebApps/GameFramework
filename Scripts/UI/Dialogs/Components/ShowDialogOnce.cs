@@ -14,7 +14,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     public class ShowDialogOnce : MonoBehaviour
     {
         public string DialogKey;
-        public string Prefab;
+        public string PrefabName;
         public string TitleKey;
         public string TextKey;
         public string Text2Key;
@@ -24,7 +24,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             Assert.IsTrue(DialogManager.IsActive, "To use the ShowDialogOnce component, you must have a DialogManager added to your scene.");
 
-            DialogManager.Instance.ShowOnce(DialogKey, Prefab, titleKey: TitleKey, textKey: TextKey, text2Key: Text2Key,
+            DialogManager.Instance.ShowOnce(DialogKey, PrefabName, titleKey: TitleKey, textKey: TextKey, text2Key: Text2Key,
                 sprite: Sprite);
         }
     }
