@@ -6,11 +6,14 @@
 #if UNITY_PURCHASING
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
 #endif
+using System.Linq;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
@@ -25,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     {
         GameObject _canvas;
         UnityEngine.UI.Slider _musicVolume, _sfxVolume;
+        UnityEngine.UI.Dropdown _language;
+
         protected DialogInstance DialogInstance;
         float _oldBackGroundAudioVolume;
 
@@ -36,6 +41,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
             _musicVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "MusicSlider", true);
             _sfxVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "SfxSlider", true);
+            _language = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Dropdown>(DialogInstance.DialogGameObject, "LanguageDropdown", true);
         }
 
         public virtual void Show()
@@ -44,6 +50,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             _oldBackGroundAudioVolume = GameManager.Instance.BackGroundAudioVolume;
             _musicVolume.value = GameManager.Instance.BackGroundAudioVolume;
             _sfxVolume.value = GameManager.Instance.EffectAudioVolume;
+            _language.options = (from item in LocaliseText.AllowedLanguages select new Dropdown.OptionData(item)).ToList();
+            for (int i = 0; i < _language.options.Count; i++)
+                if (_language.options[i].text == LocaliseText.Language)
+                    _language.value = i;
 
             DialogInstance.Show(doneCallback: DoneCallback, destroyOnClose: false);
         }
@@ -52,8 +62,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             if (DialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
             {
-                // set values
-                GameManager.Instance.BackGroundAudioVolume = _musicVolume.value;
+                // set values not updated automatically
                 GameManager.Instance.EffectAudioVolume = _sfxVolume.value;
                 PlayerPrefs.Save();
             }
@@ -66,6 +75,11 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public void MusicVolumeChanged()
         {
             GameManager.Instance.BackGroundAudioVolume = _musicVolume.value;
+        }
+
+        public void LanguageChanged(int index)
+        {
+            LocaliseText.Language = _language.options[index].text;
         }
 
         public void RestorePurchases()

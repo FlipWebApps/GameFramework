@@ -8,8 +8,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 {
     /// <summary>
-    /// Localises a Text input based upon the given Key
-    /// TODO Add automatic notifications when localisation changes e.g. new Language selected.
+    /// Localises a Text field based upon the given Key
     /// </summary>
     [RequireComponent(typeof(UnityEngine.UI.Text))]
     public class LocaliseText : MonoBehaviour
@@ -26,31 +25,45 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
         {
             set
             {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    UnityEngine.UI.Text text = GetComponent<UnityEngine.UI.Text>();
+                if (string.IsNullOrEmpty(value)) return;
 
-                    if (text != null)
-                    {
-                        text.text = value;
-                    }
-                }
+                _textComponent.text = value;
+            }
+        }
+
+        UnityEngine.UI.Text _textComponent;
+
+        void Awake()
+        {
+            _textComponent = GetComponent<UnityEngine.UI.Text>();
+
+            // If no localization key has been specified, use the text value as the key
+            if (string.IsNullOrEmpty(Key))
+            {
+                Key = _textComponent.text;
             }
         }
 
         /// <summary>
-        /// Localize the widget on start.
+        /// Localize the widget in OnEnable so we don't miss notifications (onStart is only called once).
         /// </summary>
-        void Start()
+        void OnEnable()
         {
-            // If no localization key has been specified, use the text value as the key
-            if (string.IsNullOrEmpty(Key))
-            {
-                UnityEngine.UI.Text text = GetComponent<UnityEngine.UI.Text>();
-                if (text != null) Key = text.text;
-            }
+            OnLocalise();
+            Localisation.LocaliseText.OnLocalise += OnLocalise;
+        }
 
-            // If we still don't have a key, leave the value as blank
+        void OnDisable()
+        {
+            Localisation.LocaliseText.OnLocalise -= OnLocalise;
+        }
+
+        /// <summary>
+        /// Update the display with the localise text
+        /// </summary>
+        void OnLocalise()
+        {
+            // If we don't have a key then don't change the value
             if (!string.IsNullOrEmpty(Key)) Value = Localisation.LocaliseText.Get(Key);
         }
     }

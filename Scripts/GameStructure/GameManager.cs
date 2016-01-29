@@ -43,6 +43,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public float ReferencePhysicalScreenHeightInInches = 4f;
         public float DisplayChangeCheckDelay = 0.5f;                      // How long to wait until we check orientation & resolution changes.
 
+        [Header("Localisation")]
+        public string[] SupportedLanguages;
+
         /// <summary>
         /// Gameplay related properties
         /// </summary>
@@ -137,13 +140,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             SetDisplayProperties();
 
             // Localisation setup. If nothing stored then use system Language if it exists. Otherwise we will default to English.
-            if (PlayerPrefs.GetString("Language") == null)
-            {
-                if (Array.Exists(LocaliseText.Languages, s => s.Equals(Application.systemLanguage.ToString())))
-                {
-                    LocaliseText.Language = Application.systemLanguage.ToString();
-                }
-            }
+            LocaliseText.AllowedLanguages = SupportedLanguages;
 
             // setup players.
             Players = new Player[Instance.PlayerCount];

@@ -1,5 +1,5 @@
-KEY,English,Other
-Advertising.UnityAds.WatchForCoins.Button,Free Coins,x
+KEY,English,Norwegian
+Advertising.UnityAds.WatchForCoins.Button,Free Coins,Gratis Penger
 Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,
 Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,
 Advertising.UnityAds.UnableToShow,"Unable to load adverts!
@@ -43,8 +43,8 @@ GameFeedback.AssumeLikeOptionaliOS,"We hope that you like '{0}'.
 
 It'd be really helpful if you rated us in the App store.
 Many thanks for your support.",x
-GeneralMessage.Ok,OK,x
-GeneralMessage.Cancel,Cancel,x
+GeneralMessage.Ok,OK,Ok
+GeneralMessage.Cancel,Cancel,Kansellere
 GeneralMessage.Error.Title,Error,x
 GeneralMessage.Info.Title,Info,x
 GeneralMessage.Error.GeneralError,An error occurred: {0},x
@@ -64,10 +64,11 @@ GameOver.FacebookPost,"Facebook",x
 GameOver.Rate,Rate,x
 GameOver.Retry,Retry,x
 GameOver.Continue,Continue,x
-Settings.Title,Settings,x
-Settings.Music,MUSIC,x
-Settings.FX,FX,x
-Settings.RestorePurchases,Restore Purchases,x
+Settings.Title,Settings,Instillinger
+Settings.Music,Music,Lyd
+Settings.FX,FX,FX
+Settings.Language,Language,Språk
+Settings.RestorePurchases,Restore Purchases,Gjenopprette Kjøp
 P0.Name,Player 1,x
 Level.Buy.Title,BUY,x
 Level.Buy.Text1,Purchase this level?,x

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
@@ -46,6 +47,14 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
 
         /// <summary>
+        /// List of allowed languages. As the default file can contain additional languages that the game doesn't localise for
+        /// then we specify what the user can actually choose from. If this is empty then we default to the first language in the 
+        /// user / main localisation file.
+        /// </summary>
+        public static string[] AllowedLanguages { get; set; }
+
+
+        /// <summary>
         /// List of loaded languages.
         /// </summary>
         public static string[] Languages
@@ -54,7 +63,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
             {
                 return _languages;
             }
-            private set { _languages = value; }
         }
         static string[] _languages = new string[0];
 
@@ -70,29 +78,25 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
             }
             set
             {
-                // before we set a new language we need to make sure it is different and available
-                if (_language != value)
-                {
-                    for (int i = 0; i < Languages.Length; ++i)
-                    {
-                        if (Languages[i] == value)
-                        {
-                            _language = value;
-                            _languageIndex = i;
-                            PlayerPrefs.SetString("Language", Language);
+                // make sure we change something
+                if (_language == value) return;
 
-                            // notify of change here
-                            if (OnLocalise != null)
-                                OnLocalise();
-                            return;
-                        }
-                    }
-                }
+                // make sure it is loaded
+                var index = Array.IndexOf(Languages, value);
+                if (index == -1) return;
+
+                _language = value;
+                _languageIndex = index;
+                PlayerPrefs.SetString("Language", Language);
+
+                // notify of change here
+                if (OnLocalise != null)
+                    OnLocalise();
             }
         }
-
         static string _language;                        // selected Language
         static int _languageIndex = -1;                 // selected Language index
+        static string _defaultUserLanguage;             // the first language from the user localisation file.
 
 
         /// <summary>
@@ -108,7 +112,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                 // Try to load the default Localisation file directly
                 TextAsset asset = Resources.Load<TextAsset>("Default/Localisation");
                 if (asset != null) bytes = asset.bytes;
-                IsLocalisationLoaded = LoadCSV(bytes);
+                IsLocalisationLoaded = LoadCSV(bytes, true);
                 //LogState();
 
                 // Try and additionally load user specific localisations and overrides
@@ -120,7 +124,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                 // if loaded then set default language
                 if (IsLocalisationLoaded)
                 {
-                    SetupDefaultLanguage();
+                    SetDefaultLanguage();
                 }
                 else
                 {
@@ -130,7 +134,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
         }
 
 
-        static bool LoadCSV(byte[] bytes)
+        static bool LoadCSV(byte[] bytes, bool isMasterFile = false)
         {
             try
             {
@@ -150,8 +154,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                                 return false;
                             }
 
-                            // setup
-
                             // find what languages are new and update references for existing ones
                             columnLanguageMapping = new int[columns.Count];                 // mapping from new columns to languages array
                             var newLanguageCount = columns.Count - 1;               // the number of languages in the file (1 less for 'KEY')
@@ -166,16 +168,20 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                                     {
                                         columnLanguageMapping[column] = j;
                                         newLanguageCount--;
+
+                                        if (!isMasterFile && _defaultUserLanguage == null)
+                                            _defaultUserLanguage = Languages[j];
+
                                         break;
                                     }
                                 }
                             }
 
                             // resize the languages array
-                            Array.Resize(ref _languages, _languages.Length + newLanguageCount);
+                            Array.Resize(ref _languages, Languages.Length + newLanguageCount);
 
                             // copy new languages to the end and update mapping references
-                            int maxLanguageColumn = _languages.Length - newLanguageCount;
+                            int maxLanguageColumn = Languages.Length - newLanguageCount;
                             for (int i = 1; i < columns.Count; ++i)
                             {
                                 if (columnLanguageMapping[i] == -1)
@@ -296,23 +302,35 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
 
 
-        static bool SetupDefaultLanguage()
+        static void SetDefaultLanguage()
         {
-            // if already set then check it exists
-            if (_languageIndex != -1) return true;
-
             // 1. try and set from prefs
-            Language = PlayerPrefs.GetString("Language");
-            if (_languageIndex != -1) return true;
+            if (TrySetAllowedLanguage(PlayerPrefs.GetString("Language"))) return;
 
             // 2. if not then try and set system Language.
-            Language = Application.systemLanguage.ToString();
-            if (_languageIndex != -1) return true;
+            if (TrySetAllowedLanguage(Application.systemLanguage.ToString())) return;
 
-            // 2. if not set then fall back to first Language
+            // 3. use the first language from any user localisation file
+            Language = _defaultUserLanguage;
+            if (_languageIndex != -1) return;
+
+            // 2. if not set then fall back to first Language from first (default) file
             Language = Languages[0];
-            if (_languageIndex != -1) return true;
+        }
 
+
+        /// <summary>
+        /// Try and set the specified language, first verifying that we have it loaded and it is allowed to select it.
+        /// </summary>
+        /// <param name="newDefaultLanguage"></param>
+        /// <returns></returns>
+        static bool TrySetAllowedLanguage(string newDefaultLanguage)
+        {
+            if (AllowedLanguages.Contains(newDefaultLanguage) && Languages.Contains(newDefaultLanguage))
+            {
+                Language = newDefaultLanguage;
+                return true;
+            }
             return false;
         }
 
