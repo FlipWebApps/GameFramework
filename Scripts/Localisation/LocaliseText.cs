@@ -286,6 +286,10 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                             curValue.Append(c);
                             c = (char)csv.Read();
                         }
+                        // if end of file then make sure that we add the last read character
+                        if (csv.Peek() == -1)
+                            curValue.Append(c);
+
                         result.Add(curValue.ToString());
                         curValue = new StringBuilder();
                         if (c == ',') c = (char)csv.Read(); //either ',', newline, or endofstream

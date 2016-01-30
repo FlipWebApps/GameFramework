@@ -95,10 +95,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
             }
         }
 
-        public static void SafeSetActive(GameObject gameObject, bool value)
+        public static bool SafeSetActive(GameObject gameObject, bool value)
         {
             if (gameObject != null)
+            {
                 gameObject.SetActive(value);
+                return true;
+            }
+            return false;
         }
     }
 

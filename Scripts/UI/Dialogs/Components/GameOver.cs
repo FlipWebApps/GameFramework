@@ -33,8 +33,14 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     [RequireComponent(typeof(DialogInstance))]
     public class GameOver : Singleton<GameOver>
     {
+        [Header("General")]
         public string LocalisationBase = "GameOver";
         public int TimesPlayedBeforeRatingPrompt = -1;
+        public bool ShowStars = true;
+        public bool ShowTime = true;
+        public bool ShowCoins = true;
+        public bool ShowScore = true;
+        [Header("Tuning")]
         public float PeriodicUpdateDelay = 1f;
 
         protected DialogInstance DialogInstance;
@@ -58,28 +64,59 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "AchievementText", LocaliseText.Format(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name));
 
             // setup stars
-            int newStarsWon = GetNewStarsWon();
-            currentLevel.StarsWon |= newStarsWon;
-            GameObject star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star1", true);
-            GameObject star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star2", true);
-            GameObject star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star3", true);
-            StarWon(currentLevel.StarsWon, newStarsWon, star1WonGameObject, 1);
-            StarWon(currentLevel.StarsWon, newStarsWon, star2WonGameObject, 2);
-            StarWon(currentLevel.StarsWon, newStarsWon, star3WonGameObject, 4);
-            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(gameObject, "StarWon", true), newStarsWon != 0);
-
-            //show high score
-            string distanceText = LocaliseText.Format(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString());
-            if (currentLevel.HighScore > currentLevel.OldHighScore)
-                distanceText += "\n" + LocaliseText.Get(LocalisationBase + ".NewHighScore");
-            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "ScoreResult", distanceText, true);
+            var starsGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Stars", true);
+            GameObjectHelper.SafeSetActive(starsGameObject, ShowStars);
+            if (ShowStars)
+            {
+                Assert.IsNotNull(starsGameObject, "GameOver->ShowStars is enabled, but could not find a 'Stars' gameobject. Disable the option or fix the structure.");
+                starsGameObject.SetActive(ShowStars);
+                int newStarsWon = GetNewStarsWon();
+                currentLevel.StarsWon |= newStarsWon;
+                GameObject star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star1", true);
+                GameObject star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star2", true);
+                GameObject star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star3", true);
+                StarWon(currentLevel.StarsWon, newStarsWon, star1WonGameObject, 1);
+                StarWon(currentLevel.StarsWon, newStarsWon, star2WonGameObject, 2);
+                StarWon(currentLevel.StarsWon, newStarsWon, star3WonGameObject, 4);
+                GameObjectHelper.SafeSetActive(
+                    GameObjectHelper.GetChildNamedGameObject(starsGameObject, "StarWon", true),
+                    newStarsWon != 0);
+            }
 
             // set time
-            TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
-            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TimeResult", difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
+            var timeGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Time", true);
+            GameObjectHelper.SafeSetActive(timeGameObject, ShowTime);
+            if (ShowTime)
+            {
+                Assert.IsNotNull(timeGameObject,
+                    "GameOver->ShowTime is enabled, but could not find a 'Time' gameobject. Disable the option or fix the structure.");
+                TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
+                UIHelper.SetTextOnChildGameObject(timeGameObject, "TimeResult",
+                    difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
+            }
 
-            // set count
-            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "CoinsResult", currentLevel.Coins.ToString(), true);
+            // set coins
+            var coinsGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Coins", true);
+            GameObjectHelper.SafeSetActive(coinsGameObject, ShowCoins);
+            if (ShowCoins)
+            {
+                Assert.IsNotNull(coinsGameObject,
+                    "GameOver->ShowCoins is enabled, but could not find a 'Coins' gameobject. Disable the option or fix the structure.");
+                UIHelper.SetTextOnChildGameObject(coinsGameObject, "CoinsResult",
+                    currentLevel.Coins.ToString(), true);
+            }
+
+            // set score
+            var scoreGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Score", true);
+            GameObjectHelper.SafeSetActive(scoreGameObject, ShowScore);
+            if (ShowScore)
+            {
+                Assert.IsNotNull(scoreGameObject, "GameOver->ShowScore is enabled, but could not find a 'Score' gameobject. Disable the option or fix the structure.");
+                var distanceText = LocaliseText.Format(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString());
+                if (currentLevel.HighScore > currentLevel.OldHighScore)
+                    distanceText += "\n" + LocaliseText.Get(LocalisationBase + ".NewHighScore");
+                UIHelper.SetTextOnChildGameObject(scoreGameObject, "ScoreResult", distanceText, true);
+            }
 
             UpdateNeededCoins();
 

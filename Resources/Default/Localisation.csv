@@ -1,34 +1,35 @@
-KEY,English,Norwegian
+﻿KEY,English,Norwegian
 Advertising.UnityAds.WatchForCoins.Button,Free Coins,Gratis Penger
-Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,
-Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,
+Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,Du nå har 10 ekstra mynter.
+Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,Vennligst se hele videoen for å få mynter.
 Advertising.UnityAds.UnableToShow,"Unable to load adverts!
-Please try again later.",
-Billing.NotInitialised,Billing not accessible. Please check settings and try again later.,x
+Please try again later.","Kunne ikke laste reklame!
+Prøv igjen senere."
+Billing.NotInitialised,Billing not accessible. Please check settings and try again later.,Kjøp ikke tilgjengelig. Vennligst sjekk innstillingene og prøv igjen senere.
 Billing.NotAvailable,"Unable to purchase.
 
 Either the item is not found or is not currently available for purchase.
 
 Please try again later.",x
-Billing.RestoreSucceeded,Purchases have been restored.,x
-Billing.RestoreFailed,Unable to restore purchases.,x
-Facebook.Logout,Logout,x
+Billing.RestoreSucceeded,Purchases have been restored.,Kjøp gjenopprettet.
+Billing.RestoreFailed,Unable to restore purchases.,Kunne ikke gjenopprette kjøp.
+Facebook.Logout,Logout,Logg ut
 Facebook.Reconnect,Reconnect,x
 Facebook.Connect,"Facebook
-Connect",x
-Facebook.Connecting,Connecting�,x
+Connect",Facebook
+Facebook.Connecting,Connecting…,x
 Facebook.Share.Caption,Come play the new hit game,x
 Facebook.Share.Description,Try out {0},x
 Facebook.Invite.Caption,{0} is great! Check it out.,x
-Facebook.Invite.Description,Join me and play Space Minesweeper!,x
+Facebook.Invite.Description,Join me and play {0}!,x
 Facebook.Error.Login.Description,"We were unable to log into Facebook and will continue in offline mode.
 Try connecting again later.",x
-FreePrize,Free Prize,x
-FreePrize.NewPrize,New prize in {0:D2}:{1:D2}:{2:D2},x
-FreePrize.Title,FREE PRIZE,x
-FreePrize.Text1,You won {0} coins,x
-FreePrize.Text2,New prize available soon.,x
-GameFeedback.FeedbackTitle,Feedback,x
+FreePrize,Free Prize,Gratis Premie
+FreePrize.NewPrize,New prize in {0:D2}:{1:D2}:{2:D2},Gratis premie i {0:D2}:{1:D2}:{2:D2}
+FreePrize.Title,FREE PRIZE,GRATIS PREMIE
+FreePrize.Text1,You won {0} coins,Du vant {0} mynter
+FreePrize.Text2,New prize available soon.,Ny premie tilgjengelig snart.
+GameFeedback.FeedbackTitle,Feedback,Tilbakemelding
 GameFeedback.RateTitle,Rate us!,x
 GameFeedback.RateThanks,Thank you for any positive feedback and for rating our app!,x
 GameFeedback.Unsure,Are you enjoying '{0}'?,x
@@ -45,32 +46,32 @@ It'd be really helpful if you rated us in the App store.
 Many thanks for your support.",x
 GeneralMessage.Ok,OK,Ok
 GeneralMessage.Cancel,Cancel,Kansellere
-GeneralMessage.Error.Title,Error,x
-GeneralMessage.Info.Title,Info,x
+GeneralMessage.Error.Title,Error,Feil
+GeneralMessage.Info.Title,Info,Info
 GeneralMessage.Error.GeneralError,An error occurred: {0},x
-GameOver.Title,GAME OVER,x
-GameOver.Won,CONGRATULATIONS,x
-GameOver.Lost,YOU LOST,x
+GameOver.Title,GAME OVER,SPILL OVER
+GameOver.Won,CONGRATULATIONS,GRATULERER
+GameOver.Lost,YOU LOST,DU TAPTE
 GameOver.Achievement,x,x
-GameOver.Time,Time,x
-GameOver.Coins,Coins,x
-GameOver.Score,Score,
-GameOver.ScoreResult,{0},
-GameOver.HighScoreText,x,x
-GameOver.NewHighScore,New High Score,x
+GameOver.Time,Time,Tid
+GameOver.Coins,Coins,Mynter
+GameOver.Score,Score,Score
+GameOver.ScoreResult,{0},{0}
+GameOver.HighScoreText,High Score,Rekord
+GameOver.NewHighScore,New High Score,Ny Rekord
 GameOver.TargetCoins,Get {0} more coins to unlock a new level,x
 GameOver.TargetCoinsGot,New level available,x
-GameOver.FacebookPost,"Facebook",x
-GameOver.Rate,Rate,x
+GameOver.FacebookPost,Facebook,Facebook
+GameOver.Rate,Rate,xx
 GameOver.Retry,Retry,x
-GameOver.Continue,Continue,x
+GameOver.Continue,Continue,Fortsette
 Settings.Title,Settings,Instillinger
 Settings.Music,Music,Lyd
 Settings.FX,FX,FX
-Settings.Language,Language,Spr�k
-Settings.RestorePurchases,Restore Purchases,Gjenopprette Kj�p
-P0.Name,Player 1,x
-Level.Buy.Title,BUY,x
+Settings.Language,Language,Språk
+Settings.RestorePurchases,Restore Purchases,Gjenopprette Kjøp
+P0.Name,Player 1,Spiller 1
+Level.Buy.Title,BUY,KJØP
 Level.Buy.Text1,Purchase this level?,x
 Level.Buy.Text2,You can also collect coins to unlock,x
 Level.Buy.NotEnabled,Collect coins to unlock this level,
@@ -78,7 +79,7 @@ Level.Unlock,Unlock,x
 Level.Unlock.Title,UNLOCK LEVEL,x
 Level.Unlock.New.Text1,"Congratulations!
 New level Unlocked",x
-Level.Unlock.New.Text2,Collect more coins to unlock others.,x
+Level.Unlock.New.Text2,Collect more coins to unlock others.,Collect more coins to unlock others.
 Level.Unlock.Existing.Text1,"Bad Luck!
 Level Already Unlocked.",x
-Level.Unlock.Existing.Text2,Collect more coins to try again.,x
+Level.Unlock.Existing.Text2,Collect more coins to try again.,Collect more coins to try again.
