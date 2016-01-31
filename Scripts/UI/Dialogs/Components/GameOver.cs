@@ -84,13 +84,15 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
 
             // set time
+            TimeSpan difference = TimeSpan.Zero;
             var timeGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Time", true);
             GameObjectHelper.SafeSetActive(timeGameObject, ShowTime);
             if (ShowTime)
             {
+                Assert.IsTrue(LevelManager.IsActive, "Ensure that you have a LevelManager component attached to your scene.");
                 Assert.IsNotNull(timeGameObject,
                     "GameOver->ShowTime is enabled, but could not find a 'Time' gameobject. Disable the option or fix the structure.");
-                TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
+                difference = DateTime.Now - LevelManager.Instance.StartTime;
                 UIHelper.SetTextOnChildGameObject(timeGameObject, "TimeResult",
                     difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
             }
@@ -137,13 +139,16 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
 #if UNITY_ANALYTICS
             // record some analytics on the level played
-            Analytics.CustomEvent("GameOver", new Dictionary<string, object>
+            var values = new Dictionary<string, object>
                 {
                     { "score", currentLevel.Score },
                     { "Coins", currentLevel.Coins },
                     { "time", difference },
                     { "level", currentLevel.Number }
-                });
+                };
+            if (ShowTime) values.Add("time", difference);   // difference is set above (only) if ShowTime is set
+
+            Analytics.CustomEvent("GameOver", values);
 #endif
 
             // co routine to periodic updates of display (don't need to do this every frame)
@@ -176,7 +181,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
         }
 
-   
+
         public virtual int GetNewStarsWon()
         {
             return 0;
