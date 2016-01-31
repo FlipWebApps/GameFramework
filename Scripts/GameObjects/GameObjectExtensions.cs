@@ -80,5 +80,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
             }
             gObj.transform.DetachChildren();
         }
+
+        /// <summary>
+        /// Get the path to the gameobject by iterating through the parent items.
+        /// </summary>
+        /// <param name="current"></param>
+        /// <returns></returns>
+        public static string GetPath(this GameObject current)
+        {
+            if (current.transform.parent == null)
+                return "/" + current.name;
+            return current.transform.parent.gameObject.GetPath() + "/" + current.name;
+        }
     }
 }
