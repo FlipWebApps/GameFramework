@@ -6,19 +6,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
-{
+namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components {
     /// <summary>
-    /// When a button is clicked then load the specificed Url
+    /// Quit the game when clicked
     /// 
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class OnButtonClickLoadUrl : MonoBehaviour
+    public class OnButtonClickExit : MonoBehaviour
     {
-        public string AndroidUrl;
-        public string DesktopUrl;
-        public string IOsUrl;
 
         void Start()
         {
@@ -27,13 +23,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 
         void OnClick()
         {
-#if UNITY_ANDROID
-            Application.OpenURL(AndroidUrl);
-#elif UNITY_IPHONE
-            Application.OpenURL(iOSUrl);
-#else
-            Application.OpenURL(DesktopUrl);
-#endif
+            Application.Quit(); 
+
         }
     }
 }

@@ -3,10 +3,11 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
+namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
     /// <summary>
     /// Load the specified scene when the button is clicked.

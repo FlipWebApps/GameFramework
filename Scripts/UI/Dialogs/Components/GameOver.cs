@@ -49,11 +49,13 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             DialogInstance = GetComponent<DialogInstance>();
 
-            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
+            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details).");
         }
 
         public virtual void Show(bool isWon)
         {
+            Assert.IsTrue(LevelManager.IsActive, "Ensure that you have a LevelManager component attached to your scene.");
+
             Level currentLevel = GameManager.Instance.Levels.Selected;
 
             // show won / lost game objects as appropriate
@@ -84,15 +86,14 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
 
             // set time
-            TimeSpan difference = TimeSpan.Zero;
+            TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
             var timeGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Time", true);
             GameObjectHelper.SafeSetActive(timeGameObject, ShowTime);
             if (ShowTime)
             {
-                Assert.IsTrue(LevelManager.IsActive, "Ensure that you have a LevelManager component attached to your scene.");
                 Assert.IsNotNull(timeGameObject,
                     "GameOver->ShowTime is enabled, but could not find a 'Time' gameobject. Disable the option or fix the structure.");
-                difference = DateTime.Now - LevelManager.Instance.StartTime;
+                
                 UIHelper.SetTextOnChildGameObject(timeGameObject, "TimeResult",
                     difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
             }
@@ -146,8 +147,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                     { "time", difference },
                     { "level", currentLevel.Number }
                 };
-            if (ShowTime) values.Add("time", difference);   // difference is set above (only) if ShowTime is set
-
             Analytics.CustomEvent("GameOver", values);
 #endif
 

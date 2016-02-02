@@ -42,18 +42,12 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
             {
                 Key = _textComponent.text;
             }
-        }
 
-        /// <summary>
-        /// Localize the widget in OnEnable so we don't miss notifications (onStart is only called once).
-        /// </summary>
-        void OnEnable()
-        {
             OnLocalise();
             Localisation.LocaliseText.OnLocalise += OnLocalise;
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             Localisation.LocaliseText.OnLocalise -= OnLocalise;
         }

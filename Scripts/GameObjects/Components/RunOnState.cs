@@ -3,6 +3,7 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
+using System.Collections;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
@@ -16,8 +17,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// </summary>
     public abstract class RunOnState : MonoBehaviour
     {
-        public enum RunType { OnAwake, OnEnable, OnStart, OnUpdate };
+        public enum RunType { OnAwake, OnEnable, OnStart, OnUpdate, Periodically = 100 };
         public RunType Run;
+        public float RunFrequency = 1;
 
         public void Awake()
         {
@@ -35,12 +37,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         {
             if (Run == RunType.OnStart)
                 RunMethod();
+            else if (Run == RunType.Periodically)
+                StartCoroutine(PeriodicUpdate());
         }
 
         public void Update()
         {
             if (Run == RunType.OnUpdate)
                 RunMethod();
+        }
+
+
+        IEnumerator PeriodicUpdate()
+        {
+            while(true)
+            {
+                RunMethod();
+                yield return new WaitForSeconds(RunFrequency);
+
+            }
         }
 
         public abstract void RunMethod();
