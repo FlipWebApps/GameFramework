@@ -7,6 +7,7 @@ using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
+using System;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
@@ -148,22 +149,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// settings. This way we can setup a gameitem and save this Value from IAP code without worrying about it being used 
         /// elsewhere.
         /// </summary>
-        public void UpdatePlayerPrefsIsBoughtOnly()
+        public void MarkAsBought()
         {
-            if (IsBought)
-                PlayerPrefs.SetInt(FullKey("IsB"), 1);	                                // saved at global level rather than pre player.
+            IsBought = true;
+            IsUnlocked = true;
+            PlayerPrefs.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than pre player.
+            PlayerPrefs.Save();
         }
-
 
         // uses optimised names as we store these for all objects so there can be quite a few!
         public virtual void UpdatePlayerPrefs()
         {
-            UpdatePlayerPrefsIsBoughtOnly();
             SetSetting("IsU", IsUnlocked ? 1 : 0);
             SetSetting("IsUAS", IsUnlockedAnimationShown ? 1 : 0);
             SetSetting("SW", StarsWon);
             SetSetting("HS", HighScore);
 
+            if (IsBought)
+                PlayerPrefs.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than pre player.
             if (HighScoreLocalPlayers != 0)
                 PlayerPrefs.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than pre player.
             if (HighScoreLocalPlayersPlayerNumber != -1)

@@ -31,8 +31,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
         public PaymentProduct[] Products;
 
         // actions called when some standard products are purchased
+        public Action<int> WorldPurchased;
         public Action<int> LevelPurchased;
         public Action<int> CharacterPurchased;
+        public Action UnlockGamePurchased;
 
         // setup references
         private IStoreController _controller;              // Reference to the Purchasing system.
@@ -169,7 +171,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
         /// <summary>
         /// Called when a purchase completes. This automatically handles certain types of purchase and notifications
-        /// TODO Add characher unlock and global gamne unlock (e.g. remove adds).
+        /// TODO Add characher unlock
         /// 
         /// May be called at any time after OnInitialized().
         /// </summary>
@@ -182,40 +184,81 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 DialogManager.Instance.ShowInfo("Test payment android.test.purchased purchased ok");
             }
 
+            else if (productId.Equals("unlockgame"))
+            {
+                // update on GameManager
+                GameManager.Instance.IsUnlocked = true;
+                PlayerPrefs.SetInt("IsUnlocked", 1);
+                PlayerPrefs.Save();
+
+                // notify all subscribers of the purchase
+                if (UnlockGamePurchased != null)
+                    UnlockGamePurchased();
+            }
+
+            else if (productId.StartsWith("unlock.world."))
+            {
+                int number = int.Parse(productId.Substring("unlock.world.".Length));
+                var world = null;
+
+                // first try and get from game manager
+                if (GameManager.Instance.Worlds != null)
+                    world = GameManager.Instance.Worlds.GetItem(number);
+
+                // if not found on game manager then create a new copy to ensure this purchase is recorded
+                if (world == null)
+                    world = new World(number);
+                }
+
+                // mark the item as bought and unlocked
+                world.MarkAsBought();
+
+                // notify all subscribers of the purchase
+                if (WorldPurchased != null)
+                    WorldPurchased(number);
+            }
+
             else if (productId.StartsWith("unlock.level."))
             {
-                int levelNumber = int.Parse(productId.Substring("unlock.level.".Length));
-                bool levelUpdated = false;
+                int number = int.Parse(productId.Substring("unlock.level.".Length));
+                var level = null;
 
-                // first try and update on game manager
+                // first try and get from game manager
                 if (GameManager.Instance.Levels != null)
-                {
-                    Level level = GameManager.Instance.Levels.GetItem(levelNumber);
-                    if (level != null)
-                    {
-                        level.IsBought = true;
-                        level.IsUnlocked = true;
-                        level.UpdatePlayerPrefsIsBoughtOnly();
-                        PlayerPrefs.Save();
-                        levelUpdated = true;
-                    }
-                }
+                    level = GameManager.Instance.Levels.GetItem(number);
 
-                // if not found on game manager then load and update to ensure this pruchase is recorded-
-                if (!levelUpdated)
-                {
-                    // make sure that we record this purchase
-                    Level level = new Level(levelNumber);
-                    level.IsBought = true;
-                    level.UpdatePlayerPrefsIsBoughtOnly();
-                    PlayerPrefs.Save();
-                }
+                // if not found on game manager then create a new copy to ensure this purchase is recorded
+                if (!level == null)
+                    level = new Level(number)
+
+                // mark the item as bought and unlocked
+                level.MarkAsBought();
 
                 // notify all subscribers of the purchase
                 if (LevelPurchased != null)
-                    LevelPurchased(levelNumber);
+                    LevelPurchased(number);
             }
 
+            else if (productId.StartsWith("unlock.character."))
+            {
+                int number = int.Parse(productId.Substring("unlock.character.".Length));
+                var character = null;
+
+                // first try and get from game manager
+                if (GameManager.Instance.Characters != null)
+                    character = GameManager.Instance.Characters.GetItem(number);
+
+                // if not found on game manager then create a new copy to ensure this purchase is recorded
+                if (!character == null)
+                    character = new Character(number)
+
+                // mark the item as bought and unlocked
+                character.MarkAsBought();
+
+                // notify all subscribers of the purchase
+                if (CharacterPurchased != null)
+                    CharacterPurchased(number);
+            }
             return PurchaseProcessingResult.Complete;
         }
 
