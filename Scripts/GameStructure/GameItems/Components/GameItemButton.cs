@@ -39,6 +39,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         public Color CoinColorCanUnlock = Color.green;
         public Color CoinColorCantUnlock = Color.white;
 
+        [Header("Default Handling")]
+        public string ClickUnlockedSceneToLoad;
+
         protected Player CurrentPlayer;
 
         public T CurrentItem { get; set; }
@@ -169,6 +172,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         {
             GetGameItemsManager().Selected = CurrentItem;
             PlayerPrefs.Save();
+
+            if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
+            {
+                string sceneName = GameManager.GetIdentifierScene(ClickUnlockedSceneToLoad);
+                if (FadeLevelManager.IsActive)
+                {
+                    FadeLevelManager.Instance.LoadScene(sceneName);
+                }
+                else
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+                }
+            }
         }
 
 

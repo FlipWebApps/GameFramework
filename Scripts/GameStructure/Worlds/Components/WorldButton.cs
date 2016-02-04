@@ -10,16 +10,16 @@ using System.Runtime.Remoting.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Level Details Button
+    /// World Details Button
     /// </summary>
-    public class LevelButton : GameItemButton<Level>
+    public class WorldButton : GameItemButton<World>
     {
         public new void Awake()
         {
@@ -27,7 +27,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 
 #if UNITY_PURCHASING
             if (PaymentManager.Instance != null)
-                PaymentManager.Instance.LevelPurchased += UnlockIfNumberMatches;
+                PaymentManager.Instance.WorldPurchased += UnlockIfNumberMatches;
 #endif
         }
 
@@ -35,15 +35,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         {
 #if UNITY_PURCHASING
             if (PaymentManager.Instance != null)
-                PaymentManager.Instance.LevelPurchased -= UnlockIfNumberMatches;
+                PaymentManager.Instance.WorldPurchased -= UnlockIfNumberMatches;
 #endif
 
             base.OnDestroy();
         }
 
-        protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
+        protected override GameItemsManager<World, GameItem> GetGameItemsManager()
         {
-            return GameManager.Instance.Levels;
+            return GameManager.Instance.Worlds;
         }
     }
 }
