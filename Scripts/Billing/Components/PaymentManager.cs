@@ -8,7 +8,9 @@ using System;
 using System.ComponentModel;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
@@ -199,7 +201,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
             else if (productId.StartsWith("unlock.world."))
             {
                 int number = int.Parse(productId.Substring("unlock.world.".Length));
-                var world = null;
+                World world = null;
 
                 // first try and get from game manager
                 if (GameManager.Instance.Worlds != null)
@@ -208,7 +210,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
                 if (world == null)
                     world = new World(number);
-                }
 
                 // mark the item as bought and unlocked
                 world.MarkAsBought();
@@ -221,15 +222,15 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
             else if (productId.StartsWith("unlock.level."))
             {
                 int number = int.Parse(productId.Substring("unlock.level.".Length));
-                var level = null;
+                Level level = null;
 
                 // first try and get from game manager
                 if (GameManager.Instance.Levels != null)
                     level = GameManager.Instance.Levels.GetItem(number);
 
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (!level == null)
-                    level = new Level(number)
+                if (level == null)
+                    level = new Level(number);
 
                 // mark the item as bought and unlocked
                 level.MarkAsBought();
@@ -242,15 +243,15 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
             else if (productId.StartsWith("unlock.character."))
             {
                 int number = int.Parse(productId.Substring("unlock.character.".Length));
-                var character = null;
+                Character character = null;
 
                 // first try and get from game manager
                 if (GameManager.Instance.Characters != null)
                     character = GameManager.Instance.Characters.GetItem(number);
 
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (!character == null)
-                    character = new Character(number)
+                if (character == null)
+                    character = new Character(number);
 
                 // mark the item as bought and unlocked
                 character.MarkAsBought();
