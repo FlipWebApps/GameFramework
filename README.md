@@ -1,5 +1,5 @@
 # Game Framework for Unity
-Game Framework is a free, community supported open source framework that will help drastically increase the development speed and feature set of Unity games. The aim is to provide the features most games need in a flexible manner with a minimum of coding
+Game Framework is a free, community supported  framework provided with full source code that will help drastically increase the development speed and feature set of Unity games. The aim is to provide the features most games need in a flexible manner with a minimum of coding
 
 Features include:
 
