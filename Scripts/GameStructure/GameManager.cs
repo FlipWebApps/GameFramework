@@ -5,6 +5,8 @@
 
 using System;
 using System.Collections;
+using System.Linq;
+using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.Display.Placement;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
@@ -15,6 +17,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure
 {
@@ -62,11 +65,32 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// Audio related properties
         /// </summary>
         public AudioSource BackGroundAudioSource { get; set; }
-        public AudioSource EffectAudioSource { get; set; }
+        public AudioSource[] EffectAudioSources { get; set; }
+
+        public float BackGroundAudioVolume
+        {
+            get { return _backGroundAudioVolume; }
+            set
+            {
+                _backGroundAudioVolume = value;
+                if (BackGroundAudioSource != null) BackGroundAudioSource.volume = value;
+            }
+        }
         float _backGroundAudioVolume;
-        public float BackGroundAudioVolume { get { return _backGroundAudioVolume; } set { _backGroundAudioVolume = value; if (BackGroundAudioSource != null) BackGroundAudioSource.volume = value; } }
+
+        public float EffectAudioVolume {
+            get { return _effectAudioVolume; }
+            set {
+                _effectAudioVolume = value;
+                if (EffectAudioSources != null)
+                {
+                    foreach (var audioSource in EffectAudioSources)
+                        audioSource.volume = value;
+                }
+
+            }
+        }
         float _effectAudioVolume;
-        public float EffectAudioVolume { get { return _effectAudioVolume; } set { _effectAudioVolume = value; if (EffectAudioSource != null) EffectAudioSource.volume = value; } }
 
         /// <summary>
         /// Display related properties
@@ -119,22 +143,31 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             Debug.Log("Application.PersistantDataPath : " + Application.persistentDataPath);
 
             // audio related properties
+            BackGroundAudioVolume = 1;              // default if nothing else is set.
+            EffectAudioVolume = 1;                  // default if nothing else is set.
             var audioSources = GetComponents<AudioSource>();
             if (audioSources.Length == 0)
             {
-                Debug.LogWarning(
+                MyDebug.LogWarning(
                     "To make use of the Game Manager audio functions you should add 2 AudioSource components to the same gameobject as the GameManager. The first for background audio and the second for effects.");
             }
             else
             {
                 if (audioSources.Length > 0)
-                    BackGroundAudioSource = GetComponents<AudioSource>()[0];
+                {
+                    BackGroundAudioSource = audioSources[0];
+                    BackGroundAudioVolume = BackGroundAudioSource.volume;
+                }
                 if (audioSources.Length > 1)
-                    EffectAudioSource = GetComponents<AudioSource>()[1];
+                {
+                    EffectAudioSources = new AudioSource[audioSources.Length - 1];
+                    Array.Copy(audioSources, 1, EffectAudioSources, 0, audioSources.Length - 1);
+                    EffectAudioVolume = EffectAudioSources[0].volume;
+                }
             }
 
-            BackGroundAudioVolume = PlayerPrefs.GetFloat("BackGroundAudioVolume", BackGroundAudioSource != null ? BackGroundAudioSource.volume : 1);
-            EffectAudioVolume = PlayerPrefs.GetFloat("EffectAudioVolume", EffectAudioSource != null ? EffectAudioSource.volume : 1);
+            BackGroundAudioVolume = PlayerPrefs.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
+            EffectAudioVolume = PlayerPrefs.GetFloat("EffectAudioVolume", EffectAudioVolume);
 
             // display related properties
             SetDisplayProperties();
@@ -239,17 +272,50 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
 
-        public void PlayEffect(AudioClip clip)
+        public void PlayEffect(AudioClip clip, float pitchLow = 1, float pitchHigh = 1)
         {
-            PlayEffect(clip, 1, 1);
+            Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playying effects.");
+            Assert.AreNotEqual(0, EffectAudioSources.Length, "Ensure that you have added AudioSources if you are playying effects.");
+
+            var newPitch = UnityEngine.Random.Range(pitchLow, pitchHigh);
+
+            // try and find a free or similar audio source
+            //AudioSource similarAudioSource = null;
+            foreach (var audioSource in EffectAudioSources)
+            {
+                if (audioSource.isPlaying == false)
+                {
+                    audioSource.clip = clip;
+                    audioSource.pitch = newPitch;
+                    audioSource.Play();
+                    return;
+                }
+
+                //if (Mathf.Approximately(audioSource.pitch, pitchHigh))
+                //{
+                //    similarAudioSource = audioSource;
+                //}
+            }
+
+            // no free so play one shot if we have a similar match.
+            //if (similarAudioSource != null)
+            //{
+            //    MyDebug.LogWarningF("Not enough free effect AudioSources for playing {0}, ({1}). Using a similar one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
+            //    similarAudioSource.PlayOneShot(clip);
+            //    return;
+            //}
+
+            // otherwise we create and add a new one
+            MyDebug.LogWarningF("Not enough free effect AudioSources for playing {0}, ({1}). Adding a new one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
+            var newAudioSource = gameObject.AddComponent<AudioSource>();
+            newAudioSource.playOnAwake = false;
+            newAudioSource.volume = EffectAudioVolume;
+            newAudioSource.pitch = newPitch;
+            newAudioSource.clip = clip;
+            newAudioSource.Play();
+            EffectAudioSources = EffectAudioSources.Concat(Enumerable.Repeat(newAudioSource, 1)).ToArray();
         }
 
-        public void PlayEffect(AudioClip clip, float pitchLow, float pitchHigh)
-        {
-            EffectAudioSource.clip = clip;
-            EffectAudioSource.pitch = UnityEngine.Random.Range(pitchLow, pitchHigh);
-            EffectAudioSource.Play();
-        }
 
         /// <summary>
         /// Get the theme that is defined
