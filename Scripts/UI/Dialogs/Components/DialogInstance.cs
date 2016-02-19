@@ -3,7 +3,10 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
-using System;
+#region FULL VERSION ONLY
+using FlipWebApps.BeautifulTransitions.Scripts;
+#endregion FULL VERSION ONLY
+
 using FlipWebApps.GameFramework.Scripts.Display.Other;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Localisation;
@@ -21,14 +24,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// </summary>
     public class DialogInstance : MonoBehaviour
     {
-        public enum DisplayModeType
-        {
-            Immediate,
-            Bounce,
-            Fade
-        }
-
-        public DisplayModeType DisplayMode;
         public bool ShowOnStart;
 
         public System.Action<DialogInstance> DoneCallback;
@@ -157,7 +152,16 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                     break;
             }
 
-            StartCoroutine(CoRoutines.ShowPanel(gameObject, callback: ShowFinished, animationState: DisplayMode + "In"));
+            // show / transition in and when done call coroutine
+            float transitionTime = 0;
+            DialogGameObject.SetActive(true);
+            #region FULL VERSION ONLY
+            if (TransitionHelper.ContainsTransition(gameObject))
+            {
+                transitionTime = TransitionHelper.GetTransitionInTime(TransitionHelper.TransitionIn(gameObject));
+            }
+            #endregion FULL VERSION ONLY
+            StartCoroutine(CoRoutines.DelayedCallback(transitionTime, ShowFinished));
         }
 
         public void ShowFinished()
@@ -203,16 +207,23 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Done()
         {
-            if (ContentAnimator != null && ContentAnimator.runtimeAnimatorController != null && ContentAnimator.HasState(0, Animator.StringToHash("Done")))
-                ContentAnimator.Play("Done");
-
-            StartCoroutine(CoRoutines.HidePanel(gameObject, callback: DoneFinished, animationState: DisplayMode + "Out"));
+            // show / transition in and when done call coroutine
+            float transitionTime = 0;
+            #region FULL VERSION ONLY
+            if (TransitionHelper.ContainsTransition(gameObject))
+            {
+                transitionTime = TransitionHelper.GetTransitionOutTime(TransitionHelper.TransitionOut(gameObject));
+            }
+            #endregion FULL VERSION ONLY
+            StartCoroutine(CoRoutines.DelayedCallback(transitionTime, DoneFinished));
         }
 
         public void DoneFinished()
         {
             if (DoneCallback != null)
                 DoneCallback(this);
+
+            DialogGameObject.SetActive(false);
 
             if (_destroyOnClose)
                 Destroy(gameObject);

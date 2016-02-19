@@ -153,7 +153,6 @@ GameObject:
   m_Component:
   - 224: {fileID: 22417056}
   - 114: {fileID: 11494786}
-  - 95: {fileID: 9575182}
   m_Layer: 0
   m_Name: GameFeedbackDialog
   m_TagString: Untagged
@@ -313,23 +312,6 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!95 &9575182
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 145462}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 78346e830b4c6db4e990a389e170fe0c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1033,7 +1015,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5f6af7c5c08cc429fc08055195010b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayMode: 2
   ShowOnStart: 0
 --- !u!114 &11495450
 MonoBehaviour:

@@ -33,7 +33,7 @@ QUICK START
 
 	1. If you have an older version installed:
 		1.1. Make a backup of your project
-		1.2. Delete the old /FlipWebApps folder to cater for possible.
+		1.2. Delete the old /FlipWebApps folder to cater for possible conflicts.
 	2. Select "Edit->Project Settings->Script Execution Order…".
 	3. Drag the following scripts across and give them the specified priority:
 		- FlipWebApps/GameFramework/Scripts/UI/Dialogs/Components/DialogInstance.cs (priority -100)

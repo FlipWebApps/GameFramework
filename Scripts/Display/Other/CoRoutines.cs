@@ -107,47 +107,14 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other
                 Object.Destroy(transform.gameObject);
         }
 
-        ////
-        //// Panels
-        ////
-        public static IEnumerator ShowPanel(GameObject gameObject, float animationTime = -1f, System.Action callback = null, string animationState = "PanelIn")
+
+        public static IEnumerator DelayedCallback(float delay, System.Action callback)
         {
-            Animator animator = gameObject.GetComponent<Animator>();
-            Assert.IsNotNull(animator, "To use transitions, you need to have an animator added.");
-            animator.Play(animationState);
-
-            if (Mathf.Approximately(animationTime, -1f))
-            {
-                // need to wait for ned of next rame before calling GetCurrentAnimatorStateInfo().length for new clip
-                yield return new WaitForEndOfFrame();
-                animationTime = animator.GetCurrentAnimatorStateInfo(0).length;
-            }
-
-            yield return new WaitForSeconds(animationTime);
+            if (delay != 0)
+                yield return  new WaitForSeconds(delay);
 
             if (callback != null)
                 callback();
         }
-
-        public static IEnumerator HidePanel(GameObject gameObject, float animationTime = -1f, System.Action callback = null, string animationState = "PanelOut")
-        {
-            Animator animator = gameObject.GetComponent<Animator>();
-            Assert.IsNotNull(animator, "To use transitions, you need to have an animator added.");
-            animator.Play(animationState);
-
-            if (Mathf.Approximately(animationTime, -1f))
-            {
-                // need to wait for ned of next rame before calling GetCurrentAnimatorStateInfo().length for new clip
-                yield return new WaitForEndOfFrame();
-                animationTime = animator.GetCurrentAnimatorStateInfo(0).length;
-            }
-
-            yield return new WaitForSeconds(animationTime);
-            //gameObject.SetActive(false);
-
-            if (callback != null)
-                callback();
-        }
-
     }
 }

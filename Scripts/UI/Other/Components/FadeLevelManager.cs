@@ -28,6 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 
             Canvas myCanvas = fadeLevelGameObject.AddComponent<Canvas>();
             myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            myCanvas.sortingOrder = 999;
 
             _fadeRawImage = fadeLevelGameObject.AddComponent<RawImage>();
             _fadeRawImage.color = FadeColour;
