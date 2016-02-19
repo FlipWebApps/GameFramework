@@ -4,7 +4,7 @@
 //----------------------------------------------
 
 #region FULL VERSION ONLY
-using FlipWebApps.BeautifulTransitions.Scripts;
+//using FlipWebApps.BeautifulTransitions.Scripts;
 #endregion FULL VERSION ONLY
 
 using FlipWebApps.GameFramework.Scripts.Display.Other;
@@ -156,10 +156,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             float transitionTime = 0;
             DialogGameObject.SetActive(true);
             #region FULL VERSION ONLY
-            if (TransitionHelper.ContainsTransition(gameObject))
-            {
-                transitionTime = TransitionHelper.GetTransitionInTime(TransitionHelper.TransitionIn(gameObject));
-            }
+            //if (TransitionHelper.ContainsTransition(gameObject))
+            //{
+            //    transitionTime = TransitionHelper.GetTransitionInTime(TransitionHelper.TransitionIn(gameObject));
+            //}
             #endregion FULL VERSION ONLY
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, ShowFinished));
         }
@@ -210,10 +210,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             // show / transition in and when done call coroutine
             float transitionTime = 0;
             #region FULL VERSION ONLY
-            if (TransitionHelper.ContainsTransition(gameObject))
-            {
-                transitionTime = TransitionHelper.GetTransitionOutTime(TransitionHelper.TransitionOut(gameObject));
-            }
+            //if (TransitionHelper.ContainsTransition(gameObject))
+            //{
+            //    transitionTime = TransitionHelper.GetTransitionOutTime(TransitionHelper.TransitionOut(gameObject));
+            //}
             #endregion FULL VERSION ONLY
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, DoneFinished));
         }
