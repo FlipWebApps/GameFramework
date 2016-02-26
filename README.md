@@ -18,12 +18,27 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
-* [Download Current Release](https://github.com/FlipWebApps/GameFramework/releases)
+Note: For ease of use we will now only release stable versions through the Unity asset store.
+
+* [Asset store download (Free Version)](https://www.assetstore.unity3d.com/#!/content/55334)
+* [Asset store download (Paid Version)](https://www.assetstore.unity3d.com/#!/content/50893)
 * [Documentation](http://www.flipwebapps.com/game-framework/)
 * [Tutorials](http://www.flipwebapps.com/game-framework/tutorials/)
 
 ## Your Support
-We have created a package on the [Unity Asset Store](http://u3d.as/mtk) that includes the same framework code, but also additional samples, tutorial files, themes and other content that show you how to get the most out of the framework. Please consider supporting our efforts by downloading this.
+The framework is free, however there is also a [paid version](https://www.assetstore.unity3d.com/#!/content/50893) which contains additional content to get you up and running including:
+
+	- 3 UI themes (Cartoon, Space, RPG)
+	- The full Beautiful Transitions asset
+	- Additional 3D models
+	- Additional samples
+	- Tutorials
+	- Other content
+	- Priority support and feature requests
+	- Secures future development of this framework
+	
+Feel free to try and use the free version, however if you like the framework then please consider the small price of purchasing the 
+paid version to support our efforts in maintaining and developing this framework further.
 
 * [Download from Unity Asset Store](https://www.assetstore.unity3d.com/#!/content/50893)
 

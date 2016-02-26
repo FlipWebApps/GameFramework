@@ -23,8 +23,14 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             base.Awake();
 
             _text = GetComponent<UnityEngine.UI.Text>();
+
+            Localisation.LocaliseText.OnLocalise += RunMethod;
         }
 
+        void OnDestroy()
+        {
+            Localisation.LocaliseText.OnLocalise -= RunMethod;
+        }
 
         public override void RunMethod()
         {

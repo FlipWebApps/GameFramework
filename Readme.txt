@@ -1,4 +1,4 @@
-Game Framework Free v0.9
+Game Framework - Free v1.0
 
 Thank you for using Game Framework. 
 
@@ -6,6 +6,7 @@ This package features the main core of Game Framework. There is also a paid vers
 get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
+	- The full Beautiful Transitions asset
 	- Additional 3D models
 	- Additional samples
 	- Tutorials
@@ -39,17 +40,43 @@ QUICK START
 		- FlipWebApps/GameFramework/Scripts/UI/Dialogs/Components/DialogInstance.cs (priority -100)
 		- FlipWebApps/GameFramework/Scripts/GameStructure/GameManager.cs (priority -50)
 		- FlipWebApps/GameFramework/Scripts/FreePrize/Components/FreePrizeManager.cs (priority -20)
-	4. If you have the paid version and want to run a tutorial:
-		4.1. Browse to the tutorial you want to run e.g. "FlipWebApps/GameFrameworkTutorials/GettingStarted/Part5"
+	4. Setup and run the basic tutorial:
+		4.1. Browse to "FlipWebApps/GameFramework"
 		4.2. Open build settings from "Top Menu->File->Build Settings".
-		4.3. Drag all scenes in the tutorial folder to "Scenes In Build" in the "Build Settings" window.
-		4.4. Play the scene (if there are multiple scenes then the one ending "Title" is typically the entry point)
+		4.3. Drag Demo-Game and Demo-Menu to "Scenes In Build" in the "Build Settings" window.
+		4.4. Run the Demo-Menu scene.
+		4.5. This is only a very basic demo so check the getting started tutorial at 
+		     http://www.flipwebapps.com/game-framework/tutorials/
 
 For full setup instructions visit: http://www.flipwebapps.com/game-framework/setup/		
 		
 - - - - - - - - - -
 
 CHANGE LOG
+
+v1.0
+	Game Framework Core - Improvements
+	- Deprecated legacy UI animations and added support for Beautiful Transitions asset (included with paid version)
+	- Basic Demo scene added
+	- Animation: SetTriggerOnce and SetBoolOnce components for running animations one time
+	- Audio: Effect audio effect pooling and simultaneous effect support.
+	- GameObjects: Generic EnableOnce component
+
+	Game Framework Core - Fixes
+	- Free Prize: Time to Free Prize subscribes to localisation changes
+
+	Game Framework Extras - Improvements
+	- UI / Themes: Updated all dialogs to use the new Beautiful Transitions asset.
+	- Themes: Basic RPG theme.
+	- Themes: Start of basic themes window to help with rebranding.
+
+	Game Framework Extras - Fixes
+	
+	Game Framework Tutorials - Improvements
+	- Advanced 'Extending Level' tutorial added
+	- Updated all tutorials to use the new Beautiful Transitions asset.
+
+	Game Framework Tutorials - Fixes
 
 v0.9
 	Game Framework Core - Improvements

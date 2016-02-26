@@ -108,6 +108,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                         level.IsUnlockedAnimationShown = true;
                         level.UpdatePlayerPrefs();
                     }
+                    PlayerPrefs.Save();
                 }
                 else
                 {
@@ -124,6 +125,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                         level.IsUnlockedAnimationShown = false;
                         level.UpdatePlayerPrefs();
                     }
+                    PlayerPrefs.Save();
                 }
                 else
                 {
