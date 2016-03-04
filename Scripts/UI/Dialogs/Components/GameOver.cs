@@ -16,10 +16,12 @@ using FlipWebApps.GameFramework.Scripts.UI.Other;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 #if FACEBOOK_SDK
 using FlipWebApps.GameFramework.Scripts.Facebook.Components;
 #endif
+
 #if UNITY_ANALYTICS
 using System.Collections.Generic;
 using UnityEngine.Analytics;
@@ -40,6 +42,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public bool ShowTime = true;
         public bool ShowCoins = true;
         public bool ShowScore = true;
+
         [Header("Tuning")]
         public float PeriodicUpdateDelay = 1f;
 
@@ -205,12 +208,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Continue()
         {
-            FadeLevelManager.Instance.LoadScene(GameManager.GetIdentifierScene("Menu"));
+            GameManager.LoadSceneWithTransitions("Menu");
         }
 
         public void Retry()
         {
-            FadeLevelManager.Instance.LoadScene(GameManager.GetIdentifierScene("Game"));
+            GameManager.LoadSceneWithTransitions("Game");
         }
     }
 }

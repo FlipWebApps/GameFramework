@@ -18,6 +18,11 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
+
+#if BEAUTIFUL_TRANSITIONS
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+#endif
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure
 {
@@ -345,13 +350,29 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         public static string GetIdentifierScene(string sceneName)
         {
-                string newSceneName = GameManager.GetIdentifierBase() == null
+            string newSceneName = string.IsNullOrEmpty(GameManager.GetIdentifierBase())
                     ? sceneName
                     : GameManager.GetIdentifierBase() + "-" + sceneName;
             return newSceneName;
         }
 
+        #region Scene Transitions
 
+        public static void LoadSceneWithTransitions(string sceneName)
+        {
+#if BEAUTIFUL_TRANSITIONS
+            sceneName = GameManager.GetIdentifierScene(sceneName);
+            if (TransitionManager.IsActive)
+                TransitionManager.Instance.TransitionOutAndLoadScene(sceneName);
+            else
+#endif
+                SceneManager.LoadScene(sceneName);
+        }
+
+        #endregion Scene Transitions
+
+        
+        #region Player related code
         /// 
         /// Player related - override if you have a custom player class.
         ///
@@ -376,5 +397,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             Player = Players[playerNumber];
         }
+        #endregion Player Related
     }
 }

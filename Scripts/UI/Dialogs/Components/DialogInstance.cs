@@ -3,9 +3,9 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
-#region FULL VERSION ONLY
-//using FlipWebApps.BeautifulTransitions.Scripts;
-#endregion FULL VERSION ONLY
+#if BEAUTIFUL_TRANSITIONS
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+#endif
 
 using FlipWebApps.GameFramework.Scripts.Display.Other;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
@@ -155,15 +155,15 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             // show / transition in and when done call coroutine
             float transitionTime = 0;
             DialogGameObject.SetActive(true);
-            #region FULL VERSION ONLY
-            //if (TransitionHelper.ContainsTransition(gameObject))
-            //{
-            //    transitionTime = TransitionHelper.GetTransitionInTime(TransitionHelper.TransitionIn(gameObject));
-            //}
-            #endregion FULL VERSION ONLY
+#if BEAUTIFUL_TRANSITIONS
+            if (TransitionHelper.ContainsTransition(gameObject))
+            {
+                transitionTime = TransitionHelper.GetTransitionInTime(TransitionHelper.TransitionIn(gameObject));
+            }
+#endif
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, ShowFinished));
         }
-
+            
         public void ShowFinished()
         {
         }
@@ -209,12 +209,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             // show / transition in and when done call coroutine
             float transitionTime = 0;
-            #region FULL VERSION ONLY
-            //if (TransitionHelper.ContainsTransition(gameObject))
-            //{
-            //    transitionTime = TransitionHelper.GetTransitionOutTime(TransitionHelper.TransitionOut(gameObject));
-            //}
-            #endregion FULL VERSION ONLY
+#if BEAUTIFUL_TRANSITIONS
+            if (TransitionHelper.ContainsTransition(gameObject))
+            {
+                transitionTime = TransitionHelper.GetTransitionOutTime(TransitionHelper.TransitionOut(gameObject));
+            }
+#endif
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, DoneFinished));
         }
 

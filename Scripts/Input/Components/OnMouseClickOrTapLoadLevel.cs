@@ -9,6 +9,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using FlipWebApps.GameFramework.Scripts.GameStructure;
 
 namespace FlipWebApps.GameFramework.Scripts.Input.Components
 {
@@ -20,7 +21,6 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
     public class OnMouseClickOrTapLoadLevel : MonoBehaviour
     {
         public string SceneName;
-        public bool Fade;
         public List<GameObject> BlockingGameObjects;
 
         void Update()
@@ -46,10 +46,7 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
             }
 
             // if we got here then load the new scene
-            if (Fade)
-                FadeLevelManager.Instance.LoadScene(SceneName);
-            else
-                UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
+            GameManager.LoadSceneWithTransitions(SceneName);
         }
     }
 }

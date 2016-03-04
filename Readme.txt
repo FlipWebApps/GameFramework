@@ -1,4 +1,4 @@
-Game Framework - Free v1.0
+Game Framework - Free v1.1
 
 Thank you for using Game Framework. 
 
@@ -6,8 +6,8 @@ This package features the main core of Game Framework. There is also a paid vers
 get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
-	- The full Beautiful Transitions asset
-	- Additional 3D models
+	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
+	- Additional 3D models and animations including for free prize
 	- Additional samples
 	- Tutorials
 	- Other content
@@ -35,12 +35,7 @@ QUICK START
 	1. If you have an older version installed:
 		1.1. Make a backup of your project
 		1.2. Delete the old /FlipWebApps folder to cater for possible conflicts.
-	2. Select "Edit->Project Settings->Script Execution Order…".
-	3. Drag the following scripts across and give them the specified priority:
-		- FlipWebApps/GameFramework/Scripts/UI/Dialogs/Components/DialogInstance.cs (priority -100)
-		- FlipWebApps/GameFramework/Scripts/GameStructure/GameManager.cs (priority -50)
-		- FlipWebApps/GameFramework/Scripts/FreePrize/Components/FreePrizeManager.cs (priority -20)
-	4. Setup and run the basic tutorial:
+	2. Setup and run the basic tutorial:
 		4.1. Browse to "FlipWebApps/GameFramework"
 		4.2. Open build settings from "Top Menu->File->Build Settings".
 		4.3. Drag Demo-Game and Demo-Menu to "Scenes In Build" in the "Build Settings" window.
@@ -53,6 +48,19 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 - - - - - - - - - -
 
 CHANGE LOG
+
+v1.1
+	Game Framework Core - Improvements
+	- Removed FadeLevelManager as more advanced screen wipes are supported through the bundled BeautifulTransitions asset (paid verions only)
+	- Updated the bundled BeautifulTransitions asset to v0.9 that includes:
+		- Rewritten core for easier extensibility
+		- Added Screen transitions including fade and multiple wipe transitions
+		- Added Camera transitions including fade and multiple wipe transitions
+		- Added the possibility to create your own custom transitions by uploading a new Alpha texture
+		- Added new demo for screen and camera transitions.
+
+	Game Framework Extras - Fixes
+	- Dialog fixes for updated transitions
 
 v1.0
 	Game Framework Core - Improvements

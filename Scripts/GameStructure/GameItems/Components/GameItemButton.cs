@@ -175,15 +175,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
             {
-                string sceneName = GameManager.GetIdentifierScene(ClickUnlockedSceneToLoad);
-                if (FadeLevelManager.IsActive)
-                {
-                    FadeLevelManager.Instance.LoadScene(sceneName);
-                }
-                else
-                {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-                }
+                GameManager.LoadSceneWithTransitions(ClickUnlockedSceneToLoad);
             }
         }
 
