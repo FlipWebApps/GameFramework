@@ -360,13 +360,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         public static void LoadSceneWithTransitions(string sceneName)
         {
-#if BEAUTIFUL_TRANSITIONS
             sceneName = GameManager.GetIdentifierScene(sceneName);
+#if BEAUTIFUL_TRANSITIONS
             if (TransitionManager.IsActive)
                 TransitionManager.Instance.TransitionOutAndLoadScene(sceneName);
             else
 #endif
-                SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName);
         }
 
         #endregion Scene Transitions

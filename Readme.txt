@@ -33,15 +33,10 @@ For tutorials visit: http://www.flipwebapps.com/game-framework/tutorials/
 QUICK START
 
 	1. If you have an older version installed:
-		1.1. Make a backup of your project
+		1.1. Make a backup of your project.
 		1.2. Delete the old /FlipWebApps folder to cater for possible conflicts.
-	2. Setup and run the basic tutorial:
-		4.1. Browse to "FlipWebApps/GameFramework"
-		4.2. Open build settings from "Top Menu->File->Build Settings".
-		4.3. Drag Demo-Game and Demo-Menu to "Scenes In Build" in the "Build Settings" window.
-		4.4. Run the Demo-Menu scene.
-		4.5. This is only a very basic demo so check the getting started tutorial at 
-		     http://www.flipwebapps.com/game-framework/tutorials/
+		1.3. Import the new version.
+		1.4. Try out the Demo scene for getting started information.
 
 For full setup instructions visit: http://www.flipwebapps.com/game-framework/setup/		
 		
@@ -52,12 +47,13 @@ CHANGE LOG
 v1.1
 	Game Framework Core - Improvements
 	- Removed FadeLevelManager as more advanced screen wipes are supported through the bundled BeautifulTransitions asset (paid verions only)
-	- Updated the bundled BeautifulTransitions asset to v0.9 that includes:
+	- Updated the bundled BeautifulTransitions asset to v1.0 that includes:
 		- Rewritten core for easier extensibility
 		- Added Screen transitions including fade and multiple wipe transitions
 		- Added Camera transitions including fade and multiple wipe transitions
 		- Added the possibility to create your own custom transitions by uploading a new Alpha texture
 		- Added new demo for screen and camera transitions.
+	- Updated Demo scene
 
 	Game Framework Extras - Fixes
 	- Dialog fixes for updated transitions

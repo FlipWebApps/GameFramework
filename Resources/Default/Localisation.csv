@@ -100,25 +100,3 @@ Level.Unlock.Existing.Text1,"Bad Luck!
 Level Already Unlocked.","Uflaks!
 Level er allerede låst opp. "
 Level.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
-GameFramework.ProVersion.Title,Pro Version,Pro Version
-GameFramework.ProVersion.Text1,Check out the pro version of Game Framework on the asset store!,Check out the pro version of Game Framework on the asset store!
-GameFramework.ProVersion.Text2,'Additional Features Include:
-
- - 3 UI themes (Cartoon, Space, RPG)
- - The full Beautiful Transitions asset for smooth animated effects
- - Additional 3D models
- - Additional samples
- - Tutorials
- - Other content
- - Priority support and feature requests
- - Reasonably priced','Additional Features Include:
-
- - 3 UI themes (Cartoon, Space, RPG)
- - The full Beautiful Transitions asset for smooth animated effects
- - Additional 3D models
- - Additional samples
- - Tutorials
- - Other content
- - Priority support and feature requests
- - Reasonably priced'
- 
