@@ -92,7 +92,7 @@ namespace FlipWebApps.GameFramework.Demo.Scripts
         public void ShowAssetStorePage()
         {
             GameManager.Instance.PlayEffect(ClickAudioClip);
-            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/56442");
+            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/55334");
         }
 
         public void ShowPaidVersion()
