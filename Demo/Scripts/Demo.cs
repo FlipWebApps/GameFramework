@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//----------------------------------------------
+// Flip Web Apps: Game Framework
+// Copyright © 2016 Flip Web Apps / Mark Hewitt
+//----------------------------------------------
+
+using System.Collections;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
@@ -12,7 +17,7 @@ namespace FlipWebApps.GameFramework.Demo.Scripts
         public Text ProgressText;
         public AudioClip ClickAudioClip;
 
-        public float PlaybackSpeed { get; set; }    // Playback speed in seconds.
+        public float PlaybackSpeed { get; set; }    // Playback Speed in seconds.
 
         int _pageIndex;
         float _autoCounter;
