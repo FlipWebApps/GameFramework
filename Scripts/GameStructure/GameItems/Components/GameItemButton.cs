@@ -175,7 +175,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
             {
-                GameManager.LoadSceneWithTransitions(ClickUnlockedSceneToLoad);
+                GameManager.LoadSceneWithTransitions(string.Format("{0}{1}",ClickUnlockedSceneToLoad, CurrentItem.Number));
             }
         }
 
