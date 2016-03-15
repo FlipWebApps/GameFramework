@@ -3,13 +3,12 @@
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //----------------------------------------------
 
-using System.Diagnostics;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace FlipWebApps.GameFramework.Scripts.Editor {
+namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
     /// <summary>
     /// Adds commands for opening in certain applications.
     /// See https://unity3d.com/learn/tutorials/modules/intermediate/editor/menu-items

@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using DB = UnityEngine.Debug;
 
-namespace FlipWebApps.GameFramework.Scripts.Editor {
+namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
     /// <summary>
     /// Various helper options for models
     /// </summary>

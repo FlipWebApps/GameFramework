@@ -7,7 +7,7 @@ using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Editor {
+namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
     /// <summary>
     /// Flip Web Apps links and documentation
     /// </summary>
