@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿//----------------------------------------------
+// Flip Web Apps: Game Framework
+// Copyright © 2016 Flip Web Apps / Mark Hewitt
+//----------------------------------------------
+
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
