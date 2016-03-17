@@ -23,6 +23,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
     /// <typeparam name="T">The type of the items that we are putting a weight upon</typeparam>
     public class DistanceWeightedItems<T>
     {
+        // count of items added.
+        public int ItemCount { get; set; }
+
         // A list of all passed items that we are weighting.
         List<DistanceWeightedItem> _items = new List<DistanceWeightedItem>();
 
@@ -32,15 +35,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
         // Set once everything is setup and ready for retreiving weighted items.
         bool isPreparedForUse = false;
 
-
         /// <summary>
         /// Add an item and update the master list with all distances.
         /// </summary>
         /// <param name="item"></param>
         /// <param name="distanceWeights"></param>
-        public void AddItem(T item, List<DistanceWeightValue> distanceWeights)
+        public bool AddItem(T item, List<DistanceWeightValue> distanceWeights)
         {
+            if (distanceWeights == null || distanceWeights.Count == 0) return false;
+
             _items.Add(new DistanceWeightedItem() { Item = item, DistanceWeights = distanceWeights });
+            ItemCount++;
 
             // add all distance weights passed in
             foreach (var distanceWeight in distanceWeights)
@@ -48,6 +53,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
                 if (_distancesWithWeights.FirstOrDefault(t => t.Distance == distanceWeight.Distance) == null)
                     _distancesWithWeights.Add(new DistanceWithWeights() { Distance = distanceWeight.Distance });
             }
+
+            return true;
         }
 
 
@@ -83,6 +90,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
                 }
             }
 
+#if UNITY_EDITOR
+            // sanity check
+            for (var j = 0; j < _distancesWithWeights.Count; j++)
+            {
+                var distanceWithWeights = _distancesWithWeights[j];
+                if (distanceWithWeights.Total == 0)
+                    MyDebug.LogWarningF("All Totals are 0 for distance {0}. This might give unexpected results.", distanceWithWeights.Distance);
+            }
+#endif
+
             isPreparedForUse = true;
         }
 
@@ -97,55 +114,102 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
             Assert.IsTrue(isPreparedForUse, "You must call PrepareForUse before trying to get values.");
 
             // loop to find matching distance.
+            var distanceWithWeights = GetAssociatedDistance(distance);
+
+            // get item based upon weight
+            var weight = Random.Range(0, distanceWithWeights.Total + 1);
+            return _items[GetIndexFromWeights(distanceWithWeights.ItemWeights, weight)].Item;
+        }
+
+
+        /// <summary>
+        /// Get the item that is associated with the specified distance.
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public DistanceWithWeights GetAssociatedDistance(int distance)
+        {
             var selectedDistanceWithWeights = _distancesWithWeights[0];
             for (var i = 0; i < _distancesWithWeights.Count; i++)
             {
-                if (distance <= _distancesWithWeights[i].Distance)
+                if (distance < _distancesWithWeights[i].Distance)
                     break;
 
                 selectedDistanceWithWeights = _distancesWithWeights[i];
             }
 
-            // get item based upon weight
-            int weight = Random.Range(0, selectedDistanceWithWeights.Total + 1);
-            int weightCounter = 0;
-            for (int i = 0; i < selectedDistanceWithWeights.ItemWeights.Count; i++)
-            {
-                var itemWeight = selectedDistanceWithWeights.ItemWeights[i];
-                weightCounter += itemWeight;
-                Debug.Log(weightCounter + ", " + weight);
-                if (weightCounter >= weight)
-                {
-                    return _items[i].Item;
-                }
-            }
-
-            // should never happen as we should always get a match!
-            MyDebug.Log("No item found for given distance. Please report this error as this should never happen!");
-            return default(T);
+            return selectedDistanceWithWeights;
         }
 
 
+        /// <summary>
+        /// Given a list of individual item weights and a target weight value, return the index that corresponds 
+        /// to teh accumulated item weights that meet target weight.
+        /// </summary>
+        /// <param name="itemWeights"></param>
+        /// <param name="targetWeight"></param>
+        /// <returns></returns>
+        public int GetIndexFromWeights(List<int> itemWeights, int targetWeight)
+        {
+            var weightCounter = 0;
+            for (int i = 0; i < itemWeights.Count; i++)
+            {
+                var itemWeight = itemWeights[i];
+                if (itemWeight != 0)
+                {
+                    weightCounter += itemWeight;
+                    //Debug.Log(weightCounter + ", " + weight);
+                    if (weightCounter >= targetWeight)
+                    {
+                        {
+                            return i;
+                        }
+                    }
+                }
+            }
+
+            // should never happen as we should always get a match! We warn about case where all are 0 earlier, warn on others here.
+            if (weightCounter != 0)
+            {
+                MyDebug.LogWarningF("No match for weight {0}. Please report this error as this should never happen!",
+                    targetWeight);
+                MyDebug.LogWarningF(ToString());
+            }
+            return 0;
+        }
+
+
+        /// <summary>
+        /// Get all distances that have been added
+        /// </summary>
+        /// <returns></returns>
         public List<int> GetDistances()
         {
             return _distancesWithWeights.Select(t => t.Distance).ToList();
         }
 
 
+        /// <summary>
+        /// Get the total weight for the specified distanse
+        /// </summary>
+        /// <param name="distance"></param>
+        /// <returns></returns>
         public int GetDistanceTotalWeight(int distance)
         {
-            return _distancesWithWeights.FirstOrDefault(t => t.Distance == distance).Total;
+            var distanceWithWeights = _distancesWithWeights.FirstOrDefault(t => t.Distance == distance);
+            return distanceWithWeights == null ? -1 : distanceWithWeights.Total;
         }
 
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            for (var i = 0; i < _items.Count; i++)
+            var sb = new StringBuilder();
+            for (var j = 0; j < _distancesWithWeights.Count; j++)
             {
-                for (var j = 0; j < _distancesWithWeights.Count; j++)
+                var distanceWithWeights = _distancesWithWeights[j];
+                sb.AppendFormat("Distance: {0}, Total: {1}, Values:", distanceWithWeights.Distance, distanceWithWeights.Total);
+                for (var i = 0; i < _items.Count; i++)
                 {
-                    var distanceWithWeights = _distancesWithWeights[j];
                     sb.Append(distanceWithWeights.ItemWeights[i]);
                     sb.Append(", ");
                 }
@@ -161,7 +225,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
             internal List<DistanceWeightValue> DistanceWeights;
         }
 
-        class DistanceWithWeights
+        public class DistanceWithWeights
         {
             public int Distance;
             public int Total;
