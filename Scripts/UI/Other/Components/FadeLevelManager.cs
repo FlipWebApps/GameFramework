@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
+    [System.Obsolete("Discontinued in favour of the Beautiful Assets package!")]
     public class FadeLevelManager : Singleton<FadeLevelManager>
     {
         public Color FadeColour = Color.black;

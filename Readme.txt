@@ -75,6 +75,15 @@ v1.3
 	Game Framework Tutorials (Paid Version Only) - Improvements
 	- The start of what will be a full 2D infinate scrolling game template with tutorials. (work in progress)
 
+v1.2
+	Game Framework Core - Improvements
+	- Input: New shared OnMouseClickOrTap base class.
+	- UI: Improvements for dialog swapping / transitioning
+	- UI: Added OnButtonClickSwapDialogInstance and OnMouseClickOrTapSwapDialogInstance components.
+
+	Game Framework Core - Fixes
+	- UI: DialogInstance IsShown state correctly reflects active value
+
 v1.1
 	Game Framework Core - Improvements
 	- Removed FadeLevelManager as more advanced screen wipes are supported through the bundled BeautifulTransitions asset (paid verions only)
