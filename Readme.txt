@@ -1,4 +1,4 @@
-Game Framework - Free v1.1
+Game Framework - Free v1.3
 
 Thank you for using Game Framework. 
 
@@ -43,6 +43,37 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 - - - - - - - - - -
 
 CHANGE LOG
+
+v1.3
+	Game Framework Core - Improvements
+	- BeautifulTransitions: Updated to v1.2 that includes:
+		- New Rotate UI / Game Object transition. 
+		- Transition core code refactor.
+		- Added the ability to define your own animation curves.
+		- Added Custom Property Editor for improved UI and additional help. 
+		- Various fixes (see seperate 'Readme - Beautiful Transitions.txt' for full details)
+	- Display: Added SetQuadUVs
+	- Editor: Added Conditional Hide property drawer (thanks to Brecht Lecluyse -  www.brechtos.com). 
+	- Editor: Moved Editor files to allow better grouping
+	- GameObjects: Added MinMax and MinMaxf structures.
+	- GameStructure: Added Weighting framework for managing relative object weights over distance / time 
+	  and selection of items based upon this. Usage will be demoed in a full infinate scroller game template in the 
+	  paid version.
+	- GameStructure: Allow specifying of an optional game item specific scene from game item button (e.g. for level).
+	- Input: New shared OnMouseClickOrTap base class.
+	- UI: Improvements for dialog swapping / transitioning
+	- UI: Added OnButtonClickSwapDialogInstance and OnMouseClickOrTapSwapDialogInstance components.
+
+	Game Framework Core - Fixes
+	- UI: DialogInstance IsShown state correctly reflects active value
+
+	Game Framework Extras (Paid Version Only) - Improvements
+	- Scrolling: Added Scrolling script including manual / automatic scene setup, pooling and reuse of display instances, 
+	auto scroll of follow camera, parallex support, for automatic scene setup - relative weightings for displayed gameobjects given 
+	distance or time.
+
+	Game Framework Tutorials (Paid Version Only) - Improvements
+	- The start of what will be a full 2D infinate scrolling game template with tutorials. (work in progress)
 
 v1.1
 	Game Framework Core - Improvements
