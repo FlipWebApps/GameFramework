@@ -44,6 +44,12 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 		
 - - - - - - - - - -
 
+CREDIT
+
+ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com)
+		
+- - - - - - - - - -
+
 CHANGE LOG
 
 v1.3
