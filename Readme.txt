@@ -7,6 +7,8 @@ get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
+	- Full 2D runner framework and game sample.
+	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
 	- Additional samples
 	- Tutorials
