@@ -229,7 +229,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Retry()
         {
-            GameManager.LoadSceneWithTransitions("Game");
+            var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ?
+                SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;
+            GameManager.LoadSceneWithTransitions(sceneName);
         }
     }
 }
