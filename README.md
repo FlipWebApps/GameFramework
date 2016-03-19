@@ -29,8 +29,10 @@ Note: For ease of use we will now only release stable versions through the Unity
 The framework is free, however there is also a [paid version](https://www.assetstore.unity3d.com/#!/content/50893) which contains additional content to get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
-	- The full Beautiful Transitions asset
-	- Additional 3D models
+	- The full Beautiful Transitions asset for screen, gameobject and UI wipes and transitions
+	- Full 2D runner framework and game sample.
+	- Advanced parallex scrolling script.
+	- Additional 3D models and animations including for free prize
 	- Additional samples
 	- Tutorials
 	- Other content
