@@ -909,12 +909,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Please visit our website using the button below for full tutorials and
-    examples.
-
-
-    If you like this free asset please rate it on the Unity asset store. More ratings
-    = more users = more features for you :) Thanks!'
+  m_Text: "Visit our website using the button below for full tutorials and examples.\nIf
+    you like this free asset please show us your support and rate it on the Unity
+    asset store. \nMore ratings = more users = more features for you :) Thanks!"
 --- !u!222 &184513454
 CanvasRenderer:
   m_ObjectHideFlags: 0

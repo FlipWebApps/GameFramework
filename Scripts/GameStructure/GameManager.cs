@@ -339,7 +339,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
 
         /// <summary>
-        /// Get the theme that is defined
+        /// Get the identifier that is defined
         /// </summary>
         /// <returns></returns>
         public static string GetIdentifierBase()
