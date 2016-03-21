@@ -41,21 +41,6 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         const int ButtonWidth = 75;
         const int ButtonHeight = 25;
 
-        bool _isWon;
-        bool _isLost;
-
-        void Update ()
-        {
-            if (LevelManager.Instance.IsLevelRunning && (_isWon || _isLost))
-            {
-                Assert.IsTrue(LevelManager.IsActive, "Please ensure that you have a LevelManager component added to your scene.");
-                Assert.IsTrue(GameOver.IsActive, "Please ensure that you have a GameOver component added to your scene, or are using one of the default GameOver prefabs.");
-
-                LevelManager.Instance.LevelFinished();
-                GameOver.Instance.Show(_isWon);
-            }
-        }
-
 
         void OnGUI()
         {
@@ -82,11 +67,11 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
 
             if (GUI.Button(new Rect(x, y, ButtonWidth, ButtonHeight), "Win"))
             {
-                _isWon = true;
+                LevelManager.Instance.GameOver(true);
             }
             if (GUI.Button(new Rect(x, y - ButtonHeight - 10, ButtonWidth, ButtonHeight), "Lose"))
             {
-                _isLost = true;
+                LevelManager.Instance.GameOver(false);
             }
         }
     }
