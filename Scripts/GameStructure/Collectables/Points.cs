@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Collectables
         void OnTriggerEnter2D(Collider2D otherCollider)
         {
             // Is this an obsticle?
-            if (otherCollider.gameObject.tag == "Player")
+            if (otherCollider.gameObject.CompareTag("Player"))
             {
                 Instantiate(Effect, transform.position, Quaternion.identity);
                 GameManager.Instance.PlayEffect(AudioClip);

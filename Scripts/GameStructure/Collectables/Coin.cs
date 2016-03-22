@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Collectables
         void OnTriggerEnter2D(Collider2D otherCollider)
         {
             // Is this an obsticle?
-            if (otherCollider.gameObject.tag == "Player")
+            if (otherCollider.gameObject.CompareTag("Player"))
             {
                 if (FireworksEffect != null)
                     Instantiate(FireworksEffect, transform.position, Quaternion.identity);
@@ -48,9 +48,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Collectables
                 GameManager.Instance.Player.AddCoins(Value);
                 GameManager.Instance.Levels.Selected.AddCoins(Value);
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
-
         }
     }
 }

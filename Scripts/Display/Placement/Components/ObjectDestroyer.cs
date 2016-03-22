@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
                 return;
 
             // Is this an obsticle?
-            if (collision.gameObject.tag == DestroyTag)
+            if (collision.gameObject.CompareTag(DestroyTag))
             {
                 DestroyCollidingGameObject(collision.gameObject);
             }
@@ -49,7 +49,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
                 return;
 
             // Is this an obsticle?
-            if (otherCollider.gameObject.tag == DestroyTag)
+            if (otherCollider.gameObject.CompareTag(DestroyTag))
             {
                 Destroy(otherCollider.gameObject); // Remember to always target the game object, otherwise you will just remove the script
             }
