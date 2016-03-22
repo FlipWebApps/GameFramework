@@ -29,6 +29,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         public int Min;
         public int Max;
         public int Difference { get { return Max - Min; } }
+
+        // Returns a random integer number between min[inclusive] and max[exclusive] (Read Only).
+        public float RandomValue()
+        {
+            return UnityEngine.Random.Range(Min, Max + 1);
+        }
     }
 
     [Serializable]
@@ -37,5 +43,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         public float Min;
         public float Max;
         public float Difference { get { return Max - Min; } }
+
+        // Returns a random float number between min[inclusive] and max[inclusive] (Read Only).
+        public float RandomValue()
+        {
+            return UnityEngine.Random.Range(Min, Max);
+        }
     }
 }
