@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.Display.Other;
 using UnityEngine;
 
 //#if UNITY_EDITOR
@@ -204,7 +205,16 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
             Debug.DrawLine(points[4], points[3], color, duration);
             Debug.DrawLine(points[5], points[2], color, duration);
             Debug.DrawLine(points[5], points[3], color, duration);
+        }
 
+
+        public static void DrawGizmoRect(Rect rect, Color color)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawLine(new Vector3(rect.xMin, rect.yMin, 0), new Vector3(rect.xMax, rect.yMin, 0));
+            Gizmos.DrawLine(new Vector3(rect.xMax, rect.yMin, 0), new Vector3(rect.xMax, rect.yMax, 0));
+            Gizmos.DrawLine(new Vector3(rect.xMax, rect.yMax, 0), new Vector3(rect.xMin, rect.yMax, 0));
+            Gizmos.DrawLine(new Vector3(rect.xMin, rect.yMax, 0), new Vector3(rect.xMin, rect.yMin, 0));
         }
     }
 }
