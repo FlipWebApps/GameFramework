@@ -55,7 +55,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
             GUILayout.EndHorizontal();
 
             // player
-            GUILayout.Label("Player", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5,5,5,5) });
+            GUILayout.Label("Player", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             // player score
             GUILayout.BeginHorizontal();
             string playerScore = GameManager.IsActive ? " (" + GameManager.Instance.Player.Score + ")" : "";
@@ -109,7 +109,57 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
             GUILayout.EndHorizontal();
 
 
-            // level
+            WorldMenuOptions();
+            LevelMenuOptions();
+            FreePrizeMenuOptions();
+        }
+
+
+        private static void WorldMenuOptions()
+        {
+            GUILayout.Label("World", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            // general
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Current Worlds", GUILayout.Width(100));
+            if (GUILayout.Button("Unlock All", GUILayout.Width(100)))
+            {
+                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Worlds != null)
+                {
+                    foreach (var world in GameManager.Instance.Worlds.Items)
+                    {
+                        world.IsUnlocked = true;
+                        world.IsUnlockedAnimationShown = true;
+                        world.UpdatePlayerPrefs();
+                    }
+                    PlayerPrefs.Save();
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have worlds setup.");
+                }
+            }
+            if (GUILayout.Button("Lock All", GUILayout.Width(100)))
+            {
+                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Worlds != null)
+                {
+                    foreach (var world in GameManager.Instance.Worlds.Items)
+                    {
+                        world.IsUnlocked = false;
+                        world.IsUnlockedAnimationShown = false;
+                        world.UpdatePlayerPrefs();
+                    }
+                    PlayerPrefs.Save();
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have worlds setup.");
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
+
+        private static void LevelMenuOptions()
+        {
             GUILayout.Label("Level", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             // general
             GUILayout.BeginHorizontal();
@@ -201,8 +251,6 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                 UpdateLevelCoins(100);
             }
             GUILayout.EndHorizontal();
-
-            FreePrizeMenuOptions();
         }
 
         static void FreePrizeMenuOptions()
