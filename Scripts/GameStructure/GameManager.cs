@@ -35,6 +35,8 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using FlipWebApps.GameFramework.Scripts.GameObjects;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -47,28 +49,77 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
     /// </summary>
     public class GameManager : SingletonPersistantSavedState<GameManager>
     {
-        [Header("Game Details")]
-        public string GameName = "";
-        public string PlayWebUrl = "";
-        public string PlayMarketUrl = "";
-        public string iOSWebUrl = "";
+        #region Inspector Values
 
-        [Header("Game Setup")]
+        // General related
+        [Tooltip("The name of this game")]
+        public string GameName = "";
+        [Tooltip("If targeting Andriod, a Google Play url for the game")]
+        public string PlayWebUrl = "";
+        [Tooltip("If targeting Andriod, a Google Play direct link for the game")]
+        public string PlayMarketUrl = "";
+        [Tooltip("If targeting iOS, a link to the App Store page game")]
+        public string iOSWebUrl = "";
+        [Tooltip("The number of local players to setup")]
         public int PlayerCount = 1;
+        [Tooltip("Whether the game is unlocked.\nCan be used to only enable certain features and can be linked to in app purchase")]
         public bool IsUnlocked;
+        [Tooltip("Set the base identifier to allow for multiple games in a single project")]
         public string IdentifierBase;
 
-        [Header("Basic Level Setup")]
-        public LevelGameItemsManager.LevelUnlockModeType LevelUnlockMode;
-        public int NumberOfStandardLevels = 10;
-        public int CoinsToUnlockLevels = 10;
-
+        // Display related
         [Header("Display")]
+        [Tooltip("Physical size the game is designed against. Can be used later with PhysicalScreenHeightMultiplier for screen scaling")]
         public float ReferencePhysicalScreenHeightInInches = 4f;
+        [Tooltip("How often to check for orientation and resolution changes")]
         public float DisplayChangeCheckDelay = 0.5f;                      // How long to wait until we check orientation & resolution changes.
 
-        [Header("Localisation")]
+        /// <summary>
+        /// Game Structure setup
+        /// </summary>
+        [Header("Worlds")]
+        [Tooltip("Whether to automatically setup wolds using default values.")]
+        public bool AutoCreateWorlds = false;
+        [Tooltip("The number of standard worlds that should be automatically created by the framework.")]
+        public int NumberOfAutoCreatedWorlds = 0;
+        [Tooltip("Whether to try and load data from a resources file.")]
+        public bool LoadWorldDatafromResources = false;
+        [Tooltip("How we plan on letting users unlock worlds.")]
+        public GameItem.UnlockModeType WorldUnlockMode;
+        [Tooltip("The default number of coins to unlock worlds (can be overriden by json configuration files or code).")]
+        public int CoinsToUnlockWorlds = 10;
+        [Tooltip("What levels numbers are assigned to each world.\nThese are used for internal lookup and references for e.g. in-app purchase.\n\nEnter a range but keep the numbers unique. You might also want to leave room to expand these later. e.g. (1-10), (101,110)")]
+        public MinMax[] WorldLevelNumbers;
+
+        [Header("Levels")]
+        [Tooltip("Whether to automatically setup levels using default values.\n\nThis option is hidden if automatically creating worlds as we then need per world configuration.")]
+        public bool AutoCreateLevels = false;
+        [Tooltip("The number of standard levels that should be automatically created by the framework.")]
+        [FormerlySerializedAs("NumberOfStandardLevels")]
+        public int NumberOfAutoCreatedLevels = 10;
+        [Tooltip("Whether to try and load data from a resources file.")]
+        public bool LoadLevelDatafromResources = false;
+        [Tooltip("How we plan on letting users unlock levels.")]
+        public GameItem.UnlockModeType LevelUnlockMode;
+        [Tooltip("The default number of coins to unlock levels (can be overriden by json configuration files or code).")]
+        public int CoinsToUnlockLevels = 10;
+
+        [Header("Characters")]
+        [Tooltip("Whether to automatically setup characters using default values.")]
+        public bool AutoCreateCharacters = false;
+        [Tooltip("The number of standard characters that should be automatically created by the framework.")]
+        public int NumberOfAutoCreatedCharacters = 10;
+        [Tooltip("Whether to try and load data from a resources file.")]
+        public bool LoadCharacterDatafromResources = false;
+        [Tooltip("How we plan on letting users unlock characters.")]
+        public GameItem.UnlockModeType CharacterUnlockMode;
+        [Tooltip("The default number of coins to unlock characters (can be overriden by json configuration files or code).")]
+        public int CoinsToUnlockCharacters = 10;
+
+        [Tooltip("A list of localisation languages that we support")]
         public string[] SupportedLanguages;
+
+        #endregion Inspector Values
 
         /// <summary>
         /// Gameplay related properties
@@ -140,6 +191,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public GameItemsManager<World, GameItem> Worlds { get; set; }
         public GameItemsManager<Level, GameItem> Levels { get; set; }
 
+        #region Setup
+
         protected override void GameSetup()
         {
             base.GameSetup();
@@ -207,11 +260,36 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 #elif UNITY_IPHONE
 #endif
 
-            // setup levels if we aren't doing this ourselves
-            if (LevelUnlockMode != LevelGameItemsManager.LevelUnlockModeType.Custom)
+            // setup worlds if auto setup
+            if (AutoCreateWorlds)
             {
-                Levels = new LevelGameItemsManager(NumberOfStandardLevels, LevelUnlockMode, CoinsToUnlockLevels);
-                Levels.Load();
+                Worlds = new GameItemsManager<World, GameItem>();
+                if (WorldUnlockMode == GameItem.UnlockModeType.Coins)
+                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, CoinsToUnlockLevels, LoadWorldDatafromResources);
+                else
+                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, loadFromResources: LoadWorldDatafromResources);
+            }
+
+            // setup levels if auto setup
+            if (AutoCreateLevels)
+            {
+                int startLevel = AutoCreateWorlds ? WorldLevelNumbers[Worlds.Selected.Number - 1].Min : 1;
+                int endLevel = AutoCreateWorlds ? WorldLevelNumbers[Worlds.Selected.Number - 1].Max : NumberOfAutoCreatedLevels;
+                Levels = new GameItemsManager<Level, GameItem>();
+                if (LevelUnlockMode == GameItem.UnlockModeType.Coins)
+                    Levels.LoadDefaultItems(startLevel, endLevel, CoinsToUnlockLevels, LoadLevelDatafromResources);
+                else
+                    Levels.LoadDefaultItems(startLevel, endLevel, loadFromResources: LoadLevelDatafromResources);
+            }
+
+            // setup levels if auto setup
+            if (AutoCreateCharacters)
+            {
+                Characters = new GameItemsManager<Character, GameItem>();
+                if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
+                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
+                else
+                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
             }
 
             // coroutine to check for display changes (don't need to do this every frame)
@@ -219,6 +297,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 StartCoroutine(CheckForDisplayChanges());
         }
 
+        #endregion Setup
 
         /// <summary>
         /// Setup some properties about the current state of the display
