@@ -26,7 +26,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Weighting {
+namespace FlipWebApps.GameFramework.Scripts.Weighting {
     /// <summary>
     /// Used for determining the relating weighting between items over a given distance (or time).
     /// This can be used to control things such as what is displayed, behavious, or other such things.
