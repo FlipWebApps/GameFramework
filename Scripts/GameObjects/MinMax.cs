@@ -23,28 +23,87 @@ using System;
 
 namespace FlipWebApps.GameFramework.Scripts.GameObjects
 {
+    /// <summary>
+    /// Simple struture to hold a set of minimum and maximum integer values.
+    /// </summary>
     [Serializable]
     public struct MinMax
     {
         public int Min;
         public int Max;
+
+        /// <summary>
+        /// Difference between the two values
+        /// </summary>
         public int Difference { get { return Max - Min; } }
 
-        // Returns a random integer number between min[inclusive] and max[exclusive] (Read Only).
+        /// <summary>
+        /// Whether a passed value is within the minimum / maximum range
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool IsWithinRange(int other)
+        {
+            return other >= Min && other <= Max;
+        }
+
+        /// <summary>
+        /// Whether two MinMax structs overlap.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Overlaps(MinMax other) {
+            return IsWithinRange(other.Min) || IsWithinRange(other.Max) || other.IsWithinRange(Min) || other.IsWithinRange(Max);
+        }
+
+        /// <summary>
+        /// Returns a random integer number between min[inclusive] and max[exclusive] (Read Only).
+        /// </summary>
+        /// <returns></returns>
         public float RandomValue()
         {
             return UnityEngine.Random.Range(Min, Max + 1);
         }
     }
 
+    /// <summary>
+    /// Simple struture to hold a set of minimum and maximum float values.
+    /// </summary>
     [Serializable]
     public struct MinMaxf
     {
         public float Min;
         public float Max;
+
+        /// <summary>
+        /// Difference between the two values
+        /// </summary>
         public float Difference { get { return Max - Min; } }
 
-        // Returns a random float number between min[inclusive] and max[inclusive] (Read Only).
+        /// <summary>
+        /// Whether a passed value is within the minimum / maximum range
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool IsWithinRange(float other)
+        {
+            return other >= Min && other <= Max;
+        }
+
+        /// <summary>
+        /// Whether two MinMax structs overlap.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Overlaps(MinMaxf other)
+        {
+            return IsWithinRange(other.Min) || IsWithinRange(other.Max) || other.IsWithinRange(Min) || other.IsWithinRange(Max);
+        }
+
+        /// <summary>
+        /// Returns a random integer number between min[inclusive] and max[inclusive] (Read Only).
+        /// </summary>
+        /// <returns></returns>
         public float RandomValue()
         {
             return UnityEngine.Random.Range(Min, Max);
