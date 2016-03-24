@@ -25,6 +25,7 @@ using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 {
@@ -36,6 +37,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// </summary>
     public class GameItem
     {
+        public enum UnlockModeType { Custom, Completion, Coins }
+
+        public virtual string IdentifierBase { get; protected set; }
+        public virtual string IdentifierBasePrefs { get; protected set; }
+
         public Player Player;
         //public GameItem Parent;
 
@@ -43,8 +49,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Global settings
         /// </summary>
         public int Number { get; protected set; }
-        public string IdentifierBase { get; protected set; }
-        public string IdentifierBasePrefs { get; protected set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -82,9 +86,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public bool IsUnlockedAnimationShown { get; set; }
         public int StarsWon { get; set; }
 
-        readonly bool _isPlayer;
+        /// <summary>
+        /// Stored json data from disk. Consider creating a subclass to save this instead.
+        /// </summary>
+        public JSONObject JsonConfigurationData { get; set; }
 
-        public GameItem(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        bool _isPlayer;
+
+        public GameItem()
+        {
+        }
+
+        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
+        //public GameItem(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        //{
+        //    Initialise(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, identifierBase, identifierBasePrefs, loadFromResources);
+        //}
+
+        public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
@@ -122,7 +141,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         public void LoadLevelData()
         {
-            ParseLevelFileData(LoadJSONDataFile());
+            if (JsonConfigurationData == null)
+                JsonConfigurationData = LoadJSONDataFile();
+            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. CHeck the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            ParseLevelFileData(JsonConfigurationData);
         }
 
 
@@ -143,7 +165,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         public void LoadGameData()
         {
-            ParseGameData(LoadJSONDataFile());
+            if (JsonConfigurationData == null)
+                JsonConfigurationData = LoadJSONDataFile();
+            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. CHeck the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            ParseGameData(JsonConfigurationData);
         }
 
         public virtual void ParseGameData(JSONObject jsonObject)
@@ -154,6 +179,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         JSONObject LoadJSONDataFile()
         {
             TextAsset jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            if (jsonTextAsset == null) return null;
+
             MyDebug.Log(jsonTextAsset.text);
             JSONObject jsonObject = JSONObject.Parse(jsonTextAsset.text);
             return jsonObject;

@@ -30,9 +30,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
     /// </summary>
     public class Character : GameItem
     {
-        public Character(int levelNumber, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null) //, GameItem parent = null)
-            : base(levelNumber, name: name, localiseName: localiseName, description: description, localiseDescription: localiseDescription, sprite: sprite, valueToUnlock: valueToUnlock, player: player, identifierBase: "Character", identifierBasePrefs: "C") //parent: parent, 
-        {
-        }
+        public override string IdentifierBase { get { return "Character"; } }
+        public override string IdentifierBasePrefs { get { return "C"; } }
+
+        public Character() { }
+
+        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
+        //public Character(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
+        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "Character", "C", loadFromResources)
+        //{
+        //}
     }
 }

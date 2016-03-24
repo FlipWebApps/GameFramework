@@ -32,11 +32,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
     {
         public int SelectedLevel;
 
-        public World(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null) //, GameItem parent = null)
-            : base(number, name: name, localiseName: localiseName, description: description, localiseDescription: localiseDescription, sprite: sprite, valueToUnlock: valueToUnlock, player: player, identifierBase: "World", identifierBasePrefs: "W") //parent: parent, 
-        {
-            //SelectedLevel = GameManager.Instance.Player.GetSettingInt(FullKey("SelectedLevel"), -1);
-        }
+        public override string IdentifierBase { get { return "World"; } }
+        public override string IdentifierBasePrefs { get { return "W"; } }
+
+        public World() { }
+
+        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
+        //public World(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
+        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "World", "W", loadFromResources)
+        //{
+        //}
 
         //public override void UpdatePlayerPrefs()
         //{

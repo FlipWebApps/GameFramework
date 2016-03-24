@@ -41,7 +41,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     [RequireComponent(typeof(Button))]
-    public abstract class UnlockGameItemButton<T> : MonoBehaviour where T : GameItem
+    public abstract class UnlockGameItemButton<T> : MonoBehaviour where T : GameItem, new()
     {
         [Header("Settings")]
         public int MaxFailedUnlocks = 999;      // number of failed unlock attmepts before we actually unlock something for them

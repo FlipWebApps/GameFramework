@@ -29,6 +29,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
 {
@@ -61,5 +62,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
         {
             return GameManager.Instance.Worlds;
         }
+
+
+        public override void ClickUnlocked()
+        {
+            if (GameManager.Instance.AutoCreateLevels)
+            {
+                int startLevel = GameManager.Instance.WorldLevelNumbers[CurrentItem.Number - 1].Min;
+                int endLevel = GameManager.Instance.WorldLevelNumbers[CurrentItem.Number - 1].Max;
+                GameManager.Instance.Levels = new GameItemsManager<Level, GameItem>();
+                if (GameManager.Instance.LevelUnlockMode == GameItem.UnlockModeType.Coins)
+                    GameManager.Instance.Levels.LoadDefaultItems(startLevel, endLevel, GameManager.Instance.CoinsToUnlockLevels);
+                else
+                    GameManager.Instance.Levels.LoadDefaultItems(startLevel, endLevel);
+            }
+            base.ClickUnlocked();
+        }
+
     }
 }

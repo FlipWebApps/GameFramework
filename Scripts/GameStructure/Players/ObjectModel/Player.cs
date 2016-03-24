@@ -29,14 +29,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
     public class Player : GameItem
     {
+        public override string IdentifierBase { get { return "Player"; } }
+        public override string IdentifierBasePrefs { get { return "P"; } }
+
         public int MaximumWorld;
         public int MaximumLevel;
         public int SelectedWorld;
         public int SelectedLevel;   // only use when not using worlds, other use World.SelectedLevel for world specific level.
 
-        public Player(int playerNumber)
-            : base(playerNumber, identifierBase: "Player", identifierBasePrefs: "P", localiseDescription: false)
+        public Player(int playerNumber) //: base(playerNumber, identifierBase: "Player", identifierBasePrefs: "P", localiseDescription: false)
         {
+            Initialise(playerNumber, localiseDescription: false);
+
             Reset();
 
             Name = GetSettingString("Name", Name);

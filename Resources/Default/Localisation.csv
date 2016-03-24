@@ -100,3 +100,31 @@ Level.Unlock.Existing.Text1,"Bad Luck!
 Level Already Unlocked.","Uflaks!
 Level er allerede låst opp. "
 Level.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
+World.Buy.Title,BUY,KJØP
+World.Buy.Text1,Purchase this world?,Vil du kjøpe denne verden? 
+World.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp
+World.Buy.NotEnabled,Collect coins to unlock this world,Få flere mynter for å låse opp denne verden
+World.Unlock,Unlock,Lås opp
+World.Unlock.Title,UNLOCK WORLD,Lås opp verden. 
+World.Unlock.New.Text1,"Congratulations!
+New world Unlocked","Gratulerer!
+Ny verden låst opp. "
+World.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.
+World.Unlock.Existing.Text1,"Bad Luck!
+World Already Unlocked.","Uflaks!
+Verden er allerede låst opp. "
+World.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
+Character.Buy.Title,BUY,KJØP
+Character.Buy.Text1,Purchase this character?,Vil du kjøpe denne karakteren? 
+Character.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp
+Character.Buy.NotEnabled,Collect coins to unlock this character,Få flere mynter for å låse opp denne karakteren
+Character.Unlock,Unlock,Lås opp
+Character.Unlock.Title,UNLOCK CHARACTER,Lås opp karakteren. 
+Character.Unlock.New.Text1,"Congratulations!
+New character Unlocked","Gratulerer!
+Ny karakter låst opp. "
+Character.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.
+Character.Unlock.Existing.Text1,"Bad Luck!
+Character Already Unlocked.","Uflaks!
+Karakteren er allerede låst opp. "
+Character.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 

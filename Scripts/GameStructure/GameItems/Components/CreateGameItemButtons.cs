@@ -29,7 +29,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     /// </summary>
     /// <typeparam name="TGameItemButton">The type of the Game Item button</typeparam>
     /// <typeparam name="TGameItem">The type of the Game Item</typeparam>
-    public abstract class CreateGameItemButtons<TGameItemButton, TGameItem> : MonoBehaviour where TGameItemButton: GameItemButton<TGameItem> where TGameItem: GameItem
+    public abstract class CreateGameItemButtons<TGameItemButton, TGameItem> : MonoBehaviour where TGameItemButton: GameItemButton<TGameItem> where TGameItem: GameItem, new()
     {
         public GameObject Prefab;
 

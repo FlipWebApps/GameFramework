@@ -20,45 +20,17 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 {
-    /// <summary>
-    /// A simple implementation of a Level GameItemsManager for setting up Levels using the standard object model class.
-    /// 
-    /// Name and Description are collected from the localisation file.
-    /// </summary>
-    public class LevelGameItemsManager : GameItemsManager<Level, GameItem>
+    public class UnlockWorldButton : UnlockGameItemButton<World>
     {
-        public enum LevelUnlockModeType { Custom, Completion, Coins }
-
-        readonly int _numberOfLevels;
-        readonly LevelUnlockModeType _levelUnlockModeType;
-        readonly int _valueToUnlock;
-
-        public LevelGameItemsManager(int numberOfLevels, LevelUnlockModeType levelUnlockModeType, int valueToUnlock)
+        protected override GameItemsManager<World, GameItem> GetGameItemsManager()
         {
-            _numberOfLevels = numberOfLevels;
-            _levelUnlockModeType = levelUnlockModeType;
-            _valueToUnlock = valueToUnlock;
-        }
-
-        protected override void LoadItems()
-        {
-            Items = new Level[_numberOfLevels];
-
-            for (var count = 0; count < _numberOfLevels; count++ )
-            {
-                if (_levelUnlockModeType == LevelUnlockModeType.Completion)
-                {
-                    Items[count] = new Level(count + 1);
-                }
-                else
-                {
-                    Items[count] = new Level(count + 1, valueToUnlock: _valueToUnlock);
-                }
-            };
+            return GameManager.Instance.Worlds;
         }
     }
 }

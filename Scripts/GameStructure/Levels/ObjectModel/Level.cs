@@ -30,11 +30,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
     /// </summary>
     public class Level : GameItem
     {
-        public static string IdBase = "Level";
+        public override string IdentifierBase { get { return "Level"; }}
+        public override string IdentifierBasePrefs { get { return "L"; } }
 
-        public Level(int levelNumber, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //, GameItem parent = null)
-            : base(levelNumber, name: name, localiseName: localiseName, description: description, localiseDescription: localiseDescription, sprite: sprite, valueToUnlock: valueToUnlock, player: player, identifierBase: "Level", identifierBasePrefs: "L", loadFromResources : loadFromResources) //parent: parent, 
-        {
-        }
+        public Level() : base() { }
+
+        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
+        //public Level(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
+        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "Level", "L", loadFromResources)
+        //{
+        //}
     }
 }

@@ -40,7 +40,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     /// Base Game Item button that displays information about the linked Game Item
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class GameItemButton<T> : MonoBehaviour where T : GameItem
+    public abstract class GameItemButton<T> : MonoBehaviour where T : GameItem, new()
     {
         public enum SelectionModeType { ClickThrough, Select }
 

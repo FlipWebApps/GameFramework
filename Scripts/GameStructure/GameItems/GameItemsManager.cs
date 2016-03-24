@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
@@ -33,8 +32,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TParent"></typeparam>
-    public abstract class GameItemsManager<T, TParent> where T: GameItem where TParent: GameItem
+    public class GameItemsManager<T, TParent> where T: GameItem, new() where TParent: GameItem
     {
+
+        public GameItem.UnlockModeType UnlockMode;
+
         public string TypeNameFull = typeof(T).FullName;
         public string TypeName = typeof(T).Name;
 
@@ -61,44 +63,74 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             }
         }
 
-        protected GameItemsManager() : this(null) { }
+        public GameItemsManager() : this(null) { }
 
-        protected GameItemsManager(TParent parent)
+        public GameItemsManager(TParent parent)
         {
             Debug.Log(TypeNameFull + ": Constructor");
             Parent = parent;
 
             // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this e.g. worlds->levels
             _baseKey = parent == null ? "" : Parent.FullKey("");
-
-
         }
 
         public void Load()
         {
             LoadItems();
-
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.Load()");
 
+            SetSelectedItemFromPrefs();
+            UnlockInitialItems();
+        }
+
+        protected virtual void LoadItems()
+        {
+
+        }
+
+        public void LoadDefaultItems(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
+        { 
+            int count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
+            Items = new T[count];
+
+            for (var i = 0; i < count; i++)
+            {
+                Items[i] = new T();
+                Items[i].Initialise(startNumber + i, valueToUnlock: valueToUnlock, loadFromResources : loadFromResources);
+            }
+            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.Load()");
+
+            SetSelectedItemFromPrefs();
+            UnlockInitialItems();
+        }
+
+        void SetSelectedItemFromPrefs()
+        {
             // get the last selected item or default to the first
             int selectedNumber = GameManager.Instance.Player.GetSettingInt(_baseKey + "Selected" + TypeName, -1);
-            if (selectedNumber == -1) selectedNumber = Items[0].Number;
             foreach (T item in Items)
             {
                 if (item.Number == selectedNumber)
                     Selected = item;
+            }
+            if (Selected == null)
+                Selected = Items[0];
+        }
 
+        void UnlockInitialItems()
+        {
+            Assert.IsNotNull(Selected, "Ensure you have a selected item (or default selected item before calling UnlockInitialItems");
+            foreach (T item in Items)
+            {
                 // If this is the first run, the the selected item and other items with valuetoUnlock==0 might not be unlocked, 
                 // so make sure they are
-                if (item.Number == selectedNumber || (item.ValueToUnlock == 0 && !item.IsUnlocked))
+                if (item.Number == Selected.Number || (item.ValueToUnlock == 0 && !item.IsUnlocked))
                 {
                     item.IsUnlocked = item.IsUnlockedAnimationShown = true;
                     item.UpdatePlayerPrefs();
                 }
             }
         }
-
-        protected abstract void LoadItems();
 
         public T GetItem(int number)
         {
@@ -132,6 +164,5 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             if (minimumCoins < 0) minimumCoins = 0;
             return minimumCoins;
         }
-
     }
 }
