@@ -33,12 +33,39 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         public override string IdentifierBase { get { return "Level"; }}
         public override string IdentifierBasePrefs { get { return "L"; } }
 
+        /// <summary>
+        /// A value that can be used for holding a target the the first star. Automatically loaded from JSON configuration if present.
+        /// </summary>
+        public float Star1Target { get; set; }
+        /// <summary>
+        /// A value that can be used for holding a target the the second star. Automatically loaded from JSON configuration if present.
+        /// </summary>
+        public float Star2Target { get; set; }
+        /// <summary>
+        /// A value that can be used for holding a target the the third star. Automatically loaded from JSON configuration if present.
+        /// </summary>
+        public float Star3Target { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Level() : base() { }
 
-        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
-        //public Level(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
-        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "Level", "L", loadFromResources)
-        //{
-        //}
+
+        /// <summary>
+        /// Parse the loaded level file data for level specific values. If overriding from a base class be sure to call base.ParseLevelFileData()
+        /// </summary>
+        /// <param name="jsonObject"></param>
+        public override void ParseLevelFileData(Helper.JSONObject jsonObject)
+        {
+            base.ParseLevelFileData(jsonObject);
+
+            if (jsonObject.ContainsKey("star1target"))
+                Star1Target = (float)jsonObject.GetNumber("star1target");
+            if (jsonObject.ContainsKey("star2target"))
+                Star2Target = (float)jsonObject.GetNumber("star2target");
+            if (jsonObject.ContainsKey("star3target"))
+                Star3Target = (float)jsonObject.GetNumber("star3target");
+        }
     }
 }
