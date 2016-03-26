@@ -37,12 +37,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
 
         public World() { }
 
-        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
-        //public World(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
-        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "World", "W", loadFromResources)
-        //{
-        //}
-
+        /// <summary>
+        /// Update PlayerPrefs with setting or preferences for this item.
+        /// Note: This does not call PlayerPrefs.Save()
+        /// 
+        /// If overriding from a base class be sure to call base.ParseGameData()
+        /// </summary>
         //public override void UpdatePlayerPrefs()
         //{
         //    GameManager.Instance.Player.SetSetting(FullKey("SelectedLevel"), SelectedLevel);
