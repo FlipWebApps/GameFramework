@@ -23,6 +23,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEditor;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure
 {
@@ -104,10 +105,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             //DrawDefaultInspector();
             serializedObject.Update();
+
             DrawGameDetails();
             DrawGameStructure();
             DrawLocalisation();
+
+            // do this check here at the end of layout to avoid any layout issues
+            if (Event.current.type == EventType.Repaint)
+            {
+                _worldLevelNumbersProperty.arraySize = _gameManager.NumberOfAutoCreatedWorlds;
+            }
+
             serializedObject.ApplyModifiedProperties();
+
+
         }
 
         void DrawGameDetails()
@@ -159,13 +170,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                         EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
 
                     // level number ranges
-                    EditorGUI.indentLevel += 1;
-                    EditorGUILayout.PropertyField(_worldLevelNumbersProperty, new GUIContent("Level Number Ranges"));
-                    EditorGUI.indentLevel += 1;
-                    _worldLevelNumbersProperty.arraySize = _gameManager.NumberOfAutoCreatedWorlds;
+                    EditorGUILayout.LabelField("Level Number Ranges", EditorStyles.boldLabel);
                     for (var i = 0; i < _worldLevelNumbersProperty.arraySize; i++)
                     {
-                        EditorGUILayout.PropertyField(_worldLevelNumbersProperty.GetArrayElementAtIndex(i), new GUIContent("Level " + i), true);
+                        EditorGUILayout.PropertyField(_worldLevelNumbersProperty.GetArrayElementAtIndex(i), new GUIContent("World " + i), true);
                     }
                     bool overlap = false;
                     for (var i = 0; i < _gameManager.WorldLevelNumbers.Length - 1; i++)
@@ -176,8 +184,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                                 overlap = true;
                         }
                     }
-                    EditorGUI.indentLevel -= 1;
-                    EditorGUI.indentLevel -= 1;
                     if (overlap) EditorGUILayout.HelpBox("Level ranges should not overlap!", MessageType.Error);
                 }
                 EditorGUILayout.EndVertical();
@@ -219,10 +225,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             EditorGUILayout.LabelField("Localisation", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("Box");
             EditorGUI.indentLevel += 1;
-            EditorGUILayout.PropertyField(_supportedLanguagesProperty, true);
+            EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.ElementLabels | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton);
             EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }
-
     }
 }
