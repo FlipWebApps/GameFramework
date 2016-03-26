@@ -30,10 +30,10 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
-    /// Game Item class. This represents most in static game items that have features such as a name and description, 
-    /// the ability to unlock, a score or Value. 
+    /// Game Item class. This represents most in game items that have features such as a name and description, 
+    /// the ability to unlock, a score or value. 
     /// 
-    /// This might include players, worlds, levels and characters.
+    /// This might include players, worlds, levels and characters...
     /// </summary>
     public class GameItem
     {
@@ -93,15 +93,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         bool _isPlayer;
 
-        public GameItem()
-        {
-        }
+        public GameItem() { }
 
         // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
         //public GameItem(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         //{
         //    Initialise(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, identifierBase, identifierBasePrefs, loadFromResources);
         //}
+
+        #region Initialisation
 
         public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
@@ -133,9 +133,26 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
             if (loadFromResources)
                 LoadLevelData();
+
+            // allow for any custom game item specific initialisation
+            CustomInitialisation();
         }
 
 
+        /// <summary>
+        /// Provides a simple method that you can overload to do custom initialisation in your own classes.
+        /// This is called after ParseLevelFileData (if loading from resources) so you can use values setup by that method. 
+        /// 
+        /// If overriding from a base class be sure to call base.CustomInitialisation()
+        /// </summary>
+        public virtual void CustomInitialisation()
+        {
+        }
+
+        #endregion Initialisation
+
+
+        #region Load JSON Data
         /// <summary>
         /// Load simple meta data associated with this game item.
         /// </summary>
@@ -148,9 +165,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Parse the loaded level file data. 
+        /// 
+        /// If overriding from a base class be sure to call base.ParseLevelFileData()
+        /// </summary>
+        /// <param name="jsonObject"></param>
         public virtual void ParseLevelFileData(JSONObject jsonObject)
         {
-            // get level info
             if (jsonObject.ContainsKey("name"))
                 Name = jsonObject.GetString("name");
             if (jsonObject.ContainsKey("description"))
@@ -171,11 +193,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             ParseGameData(JsonConfigurationData);
         }
 
+
+        /// <summary>
+        /// Parse the loaded game data. 
+        /// 
+        /// If overriding from a base class be sure to call base.ParseGameData()
+        /// </summary>
+        /// <param name="jsonObject"></param>
         public virtual void ParseGameData(JSONObject jsonObject)
         {
         }
 
 
+        /// <summary>
+        /// Load the json file that corresponds to this item.
+        /// </summary>
+        /// <param name="jsonObject"></param>
         JSONObject LoadJSONDataFile()
         {
             TextAsset jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
@@ -186,6 +219,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return jsonObject;
         }
 
+        #endregion Load JSON Data
 
         /// <summary>
         /// This is seperate so that we can save the bought status (e.g. from in app purchase) without affecting any of the other 
@@ -196,11 +230,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             IsBought = true;
             IsUnlocked = true;
-            PlayerPrefs.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than pre player.
+            PlayerPrefs.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
             PlayerPrefs.Save();
         }
 
-        // uses optimised names as we store these for all objects so there can be quite a few!
+        /// <summary>
+        /// Update PlayerPrefs with setting or preferences for this item.
+        /// Note: This does not call PlayerPrefs.Save()
+        /// 
+        /// If overriding from a base class be sure to call base.ParseGameData()
+        /// </summary>
         public virtual void UpdatePlayerPrefs()
         {
             SetSetting("IsU", IsUnlocked ? 1 : 0);
@@ -209,11 +248,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             SetSetting("HS", HighScore);
 
             if (IsBought)
-                PlayerPrefs.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than pre player.
+                PlayerPrefs.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
             if (HighScoreLocalPlayers != 0)
-                PlayerPrefs.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than pre player.
+                PlayerPrefs.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
             if (HighScoreLocalPlayersPlayerNumber != -1)
-            PlayerPrefs.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than pre player.
+            PlayerPrefs.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
 
         #region Score Related
@@ -270,7 +309,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
         #endregion
 
-        #region For setting player specific settings
+        #region For setting gameitem instance specific settings
         public void SetSetting(string key, string value, string defaultValue = null)
         {
             if (_isPlayer)
