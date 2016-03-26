@@ -2,11 +2,12 @@ Game Framework - Free v1.3
 
 Thank you for using Game Framework. 
 
-This package features the main core of Game Framework. There is also a paid version which contains additional content to 
-get you up and running including:
+This package features the main core of Game Framework. There is also a pro bundle which contains 
+additional content to get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
+	- THe full Pro Pooling asset for advanced gameobject pooling
 	- Full 2D runner framework and game sample.
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
@@ -16,8 +17,8 @@ get you up and running including:
 	- Priority support and feature requests
 	- Secures future development of this framework
 	
-Feel free to try this version, however if you like the framework then please consider the small price of purchasing the 
-paid version to support our efforts in developing this framework further.
+Feel free to try this version, however if you like the framework then please consider the small 
+price of purchasing the pro bundle to support our efforts in developing this framework further.
 
 Our goal is to create something that you enjoy and want to use. If you have any thoughts, comments, suggestions or 
 otherwise then please contact us through our website or drop me a mail directly on mark_a_hewitt@yahoo.co.uk
@@ -47,10 +48,95 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 CREDIT
 
 ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com)
+EditorList - courtesy of catlikecoding.com
 		
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.0
+
+IMPORTANT NOTE: This version includes some unavoidable breaking changes to allow 
+for supporting new features. You might need to reconfigure some items or perform 
+minor code changes. In particular the number of automatically created levels on 
+GameManager will need re-entering. See below for further details.
+
+	Game Framework Core - Improvements
+
+	- Debugging: Added DrawGizmoRect() method to MyDebug.cs
+	- Debugging: Options for handling worlds in Cheat Functions window.
+	- Display: GradientBackground lets you specify the top and bottom y position for finer control.
+	- EditorExtras: Added HelpBox Decorator drawer
+	- EditorExtras: Added custom EditorList - courtesy of catlikecoding.com
+	- GameObjects: Added documentation and Random(), IsWithinRange() and Overlap() functions to MinMax.cs
+	- GameObjects: Custom MinMax property drawer
+	- GameStructure: GameOver method added to LevelManager
+	- GameStructure: Added character and world button prefabs
+	- GameStructure: Refactor of Game Structure Code.:
+		- Simplified access to extended json configuration data from automatic setup mode without needing to create subclasses.
+		- Better support for world and character menus and management.
+		- Removed need for Level and World GameItemManagers.
+		- Updated constructor and instantiating of GameItems.
+		- Unlock world buttons.
+		- World button sets correct levels if in auto setup mode
+		- Localisation for world and character unlock and purchase
+	- GameStructure: Reworked Auto Level setup:
+		- Option for auto setup of worlds and characters. 
+		- Custom inspector. 
+		- Tooltips
+	- GameStructure: Added Show(Character/Level/World) info component with optional localisation
+	- GameStructure: Player lives support:
+		- Set default on GameManager
+		- Lives per player
+		- Buttons in Cheat Functions window
+		- Components to reset lives
+		- Component to display life icons based upon lives.
+	- GameStructure: GameItem - CustomInitialisation virtual method to allow an easy way for sub classes to do initialisation.
+	- GameStructure: Level star targets with automatic setting from json configuration.
+
+	
+	Game Framework Core - Fixes
+	
+	- changed ".tag ==" to ".CompareTag()" for performance in all instances
+	- Weighting: Moved weighting framework to top level as it isn't tied to gamestructure.
+
+	
+	Game Framework Extras (Pro Bundle) - Improvements
+	
+	- GameStructure: Added Character and World Buttons to all themes.
+	- Scrolling: ParallaxLayer and Parallax Items updated to use the new bundles Pro Pooling asset (see below)
+	- Scrolling: Support for weighting and child instance specific spacing
+
+	
+	Game Framework Extras (Pro Bundle) - Fixes
+	
+	- General cleanup and code refactor.
+
+	
+	Game Framework Tutorials (Pro Bundle) - Improvements
+	
+	- Full 2D Infinite Runner Framework: Various updates and improvements.
+	- Getting Started Tutorials: Various updates and improvements.
+	- Getting Started Tutorials: Added new 'Getting Started Part 6 - Worlds' tutorial.
+
+	
+	Game Framework Tutorials (Pro Bundle) - Fixes
+	
+	- All demos and tutorials updated for latest framework changes
+	- General cleanup and minor fixes.
+
+	
+	BeautifulTransitions (Pro Bundle): Updated to v2.0 that includes:
+
+	- All previous transition curves are now built in, removing the dependency on iTween and giving improved performance.
+	- Updated inspector gui with visual curves.
+	- Code refactor improvements (if you experience any build errors with your own derived classes that you don't know how to fix then let us know)
+	- Various fixes (see seperate 'Readme - Beautiful Transitions.txt' for full details)
+
+	
+	Pro Pooling (Pro Bundle): The Pro Bundle now includes Pro Pooling v1.0
+	
+	- Now included in the pro bundle.
 
 v1.3
 	Game Framework Core - Improvements

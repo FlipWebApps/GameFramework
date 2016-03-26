@@ -14,6 +14,7 @@ Features include:
 * ‘Free prize’ functionality
 * ‘Social’ functionality
 * Debugging and test functions
+* Weighting framework
 * Many helper classes and components from Animation through UI
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
@@ -21,7 +22,7 @@ The source code is open and free to use in your games under a license similar to
 Note: For ease of use we will now only release stable versions through the Unity asset store.
 
 * [Asset store download (Free Version)](https://www.assetstore.unity3d.com/#!/content/55334)
-* [Asset store download (Paid Version)](https://www.assetstore.unity3d.com/#!/content/50893)
+* [Asset store download (Pro Bundle)](https://www.assetstore.unity3d.com/#!/content/50893)
 * [Documentation](http://www.flipwebapps.com/game-framework/)
 * [Tutorials](http://www.flipwebapps.com/game-framework/tutorials/)
 
@@ -29,7 +30,8 @@ Note: For ease of use we will now only release stable versions through the Unity
 The framework is free, however there is also a [paid version](https://www.assetstore.unity3d.com/#!/content/50893) which contains additional content to get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
-	- The full Beautiful Transitions asset for screen, gameobject and UI wipes and transitions
+	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
+	- THe full Pro Pooling asset for advanced gameobject pooling
 	- Full 2D runner framework and game sample.
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
