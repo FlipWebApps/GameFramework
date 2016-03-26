@@ -60,8 +60,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public string PlayMarketUrl = "";
         [Tooltip("If targeting iOS, a link to the App Store page game")]
         public string iOSWebUrl = "";
-        [Tooltip("The number of local players to setup")]
-        public int PlayerCount = 1;
         [Tooltip("Whether the game is unlocked.\nCan be used to only enable certain features and can be linked to in app purchase")]
         public bool IsUnlocked;
         [Tooltip("Set the base identifier to allow for multiple games in a single project")]
@@ -77,6 +75,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <summary>
         /// Game Structure setup
         /// </summary>
+        [Header("Players")]
+        [Tooltip("The default number of lives players will have (optional if not using lives).")]
+        public int DefaultLives = 0;
+        [Tooltip("The number of local players to setup")]
+        public int PlayerCount = 1;
+
         [Header("Worlds")]
         [Tooltip("Whether to automatically setup wolds using default values.")]
         public bool AutoCreateWorlds = false;
@@ -252,13 +256,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             // setup players.
             Players = new Player[Instance.PlayerCount];
             for (var i = 0; i < Instance.PlayerCount; i++)
+            {
                 Players[i] = CreatePlayer(i);
+            }
             SetPlayerByNumber(0);
-
-#if UNITY_EDITOR
-#elif UNITY_ANDROID
-#elif UNITY_IPHONE
-#endif
 
             // setup worlds if auto setup
             if (AutoCreateWorlds)
@@ -475,7 +476,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             Debug.Log("GameManager: CreatePlayer");
 
-            return new Player(playerNumber);
+            var player = new Player();
+            player.Initialise(playerNumber, localiseDescription: false);
+            return player;
         }
 
         public Player GetPlayer()

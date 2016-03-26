@@ -32,15 +32,26 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         public override string IdentifierBase { get { return "Player"; } }
         public override string IdentifierBasePrefs { get { return "P"; } }
 
+        /// <summary>
+        /// The number of lives that the current player as.
+        /// </summary>
+        public int Lives { get; set; }
+
         public int MaximumWorld;
         public int MaximumLevel;
         public int SelectedWorld;
         public int SelectedLevel;   // only use when not using worlds, other use World.SelectedLevel for world specific level.
 
-        public Player(int playerNumber) //: base(playerNumber, identifierBase: "Player", identifierBasePrefs: "P", localiseDescription: false)
-        {
-            Initialise(playerNumber, localiseDescription: false);
+        public Player() { }
 
+        /// <summary>
+        /// Provides a simple method that you can overload to do custom initialisation in your own classes.
+        /// This is called after ParseLevelFileData (if loading from resources) so you can use values setup by that method. 
+        /// 
+        /// If overriding from a base class be sure to call base.CustomInitialisation()
+        /// </summary>
+        public override void CustomInitialisation()
+        {
             Reset();
 
             Name = GetSettingString("Name", Name);
@@ -48,11 +59,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             Score = GetSettingInt("TotalScore", 0);
             Coins = GetSettingInt("TotalCoins", 0);
 
+            if (GameManager.IsActive)
+                Lives = GameManager.Instance.DefaultLives;
+
             MaximumWorld = GetSettingInt("MaximumWorld", MaximumWorld);
             MaximumLevel = GetSettingInt("MaximumLevel", MaximumLevel);
             SelectedWorld = GetSettingInt("SelectedWorld", SelectedWorld);
             SelectedLevel = GetSettingInt("SelectedLevel", SelectedLevel);
         }
+
 
         public virtual void Reset()
         {
@@ -65,6 +80,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             Coins = 0;
         }
 
+
+        /// <summary>
+        /// Update PlayerPrefs with setting or preferences for this item.
+        /// Note: This does not call PlayerPrefs.Save()
+        /// 
+        /// If overriding from a base class be sure to call base.ParseGameData()
+        /// </summary>
         public override void UpdatePlayerPrefs()
         {
             SetSetting("Name", Name);

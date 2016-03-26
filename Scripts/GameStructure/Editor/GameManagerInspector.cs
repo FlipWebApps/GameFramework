@@ -33,18 +33,21 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         GameManager _gameManager;
         bool showLinks = false;
         bool showAdvanced = false;
+        bool showPlayerAdvanced = false;
 
         SerializedProperty _gameNameProperty;
         SerializedProperty _playWebUrlProperty;
         SerializedProperty _playMarketUrlProperty;
         SerializedProperty _iOSWebUrlProperty;
         SerializedProperty _isUnlockedProperty;
-        SerializedProperty _playerCountProperty;
         SerializedProperty _referencePhysicalScreenHeightInInchesProperty;
         SerializedProperty _displayChangeCheckDelayProperty;
         SerializedProperty _identifierBaseProperty;
 
         SerializedProperty _supportedLanguagesProperty;
+
+        SerializedProperty _defaultLivesProperty;
+        SerializedProperty _playerCountProperty;
 
         SerializedProperty _autoCreateWorldsProperty;
         SerializedProperty _numberOfAutoCreatedWorldsProperty;
@@ -74,12 +77,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             _playMarketUrlProperty = serializedObject.FindProperty("PlayMarketUrl");
             _iOSWebUrlProperty = serializedObject.FindProperty("iOSWebUrl");
             _isUnlockedProperty = serializedObject.FindProperty("IsUnlocked");
-            _playerCountProperty = serializedObject.FindProperty("PlayerCount");
             _identifierBaseProperty = serializedObject.FindProperty("IdentifierBase");
             _referencePhysicalScreenHeightInInchesProperty = serializedObject.FindProperty("ReferencePhysicalScreenHeightInInches");
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
 
             _supportedLanguagesProperty = serializedObject.FindProperty("SupportedLanguages");
+
+            _playerCountProperty = serializedObject.FindProperty("PlayerCount");
+            _defaultLivesProperty = serializedObject.FindProperty("DefaultLives");
 
             _autoCreateWorldsProperty = serializedObject.FindProperty("AutoCreateWorlds");
             _numberOfAutoCreatedWorldsProperty = serializedObject.FindProperty("NumberOfAutoCreatedWorlds");
@@ -138,7 +143,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             showAdvanced = EditorGUILayout.Foldout(showAdvanced, "Advanced");
             if (showAdvanced)
             {
-                EditorGUILayout.PropertyField(_playerCountProperty);
                 EditorGUILayout.PropertyField(_identifierBaseProperty);
                 EditorGUILayout.PropertyField(_referencePhysicalScreenHeightInInchesProperty);
                 EditorGUILayout.PropertyField(_displayChangeCheckDelayProperty);
@@ -150,6 +154,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         void DrawGameStructure()
         {
             EditorGUILayout.LabelField("Game Structure", EditorStyles.boldLabel);
+
+            // Player setup
+            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.PropertyField(_defaultLivesProperty);
+            EditorGUI.indentLevel += 1;
+            showPlayerAdvanced = EditorGUILayout.Foldout(showPlayerAdvanced, "Advanced");
+            if (showPlayerAdvanced)
+            {
+                EditorGUILayout.PropertyField(_playerCountProperty);
+            }
+            EditorGUI.indentLevel -= 1;
+            EditorGUILayout.EndVertical();
+
+            // Worlds setup
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.PropertyField(_autoCreateWorldsProperty);
             if (_gameManager.AutoCreateWorlds)

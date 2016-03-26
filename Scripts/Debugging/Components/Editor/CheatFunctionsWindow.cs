@@ -42,9 +42,17 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
 
         void OnGUI()
         {
-            // player
+            PreferencesMenuOptions();
+            PlayerMenuOptions();
+            WorldMenuOptions();
+            LevelMenuOptions();
+            FreePrizeMenuOptions();
+        }
+
+        private static void PreferencesMenuOptions()
+        {
+            // preferences
             GUILayout.Label("Preferences", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
-            // player score
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
             {
@@ -53,9 +61,39 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                 Debug.Log("Player prefs deleted. Note: Some gameobjects might hold values and write these out after this call!");
             }
             GUILayout.EndHorizontal();
+        }
 
+        private static void PlayerMenuOptions()
+        {
             // player
             GUILayout.Label("Player", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            // lives
+            GUILayout.BeginHorizontal();
+            var playerLives = GameManager.IsActive ? " (" + GameManager.Instance.Player.Lives + ")" : "";
+            GUILayout.Label("Lives" + playerLives, GUILayout.Width(100));
+            if (GUILayout.Button("-1", GUILayout.Width(50)))
+            {
+                if (Application.isPlaying && GameManager.IsActive)
+                {
+                    GameManager.Instance.Player.Lives -= 1;
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
+                }
+            }
+            if (GUILayout.Button("+1", GUILayout.Width(50)))
+            {
+                if (Application.isPlaying && GameManager.IsActive)
+                {
+                    GameManager.Instance.Player.Lives += 1;
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
+                }
+            }
+            GUILayout.EndHorizontal();
             // player score
             GUILayout.BeginHorizontal();
             string playerScore = GameManager.IsActive ? " (" + GameManager.Instance.Player.Score + ")" : "";
@@ -107,13 +145,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                 UpdatePlayerCoins(100);
             }
             GUILayout.EndHorizontal();
-
-
-            WorldMenuOptions();
-            LevelMenuOptions();
-            FreePrizeMenuOptions();
         }
-
 
         private static void WorldMenuOptions()
         {
