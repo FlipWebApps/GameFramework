@@ -97,7 +97,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         [Header("Levels")]
         [Tooltip("Whether to automatically setup levels using default values.\n\nThis option is hidden if automatically creating worlds as we then need per world configuration.")]
-        public bool AutoCreateLevels = false;
+        public bool AutoCreateLevels = true;
         [Tooltip("The number of standard levels that should be automatically created by the framework.")]
         [FormerlySerializedAs("NumberOfStandardLevels")]
         public int NumberOfAutoCreatedLevels = 10;

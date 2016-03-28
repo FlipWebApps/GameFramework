@@ -58,6 +58,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public bool ShowTime = true;
         public bool ShowCoins = true;
         public bool ShowScore = true;
+        public string ContinueScene = "Menu";
 
         [Header("Tuning")]
         public float PeriodicUpdateDelay = 1f;
@@ -224,7 +225,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Continue()
         {
-            GameManager.LoadSceneWithTransitions("Menu");
+            GameManager.LoadSceneWithTransitions(ContinueScene);
         }
 
         public void Retry()

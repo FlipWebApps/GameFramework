@@ -93,8 +93,9 @@ GameManager will need re-entering. See below for further details.
 		- Component to display life icons based upon lives.
 	- GameStructure: GameItem - CustomInitialisation virtual method to allow an easy way for sub classes to do initialisation.
 	- GameStructure: Level star targets with automatic setting from json configuration.
+	- UI: Added option to specify continue screen for GameOver dialog.
 
-	
+		
 	Game Framework Core - Fixes
 	
 	- changed ".tag ==" to ".CompareTag()" for performance in all instances
