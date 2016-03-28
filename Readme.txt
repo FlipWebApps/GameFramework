@@ -59,7 +59,8 @@ v2.0
 IMPORTANT NOTE: This version includes some unavoidable breaking changes to allow 
 for supporting new features. You might need to reconfigure some items or perform 
 minor code changes. In particular the number of automatically created levels on 
-GameManager may need re-entering. See below for further details.
+GameManager may need re-entering. You should also first make a backup and then 
+delete the old /FlipWebApps/ directory before importing. See below for further details.
 
 	Game Framework Core - Improvements
 
