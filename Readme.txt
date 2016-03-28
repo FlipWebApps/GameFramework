@@ -1,4 +1,4 @@
-Game Framework - Free v1.3
+Game Framework - Free v2.0
 
 Thank you for using Game Framework. 
 
@@ -59,7 +59,7 @@ v2.0
 IMPORTANT NOTE: This version includes some unavoidable breaking changes to allow 
 for supporting new features. You might need to reconfigure some items or perform 
 minor code changes. In particular the number of automatically created levels on 
-GameManager will need re-entering. See below for further details.
+GameManager may need re-entering. See below for further details.
 
 	Game Framework Core - Improvements
 

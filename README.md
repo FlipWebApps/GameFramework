@@ -31,7 +31,7 @@ The framework is free, however there is also a [paid version](https://www.assets
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
-	- THe full Pro Pooling asset for advanced gameobject pooling
+	- The full Pro Pooling asset for advanced gameobject pooling
 	- Full 2D runner framework and game sample.
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
