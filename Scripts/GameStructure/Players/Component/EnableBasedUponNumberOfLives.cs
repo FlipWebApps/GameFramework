@@ -30,16 +30,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     public class EnableBasedUponNumberOfLives : EnableDisableGameObject
     {
         /// <summary>
-        /// Whether to use the number of lives set in GameManager
+        /// The number of lives this icon represents. If the players lives are >= this then the met gameobject is shown, otherwise the not met gameobject is shown.
         /// </summary>
-        [Tooltip("Whether to use the number of lives set in GameManager.")]
-        public bool UseGlobalLifeCount = true;
-
-        /// <summary>
-        /// If not using global life count then the number of lives to set.
-        /// </summary>
-        [ConditionalHide("UseGlobalLifeCount", true, true)]
-        [Tooltip("If not using global life count then the number of lives to set.")]
+        [Tooltip("The number of lives this icon represents. If the players lives are >= this then the met gameobject is shown, otherwise the not met gameobject is shown.")]
         public int Lives;
 
 
@@ -49,7 +42,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// <returns></returns>
         public override bool IsConditionMet()
         {
-            return GameManager.Instance.Player.Lives >= (UseGlobalLifeCount ? GameManager.Instance.DefaultLives : Lives);
+            return GameManager.Instance.Player.Lives >= Lives;
         }
     }
 }
