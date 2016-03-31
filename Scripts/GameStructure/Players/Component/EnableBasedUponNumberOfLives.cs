@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
@@ -29,11 +29,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// </summary>
     public class EnableBasedUponNumberOfLives : EnableDisableGameObject
     {
+        /// <summary>
+        /// Whether to use the number of lives set in GameManager
+        /// </summary>
+        [Tooltip("Whether to use the number of lives set in GameManager.")]
+        public bool UseGlobalLifeCount = true;
+
+        /// <summary>
+        /// If not using global life count then the number of lives to set.
+        /// </summary>
+        [ConditionalHide("UseGlobalLifeCount", true, true)]
+        [Tooltip("If not using global life count then the number of lives to set.")]
         public int Lives;
 
+
+        /// <summary>
+        /// Returns whether to show the condition met gameobject (true) or the condition not met one (false)
+        /// </summary>
+        /// <returns></returns>
         public override bool IsConditionMet()
         {
-            return GameManager.Instance.Player.Lives >= Lives;
+            return GameManager.Instance.Player.Lives >= (UseGlobalLifeCount ? GameManager.Instance.DefaultLives : Lives);
         }
     }
 }

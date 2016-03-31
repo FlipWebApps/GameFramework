@@ -33,6 +33,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         public GameObject ConditionMetGameObject;
         public GameObject ConditionNotMetGameObject;
 
+
+        /// <summary>
+        /// Method that is run at a period defined by settings in the RunOnState base class
+        /// </summary>
         public override void RunMethod()
         {
             var isConditionMet = IsConditionMet();
@@ -42,6 +46,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
                 ConditionNotMetGameObject.SetActive(!isConditionMet);
         }
 
+
+        /// <summary>
+        /// Returns whether to show the condition met gameobject (true) or the condition not met one (false)
+        /// </summary>
+        /// <returns></returns>
         public abstract bool IsConditionMet();
     }
 }

@@ -31,12 +31,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// <summary>
         /// Whether to use the number of lives set in GameManager
         /// </summary>
+        [Tooltip("Whether to use the number of lives set in GameManager.")]
         public bool UseGlobalLifeCount = true;
 
         /// <summary>
         /// If not using global life cound then the number of lives to set.
         /// </summary>
         [ConditionalHide("UseGlobalLifeCount", true, true)]
+        [Tooltip("If not using global life count then the number of lives to set.")]
         public int Lives;
 
         void Start()

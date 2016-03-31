@@ -19,13 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
-using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
@@ -35,7 +31,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
     public class ShowLives : ShowValueAnimated<int>
     {
         Player _player;
-
 
         /// <summary>
         /// Cache player reference and call base class.
