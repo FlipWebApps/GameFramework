@@ -77,7 +77,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// </summary>
         [Header("Players")]
         [Tooltip("The default number of lives players will have (optional if not using lives).")]
-        public int DefaultLives = 0;
+        public int DefaultLives = 3;
         [Tooltip("The number of local players to setup")]
         public int PlayerCount = 1;
 
@@ -97,7 +97,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         [Header("Levels")]
         [Tooltip("Whether to automatically setup levels using default values.\n\nThis option is hidden if automatically creating worlds as we then need per world configuration.")]
-        public bool AutoCreateLevels = true;
+        public bool AutoCreateLevels = false;
         [Tooltip("The number of standard levels that should be automatically created by the framework.")]
         [FormerlySerializedAs("NumberOfStandardLevels")]
         public int NumberOfAutoCreatedLevels = 10;
