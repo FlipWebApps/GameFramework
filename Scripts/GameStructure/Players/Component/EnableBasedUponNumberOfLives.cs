@@ -21,6 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
@@ -42,6 +43,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// <returns></returns>
         public override bool IsConditionMet()
         {
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use CreateLifeIcons.");
+
             return GameManager.Instance.Player.Lives >= Lives;
         }
     }

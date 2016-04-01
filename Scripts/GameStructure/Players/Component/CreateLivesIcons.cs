@@ -19,16 +19,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
     /// <summary>
-    /// Sets the current players number of lives.
+    /// Creates instances of a life icon
     /// </summary>
-    public class SetLives : MonoBehaviour
+    public class CreateLivesIcons : MonoBehaviour
     {
+        /// <summary>
+        /// A prefab for the life icons. If this contains a EnableBasedUponNumberOfLives component then the number will be updated automatically.
+        /// </summary>
+        [Tooltip("A prefab for the life icons. If this contains a EnableBasedUponNumberOfLives component then the number will be updated automatically.")]
+        public GameObject Prefab;
+
         /// <summary>
         /// Whether to use the number of lives set in GameManager
         /// </summary>
@@ -42,11 +51,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         [Tooltip("If not using global life count then the number of lives to set.")]
         public int Lives;
 
-        void Start()
-        {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowLives.");
 
-            GameManager.Instance.Player.Lives = UseGlobalLifeCount ? GameManager.Instance.DefaultLives : Lives;
+        /// <summary>
+        /// Create life icons and update for correctly displaying the number of lives..
+        /// </summary>
+        public void Awake()
+        {
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use CreateLifeIcons.");
+
+            for (int i = 1; i <= (UseGlobalLifeCount ? GameManager.Instance.DefaultLives : Lives); i++)
+            {
+                var newObject = Instantiate(Prefab);
+                newObject.transform.SetParent(transform, false);
+
+                // update life number.
+                var enableBasedUponNumberOfLives = newObject.GetComponentInChildren<EnableBasedUponNumberOfLives>();
+                enableBasedUponNumberOfLives.Lives = i;
+            }
+
         }
     }
 }

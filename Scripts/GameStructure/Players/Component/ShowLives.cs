@@ -22,6 +22,7 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
@@ -37,6 +38,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
         /// </summary>
         public override void Start()
         {
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowLives.");
+
             _player = GameManager.Instance.GetPlayer();
             base.Start();
         }
