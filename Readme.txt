@@ -1,4 +1,4 @@
-Game Framework - Free v2.0
+Game Framework - Free v2.1
 
 Thank you for using Game Framework. 
 
@@ -53,6 +53,63 @@ EditorList - courtesy of catlikecoding.com
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.1
+
+IMPORTANT NOTE: We changed the GameManager Auto Create Levels option to false. If
+you suddently find that your levels aren't showing then you may need to enable this
+option on your GameManager component! 
+
+	Game Framework Core - Improvements
+
+	- Demo: Updated to show v2.0+ features.
+	- Editor: improved editor list control with box and text overrides
+	- GameStructure: GameManager default to not auto creating levels and setting player lives to 3
+	- GameStructure: Added CreateLivesIcons component and life icon prefab. Assert for GameManager in all life components
+	- GameStructure: ShowLives component for showing number of lives with optional animated changes.
+	- UI: New ShowValueAnimated base class with sample animations
+
+		
+	Game Framework Extras (Pro Bundle) - Improvements
+	
+	- Themes: Various display improvements on all themes.
+	- Themes: Added life prefabs and icons.
+
+	
+	Game Framework Extras (Pro Bundle) - Fixes
+	
+	- GameStructure: Fix for animated particles not showing on level unlock.
+	- Scrolling: Updates for pro pooling api changes.
+
+	
+	Game Framework Tutorials (Pro Bundle) - Improvements
+	
+	- GameStructure: Moved level resource images to samples where they are used
+	- Tutorials: Updated Getting Started Part 6 - Visual improvements and navigation fixes
+	- 2DInfinateRunner: Added camera shake on crash
+
+	
+	Game Framework Tutorials (Pro Bundle) - Fixes
+	
+	- Getting Started Tutorials: Various visual improvements and fixes
+
+	
+	BeautifulTransitions (Pro Bundle): Updated to v2.0 that includes:
+
+	- Shake Camera: Added ShakeCamera component and shake helper for shaking other gameobjects.
+	- Code refactor improvements (some shared script files moved to the Helper folder)
+
+	
+	Pro Pooling (Pro Bundle): The Pro Bundle now includes Pro Pooling v1.0
+	NOTE: This version contains some minor API changes needed to improve the functionality. 
+	You may need to make a couple of small code changes. See below for details.	
+
+	- New graphical demo showing generics, and delegated pool returns.
+	- PoolItem lifecycle methods renamed - prefixed with 'On'
+	- Added IReturnToPool interface with reference in PoolItem and ReturnSelf() method.
+	- Pool - some items reworked around PoolItem to enable delegated references.
+	- Added custom pool inspector.
+
 
 v2.0
 
