@@ -1828,9 +1828,9 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Check out the getting started tutorial online to get up and running with
-    the basics including game structure, localisation, auto level setup and free prizes.
-    There are various unlock strategies for Levels and other GameItems including simple
-    in app purchase .
+    the basics including game structure, localisation, auto world and level setup,
+    and free prizes. There are various unlock strategies for Levels and other GameItems
+    including simple in app purchase .
 --- !u!222 &647848061
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1936,7 +1936,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -65}
-  m_SizeDelta: {x: -300, y: 120}
+  m_SizeDelta: {x: -300, y: 139.63}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &731366860
 MonoBehaviour:
@@ -1973,7 +1973,7 @@ MonoBehaviour:
   m_Text: "The paid version of Game Framework also includes the Beautiful Transitions
     asset to let you give that extra touch to your games to make them stand out from
     the crowd. \nAdd transitions and effects to your UI items, gameobjects, screens
-    and cameras."
+    and cameras. It also includes a camera shake script."
 --- !u!222 &731366861
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2388,10 +2388,10 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: The paid version includes a full 2D runner game template (work in progress)
-    that you can easily customise. It shows how to use many of the standard features
-    and also includes a parallex scrolling script including advanced features such
-    as auto or manual layer setup, object pooling, weighted display items based upon
-    time / distance, fixed or camera based movement and more.
+    that you can easily customise. It shows how to use many of the standard framework
+    features and also includes a parallex scrolling script including advanced features
+    such as auto or manual layer setup, object pooling, weighted display items based
+    upon time / distance, fixed or camera based movement and more.
 --- !u!222 &874621162
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2979,7 +2979,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Themes
+  m_Text: Customisation and Themes
 --- !u!222 &1055101505
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3650,9 +3650,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Easily extend, configure and change the existing layout and design to suit
-    your game or use one of the 3 themes provided in the paid version (Cartoon, Space
-    and RPG).
+  m_Text: 'Fully customizable! Easily extend, configure and change the existing layout
+    and design to suit your game or use one of the 3 themes provided in the paid version
+    (Cartoon, Space and RPG).
 
     Check out the Getting Started tutorials for more information on how easy themes
     are to setup.'
