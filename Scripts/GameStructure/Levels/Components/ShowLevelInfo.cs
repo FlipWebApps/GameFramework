@@ -33,7 +33,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     [RequireComponent(typeof(Text))]
     public class ShowLevelInfo : MonoBehaviour
     {
-        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]
+        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]
         public string Key;
 
         void Awake()
