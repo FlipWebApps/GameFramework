@@ -23,6 +23,7 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
         ElementLabels = 4,
         Buttons = 8,
         AlwaysShowAddButton = 16,
+        BoxAroundContent = 32,
         Default = ListSize | ListLabel | ElementLabels,
         NoElementLabels = ListSize | ListLabel,
         All = Default | Buttons
@@ -35,16 +36,15 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
     /// </summary>
     public static class EditorList
     {
-
         private static GUIContent
-            moveButtonContent = new GUIContent("\u21b4", "move down"),
-            duplicateButtonContent = new GUIContent("+", "duplicate"),
-            deleteButtonContent = new GUIContent("-", "delete"),
-            addButtonContent = new GUIContent("+", "add element");
+            moveButtonContent = new GUIContent("\u21b4", "Move Down"),
+            duplicateButtonContent = new GUIContent("+", "Duplicate"),
+            deleteButtonContent = new GUIContent("-", "Delete");
 
         private static GUILayoutOption miniButtonWidth = GUILayout.Width(20f);
 
-        public static void Show(SerializedProperty list, EditorListOption options = EditorListOption.Default)
+        public static void Show(SerializedProperty list, EditorListOption options = EditorListOption.Default,
+            string elementLabel = null, string addButtonText = "+", string addButtonToolTip = "Add Element")
         {
             if (!list.isArray)
             {
@@ -73,7 +73,7 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
                     EditorGUILayout.HelpBox("Not showing lists with different sizes.", MessageType.Info);
                 }
                 else {
-                    ShowElements(list, options);
+                    ShowElements(list, options, elementLabel, addButtonText, addButtonToolTip);
                 }
             }
             if (showListLabel)
@@ -82,41 +82,60 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
             }
         }
 
-        private static void ShowElements(SerializedProperty list, EditorListOption options)
+        private static void ShowElements(SerializedProperty list, EditorListOption options, string elementLabel,
+            string addButtonText, string addButtonToolTip)
         {
             bool
                 showElementLabels = (options & EditorListOption.ElementLabels) != 0,
                 showButtons = (options & EditorListOption.Buttons) != 0,
-                alwaysShowAddButton = (options & EditorListOption.AlwaysShowAddButton) != 0;
-            
+                alwaysShowAddButton = (options & EditorListOption.AlwaysShowAddButton) != 0,
+                boxArountContent = (options & EditorListOption.BoxAroundContent) != 0;
+            GUIContent addButtonContent = new GUIContent(addButtonText, addButtonToolTip);
+
+            // loop for all items
             for (int i = 0; i < list.arraySize; i++)
             {
+                if (boxArountContent)
+                    EditorGUILayout.BeginHorizontal("Box");
+
                 if (showButtons)
                 {
                     EditorGUILayout.BeginHorizontal();
                 }
                 if (showElementLabels)
                 {
-                    EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i));                  
+                    if (elementLabel == null)
+                        EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i), true);
+                    else
+                        EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i), new GUIContent(string.Format(elementLabel, i), list.GetArrayElementAtIndex(i).tooltip), true);
                 }
                 else {
-                    EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i), GUIContent.none);
+                    EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i), GUIContent.none, true);
                 }
                 if (showButtons)
                 {
                     ShowButtons(list, i);
                     EditorGUILayout.EndHorizontal();
                 }
+                if (boxArountContent)
+                    EditorGUILayout.EndHorizontal();
             }
+
+            // if no items and showButton then show big add button
             if (showButtons && list.arraySize == 0 && GUILayout.Button(addButtonContent, EditorStyles.miniButton))
             {
                 list.arraySize += 1;
             }
-            if (alwaysShowAddButton && list.arraySize != 0) {
+
+            // if there are items and always showing the add button
+            if (alwaysShowAddButton && list.arraySize != 0)
+            {
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Space(EditorGUI.IndentedRect(new Rect(0,0,1,1)).xMin);
+                if (!boxArountContent)
+                    GUILayout.Space(EditorGUI.IndentedRect(new Rect(0, 0, 1, 1)).xMin);
+
                 if (GUILayout.Button(addButtonContent, EditorStyles.miniButton))
-                           list.arraySize += 1;
+                    list.arraySize += 1;
 
                 EditorGUILayout.EndHorizontal();
             }
