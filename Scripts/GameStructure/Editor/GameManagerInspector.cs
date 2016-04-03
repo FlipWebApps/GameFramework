@@ -243,7 +243,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             EditorGUILayout.LabelField("Localisation", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("Box");
             EditorGUI.indentLevel += 1;
-            EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.ElementLabels | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton);
+            EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton, addButtonText: "Add Language", addButtonToolTip: "Add Language");
             EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }
