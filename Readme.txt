@@ -67,6 +67,7 @@ option on your GameManager component!
 	- GameStructure: GameManager default to not auto creating levels and setting player lives to 3
 	- GameStructure: Added CreateLivesIcons component and life icon prefab. Assert for GameManager in all life components
 	- GameStructure: ShowLives component for showing number of lives with optional animated changes.
+	- Messaging: Added global messaging system
 	- UI: New ShowValueAnimated base class with sample animations
 
 		
