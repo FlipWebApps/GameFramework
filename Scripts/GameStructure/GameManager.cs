@@ -37,6 +37,7 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -195,6 +196,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public GameItemsManager<World, GameItem> Worlds { get; set; }
         public GameItemsManager<Level, GameItem> Levels { get; set; }
 
+        /// <summary>
+        /// Messaging
+        /// </summary>
+        Messenger _messenger = new Messenger();
+        public static Messenger Messenger {
+            get {
+                return IsActive ? Instance._messenger : null;
+            }
+        }
+
         #region Setup
 
         protected override void GameSetup()
@@ -300,6 +311,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         #endregion Setup
 
+        #region Update Loop
+
+        void Update()
+        {
+            // process messages.
+            _messenger.ProcessQueue();
+        }
+
+        #endregion Update Loop
+
+        #region Display
+
         /// <summary>
         /// Setup some properties about the current state of the display
         /// </summary>
@@ -320,21 +343,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
 
-        public override void SaveState()
-        {
-            Debug.Log("GameManager: SaveState");
-
-            PlayerPrefs.SetInt("TimesPlayedForRatingPrompt", TimesPlayedForRatingPrompt);
-            PlayerPrefs.SetInt("TimesGamePlayed", TimesGamePlayed);
-            PlayerPrefs.SetInt("TimesLevelsPlayed", TimesLevelsPlayed);
-
-            PlayerPrefs.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
-            PlayerPrefs.SetFloat("EffectAudioVolume", EffectAudioVolume);
-
-            PlayerPrefs.Save();
-        }
-
-
+        /// <summary>
+        /// Co routine that periodically check for display changes
+        /// </summary>
+        /// <returns></returns>
         IEnumerator CheckForDisplayChanges()
         {
             _resolution = new Vector2(Screen.width, Screen.height);
@@ -372,7 +384,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             }
         }
 
+        #endregion Display
 
+        public override void SaveState()
+        {
+            Debug.Log("GameManager: SaveState");
+
+            PlayerPrefs.SetInt("TimesPlayedForRatingPrompt", TimesPlayedForRatingPrompt);
+            PlayerPrefs.SetInt("TimesGamePlayed", TimesGamePlayed);
+            PlayerPrefs.SetInt("TimesLevelsPlayed", TimesLevelsPlayed);
+
+            PlayerPrefs.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
+            PlayerPrefs.SetFloat("EffectAudioVolume", EffectAudioVolume);
+
+            PlayerPrefs.Save();
+        }
+
+        #region Audio
         public void PlayEffect(AudioClip clip, float pitchLow = 1, float pitchHigh = 1)
         {
             Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playying effects.");
@@ -416,7 +444,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             newAudioSource.Play();
             EffectAudioSources = EffectAudioSources.Concat(Enumerable.Repeat(newAudioSource, 1)).ToArray();
         }
+        #endregion Audio
 
+        #region BaseIdentifier related
 
         /// <summary>
         /// Get the identifier that is defined
@@ -452,6 +482,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             return newSceneName;
         }
 
+        #endregion BaseIdentifier related
+
         #region Scene Transitions
 
         public static void LoadSceneWithTransitions(string sceneName)
@@ -466,7 +498,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
         #endregion Scene Transitions
-
         
         #region Player related code
         /// 
