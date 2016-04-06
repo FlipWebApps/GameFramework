@@ -95,13 +95,15 @@ option on your GameManager component!
 	- Getting Started Tutorials: Various visual improvements and fixes
 
 	
-	BeautifulTransitions (Pro Bundle): Updated to v2.0 that includes:
+	BeautifulTransitions (Pro Bundle): Updated to v2.1.1 that includes:
 
 	- Shake Camera: Added ShakeCamera component and shake helper for shaking other gameobjects.
 	- Code refactor improvements (some shared script files moved to the Helper folder)
+	- Under certain build conditions the shaders would not be included. Moved shaders to a 
+	resources folder and improved load validation.
 
 	
-	Pro Pooling (Pro Bundle): The Pro Bundle now includes Pro Pooling v1.0
+	Pro Pooling (Pro Bundle): Updated to v1.1 that includes:
 	NOTE: This version contains some minor API changes needed to improve the functionality. 
 	You may need to make a couple of small code changes. See below for details.	
 
