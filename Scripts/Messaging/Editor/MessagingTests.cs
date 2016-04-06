@@ -197,7 +197,7 @@ namespace GameFramework.Messaging
             Assert.IsTrue(_testCustomHandlerCalled, "The custom test handler was not called or the value was not assigned correctly!");
 
             // Cleanup
-            messenger.RemoveListener<CustomMessage1>(TestHandler);
+            messenger.RemoveListener<CustomMessage1>(TestCustomHandler);
         }
 
 
@@ -216,7 +216,7 @@ namespace GameFramework.Messaging
             Assert.IsFalse(_testCustomHandlerCalled, "The custom test handler was called for an incorrect message type!");
 
             // Cleanup
-            messenger.RemoveListener<CustomMessage1>(TestHandler);
+            messenger.RemoveListener<CustomMessage1>(TestCustomHandler);
         }
 
         #endregion Custom Message Tests
