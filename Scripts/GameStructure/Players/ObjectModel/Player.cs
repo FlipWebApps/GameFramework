@@ -20,6 +20,8 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 {
@@ -32,17 +34,47 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         public override string IdentifierBase { get { return "Player"; } }
         public override string IdentifierBasePrefs { get { return "P"; } }
 
+
         /// <summary>
-        /// The number of lives that the current player as.
+        /// The number of lives that the current player as. 
+        /// LivesChangedMessage is sent whenever this value changes outside of initialisation.
         /// </summary>
-        public int Lives { get; set; }
+        public int Lives
+        {
+            get { return _lives; }
+            set
+            {
+                var oldValue = Lives;
+                _lives = value;
+                if (IsInitialised && oldValue != Lives)
+                    GameManager.SafeTriggerMessage(new LivesChangedMessage(Lives, oldValue));
+            }
+        }
+        int _lives;
+
+
+        /// <summary>
+        /// The health that the current player as in the range 0-1. 
+        /// HealthChangedMessage is sent whenever this value changes outside of initialisation.
+        /// </summary>
+        public float Health
+        {
+            get { return _health; }
+            set
+            {
+                var oldValue = Health;
+                _health = value;
+                if (IsInitialised && !Mathf.Approximately(oldValue, Health))
+                    GameManager.SafeTriggerMessage(new HealthChangedMessage(Health, oldValue));
+            }
+        }
+        float _health;
+
 
         public int MaximumWorld;
         public int MaximumLevel;
         public int SelectedWorld;
         public int SelectedLevel;   // only use when not using worlds, other use World.SelectedLevel for world specific level.
-
-        public Player() { }
 
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
@@ -56,11 +88,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
             Name = GetSettingString("Name", Name);
 
-            Score = GetSettingInt("TotalScore", 0);
-            Coins = GetSettingInt("TotalCoins", 0);
-
-            if (GameManager.IsActive)
-                Lives = GameManager.Instance.DefaultLives;
+            Score = GetSettingInt("TotalScore", Score);
+            Coins = GetSettingInt("TotalCoins", Coins);
+            Lives = GetSettingInt("Lives", Lives);
+            Health = GetSettingFloat("Health", Health);
 
             MaximumWorld = GetSettingInt("MaximumWorld", MaximumWorld);
             MaximumLevel = GetSettingInt("MaximumLevel", MaximumLevel);
@@ -69,6 +100,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         }
 
 
+        /// <summary>
+        /// Reset the player to some default values.
+        /// </summary>
         public virtual void Reset()
         {
             MaximumWorld = 0;
@@ -78,6 +112,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
             Score = 0;
             Coins = 0;
+            Lives = 0;
+            Health = 1;
+
+            if (GameManager.IsActive)
+                Lives = GameManager.Instance.DefaultLives;
         }
 
 
@@ -93,6 +132,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
             SetSetting("TotalScore", Score);
             SetSetting("TotalCoins", Coins);
+            SetSetting("Lives", Lives);
+            SetSettingFloat("Health", Health);
 
             SetSetting("MaximumWorld", MaximumWorld);
             SetSetting("MaxLevel", MaximumLevel);
@@ -101,5 +142,41 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
             base.UpdatePlayerPrefs();
         }
+
+        #region Score and Coin Messaging Overrides
+        /// <summary>
+        /// Sends a PlayerScoreChangedMessage whenever the players score changes.
+        /// </summary>
+        /// <param name="newScore"></param>
+        /// <param name="oldScore"></param>
+        public override void SendScoreChangedMessage(int newScore, int oldScore)
+        {
+            GameManager.Messenger.QueueMessage(new PlayerScoreChangedMessage(this, newScore, oldScore));
+        }
+
+
+        /// <summary>
+        /// Sends a PlayerHighScoreChangedMessage whenever the players high score changes.
+        /// </summary>
+        /// <param name="newHighScore"></param>
+        /// <param name="oldHighScore"></param>
+        public override void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
+        {
+            GameManager.Messenger.QueueMessage(new PlayerHighScoreChangedMessage(this, newHighScore, oldHighScore));
+        }
+
+
+        /// <summary>
+        /// Sends a PlayerCoinsChangedMessage whenever the players coin count changes.
+        /// </summary>
+        /// <param name="newCoins"></param>
+        /// <param name="oldCoins"></param>
+        public override void SendCoinsChangedMessage(int newCoins, int oldCoins)
+        {
+            GameManager.Messenger.QueueMessage(new PlayerCoinsChangedMessage(this, newCoins, oldCoins));
+        }
+
+        #endregion Score and Coin Messaging Overrides
+
     }
 }
