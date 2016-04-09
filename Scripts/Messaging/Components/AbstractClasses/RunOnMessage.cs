@@ -47,7 +47,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
         /// </summary>
         void OnDestroy()
         {
-            GameManager.Messenger.RemoveListener<T>(MessageListener);
+            if (GameManager.IsActive)
+                GameManager.Messenger.RemoveListener<T>(MessageListener);
         }
 
         /// <summary>
