@@ -24,32 +24,54 @@ using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
+namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
 
     /// <summary>
     /// Component for allowing various cheat functions to be called such as increasing score, resetting prefs etc..
     /// </summary>
     public class CheatFunctionsWindow : EditorWindow
     {
+        string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize"};
+        int _tabSelected;
+
         // Add menu item
         [MenuItem("Window/Flip Web Apps/Cheat Functions Windows")]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
-            EditorWindow window = EditorWindow.GetWindow(typeof(CheatFunctionsWindow));
+            var window = GetWindow(typeof(CheatFunctionsWindow));
             window.titleContent.text = "Cheat Functions";
         }
 
         void OnGUI()
         {
-            PreferencesMenuOptions();
-            PlayerMenuOptions();
-            WorldMenuOptions();
-            LevelMenuOptions();
-            FreePrizeMenuOptions();
+            DrawTabs();
+            switch (_tabSelected)
+            {
+                case 0:
+                    PreferencesMenuOptions();
+                    break;
+                case 1:
+                    PlayerMenuOptions();
+                    break;
+                case 2:
+                    WorldMenuOptions();
+                    break;
+                case 3:
+                    LevelMenuOptions();
+                    break;
+                case 4:
+                    FreePrizeMenuOptions();
+                    break;
+            }
         }
 
-        private static void PreferencesMenuOptions()
+        void DrawTabs()
+        {
+            _tabSelected = GUILayout.Toolbar(_tabSelected, _tabNames);
+        }
+
+        static void PreferencesMenuOptions()
         {
             // preferences
             GUILayout.Label("Preferences", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
@@ -87,6 +109,35 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
                 if (Application.isPlaying && GameManager.IsActive)
                 {
                     GameManager.Instance.Player.Lives += 1;
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
+                }
+            }
+            GUILayout.EndHorizontal();
+            // health
+            GUILayout.BeginHorizontal();
+            var playerHealth = GameManager.IsActive ? " (" + GameManager.Instance.Player.Health + ")" : "";
+            GUILayout.Label("Health" + playerHealth, GUILayout.Width(100));
+            if (GUILayout.Button("-0.1", GUILayout.Width(50)))
+            {
+                if (Application.isPlaying && GameManager.IsActive)
+                {
+                    GameManager.Instance.Player.Health -= 0.1f;
+                    GameManager.Instance.Player.Health = Mathf.Max(GameManager.Instance.Player.Health, 0);
+                }
+                else
+                {
+                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
+                }
+            }
+            if (GUILayout.Button("+0.1", GUILayout.Width(50)))
+            {
+                if (Application.isPlaying && GameManager.IsActive)
+                {
+                    GameManager.Instance.Player.Health += 0.1f;
+                    GameManager.Instance.Player.Health = Mathf.Min(GameManager.Instance.Player.Health, 1);
                 }
                 else
                 {
