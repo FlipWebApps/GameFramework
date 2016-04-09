@@ -206,6 +206,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             }
         }
 
+
         #region Setup
 
         protected override void GameSetup()
@@ -483,6 +484,32 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
         #endregion BaseIdentifier related
+
+        #region Messaging
+
+        /// <summary>
+        /// Safe method for queueing messages without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static bool SafeQueueMessage(BaseMessage msg)
+        {
+            if (Messenger == null) return false;
+            return Messenger.QueueMessage(msg);
+        }
+
+        /// <summary>
+        /// Safe method for triggering messages without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static bool SafeTriggerMessage(BaseMessage msg)
+        {
+            if (Messenger == null) return false;
+            return Messenger.TriggerMessage(msg);
+        }
+
+        #endregion Messaging
 
         #region Scene Transitions
 
