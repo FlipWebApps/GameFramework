@@ -38,12 +38,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         /// </summary>
         public bool AutoStart;
 
+        [Header("Auto Game Over")] public float ShowGameOverDialogDelay;
+        [Header("Auto Game Over Conditions")] public bool GameOverWhenLivesIsZero;
+        public bool GameOverWhenHealthIsZero;
+
         public DateTime StartTime { get; set; }
         public float SecondsRunning { get; set; }
         public bool IsLevelStarted { get; set; }
         public bool IsLevelFinished { get; set; }
-        public bool IsLevelRunning { get { return IsLevelStarted && !IsLevelFinished; } }
-        public Level Level { get { return GameManager.Instance.Levels != null ? GameManager.Instance.Levels.Selected : null; } }
+
+        public bool IsLevelRunning
+        {
+            get { return IsLevelStarted && !IsLevelFinished; }
+        }
+
+        public Level Level
+        {
+            get { return GameManager.Instance.Levels != null ? GameManager.Instance.Levels.Selected : null; }
+        }
 
 
         protected override void GameSetup()
@@ -69,7 +81,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
             IsLevelStarted = false;
             IsLevelFinished = false;
 
-            if (Level != null) {
+            if (Level != null)
+            {
                 Level.Coins = 0;
                 Level.Score = 0;
             }
@@ -106,7 +119,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         {
             if (!Instance.IsLevelRunning) return;
 
-            Assert.IsTrue(UI.Dialogs.Components.GameOver.IsActive, "Please ensure that you have a GameOver component added to your scene, or are using one of the default GameOver prefabs.");
+            Assert.IsTrue(UI.Dialogs.Components.GameOver.IsActive,
+                "Please ensure that you have a GameOver component added to your scene, or are using one of the default GameOver prefabs.");
 
             LevelFinished();
 
@@ -128,11 +142,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         }
 
 
-        void Update() {
-            if (IsLevelStarted && !IsLevelFinished)
+        void Update()
+        {
+            if (IsLevelRunning)
             {
                 SecondsRunning += Time.deltaTime;
+
+                // check for gameover conditions.
+                if (GameOverWhenLivesIsZero && GameManager.Instance.Player.Lives == 0)
+                    GameOver(false, ShowGameOverDialogDelay);
+                if (GameOverWhenHealthIsZero && Mathf.Approximately(GameManager.Instance.Player.Health, 0))
+                    GameOver(false, ShowGameOverDialogDelay);
+
             }
+
         }
     }
 }
