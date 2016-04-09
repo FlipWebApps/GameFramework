@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 {

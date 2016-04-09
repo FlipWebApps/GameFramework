@@ -44,7 +44,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 
         void Start()
         {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowLives.");
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use SetLives.");
 
             GameManager.Instance.Player.Lives = UseGlobalLifeCount ? GameManager.Instance.DefaultLives : Lives;
         }

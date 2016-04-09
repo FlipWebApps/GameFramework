@@ -32,7 +32,7 @@ namespace FlipWebApps.GameFramework.Scripts.Weighting {
     /// This can be used to control things such as what is displayed, behavious, or other such things.
     /// 
     /// 1. Call AddItem() on all items you are weighting passing a list of DistanceWeight values
-    /// 2. Call PrepareForUsa() to sync weights.
+    /// 2. Call PrepareForUse() to sync weights.
     /// 3. Call GetItemForDistance() to get a random, weighted item based upon the distance (or time).
     /// 
     /// </summary>

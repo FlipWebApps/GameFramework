@@ -19,38 +19,41 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
-using UnityEngine.Assertions;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
+namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
 {
     /// <summary>
-    /// Show the number of lives that a player has.
+    /// An abstract class to show an enabled or a disabled gameobject based upon the given condition.
+    /// 
+    /// Override and implement the condition as you best see fit.
     /// </summary>
-    public class ShowLives : ShowValueAnimated<int>
+    public abstract class EnableDisableGameObjectMessaging<T> : RunOnMessage<T> where T : BaseMessage
     {
-        Player _player;
+        public GameObject ConditionMetGameObject;
+        public GameObject ConditionNotMetGameObject;
+
 
         /// <summary>
-        /// Cache player reference and call base class.
+        /// Method that is run at a period defined by settings in the RunOnState base class
         /// </summary>
-        public override void Start()
+        public override bool RunMethod(T message)
         {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowLives.");
-
-            _player = GameManager.Instance.GetPlayer();
-            base.Start();
+            var isConditionMet = IsConditionMet(message);
+            if (ConditionMetGameObject != null)
+                ConditionMetGameObject.SetActive(isConditionMet);
+            if (ConditionNotMetGameObject != null)
+                ConditionNotMetGameObject.SetActive(!isConditionMet);
+            return true;
         }
 
 
         /// <summary>
-        /// Return the number of lives the player has.
+        /// Returns whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
-        public override int GetLatestValue()
-        {
-            return _player.Lives;
-        }
+        public abstract bool IsConditionMet(T message);
     }
 }

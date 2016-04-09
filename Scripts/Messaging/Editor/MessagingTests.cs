@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------
-// Flip Web Apps: Pro Pooling
+// Flip Web Apps: Game Framework
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //
 // Please direct any bugs/comments/suggestions to http://www.flipwebapps.com

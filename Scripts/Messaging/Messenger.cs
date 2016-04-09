@@ -26,7 +26,7 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.Messaging
 {
     /// <summary>
-    /// A messenging system to allow for simple decoupling of components using either queued (QueueMessage) 
+    /// A messaging system to allow for simple decoupling of components using either queued (QueueMessage) 
     /// or immediate execution (TriggerMessage). 
     /// 
     /// Exposing delegates from the individual classes directly would be slightly faster, but this is

@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class to show an enabled or a disabled gameobject based upon the given condition.
