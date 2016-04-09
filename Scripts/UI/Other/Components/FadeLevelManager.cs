@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
-    [System.Obsolete("Discontinued in favour of the Beautiful Assets package!")]
+    [System.Obsolete("Discontinued in favour of the Beautiful Transitions Assets package!")]
     public class FadeLevelManager : Singleton<FadeLevelManager>
     {
         public Color FadeColour = Color.black;
@@ -39,6 +39,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
         protected override void GameSetup()
         {
             base.GameSetup();
+
+            Debug.LogWarning(
+                "The FadeLevelManager component used on " + gameObject.name + " is deprecated in favour of the Beautiful Transitions assets included in the pro bundle or avialable seperately.");
 
             var fadeLevelGameObject = new GameObject {name = "_FadeLevel"};
             fadeLevelGameObject.SetActive(false);

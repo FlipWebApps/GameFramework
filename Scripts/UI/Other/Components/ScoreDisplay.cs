@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
@@ -28,7 +29,7 @@ using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
-
+    [Obsolete("Use the components from under GameStructure\\Player\\Components and GameStructure\\Levels\\Components instead.")]
     public class ScoreDisplay : MonoBehaviour
     {
         public enum DisplayType { TotalScore, TotalCoins, LevelScore, LevelCoins, LevelHighScore }
@@ -51,6 +52,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
         // Use this for initialization
         void Start()
         {
+            Debug.LogWarning(
+                "The ScoreDisplay component used on " + gameObject.name + " is deprecated. Use the new components from under GameStructure\\Player\\Components and GameStructure\\Levels\\Components instead.");
+
             if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
             Assert.IsNotNull(Text, "You either have to specify a Text component, or attach the Score Display to a gameobject that contains one.");
 
