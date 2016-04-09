@@ -22,19 +22,19 @@
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using System;
 using System.Collections.Generic;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
 {
-    public enum UpdateModeType { Immediate, Aggregated, Queued };
-
     /// <summary>
     /// An abstract class that runs updates a value in an optional animated fashion.
     /// 
     /// Override and implement the condition as you best see fit.
     /// </summary>
-    public abstract class ShowValueAnimated<T> : MonoBehaviour where T : IComparable<T>
+    public abstract class ShowValueAnimatedMessaging<T, TM> : RunOnMessage<TM> where T : IComparable<T> where TM : BaseMessage
     {
 
         [Tooltip("A text component to update. Not needed if on the same gameobject as this component.")]
@@ -52,14 +52,14 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
         bool _isAnimationRunning;
 
         Queue<T> _valuesPendingDisplay;
+        T _lastQueuedItem;
         T _currentlyDisplayedValue;
-        T _nextValue;
 
 
         /// <summary>
-        /// Start method. Call base.Start() if you override this!
+        /// Called during the Start() phase for your own custom initialisation. Call base.Start() if you override this!
         /// </summary>
-        public virtual void Start()
+        public override void CustomStart()
         {
             // if text not specified then get from current gameobject
             if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
@@ -73,75 +73,80 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
             _valuesPendingDisplay = new Queue<T>(2);
 
             // set the current value and display it
-            _nextValue = GetLatestValue();
+            _valuesPendingDisplay.Enqueue(GetValueFromMessage(null));
             UpdateDisplay();
+        }
+
+        /// <summary>
+        /// This is the method that you should implement that will be called when 
+        /// a message is received. Call base.Update() if you override this!
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public override bool RunMethod(TM message)
+        {
+            var latestValue = GetValueFromMessage(message);
+
+            // if no animator then we just update directly.
+            if (Animator == null)
+            {
+                if (latestValue.CompareTo(_currentlyDisplayedValue) != 0)
+                {
+                    _valuesPendingDisplay.Enqueue(latestValue);
+                    UpdateDisplay();
+                }
+            }
+
+            // otherwise there is an animator so we need to conider how we do updates in respect to any updates that are already running.
+            else
+            {
+                // add all messages for display unless the latest value is the same as the one pending display or we have the same value as
+                // the previous queued message.
+                if (UpdateMode == UpdateModeType.Immediate || UpdateMode == UpdateModeType.Queued)
+                {
+                    // if there are either no other queued values or this value is different from the last queued value then we add. 
+                    if (_valuesPendingDisplay.Count == 0 || latestValue.CompareTo(_lastQueuedItem) != 0)
+                    {
+                        _valuesPendingDisplay.Enqueue(latestValue);
+                        _lastQueuedItem = latestValue;  // so we can easily reference this next time.
+                    }
+                }
+
+                // only add the latest value
+                else if (UpdateMode == UpdateModeType.Aggregated)
+                {
+                    _valuesPendingDisplay.Clear();
+                    _valuesPendingDisplay.Enqueue(latestValue);
+                }
+
+                // process queued messages for display.
+                ProcessQueuedMessages();
+            }
+            return true;
         }
 
 
         /// <summary>
-        /// Update method. Call base.Update() if you override this!
+        /// Check if we are ready to display new messages from the queue and if so then display them as needed.
         /// </summary>
-        public virtual void Update()
+        public void ProcessQueuedMessages()
         {
-            // process further if value has changed or queued items are waiting for processing (will only happen in queued mode).
-            T latestValue = GetLatestValue();
-            if (latestValue.CompareTo(_currentlyDisplayedValue) != 0 || _valuesPendingDisplay.Count != 0)
+            if (_valuesPendingDisplay.Count == 0) return;
+
+            // if we are ready to update then do so, otherwise we will be triggered by animation completion or a new item arriving.
+            if (UpdateMode == UpdateModeType.Immediate ||
+                ((UpdateMode == UpdateModeType.Aggregated || UpdateMode == UpdateModeType.Queued) && !_isAnimationRunning))
             {
-                // if no animator then we just update directly.
-                if (Animator == null)
+                var nextValue = _valuesPendingDisplay.Peek();
+                if (nextValue.CompareTo(_currentlyDisplayedValue) > 0)
                 {
-                    _nextValue = latestValue;
-                    UpdateDisplay();
-                    UpdateCompleted();
+                    Animator.SetTrigger("Increased");
+                    _isAnimationRunning = true;
                 }
-                else
+                else if (nextValue.CompareTo(_currentlyDisplayedValue) < 0)
                 {
-                    bool trigger = false;
-                    // update immediately, but only if value has changed so we don't repeatedly trigger on same value (ref. condition above against _currentlyDisplayedValue).
-                    if (UpdateMode == UpdateModeType.Immediate)
-                    {
-                        if (_nextValue.CompareTo(latestValue) != 0)
-                        {
-                            _nextValue = latestValue;
-                            trigger = true;
-                        }
-                    }
-                    // only update if an animation is not running
-                    else if (UpdateMode == UpdateModeType.Aggregated)
-                    {
-                        if (!_isAnimationRunning)
-                        {
-                            _nextValue = latestValue;
-                            trigger = true;
-                        }
-                    }
-                    // if the value has changed save to the queue. if no animation running then pull from queue and update
-                    else if (UpdateMode == UpdateModeType.Queued)
-                    {
-                        if (latestValue.CompareTo(_currentlyDisplayedValue) != 0)
-                            _valuesPendingDisplay.Enqueue(latestValue);
-
-                        if (!_isAnimationRunning)
-                        {
-                            _nextValue = _valuesPendingDisplay.Dequeue();
-                            trigger = true;
-                        }
-                    }
-
-                    // trigger the update if the value has changed.
-                    if (trigger)
-                    {
-                        if (_nextValue.CompareTo(_currentlyDisplayedValue) > 0)
-                        {
-                            Animator.SetTrigger("Increased");
-                            _isAnimationRunning = true;
-                        }
-                        else if (_nextValue.CompareTo(_currentlyDisplayedValue) < 0)
-                        {
-                            Animator.SetTrigger("Decreased");
-                            _isAnimationRunning = true;
-                        }
-                    }
+                    Animator.SetTrigger("Decreased");
+                    _isAnimationRunning = true;
                 }
             }
         }
@@ -152,26 +157,29 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
         /// </summary>
         public void UpdateDisplay() 
         {
+            if (_valuesPendingDisplay.Count <= 0) return;
             // TODO Add a new mode - aggregate early - get new updated value incase changed since triggered.
 
-            Text.text = _localisationString == null ? _nextValue.ToString() : string.Format(_localisationString, _nextValue);
-            _currentlyDisplayedValue = _nextValue;
+            _currentlyDisplayedValue = _valuesPendingDisplay.Dequeue();
+            Text.text = _localisationString == null ? _currentlyDisplayedValue.ToString() : string.Format(_localisationString, _currentlyDisplayedValue);
         }
 
 
         /// <summary>
-        /// Notify that the update is complete
+        /// Flag that the update is complete and try processing any other pending items.
         /// </summary>
         public void UpdateCompleted()
         {
             _isAnimationRunning = false;
+            ProcessQueuedMessages();
         }
 
 
         /// <summary>
         /// Implement this to return the latest value of the item that you are trying to display.
+        /// Note message can be null if this is during initial setup in which case you should return a default of initial value.
         /// </summary>
         /// <returns></returns>
-        public abstract T GetLatestValue();
+        public abstract T GetValueFromMessage(TM message);
     }
 }
