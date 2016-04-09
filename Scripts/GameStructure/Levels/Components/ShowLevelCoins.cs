@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
 using UnityEngine.Assertions;
@@ -28,19 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Show the number of coins that have been collected for the level has.
     /// </summary>
-    public class ShowLevelCoins : ShowValueAnimated<int>
+    public class ShowLevelCoins : ShowValueAnimatedMessaging<int, LevelCoinsChangedMessage>
     {
         Level _level;
 
         /// <summary>
         /// Cache player reference and call base class.
         /// </summary>
-        public override void Start()
+        public override void CustomStart()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use ShowCoins.");
 
             _level = LevelManager.Instance.Level;
-            base.Start();
+            base.CustomStart();
         }
 
 
@@ -48,9 +49,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         /// Return the number of coins that have been collected for the level.
         /// </summary>
         /// <returns></returns>
-        public override int GetLatestValue()
+        public override int GetValueFromMessage(LevelCoinsChangedMessage message)
         {
-            return _level.Coins;
+            return message == null ? _level.Coins : message.NewCoins;
         }
     }
 }

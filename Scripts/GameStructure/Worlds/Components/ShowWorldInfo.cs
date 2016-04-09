@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -43,9 +42,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
             var world = GameManager.Instance.Worlds.Selected;
             if (world != null)
             {
-                var _textComponent = GetComponent<Text>();
+                var textComponent = GetComponent<Text>();
                 var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                _textComponent.text = string.Format(text, world.Number, world.Name, world.Description);
+                textComponent.text = string.Format(text, world.Number, world.Name, world.Description);
             }
         }
     }

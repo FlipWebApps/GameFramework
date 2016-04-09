@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
 using UnityEngine.Assertions;
@@ -28,19 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Show the current level score that a player has.
     /// </summary>
-    public class ShowLevelScore : ShowValueAnimated<int>
+    public class ShowLevelScore : ShowValueAnimatedMessaging<int, LevelScoreChangedMessage>
     {
         Level _level;
 
         /// <summary>
         /// Cache level reference and call base class.
         /// </summary>
-        public override void Start()
+        public override void CustomStart()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use ShowCoins.");
 
             _level = LevelManager.Instance.Level;
-            base.Start();
+            base.CustomStart();
         }
 
 
@@ -48,9 +49,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         /// Return the players score.
         /// </summary>
         /// <returns></returns>
-        public override int GetLatestValue()
+        public override int GetValueFromMessage(LevelScoreChangedMessage message)
         {
-            return _level.Score;
+            return message == null ? _level.Score : message.NewScore;
         }
+
     }
 }

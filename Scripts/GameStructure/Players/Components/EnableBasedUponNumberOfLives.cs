@@ -19,7 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -28,7 +29,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon the number of lives the player has.
     /// </summary>
-    public class EnableBasedUponNumberOfLives : EnableDisableGameObject
+    public class EnableBasedUponNumberOfLives : EnableDisableGameObjectMessaging<LivesChangedMessage>
     {
         /// <summary>
         /// The number of lives this icon represents. If the players lives are >= this then the met gameobject is shown, otherwise the not met gameobject is shown.
@@ -38,14 +39,26 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 
 
         /// <summary>
+        /// Called during the Start() phase for your own custom initialisation.
+        /// </summary>
+        public override void CustomStart()
+        {
+            Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use EnableBasedUponNumberOfStarsWon.");
+
+            var player = GameManager.Instance.Player;
+            RunMethod(new LivesChangedMessage(player.Lives, player.Lives));
+        }
+
+
+        /// <summary>
         /// Returns whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
-        public override bool IsConditionMet()
+        public override bool IsConditionMet(LivesChangedMessage message)
         {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use CreateLifeIcons.");
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use EnableBasedUponNumberOfLives.");
 
-            return GameManager.Instance.Player.Lives >= Lives;
+            return message.NewLives >= Lives;
         }
     }
 }

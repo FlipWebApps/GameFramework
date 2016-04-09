@@ -49,9 +49,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// Return the players score.
         /// </summary>
         /// <returns></returns>
-        public override int GetLatestValue()
+        public override int GetValueFromMessage(PlayerHighScoreChangedMessage message)
         {
-            return _player.HighScore;
+            return message == null ? _player.HighScore : message.NewHighScore;
         }
     }
 }

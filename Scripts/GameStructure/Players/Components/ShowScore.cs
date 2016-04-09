@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
 using UnityEngine.Assertions;
@@ -28,19 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Show the score that a player has.
     /// </summary>
-    public class ShowScore : ShowValueAnimated<int>
+    public class ShowScore : ShowValueAnimatedMessaging<int, PlayerScoreChangedMessage>
     {
         Player _player;
 
         /// <summary>
         /// Cache player reference and call base class.
         /// </summary>
-        public override void Start()
+        public override void CustomStart()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowScore.");
 
             _player = GameManager.Instance.GetPlayer();
-            base.Start();
+            base.CustomStart();
         }
 
 
@@ -48,9 +49,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// Return the players score.
         /// </summary>
         /// <returns></returns>
-        public override int GetLatestValue()
+        public override int GetValueFromMessage(PlayerScoreChangedMessage message)
         {
-            return _player.Score;
+            return message == null ? _player.Score : message.NewScore;
         }
     }
 }

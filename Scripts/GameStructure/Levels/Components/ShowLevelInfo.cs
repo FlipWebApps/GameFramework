@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -43,9 +42,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
             var level = GameManager.Instance.Levels.Selected;
             if (level != null)
             {
-                var _textComponent = GetComponent<Text>();
+                var textComponent = GetComponent<Text>();
                 var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                _textComponent.text = string.Format(text, level.Number, level.Name, level.Description);
+                textComponent.text = string.Format(text, level.Number, level.Name, level.Description);
             }
         }
     }
