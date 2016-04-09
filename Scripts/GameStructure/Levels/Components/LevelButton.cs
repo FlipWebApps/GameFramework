@@ -23,6 +23,7 @@
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
 #endif
 using System.Runtime.Remoting.Messaging;
+using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
@@ -56,6 +57,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 
             base.OnDestroy();
         }
+
+
+        public override void SetupDisplay()
+        {
+            base.SetupDisplay();
+
+            GameObjectHelper.SafeSetActive(StarsWonGameObject, CurrentItem.IsUnlocked);
+            GameObjectHelper.SafeSetActive(Star1WonGameObject, CurrentItem.IsStarWon(1));
+            GameObjectHelper.SafeSetActive(Star1NotWonGameObject, !CurrentItem.IsStarWon(1));
+            GameObjectHelper.SafeSetActive(Star2WonGameObject, CurrentItem.IsStarWon(2));
+            GameObjectHelper.SafeSetActive(Star2NotWonGameObject, !CurrentItem.IsStarWon(2));
+            GameObjectHelper.SafeSetActive(Star3WonGameObject, CurrentItem.IsStarWon(3));
+            GameObjectHelper.SafeSetActive(Star3NotWonGameObject, !CurrentItem.IsStarWon(3));
+            GameObjectHelper.SafeSetActive(Star4WonGameObject, CurrentItem.IsStarWon(4));
+            GameObjectHelper.SafeSetActive(Star4NotWonGameObject, !CurrentItem.IsStarWon(4));
+        }
+
 
         protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
         {

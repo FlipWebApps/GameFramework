@@ -134,16 +134,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             if (LockGameObject != null)
                 LockGameObject.SetActive(!CurrentItem.IsUnlocked);
 
-            GameObjectHelper.SafeSetActive(StarsWonGameObject, CurrentItem.IsUnlocked);
-            GameObjectHelper.SafeSetActive(Star1WonGameObject, (CurrentItem.StarsWon & 1) == 1);
-            GameObjectHelper.SafeSetActive(Star1NotWonGameObject, (CurrentItem.StarsWon & 1) != 1);
-            GameObjectHelper.SafeSetActive(Star2WonGameObject, (CurrentItem.StarsWon & 2) == 2);
-            GameObjectHelper.SafeSetActive(Star2NotWonGameObject, (CurrentItem.StarsWon & 2) != 2);
-            GameObjectHelper.SafeSetActive(Star3WonGameObject, (CurrentItem.StarsWon & 4) == 4);
-            GameObjectHelper.SafeSetActive(Star3NotWonGameObject, (CurrentItem.StarsWon & 4) != 4);
-            GameObjectHelper.SafeSetActive(Star4WonGameObject, (CurrentItem.StarsWon & 8) == 8);
-            GameObjectHelper.SafeSetActive(Star4NotWonGameObject, (CurrentItem.StarsWon & 8) != 8);
-
             if (HighScoreGameObject != null)
             {
                 HighScoreGameObject.SetActive(CurrentItem.IsUnlocked);

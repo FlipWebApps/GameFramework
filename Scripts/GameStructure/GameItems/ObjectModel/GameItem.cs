@@ -20,10 +20,10 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.Debugging;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -41,6 +41,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         public virtual string IdentifierBase { get; protected set; }
         public virtual string IdentifierBasePrefs { get; protected set; }
+        public bool IsInitialised { get; private set; }
 
         public Player Player;
         //public GameItem Parent;
@@ -69,22 +70,89 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         Sprite _sprite;
         bool _spriteTriedLoading;
 
+        /// <summary>
+        /// Whether the current item is purchased. Saved at the root level for all players.
+        /// </summary>
+        public bool IsBought { get; set; }
+
         public int ValueToUnlock { get; set; }
         public int HighScoreLocalPlayers { get; set; }              // global high score for all local players
         public int HighScoreLocalPlayersPlayerNumber { get; set; }  // number of the player that has overall high score
         public int OldHighScoreLocalPlayers { get; set; }           // high score before this turn
 
+        #region User Specific Settings
+
         /// <summary>
-        /// User specific settings
+        /// The number of coins that are currently assigned to the current GameItem. 
+        /// CoinsChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
         /// </summary>
-        public int Coins { get; set; }                              // current Coins - per turn
-        public int Score { get; set; }                              // current score - per turn.
-        public int HighScore { get; set; }                          // high score for this level for current player
-        public int OldHighScore { get; set; }                       // high score before this turn
-        public bool IsBought { get; set; }                          // Is bought - saved at root level for all players
-        public bool IsUnlocked { get; set; }                        // is unlocked - per player
+        public int Coins
+        {
+            get { return _coins; }
+            set
+            {
+                var oldValue = Coins;
+                _coins = value;
+                if (IsInitialised && oldValue != Coins)
+                    SendCoinsChangedMessage(Coins, oldValue);
+            }
+        }
+        int _coins;
+
+
+        /// <summary>
+        /// The score associated with the current GameItem. 
+        /// ScoreChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
+        /// </summary>
+        public int Score
+        {
+            get { return _score; }
+            set
+            {
+                var oldValue = Score;
+                _score = value;
+                if (IsInitialised && oldValue != Score)
+                    SendScoreChangedMessage(Score, oldValue);
+            }
+        }
+        int _score;
+
+
+        /// <summary>
+        /// The high score associated with the current GameItem. 
+        /// HighScoreChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
+        /// </summary>
+        public int HighScore
+        {
+            get { return _highScore; }
+            set
+            {
+                var oldValue = _highScore;
+                _highScore = value;
+                if (IsInitialised && oldValue != HighScore)
+                    SendHighScoreChangedMessage(HighScore, oldValue);
+            }
+        }
+        int _highScore;
+
+        /// <summary>
+        /// The initial high score before this turn / game...
+        /// </summary>
+        public int OldHighScore { get; set; }
+
+        /// <summary>
+        /// Whether the current item is unlocked. Saved per player.
+        /// </summary>
+        public bool IsUnlocked { get; set; } 
+
+        /// <summary>
+        /// Whether the unlocked animation has been shown. Used if a level is unlocked when not being displayed
+        /// so that we can still show a unlock animation to the user (e.g. when completing a level unlocks the next level)
+        /// Saved per player.
+        /// </summary>
         public bool IsUnlockedAnimationShown { get; set; }
-        public int StarsWon { get; set; }
+
+        #endregion User Specific Settings
 
         /// <summary>
         /// Stored json data from disk. Consider creating a subclass to save this instead.
@@ -93,16 +161,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         bool _isPlayer;
 
-        public GameItem() { }
-
-        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
-        //public GameItem(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
-        //{
-        //    Initialise(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, identifierBase, identifierBasePrefs, loadFromResources);
-        //}
-
         #region Initialisation
 
+
+        /// <summary>
+        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="name"></param>
+        /// <param name="localiseName"></param>
+        /// <param name="description"></param>
+        /// <param name="localiseDescription"></param>
+        /// <param name="sprite"></param>
+        /// <param name="valueToUnlock"></param>
+        /// <param name="player"></param>
+        /// <param name="identifierBase"></param>
+        /// <param name="identifierBasePrefs"></param>
+        /// <param name="loadFromResources"></param>
         public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
@@ -129,13 +205,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             IsBought = PlayerPrefs.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than pre player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
-            StarsWon = GetSettingInt("SW", 0);
 
             if (loadFromResources)
                 LoadLevelData();
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
+
+            IsInitialised = true;
         }
 
 
@@ -189,7 +266,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             if (JsonConfigurationData == null)
                 JsonConfigurationData = LoadJSONDataFile();
-            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. CHeck the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
             ParseGameData(JsonConfigurationData);
         }
 
@@ -244,7 +321,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             SetSetting("IsU", IsUnlocked ? 1 : 0);
             SetSetting("IsUAS", IsUnlockedAnimationShown ? 1 : 0);
-            SetSetting("SW", StarsWon);
             SetSetting("HS", HighScore);
 
             if (IsBought)
@@ -252,7 +328,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             if (HighScoreLocalPlayers != 0)
                 PlayerPrefs.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
             if (HighScoreLocalPlayersPlayerNumber != -1)
-            PlayerPrefs.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
+                PlayerPrefs.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
 
         #region Score Related
@@ -283,10 +359,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         public void RemovePoints(int points)
         {
-            Score -= points;
-            Score = Mathf.Max(Score, 0);
+            var tempScore = Score - points; // batch updates to avoid sending multiple messages.
+            Score = Mathf.Max(tempScore, 0);
         }
 
+        public virtual void SendScoreChangedMessage(int newScore, int oldScore)
+        {
+            GameManager.Messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
+        }
+
+        public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
+        {
+            GameManager.Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
+        }
+        #endregion
+
+        #region Coins Related
         public void AddCoin()
         {
             AddCoins(1);
@@ -304,9 +392,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         public void RemoveCoins(int coins)
         {
-            Coins -= coins;
-            Coins = Mathf.Max(Coins, 0);
+            var tempCoins = Coins - coins; // batch updates to avoid sending multiple messages.
+            Coins = Mathf.Max(tempCoins, 0);
         }
+
+        public virtual void SendCoinsChangedMessage(int newCoins, int oldCoins)
+        {
+            GameManager.Messenger.QueueMessage(new CoinsChangedMessage(this, newCoins, oldCoins));
+        }
+
         #endregion
 
         #region For setting gameitem instance specific settings
@@ -332,8 +426,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         public void SetSetting(string key, int value, int defaultValue = 0)
         {
-            //TODO if key exists and default Value then remove key. Only write if not default Value as many items won't use these values so doesn't make sense to write them.
-
             if (_isPlayer) {
                 // only set or keep values that aren't the default
                 if (value != defaultValue)
@@ -349,6 +441,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             //    Parent.SetSetting(FullKey(key), Value);
             else
                 Player.SetSetting(FullKey(key), value, defaultValue);
+        }
+
+
+        public void SetSettingFloat(string key, float value, float defaultValue = 0)
+        {
+            if (_isPlayer)
+            {
+                // only set or keep values that aren't the default
+                if (!Mathf.Approximately(value, defaultValue))
+                {
+                    PlayerPrefs.SetFloat(FullKey(key), value);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(FullKey(key));
+                }
+            }
+            //else if (Parent != null)
+            //    Parent.SetSetting(FullKey(key), Value);
+            else
+                Player.SetSettingFloat(FullKey(key), value, defaultValue);
         }
 
 
@@ -371,6 +484,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             //    return Parent.GetSettingInt(FullKey(key), defaultValue);
             else
                 return Player.GetSettingInt(FullKey(key), defaultValue);
+        }
+
+
+        public float GetSettingFloat(string key, float defaultValue)
+        {
+            if (_isPlayer)
+                return PlayerPrefs.GetFloat(FullKey(key), defaultValue);
+            //else if (Parent != null)
+            //    return Parent.GetSettingInt(FullKey(key), defaultValue);
+            else
+                return Player.GetSettingFloat(FullKey(key), defaultValue);
         }
 
         public string FullKey(string key)
