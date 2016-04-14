@@ -46,7 +46,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 #if UNITY_ANDROID
             Application.OpenURL(AndroidUrl);
 #elif UNITY_IPHONE
-            Application.OpenURL(iOSUrl);
+            Application.OpenURL(IOsUrl);
 #else
             Application.OpenURL(DesktopUrl);
 #endif
