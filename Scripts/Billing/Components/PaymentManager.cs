@@ -189,7 +189,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
         /// <summary>
         /// Called when a purchase completes. This automatically handles certain types of purchase and notifications
-        /// TODO Add characher unlock
         /// 
         /// May be called at any time after OnInitialized().
         /// </summary>
