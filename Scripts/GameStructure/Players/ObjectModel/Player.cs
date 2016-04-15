@@ -71,6 +71,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         float _health;
 
 
+        /// <summary>
+        /// Whether the current player has won the whole game.
+        /// 
+        /// GameWonMessage is sent whenever this value changes outside of initialisation.
+        /// </summary>
+        public bool IsGameWon
+        {
+            get { return _isGameWon; }
+            set
+            {
+                var oldValue = IsGameWon;
+                _isGameWon = value;
+                if (IsInitialised && oldValue != IsGameWon)
+                    GameManager.SafeTriggerMessage(new GameWonMessage());
+            }
+        }
+        bool _isGameWon;
+
+
         public int MaximumWorld;
         public int MaximumLevel;
         public int SelectedWorld;
@@ -92,6 +111,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             Coins = GetSettingInt("TotalCoins", Coins);
             Lives = GetSettingInt("Lives", Lives);
             Health = GetSettingFloat("Health", Health);
+            IsGameWon = GetSettingBool("IsGameWon", IsGameWon);
 
             MaximumWorld = GetSettingInt("MaximumWorld", MaximumWorld);
             MaximumLevel = GetSettingInt("MaximumLevel", MaximumLevel);
@@ -109,6 +129,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             MaximumLevel = 0;
             SelectedWorld = 0;
             SelectedLevel = 0;
+            IsGameWon = false;
 
             Score = 0;
             Coins = 0;
@@ -134,6 +155,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             SetSetting("TotalCoins", Coins);
             SetSetting("Lives", Lives);
             SetSettingFloat("Health", Health);
+
+            SetSetting("IsGameWon", IsGameWon);
 
             SetSetting("MaximumWorld", MaximumWorld);
             SetSetting("MaxLevel", MaximumLevel);
