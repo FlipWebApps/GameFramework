@@ -488,13 +488,35 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region Messaging
 
         /// <summary>
+        /// Safe method for adding a listener without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static void SafeAddListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
+        {
+            if (!IsActive || Messenger == null) return;
+            Messenger.AddListener<T>(handler);
+        }
+
+        /// <summary>
+        /// Safe method for removing a listener without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static void SafeRemoveListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
+        {
+            if (!IsActive || Messenger == null) return;
+            Messenger.RemoveListener<T>(handler);
+        }
+
+        /// <summary>
         /// Safe method for queueing messages without needing to test whether a gamemanager is setup.
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
         public static bool SafeQueueMessage(BaseMessage msg)
         {
-            if (Messenger == null) return false;
+            if (!IsActive || Messenger == null) return false;
             return Messenger.QueueMessage(msg);
         }
 
@@ -505,7 +527,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <returns></returns>
         public static bool SafeTriggerMessage(BaseMessage msg)
         {
-            if (Messenger == null) return false;
+            if (!IsActive || Messenger == null) return false;
             return Messenger.TriggerMessage(msg);
         }
 
