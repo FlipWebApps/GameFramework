@@ -424,6 +424,26 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 Player.SetSetting(FullKey(key), value, defaultValue);
         }
 
+        public void SetSetting(string key, bool value, bool defaultValue = false)
+        {
+            if (_isPlayer)
+            {
+                // only set or keep values that aren't the default
+                if (value != defaultValue)
+                {
+                    PlayerPrefs.SetInt(FullKey(key), value ? 1 : 0);
+                }
+                else
+                {
+                    PlayerPrefs.DeleteKey(FullKey(key));
+                }
+            }
+            //else if (Parent != null)
+            //    Parent.SetSetting(FullKey(key), Value);
+            else
+                Player.SetSetting(FullKey(key), value, defaultValue);
+        }
+
         public void SetSetting(string key, int value, int defaultValue = 0)
         {
             if (_isPlayer) {
@@ -484,6 +504,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             //    return Parent.GetSettingInt(FullKey(key), defaultValue);
             else
                 return Player.GetSettingInt(FullKey(key), defaultValue);
+        }
+
+
+        public bool GetSettingBool(string key, bool defaultValue)
+        {
+            if (_isPlayer)
+                return PlayerPrefs.GetInt(FullKey(key), defaultValue ? 1 : 0) == 1;
+            //else if (Parent != null)
+            //    return Parent.GetSettingInt(FullKey(key), defaultValue);
+            else
+                return Player.GetSettingBool(FullKey(key), defaultValue);
         }
 
 
