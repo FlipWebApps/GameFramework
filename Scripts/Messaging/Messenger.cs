@@ -52,7 +52,14 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         /// <summary>
         /// Messages waiting to be processed.
         /// </summary>
-        private Queue<BaseMessage> _messageQueue = new Queue<BaseMessage>();
+        Queue<BaseMessage> _messageQueue = new Queue<BaseMessage>();
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Message Log.
+        /// </summary>
+        public static List<MessageLogEntry> _messageLog = new List<MessageLogEntry>();
+#endif
 
         #region Queue Processing
 
@@ -96,6 +103,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             List<MessageListenerDelegate> listenerList = _listeners[messageName];
             Assert.IsFalse(listenerList.Contains(handler), "You should not add the same listener multiple times for " + messageName);
             listenerList.Add(handler);
+
+            AddLogEntry(LogEntryType.AddListener, messageName);
         }
 
 
@@ -114,6 +123,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             List<MessageListenerDelegate> listenerList = _listeners[messageName];
             Assert.IsTrue(listenerList.Contains(handler), "You are trying to remove a handler that isn't registered for " + messageName);
             listenerList.Remove(handler);
+
+            AddLogEntry(LogEntryType.RemoveListener, messageName);
         }
 
         #endregion Listener Registration
@@ -130,6 +141,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             // if no listeners then just return.
             if (!_listeners.ContainsKey(msg.Name))
             {
+                AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
                 MyDebug.LogF("Messaging: No listeners are setup for {0}. Discarding message!", msg.Name);
                 return false;
             }
@@ -148,6 +160,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         {
             if (!_listeners.ContainsKey(msg.Name))
             {
+                AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
                 MyDebug.LogF("Messaging: No listeners are setup for {0}. Discarding message!", msg.Name);
                 return false;
             }
@@ -158,11 +171,48 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
                 var sent = listenerList[i](msg);
 
                 if (msg.SendMode == BaseMessage.SendModeType.SendToFirst && sent)
+                {
+                    AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to first listener.");
                     return true;
+                }
             }
+            AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to " + listenerList.Count + " listeners.");
             return true;
         }
 
         #endregion Adding Messages and Sending
+
+        #region MessageLogEntry
+
+        /// <summary>
+        /// Add a message to the log.
+        /// </summary>
+        /// <param name="logEntryType"></param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        void AddLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
+        {
+            _messageLog.Add(new MessageLogEntry(logEntryType, messageType, contents, message));
+        }
+
+        public enum LogEntryType { AddListener, RemoveListener, Send}
+
+        public class MessageLogEntry {
+            public readonly LogEntryType LogEntryType;
+            public readonly System.DateTime Time;
+            public readonly string MessageType;
+            public readonly string Contents;
+            public readonly string Message;
+
+            public MessageLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
+            {
+                LogEntryType = logEntryType;
+                Time = System.DateTime.Now;
+                MessageType = messageType;
+                Contents = contents;
+                Message = message;
+            }
+        }
+
+        #endregion MessageLogEntry
     }
 }
