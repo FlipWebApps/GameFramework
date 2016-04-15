@@ -33,6 +33,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Purchasing;
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 {
@@ -209,8 +210,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 PlayerPrefs.Save();
 
                 // notify all subscribers of the purchase
+                GameManager.SafeQueueMessage(new ItemPurchasedMessage(productId));
                 if (UnlockGamePurchased != null)
-                    UnlockGamePurchased();
+                    UnlockGamePurchased();          // deprecated.
             }
 
             else if (productId.StartsWith("unlock.world."))
@@ -233,8 +235,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 world.MarkAsBought();
 
                 // notify all subscribers of the purchase
+                GameManager.SafeQueueMessage(new WorldPurchasedMessage(number));
                 if (WorldPurchased != null)
-                    WorldPurchased(number);
+                    WorldPurchased(number);          // deprecated.
             }
 
             else if (productId.StartsWith("unlock.level."))
@@ -257,8 +260,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 level.MarkAsBought();
 
                 // notify all subscribers of the purchase
+                GameManager.SafeQueueMessage(new LevelPurchasedMessage(number));
                 if (LevelPurchased != null)
-                    LevelPurchased(number);
+                    LevelPurchased(number);          // deprecated.
             }
 
             else if (productId.StartsWith("unlock.character."))
@@ -281,8 +285,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
                 character.MarkAsBought();
 
                 // notify all subscribers of the purchase
+                GameManager.SafeQueueMessage(new CharacterPurchasedMessage(number));
                 if (CharacterPurchased != null)
-                    CharacterPurchased(number);
+                    CharacterPurchased(number);          // deprecated.
             }
             return PurchaseProcessingResult.Complete;
         }
