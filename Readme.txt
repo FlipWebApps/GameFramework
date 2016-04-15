@@ -1,9 +1,9 @@
-Game Framework - Free v2.1
+Game Framework - Free v2.2
 
 Thank you for using Game Framework. 
 
-This package features the main core of Game Framework. There is also a pro bundle which contains 
-additional content to get you up and running including:
+This package features the main core of Game Framework. There is also an extras bundle in addition to 
+this framework also contains a lot of useful additional content to get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
@@ -53,6 +53,37 @@ EditorList - courtesy of catlikecoding.com
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.2
+	Game Framework Core - Improvements
+	- Debugging: Cheat functions changed to tabbed window to give more space.
+	- GameManager: Added SafeQueueMessage() and SafeTriggerMessage() as a shorthand so you don't need to check if GameManager is setup.
+	- GameStructure: Moved StarsWon from GameItem to Level as it is unlikely to be needed elsewhere.
+	- GameStructure: Level specific messaging overrides for changes to levels and coins.
+	- GameStructure: GameItem messaging for changes to score, highscore and coins.
+	- GameStructure: Added optional game over conditions to LevelManager including when lives = 0 and health = 0
+	- GameStructure: Player messaging for changes to lives, health, score, highscore and coins.
+	- GameStructure: Added Player ShowHealth, ShowCoins, ShowHealthImage, ShowHighScore, ShowPlayerIngo, ShowScore.
+	- GameStructure: Added Level CreateStarIcons, EnabledBasedUponNumberOfStarsWon, ShowLevelCoins, ShowLevelHighScore, ShowLevelScore components, 
+		and added messaging for Coins, HighScore, Score and Stars Won changes.
+	- GameStructure: Changed all Level and Player Showxxx() methods to react to messaging rather than relying on update loops and continual polling.
+	- Messaging: Added Dummy message and RunOnMessage abstract component for simply taking an action on a message.
+	- UI: Deprecated FadeLevelManager and ScoreDisplay in favour of better alternatives.
+	- UI: Added ShowValueAnimatedMessaging abstract class to show a (optionally animated) value based upon a message notification
+
+	Game Framework Core - Fixes
+	- Various minor namespace and spelling corrections
+	- RunOnmessage correctly checks if GameManager is active before removing listener.
+
+	Game Framework Tutorials (Pro Bundle) - Improvements
+	- Demo: All demos updated for new notification based ShowXXX GameStructure components
+	
+	BeautifulTransitions (Pro Bundle): Updated to v2.2 that includes:
+	- Exposed Transition Start and Complete events through the inspector so you can easily hook up other code.
+	- Demo: Added Events Demo
+	- Demo: Added SceneSwap Demo
+	- Fix for shaders sometimes missing from final build.
+
 
 v2.1
 

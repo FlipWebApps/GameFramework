@@ -189,7 +189,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
         /// <summary>
         /// Called when a purchase completes. This automatically handles certain types of purchase and notifications
-        /// TODO Add characher unlock
         /// 
         /// May be called at any time after OnInitialized().
         /// </summary>
@@ -225,7 +224,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
                 if (world == null)
-                    world = new World(number);
+                {
+                    world = new World();
+                    world.Initialise(number);
+                }
 
                 // mark the item as bought and unlocked
                 world.MarkAsBought();
@@ -246,7 +248,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
                 if (level == null)
-                    level = new Level(number);
+                {
+                    level = new Level();
+                    level.Initialise(number);
+                }
 
                 // mark the item as bought and unlocked
                 level.MarkAsBought();
@@ -267,7 +272,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
                 // if not found on game manager then create a new copy to ensure this purchase is recorded
                 if (character == null)
-                    character = new Character(number);
+                {
+                    character = new Character();
+                    character.Initialise(number);
+                }
 
                 // mark the item as bought and unlocked
                 character.MarkAsBought();
