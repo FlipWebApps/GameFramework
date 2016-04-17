@@ -117,6 +117,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
                 Selected = Items[0];
         }
 
+
+        /// <summary>
+        /// Make sure that any initial items are unlocked. This includes the currently selected item and any items that have
+        /// ValueTounlock set to > 0.
+        /// </summary>
         void UnlockInitialItems()
         {
             Assert.IsNotNull(Selected, "Ensure you have a selected item (or default selected item before calling UnlockInitialItems");
@@ -132,9 +137,46 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             }
         }
 
+        /// <summary>
+        /// Get the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
         public T GetItem(int number)
         {
             return Items.FirstOrDefault(gameItem => gameItem.Number == number);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes after the currently selected item
+        /// </summary>
+        /// <returns>A GameItem or null</returns>
+        public T GetNextItem()
+        {
+            return GetNextItem(Selected);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes after the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>A GameItem or null</returns>
+        public T GetNextItem(int number)
+        {
+            return GetItem(number + 1);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes after the specified item
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>A GameItem or null</returns>
+        public T GetNextItem(T item)
+        {
+            return GetNextItem(item.Number);
         }
 
         public T[] UnlockableItems(int currentValue, bool lockedOnly = false)
