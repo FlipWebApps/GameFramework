@@ -74,7 +74,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         /// <summary>
         /// Whether the current player has won the whole game.
         /// 
-        /// GameWonMessage is sent whenever this value changes outside of initialisation.
+        /// GameWonMessage is sent whenever this value is set to true outside of initialisation.
         /// </summary>
         public bool IsGameWon
         {
@@ -83,7 +83,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
             {
                 var oldValue = IsGameWon;
                 _isGameWon = value;
-                if (IsInitialised && oldValue != IsGameWon)
+                if (IsInitialised && oldValue != IsGameWon && IsGameWon)
                     GameManager.SafeTriggerMessage(new GameWonMessage());
             }
         }
