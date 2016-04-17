@@ -26,13 +26,15 @@ using FlipWebApps.GameFramework.Scripts.Billing.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Other;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Localisation;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 {
@@ -105,7 +107,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             CurrentItem = GetGameItemsManager().GetItem(Number);
             Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
+        }
 
+        public void Start()
+        {
+            SetupDisplay();
+
+            // show unlock animation if it isn't already shown.
+            if (CurrentItem.IsUnlocked == true && CurrentItem.IsUnlockedAnimationShown == false)
+                Unlock();
+
+            // add event and message listeners.
+            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
             GetGameItemsManager().Unlocked += UnlockIfGameItemMatches;
             GetGameItemsManager().SelectedChanged += SelectedChanged;
         }
@@ -114,25 +127,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         {
             GetGameItemsManager().SelectedChanged -= SelectedChanged;
             GetGameItemsManager().Unlocked -= UnlockIfGameItemMatches;
-        }
-
-        public void Start()
-        {
-            SetupDisplay();
-
-            if (CoinColorCheckInterval > 0 && ValueToUnlockAmount != null)
-                StartCoroutine(CoinColorCheck());
+            GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
         public virtual void SetupDisplay()
         {
+            var isUnlockedAndAnimationShown = CurrentItem.IsUnlocked && CurrentItem.IsUnlockedAnimationShown;
+
             UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
 
             if (DisplayImage != null)
                 DisplayImage.sprite = CurrentItem.Sprite;
 
             if (LockGameObject != null)
-                LockGameObject.SetActive(!CurrentItem.IsUnlocked);
+                LockGameObject.SetActive(!isUnlockedAndAnimationShown);
 
             if (HighScoreGameObject != null)
             {
@@ -142,7 +150,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             if (ValueToUnlockGameObject != null)
             {
-                ValueToUnlockGameObject.SetActive(!CurrentItem.IsUnlocked);
+                ValueToUnlockGameObject.SetActive(!isUnlockedAndAnimationShown && CurrentItem.ValueToUnlock != -1);
                 UIHelper.SetTextOnChildGameObject(ValueToUnlockGameObject, "ValueToUnlockAmount", "x" + CurrentItem.ValueToUnlock.ToString(), true);
             }
 
@@ -230,6 +238,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             CurrentItem.IsUnlocked = true;
             CurrentItem.IsUnlockedAnimationShown = true;
             CurrentItem.UpdatePlayerPrefs();
+            PlayerPrefs.Save();
 
             Animator animator = GetComponent<Animator>();
             if (animator != null)
@@ -239,21 +248,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         }
 
 
-        protected virtual IEnumerator CoinColorCheck()
+        /// <summary>
+        /// Receives a PlayerCoinsChangedMessage and updates the coin to unlock color.
+        /// 
+        /// Override to provide your own custom handling.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        protected virtual bool OnPlayerCoinsChanged(BaseMessage message)
         {
-            while (true)
+            var playerCoinsChangedMessage = message as PlayerCoinsChangedMessage;
+            if (ValueToUnlockAmount != null)
             {
-                if (GameManager.Instance.GetPlayer().Coins >= CurrentItem.ValueToUnlock)
-                {
-                    GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(gameObject, "ValueToUnlockAmount", true).color = CoinColorCanUnlock;
-                }
-                else
-                {
-                    GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(gameObject, "ValueToUnlockAmount", true).color = CoinColorCantUnlock;
-                }
-                yield return new WaitForSeconds(CoinColorCheckInterval);
+                ValueToUnlockAmount.color = playerCoinsChangedMessage.NewCoins >= CurrentItem.ValueToUnlock ? CoinColorCanUnlock : CoinColorCantUnlock;
+                return true;
             }
-
+            return false;
         }
     }
 }
