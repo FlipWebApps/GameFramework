@@ -1,4 +1,4 @@
-Game Framework - Free v2.2
+Game Framework - Free v2.2.1
 
 Thank you for using Game Framework. 
 
@@ -53,6 +53,30 @@ EditorList - courtesy of catlikecoding.com
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.2.1
+
+	Game Framework Core - Improvements
+	- Billing: Updated to use new messaging functionality.
+	- GameStructure: Added Player.IsGameWon property including GameWonMessage.
+	- GameStructure: Added Game\GameHelper with various glabal gamestructure related functions.
+	- GameStructure: GameItem specific bool setting support.
+	- GameStructure: GameItem button uses messaging to get coin changes. 
+	- GameStructure: GameItem improved completion unlock mode handling.
+	- GameStructure: GameItem AddedGetNextItem functions
+	- GameStructure: Added SafeAddListener and SafeRemoveListener shortcut methods to GameManager.
+	- GameStructure: GameManager SafeQueueMessage and SafeTriggerMessage methods correctly check if the GameManager is active.
+	- Messaging: Added basic message event log window.
+	- UI: Start of support for new GameOver completion messages.
+	
+	Game Framework Core - Fixes
+	- Billing: Fix for invalid call to constructor with 1 argument after v2.0 update.
+	- GameStructure: corrected (reduced) unlock delay in LevelUnlockButton
+	- UI: Incorrect naming caused IOS builds to break in OnButtonCLickLoadUrl
+	
+	Game Framework Extras (Pro Bundle) - Improvements
+	- Themes: Updated GameOver prefabs with new completion messages.
+	
 
 v2.2
 	Game Framework Core - Improvements
