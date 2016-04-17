@@ -66,6 +66,9 @@ GeneralMessage.Info.Title,Info,Info
 GeneralMessage.Error.GeneralError,An error occurred: {0},Det oppstod en feil: {0}
 GameOver.Title,GAME OVER,SPILL OVER
 GameOver.Won,CONGRATULATIONS,GRATULERER
+GameOver.GameWon,GAME COMPLETE,SPILL FERDIG
+GameOver.WorldWon,WORLD COMPLETE,VERDEN FERDIG
+GameOver.LevelWon,LEVEL COMPLETE,LEVEL FERDIG
 GameOver.Lost,YOU LOST,DU TAPTE
 GameOver.Achievement,x,x
 GameOver.Time,Time,Tid

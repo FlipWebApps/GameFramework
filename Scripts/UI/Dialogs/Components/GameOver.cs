@@ -33,6 +33,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Game;
 
 #if FACEBOOK_SDK
 using FlipWebApps.GameFramework.Scripts.Facebook.Components;
@@ -79,8 +80,43 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             Level currentLevel = GameManager.Instance.Levels.Selected;
 
             // show won / lost game objects as appropriate
-            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), isWon);
             GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Lost", true), !isWon);
+
+            // see if the world or game is won and also if we should unlock the next world / level
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "GameWon", true), false);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "WorldWon", true), false);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "LevelWon", true), false);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), false);
+            if (isWon)
+            {
+                //TODO: if coins unlock mode then need to check all levels are done before saying world complete - same for game...
+                //TODO: perhaps in future we might want to distinguish between the first and subsequent times a user completes something?
+                //// is the game won
+                //if (GameHelper.IsCurrentLevelLastInGame()) {
+                //    GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "GameWon", true), true);
+                //}
+
+                //// is a world won
+                //else if (GameHelper.IsCurrentLevelLastInGame())
+                //{
+                //    GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "WorldWon", true), true);
+                //}
+
+                //// level won
+                //else if (GameManager.Instance.Levels.GetNextItem() != null)
+                //{
+                //    GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "LevelWon", true), true);
+                //}
+
+                //// else won with some other condition
+                //else
+                //{
+                    GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), true);
+                //}
+
+                // process and update game state - do this last so we can check some bits above.
+                GameHelper.ProcessCurrentLevelComplete();
+            }
 
             // set some text based upon the result
             UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "AchievementText", LocaliseText.Format(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name));
