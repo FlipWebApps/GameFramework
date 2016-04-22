@@ -25,6 +25,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Debugging;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {
@@ -59,7 +60,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 
         public override void SaveState()
         {
-            Debug.Log("FreePrizeManager: SaveState");
+            MyDebug.Log("FreePrizeManager: SaveState");
 
             PlayerPrefs.SetString("FreePrize.NextCountdownStart", NextCountdownStart.ToString());
             PlayerPrefs.SetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString());

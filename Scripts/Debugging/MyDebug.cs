@@ -34,6 +34,19 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
     /// </summary>
     public class MyDebug
     {
+        public enum DebugLevelType { None, Information, Warning, Error }
+
+        /// <summary>
+        /// What level of debugging we actually want to show.
+        /// </summary>
+        public static DebugLevelType DebugLevel { get; set; }
+
+        /// <summary>
+        /// Static Constructuro
+        /// </summary>
+        static MyDebug() {
+            DebugLevel = DebugLevelType.None;
+        }
 
         public static bool IsDebugBuildOrEditor
         {
@@ -64,49 +77,64 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message)
         {
-            Debug.Log(message);
+            if (DebugLevel >= DebugLevelType.Information)
+                Debug.Log(message);
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogF(string format, params object[] args)
         {
-            Debug.Log(string.Format(format, args));
+            if (DebugLevel >= DebugLevelType.Information)
+                Debug.Log(string.Format(format, args));
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message, Object context)
         {
-            Debug.Log(message, context);
+            if (DebugLevel >= DebugLevelType.Information)
+                Debug.Log(message, context);
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message)
         {
-            Debug.LogError(message);
+            if (DebugLevel >= DebugLevelType.Error)
+                Debug.LogError(message);
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void LogErrorF(string format, params object[] args)
+        {
+            if (DebugLevel >= DebugLevelType.Error)
+                Debug.LogError(string.Format(format, args));
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message, Object context)
         {
-            Debug.LogError(message, context);
+            if (DebugLevel >= DebugLevelType.Error)
+                Debug.LogError(message, context);
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message)
         {
-            Debug.LogWarning(message.ToString());
+            if (DebugLevel >= DebugLevelType.Warning)
+                Debug.LogWarning(message.ToString());
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarningF(string format, params object[] args)
         {
-            Debug.LogWarning(string.Format(format, args));
+            if (DebugLevel >= DebugLevelType.Warning)
+                Debug.LogWarning(string.Format(format, args));
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message, Object context)
         {
-            Debug.LogWarning(message.ToString(), context);
+            if (DebugLevel >= DebugLevelType.Warning)
+                Debug.LogWarning(message.ToString(), context);
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
