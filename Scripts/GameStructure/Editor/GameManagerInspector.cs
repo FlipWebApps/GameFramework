@@ -39,7 +39,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         SerializedProperty _playWebUrlProperty;
         SerializedProperty _playMarketUrlProperty;
         SerializedProperty _iOSWebUrlProperty;
-        SerializedProperty _isUnlockedProperty;
+        SerializedProperty _debugLevelProperty;
         SerializedProperty _referencePhysicalScreenHeightInInchesProperty;
         SerializedProperty _displayChangeCheckDelayProperty;
         SerializedProperty _identifierBaseProperty;
@@ -76,7 +76,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             _playWebUrlProperty = serializedObject.FindProperty("PlayWebUrl");
             _playMarketUrlProperty = serializedObject.FindProperty("PlayMarketUrl");
             _iOSWebUrlProperty = serializedObject.FindProperty("iOSWebUrl");
-            _isUnlockedProperty = serializedObject.FindProperty("IsUnlocked");
+            _debugLevelProperty = serializedObject.FindProperty("DebugLevel");
             _identifierBaseProperty = serializedObject.FindProperty("IdentifierBase");
             _referencePhysicalScreenHeightInInchesProperty = serializedObject.FindProperty("ReferencePhysicalScreenHeightInInches");
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
@@ -131,7 +131,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             EditorGUILayout.LabelField("Game Details", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.PropertyField(_gameNameProperty);
-            EditorGUILayout.PropertyField(_isUnlockedProperty);
             EditorGUI.indentLevel += 1;
             showLinks = EditorGUILayout.Foldout(showLinks, "Links");
             if (showLinks)
@@ -144,6 +143,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             if (showAdvanced)
             {
                 EditorGUILayout.PropertyField(_identifierBaseProperty);
+                EditorGUILayout.PropertyField(_debugLevelProperty);
                 EditorGUILayout.PropertyField(_referencePhysicalScreenHeightInInchesProperty);
                 EditorGUILayout.PropertyField(_displayChangeCheckDelayProperty);
             }

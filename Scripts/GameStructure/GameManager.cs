@@ -38,6 +38,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -61,10 +62,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public string PlayMarketUrl = "";
         [Tooltip("If targeting iOS, a link to the App Store page game")]
         public string iOSWebUrl = "";
-        [Tooltip("Whether the game is unlocked.\nCan be used to only enable certain features and can be linked to in app purchase")]
-        public bool IsUnlocked;
         [Tooltip("Set the base identifier to allow for multiple games in a single project")]
         public string IdentifierBase;
+        [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
+        public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
 
         // Display related
         [Header("Display")]
@@ -129,6 +130,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <summary>
         /// Gameplay related properties
         /// </summary>
+
+        // set once GameSetup function is complete.
+        public bool IsInitialised { get; set; }                             
+
+        // Whether the game is unlocked. Can be used to only enable certain features and can be linked to in app purchase.
+        public bool IsUnlocked
+        {
+            get { return _isUnlocked; }
+            set
+            {
+                var oldValue = IsUnlocked;
+                _isUnlocked = value;
+                if (IsInitialised && oldValue != IsUnlocked)
+                    SafeQueueMessage(new GameUnlockedMessage(IsUnlocked));
+            }
+        }
+        bool _isUnlocked;
+
         [Obsolete("Use functions in LevelManager instead")]
         public bool IsPaused { get; set; }
         [Obsolete("Use functions in LevelManager instead?")]
@@ -213,8 +232,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             base.GameSetup();
 
-            Debug.Log("GameManager: GameSetup");
-            Debug.Log("Application.systemLanguage: " + Application.systemLanguage);
+            var sb = new System.Text.StringBuilder();
+
+            MyDebug.DebugLevel = DebugLevel;
+
+            sb.Append("GameManager: GameSetup()");
+            sb.Append("\nApplication.systemLanguage: ").Append(Application.systemLanguage);
+
 
             // Gameplay related properties
             IsUnlocked = PlayerPrefs.GetInt("IsUnlocked", 0) != 0;
@@ -227,10 +251,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             TimesLevelsPlayed = PlayerPrefs.GetInt("TimesLevelsPlayed", 0);
             TimesPlayedForRatingPrompt = PlayerPrefs.GetInt("TimesPlayedForRatingPrompt", 0);
             TimesPlayedForRatingPrompt++;
-            Debug.Log("TimesGamePlayed : " + TimesGamePlayed);
-            Debug.Log("TimesLevelsPlayed : " + TimesLevelsPlayed);
-            Debug.Log("TimesPlayedForRatingPrompt : " + TimesPlayedForRatingPrompt);
-            Debug.Log("Application.PersistantDataPath : " + Application.persistentDataPath);
+            sb.Append("\nTimesGamePlayed: ").Append(TimesGamePlayed);
+            sb.Append("\nTimesLevelsPlayed: ").Append(TimesLevelsPlayed);
+            sb.Append("\nTimesPlayedForRatingPrompt: ").Append(TimesPlayedForRatingPrompt);
+            sb.Append("\nApplication.PersistantDataPath: ").Append(Application.persistentDataPath);
+
+            MyDebug.Log(sb.ToString());
 
             // audio related properties
             BackGroundAudioVolume = 1;              // default if nothing else is set.
@@ -258,6 +284,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
             BackGroundAudioVolume = PlayerPrefs.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
             EffectAudioVolume = PlayerPrefs.GetFloat("EffectAudioVolume", EffectAudioVolume);
+
 
             // display related properties
             SetDisplayProperties();
@@ -308,6 +335,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             // coroutine to check for display changes (don't need to do this every frame)
             if (!Mathf.Approximately(DisplayChangeCheckDelay, 0))
                 StartCoroutine(CheckForDisplayChanges());
+
+            // flag as initialised
+            IsInitialised = true;
         }
 
         #endregion Setup
@@ -335,12 +365,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             AspectRatioMultiplier = (1 / 1.3333333333f) * Camera.main.aspect;      // assume designed for a 4:3 screen
             PhysicalScreenHeightMultiplier = ReferencePhysicalScreenHeightInInches / DisplayMetrics.GetPhysicalHeight();
 
-            Debug.Log("WorldBottomLeftPosition: " + WorldBottomLeftPosition);
-            Debug.Log("WorldTopRightPosition: " + WorldTopRightPosition);
-            Debug.Log("WorldSize: " + WorldSize);
-            Debug.Log("AspectRatioMultiplier: " + AspectRatioMultiplier);
-            Debug.Log("Screen size is : " + DisplayMetrics.GetPhysicalWidth() + "x" + +DisplayMetrics.GetPhysicalHeight() + "\"");
-            Debug.Log("PhysicalScreenHeightMultiplier: " + PhysicalScreenHeightMultiplier);
+            var sb = new System.Text.StringBuilder();
+            sb.Append("GameManager: SetDisplayProperties()");
+            sb.Append("\nWorldBottomLeftPosition: ").Append(WorldBottomLeftPosition);
+            sb.Append("\nWorldTopRightPosition: ").Append(WorldTopRightPosition);
+            sb.Append("\nWorldSize: ").Append(WorldSize);
+            sb.Append("\nAspectRatioMultiplier: ").Append(AspectRatioMultiplier);
+            sb.Append("\nScreen size is: ").Append(WorldBottomLeftPosition);
+            sb.Append("\nPhysicalScreenHeightMultiplier: ").Append(DisplayMetrics.GetPhysicalWidth()).Append("x").Append(DisplayMetrics.GetPhysicalHeight()).Append("\"");
+            MyDebug.Log(sb.ToString());
         }
 
 
@@ -389,7 +422,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         public override void SaveState()
         {
-            Debug.Log("GameManager: SaveState");
+            MyDebug.Log("GameManager: SaveState");
 
             PlayerPrefs.SetInt("TimesPlayedForRatingPrompt", TimesPlayedForRatingPrompt);
             PlayerPrefs.SetInt("TimesGamePlayed", TimesGamePlayed);
@@ -554,7 +587,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         ///
         protected virtual Player CreatePlayer(int playerNumber)
         {
-            Debug.Log("GameManager: CreatePlayer");
+            MyDebug.Log("GameManager: CreatePlayer");
 
             var player = new Player();
             player.Initialise(playerNumber, localiseDescription: false);
