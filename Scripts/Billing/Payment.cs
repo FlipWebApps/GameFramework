@@ -27,6 +27,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using System;
+using FlipWebApps.GameFramework.Scripts.Billing.Components;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing
