@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.Billing;
 using FlipWebApps.GameFramework.Scripts.FreePrize.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEditor;
@@ -33,6 +34,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
     {
         string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize"};
         int _tabSelected;
+        string productId;
 
         // Add menu item
         [MenuItem("Window/Flip Web Apps/Cheat Functions Windows")]
@@ -50,6 +52,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             {
                 case 0:
                     PreferencesMenuOptions();
+                    IAPMenuOptions();
                     break;
                 case 1:
                     PlayerMenuOptions();
@@ -71,10 +74,11 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             _tabSelected = GUILayout.Toolbar(_tabSelected, _tabNames);
         }
 
-        static void PreferencesMenuOptions()
+        void PreferencesMenuOptions()
         {
             // preferences
             GUILayout.Label("Preferences", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            EditorGUILayout.HelpBox("Manage preference (PlayerPrefs)", MessageType.None);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
             {
@@ -85,7 +89,23 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.EndHorizontal();
         }
 
-        private static void PlayerMenuOptions()
+        void IAPMenuOptions()
+        {
+            // preferences
+            GUILayout.Label("In App Purchase Simulation", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            EditorGUILayout.HelpBox("Simulate a purchase by entering a product id, either your own or a built in one (unlockgame, unlock.world.xx, unlock.level.xx, unlock.characher.xx)", MessageType.None);
+            GUILayout.BeginHorizontal();
+            productId = EditorGUILayout.TextField("Product Id: ", productId, GUILayout.Width(300));
+            if (GUILayout.Button("Simulate Purchase", GUILayout.Width(150)))
+            {
+                if (!string.IsNullOrEmpty(productId))
+                    Payment.ProcessPurchase(productId);
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        private void PlayerMenuOptions()
         {
             // player
             GUILayout.Label("Player", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
@@ -198,7 +218,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.EndHorizontal();
         }
 
-        private static void WorldMenuOptions()
+        private void WorldMenuOptions()
         {
             GUILayout.Label("World", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             // general
@@ -241,7 +261,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.EndHorizontal();
         }
 
-        private static void LevelMenuOptions()
+        private void LevelMenuOptions()
         {
             GUILayout.Label("Level", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             // general
@@ -336,7 +356,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.EndHorizontal();
         }
 
-        static void FreePrizeMenuOptions()
+        void FreePrizeMenuOptions()
         {
             GUI.enabled = Application.isPlaying && FreePrizeManager.IsActive;
 
@@ -362,7 +382,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.EndHorizontal();
         }
 
-        private static void UpdatePlayerScore(int amount)
+        private void UpdatePlayerScore(int amount)
         {
             if (Application.isPlaying)
             {
@@ -384,7 +404,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             }
         }
 
-        private static void UpdatePlayerCoins(int amount)
+        void UpdatePlayerCoins(int amount)
         {
             if (Application.isPlaying)
             {
@@ -406,7 +426,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             }
         }
 
-        private static void UpdateLevelScore(int amount)
+        private void UpdateLevelScore(int amount)
         {
             if (Application.isPlaying)
             {
@@ -435,7 +455,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             }
         }
 
-        private static void UpdateLevelCoins(int amount)
+        private void UpdateLevelCoins(int amount)
         {
             if (Application.isPlaying)
             {

@@ -33,6 +33,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Purchasing;
+using FlipWebApps.GameFramework.Scripts.Billing;
 using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing.Components
@@ -195,100 +196,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
         /// </summary>
         public virtual PurchaseProcessingResult ProcessPurchase(string productId)
         {
-            Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", productId));
-
-            if (string.Equals(productId, "android.test.purchased", StringComparison.Ordinal))
-            {
-                DialogManager.Instance.ShowInfo("Test payment android.test.purchased purchased ok");
-            }
-
-            else if (productId.Equals("unlockgame"))
-            {
-                // update on GameManager
-                GameManager.Instance.IsUnlocked = true;
-                PlayerPrefs.SetInt("IsUnlocked", 1);
-                PlayerPrefs.Save();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new ItemPurchasedMessage(productId));
-                if (UnlockGamePurchased != null)
-                    UnlockGamePurchased();          // deprecated.
-            }
-
-            else if (productId.StartsWith("unlock.world."))
-            {
-                int number = int.Parse(productId.Substring("unlock.world.".Length));
-                World world = null;
-
-                // first try and get from game manager
-                if (GameManager.Instance.Worlds != null)
-                    world = GameManager.Instance.Worlds.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (world == null)
-                {
-                    world = new World();
-                    world.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                world.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new WorldPurchasedMessage(number));
-                if (WorldPurchased != null)
-                    WorldPurchased(number);          // deprecated.
-            }
-
-            else if (productId.StartsWith("unlock.level."))
-            {
-                int number = int.Parse(productId.Substring("unlock.level.".Length));
-                Level level = null;
-
-                // first try and get from game manager
-                if (GameManager.Instance.Levels != null)
-                    level = GameManager.Instance.Levels.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (level == null)
-                {
-                    level = new Level();
-                    level.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                level.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new LevelPurchasedMessage(number));
-                if (LevelPurchased != null)
-                    LevelPurchased(number);          // deprecated.
-            }
-
-            else if (productId.StartsWith("unlock.character."))
-            {
-                int number = int.Parse(productId.Substring("unlock.character.".Length));
-                Character character = null;
-
-                // first try and get from game manager
-                if (GameManager.Instance.Characters != null)
-                    character = GameManager.Instance.Characters.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (character == null)
-                {
-                    character = new Character();
-                    character.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                character.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new CharacterPurchasedMessage(number));
-                if (CharacterPurchased != null)
-                    CharacterPurchased(number);          // deprecated.
-            }
+            Payment.ProcessPurchase(productId);
             return PurchaseProcessingResult.Complete;
         }
 
