@@ -21,13 +21,20 @@
 
 using UnityEngine;
 using System;
-using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.EditorExtras
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
     public class HelpBoxAttribute : PropertyAttribute
     {
+        public enum MessageType
+        {
+            None,
+            Info,
+            Warning,
+            Error,
+        }
+
         public string Text;
         public MessageType Type;
 

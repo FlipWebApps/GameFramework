@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
