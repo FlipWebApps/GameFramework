@@ -20,7 +20,9 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.Debugging;
+using FlipWebAppsCompiled.Messaging;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.Messaging
@@ -54,13 +56,6 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         /// </summary>
         Queue<BaseMessage> _messageQueue = new Queue<BaseMessage>();
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// Message Log.
-        /// </summary>
-        public static List<MessageLogEntry> _messageLog = new List<MessageLogEntry>();
-#endif
-
         #region Queue Processing
 
         /// <summary>
@@ -76,8 +71,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             while (_messageQueue.Count > 0)
             {
                 BaseMessage msg = _messageQueue.Dequeue();
-                if (!TriggerMessage(msg))
-                    MyDebug.LogF("Error when processing message: {0}", msg.Name);
+                TriggerMessage(msg);
             }
         }
 
@@ -104,7 +98,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             Assert.IsFalse(listenerList.Contains(handler), "You should not add the same listener multiple times for " + messageName);
             listenerList.Add(handler);
 
-            AddLogEntry(LogEntryType.AddListener, messageName);
+            MessageLogHandler.AddLogEntry(LogEntryType.AddListener, messageName);
         }
 
 
@@ -124,7 +118,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             Assert.IsTrue(listenerList.Contains(handler), "You are trying to remove a handler that isn't registered for " + messageName);
             listenerList.Remove(handler);
 
-            AddLogEntry(LogEntryType.RemoveListener, messageName);
+            MessageLogHandler.AddLogEntry(LogEntryType.RemoveListener, messageName);
         }
 
         #endregion Listener Registration
@@ -141,8 +135,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             // if no listeners then just return.
             if (!_listeners.ContainsKey(msg.Name))
             {
-                AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
-                MyDebug.LogF("Messaging: No listeners are setup for {0}. Discarding message!", msg.Name);
+                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
                 return false;
             }
 
@@ -160,8 +153,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         {
             if (!_listeners.ContainsKey(msg.Name))
             {
-                AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
-                MyDebug.LogF("Messaging: No listeners are setup for {0}. Discarding message!", msg.Name);
+                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
                 return false;
             }
 
@@ -172,47 +164,14 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
 
                 if (msg.SendMode == BaseMessage.SendModeType.SendToFirst && sent)
                 {
-                    AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to first listener.");
+                    MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to first listener.");
                     return true;
                 }
             }
-            AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to " + listenerList.Count + " listeners.");
+            MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to " + listenerList.Count + " listeners.");
             return true;
         }
 
         #endregion Adding Messages and Sending
-
-        #region MessageLogEntry
-
-        /// <summary>
-        /// Add a message to the log.
-        /// </summary>
-        /// <param name="logEntryType"></param>
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        void AddLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
-        {
-            _messageLog.Add(new MessageLogEntry(logEntryType, messageType, contents, message));
-        }
-
-        public enum LogEntryType { AddListener, RemoveListener, Send}
-
-        public class MessageLogEntry {
-            public readonly LogEntryType LogEntryType;
-            public readonly System.DateTime Time;
-            public readonly string MessageType;
-            public readonly string Contents;
-            public readonly string Message;
-
-            public MessageLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
-            {
-                LogEntryType = logEntryType;
-                Time = System.DateTime.Now;
-                MessageType = messageType;
-                Contents = contents;
-                Message = message;
-            }
-        }
-
-        #endregion MessageLogEntry
     }
 }
