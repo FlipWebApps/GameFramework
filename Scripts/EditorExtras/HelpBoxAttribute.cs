@@ -21,7 +21,6 @@
 
 using UnityEngine;
 using System;
-using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.EditorExtras
 {
