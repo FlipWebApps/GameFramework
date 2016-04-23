@@ -19,10 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebAppsCompiled.Messaging;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.Messaging

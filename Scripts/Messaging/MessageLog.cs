@@ -30,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
     /// Represents the message log.
     /// </summary>
     [System.Serializable]
-    public class MessageLog : UnityEngine.ScriptableObject
+    public class MessageLog : ScriptableObject
     {
         public List<MessageLogEntry> LogEntries = new List<MessageLogEntry>();
         public bool ClearOnPlay = true;
@@ -88,15 +88,15 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         }
     }
 
+    /// <summary>
+    /// Class for handling the message log and the go between to the editor window
+    /// </summary>
     public static class MessageLogHandler {
 
-#if UNITY_EDITOR
         /// <summary>
         /// Message Log.
         /// </summary>
-        //public static List<MessageLogEntry> _messageLog = new List<MessageLogEntry>();
         public static MessageLog MessageLog { get; set; }
-#endif
 
         /// <summary>
         /// Add a message to the log.
@@ -109,7 +109,6 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             {
                 MessageLog.AddLogEntry(new MessageLogEntry(logEntryType, messageType, contents, message));
             }
-
         }
     }
 }

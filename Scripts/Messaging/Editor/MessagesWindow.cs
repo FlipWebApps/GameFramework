@@ -21,11 +21,9 @@
 
 using UnityEditor;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using System.Collections.Generic;
 using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging
+namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
 {
     /// <summary>
     /// Editor window that shows the messaging activity.
@@ -49,7 +47,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
-            var window = GetWindow(typeof(MessagesWindow));
+            //var window = 
+                GetWindow(typeof(MessagesWindow));
         }
 
 
@@ -64,7 +63,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             //SmallMessageIcon = EditorGUIUtility.FindTexture("d_console.infoicon.sml");
 
             // Get or create the backend
-            if (!_messageLog)
+            if (_messageLog == null)
             {
                 _messageLog = MessageLogHandler.MessageLog;
                 if (!_messageLog)
@@ -75,11 +74,13 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             MessageLogHandler.MessageLog = _messageLog;
 
             _messageLog.LogEntryAdded += OnLogEntryAdded;
+            EditorApplication.playmodeStateChanged += OnPlaymodeStateChanged;
         }
 
 
         void OnDisable()
         {
+            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
             _messageLog.LogEntryAdded -= OnLogEntryAdded;
         }
 
@@ -90,6 +91,17 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         void OnLogEntryAdded()
         {
             Repaint();
+        }
+
+
+
+        /// <summary>
+        /// When the playmode changes, clear the log if necessary
+        /// </summary>
+        void OnPlaymodeStateChanged()
+        {
+            if (_messageLog.ClearOnPlay && EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
+                _messageLog.Clear();
         }
 
 
@@ -173,4 +185,3 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         }
     }
 }
-//#endif
