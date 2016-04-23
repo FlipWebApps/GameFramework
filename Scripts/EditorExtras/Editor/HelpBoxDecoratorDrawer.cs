@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -33,8 +34,27 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
         public override void OnGUI(Rect position)
         {
 
-           var helpBoxAttribute = (HelpBoxAttribute)attribute;
-            EditorGUI.HelpBox(position, helpBoxAttribute.Text, helpBoxAttribute.Type);
+            var helpBoxAttribute = (HelpBoxAttribute)attribute;
+            MessageType type;
+            switch (helpBoxAttribute.Type)
+            {
+                case HelpBoxAttribute.MessageType.Info:
+                    type = MessageType.Info;
+                    break;
+                case HelpBoxAttribute.MessageType.Warning:
+                    type = MessageType.Warning;
+                    break;
+                case HelpBoxAttribute.MessageType.Error:
+                    type = MessageType.Error;
+                    break;
+                case HelpBoxAttribute.MessageType.None:
+                    type = MessageType.None;
+                    break;
+                default:
+                    type = MessageType.None;
+                    break;
+            }
+            EditorGUI.HelpBox(position, helpBoxAttribute.Text, type);
         }
 
         public override float GetHeight()
