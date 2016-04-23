@@ -191,7 +191,9 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         void AddLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
         {
+#if UNITY_EDITOR
             _messageLog.Add(new MessageLogEntry(logEntryType, messageType, contents, message));
+#endif
         }
 
         public enum LogEntryType { AddListener, RemoveListener, Send}
