@@ -22,6 +22,7 @@
 using UnityEditor;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using System.Linq;
 
 namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
 {
@@ -30,6 +31,9 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
     /// </summary>
     public class MessagesWindow : EditorWindow
     {
+        string[] _tabNames = { "Activity Log", "Statistics" };
+        int _tabSelected;
+
         Vector2 scrollPosition = Vector2.zero;
         Color LineColour1;
         Color LineColour2;
@@ -111,8 +115,25 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         void OnGUI()
         {
             DrawToolbar();
-            DrawLogEntries();
+            DrawTabs();
+            switch (_tabSelected)
+            {
+                case 0:
+                    DrawLogEntries();
+                    break;
+                case 1:
+                    DrawStatistics();
+                    break;
+            }
+        }
 
+
+        /// <summary>
+        /// Draw the tabs that we have available
+        /// </summary>
+        void DrawTabs()
+        {
+            _tabSelected = GUILayout.Toolbar(_tabSelected, _tabNames);
         }
 
 
@@ -167,6 +188,53 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
             }
 
             GUILayout.EndScrollView();
+        }
+
+
+        /// <summary>
+        /// Draw the statistics
+        /// </summary>
+        private void DrawStatistics()
+        {
+            if (_messageLog.LogEntries.Count == 0)
+            {
+                GUILayout.Label("No Activity Yet", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+            }
+            else
+            {
+                var boldLabelStyle = EditorHelper.BoldLabelStyle();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Message Type", boldLabelStyle, GUILayout.Width(250));
+                GUILayout.Label("Total Messages", boldLabelStyle, GUILayout.Width(150));
+                GUILayout.Label("Active Handlers", boldLabelStyle, GUILayout.Width(150));
+                GUILayout.EndHorizontal();
+
+
+                var drawnLines = 0;
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+
+                // Acquire keys and sort them.
+                var list = _messageLog.Statistics.Keys.ToList();
+                list.Sort();
+
+                // Loop through keys.
+                foreach (var key in list)
+                {
+                    var statisticsEntry = _messageLog.Statistics[key];
+                    drawnLines++;
+                    GUIStyle s = new GUIStyle();
+                    s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
+                    GUILayout.BeginHorizontal(s);
+                    GUI.backgroundColor = (drawnLines % 2 == 0) ? LineColour1 : LineColour2;
+                    GUILayout.Label(key, GUILayout.Width(250));
+                    GUILayout.Label(statisticsEntry.MessageCount.ToString(), GUILayout.Width(150));
+                    GUILayout.Label(statisticsEntry.HandlerCount.ToString(), GUILayout.Width(150));
+                    GUILayout.EndHorizontal();
+                }
+
+                GUILayout.EndScrollView();
+            }
         }
 
 

@@ -36,6 +36,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         public bool ClearOnPlay = true;
         public System.Action LogEntryAdded;
 
+        public Dictionary<string, MessageStatistics> Statistics = new Dictionary<string, MessageStatistics>();
+
         static public MessageLog Create()
         {
             var messageLog = ScriptableObject.FindObjectOfType<MessageLog>();
@@ -51,14 +53,39 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         void OnEnable()
         {
             hideFlags = HideFlags.HideAndDontSave;
+            foreach (var messageLogEntry in LogEntries)
+                UpdateStatistics(messageLogEntry);
         }
 
 
         public void AddLogEntry(MessageLogEntry messageLogEntry)
         {
             LogEntries.Add(messageLogEntry);
+            UpdateStatistics(messageLogEntry);
             if (LogEntryAdded != null) LogEntryAdded();
         }
+
+
+        void UpdateStatistics(MessageLogEntry messageLogEntry)
+        {
+            MessageStatistics count;
+            var isExisting = Statistics.TryGetValue(messageLogEntry.MessageType, out count);
+            if (!isExisting)
+                count = new MessageStatistics();
+
+            if (messageLogEntry.LogEntryType == LogEntryType.Send)
+                count.MessageCount++;
+            else if (messageLogEntry.LogEntryType == LogEntryType.AddListener)
+                count.HandlerCount++;
+            else if (messageLogEntry.LogEntryType == LogEntryType.RemoveListener)
+                count.HandlerCount--;
+
+            if (isExisting)
+                Statistics[messageLogEntry.MessageType] = count;
+            else
+                Statistics.Add(messageLogEntry.MessageType, count);
+        }
+
 
         public void Clear()
         {
@@ -87,6 +114,17 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             Message = message;
         }
     }
+
+
+    /// <summary>
+    /// An instance within the statistics
+    /// </summary>
+    public class MessageStatistics
+    {
+        public int MessageCount;
+        public int HandlerCount;
+    }
+
 
     /// <summary>
     /// Class for handling the message log and the go between to the editor window
