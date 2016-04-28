@@ -49,7 +49,9 @@ namespace FlipWebApps.GameFramework.Scripts.Weighting {
         List<DistanceWithWeights> _distancesWithWeights = new List<DistanceWithWeights>();
 
         // Set once everything is setup and ready for retreiving weighted items.
+#pragma warning disable 414
         bool isPreparedForUse = false;
+#pragma warning restore 414
 
         /// <summary>
         /// Add an item and update the master list with all distances.
