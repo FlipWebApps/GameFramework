@@ -29,6 +29,8 @@ using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
+    [AddComponentMenu("Game Framework/UI/Dialogs/DialogManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DialogManager : Singleton<DialogManager>
     {
         public int Count;

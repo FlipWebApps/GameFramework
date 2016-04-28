@@ -50,6 +50,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// Base class for a game over dialog.
     /// </summary>
     [RequireComponent(typeof(DialogInstance))]
+    [AddComponentMenu("Game Framework/UI/Dialogs/GameOver")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameOver : Singleton<GameOver>
     {
         [Header("General")]

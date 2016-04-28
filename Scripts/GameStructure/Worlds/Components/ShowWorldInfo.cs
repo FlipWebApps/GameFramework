@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
     /// Show information about the currently selected world
     /// </summary>
     [RequireComponent(typeof(Text))]
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/ShowWorldInfo")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowWorldInfo : MonoBehaviour
     {
         [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]

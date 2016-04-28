@@ -29,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components {
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickExit")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickExit : MonoBehaviour
     {
 

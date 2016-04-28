@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Center this gameobject within the main camera.
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Placement/CenterInCamera")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CenterInCamera : MonoBehaviour
     {
         void Update()

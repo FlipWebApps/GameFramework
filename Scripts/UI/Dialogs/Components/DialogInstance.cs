@@ -38,6 +38,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// Dialog Instance should always be on the root of a dialog and be accompanied by an Animator. It should have a child gameobject called Dialog.
     /// Check teh existing prefabs for an example of how this should be setup.
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Dialogs/DialogInstance")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DialogInstance : MonoBehaviour
     {
         public bool ShowOnStart;

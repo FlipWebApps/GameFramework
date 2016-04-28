@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Maintain a fixed distance from the specified transform
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Placement/MoveWithTransform")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class MoveWithTransform : MonoBehaviour
     {
         public Transform Target;            // The position that that camera will be following.

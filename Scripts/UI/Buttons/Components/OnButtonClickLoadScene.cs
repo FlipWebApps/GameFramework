@@ -32,6 +32,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickLoadScene")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickLoadScene : MonoBehaviour
     {
         public string SceneName;

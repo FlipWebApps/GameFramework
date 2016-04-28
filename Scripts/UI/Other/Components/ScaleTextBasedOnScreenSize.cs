@@ -29,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
     /// NOTE: Is this of any use?
     /// </summary>
     [RequireComponent(typeof(Text))]
+    [AddComponentMenu("Game Framework/UI/Other/ScaleTextBasedOnScreenSize")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ScaleTextBasedOnScreenSize : MonoBehaviour
     {
         public enum RunType { OnStart, OnEnable, OnUpdate };

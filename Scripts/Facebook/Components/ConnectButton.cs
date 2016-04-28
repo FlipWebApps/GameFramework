@@ -31,6 +31,8 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
     /// <summary>
     /// Provides a button that reacts to the current state of the facebook connection.
     /// </summary>
+    [AddComponentMenu("Game Framework/Facebook/ConnectButton")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ConnectButton : MonoBehaviour
     {
         public bool ReconnectMode = false;

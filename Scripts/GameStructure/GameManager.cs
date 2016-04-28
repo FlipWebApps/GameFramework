@@ -49,6 +49,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
     /// <summary>
     /// Contains details about the game and is the base class for managing other aspects such as levels etc.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/GameManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameManager : SingletonPersistantSavedState<GameManager>
     {
         #region Inspector Values

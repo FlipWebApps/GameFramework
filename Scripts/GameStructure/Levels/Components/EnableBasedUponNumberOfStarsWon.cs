@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon the number of stars the player has for the current level.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/EnableBasedUponNumberOfStarsWon")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableBasedUponNumberOfStarsWon : EnableDisableGameObjectMessaging<StarsWonMessage>
     {
         /// <summary>

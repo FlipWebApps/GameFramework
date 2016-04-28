@@ -23,12 +23,15 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
 {
     /// <summary>
     /// Unlock GameItem button for Characters 
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Characters/EnableComponentOnce")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()

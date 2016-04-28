@@ -27,6 +27,8 @@ using UnityEngine.UI;
 namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/UI/Buttons/SyncStateTextColors")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SyncStateTextColors : SyncState
     {
         [Header("Text Color")]

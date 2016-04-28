@@ -31,6 +31,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Show the health that a player has by updating the fill amount on an image that is set to image type filled.
     /// </summary>
     [RequireComponent(typeof(Image))]
+    [AddComponentMenu("Game Framework/GameStructure/Players/ShowHealthImage")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowHealthImage : RunOnMessage<HealthChangedMessage>
     {
         Image _image;

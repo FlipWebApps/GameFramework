@@ -26,6 +26,8 @@ using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
+    [AddComponentMenu("Game Framework/UI/Buttons/SyncStateImageColors")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SyncStateImageColors : SyncState
     {
         public Color DisabledColor;

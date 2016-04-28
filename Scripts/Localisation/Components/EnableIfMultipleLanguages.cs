@@ -21,12 +21,15 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 {
     /// <summary>
     /// Enabled or a disabled a gameobject based upon whether the facebook SDK is installed
     /// </summary>
+    [AddComponentMenu("Game Framework/Localisation/EnableIfMultipleLanguages")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfMultipleLanguages : EnableDisableGameObject
     {
         public override bool IsConditionMet()

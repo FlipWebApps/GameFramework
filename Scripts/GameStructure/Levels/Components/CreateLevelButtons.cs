@@ -22,12 +22,15 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 {
     /// <summary>
     /// Creates instances of all Level GameItems
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
     {
         protected override GameItem[] GetGameItems()

@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
     /// <summary>
     /// Used for logging exception information to a file in debug build mode.
     /// </summary>
+    [AddComponentMenu("Game Framework/Debugging/LogToDisk")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LogToDisk : SingletonPersistant<LogToDisk>
     {
         //Filename to assign log

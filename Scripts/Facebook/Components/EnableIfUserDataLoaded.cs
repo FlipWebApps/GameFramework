@@ -21,12 +21,15 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 {
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon whether the users data is loaded
     /// </summary>
+    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfUserDataLoaded : EnableDisableGameObject
     {
         public override bool IsConditionMet()

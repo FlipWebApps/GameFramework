@@ -22,12 +22,15 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
 {
     /// <summary>
     /// Creates instances of all Character Game Items
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Characters/CreateCharacterButtons")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CreateCharacterButtons : CreateGameItemButtons<CharacterButton, Character>
     {
         protected override GameItem[] GetGameItems()

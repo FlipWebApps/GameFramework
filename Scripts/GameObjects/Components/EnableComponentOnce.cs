@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// <summary>
     /// Enables a component one time only. This can be useful for e.g. showing an animation the first time accesses a level.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameObjects/EnableComponentOnce")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableComponentOnce : MonoBehaviour
     {
         public Behaviour Component;

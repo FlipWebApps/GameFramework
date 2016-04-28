@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
     /// Attach this script to your camera, and change the top and bottom colors in the inspector as desired. When run, the clear flags for your camera is set to Depth Only, allowing a newly created background camera to show through. A plane with the gradient colors is created, which only the background camera can see. This is done with GradientLayer, which is the only layer that the background camera sees, and your camera is set to ignore. The default, 7, is a built-in (non-user-editable) layer that's not used for anything as of Unity 3.1. It can be changed as necessary.
     /// </summary>
     [RequireComponent(typeof(Camera))]
+    [AddComponentMenu("Game Framework/Display/Other/GradientBackground")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GradientBackground : MonoBehaviour
     {
 

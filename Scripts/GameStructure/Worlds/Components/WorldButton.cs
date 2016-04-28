@@ -36,6 +36,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
     /// <summary>
     /// World Details Button
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldButton")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class WorldButton : GameItemButton<World>
     {
         public new void Awake()

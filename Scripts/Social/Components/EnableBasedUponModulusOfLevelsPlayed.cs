@@ -22,12 +22,15 @@
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Social.Components
 {
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon the modulus of the number of levels played
     /// </summary>
+    [AddComponentMenu("Game Framework/Social/EnableBasedUponModulusOfLevelsPlayed")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableBasedUponModulusOfLevelsPlayed : EnableDisableGameObject
     {
         public int Modulus;

@@ -25,6 +25,8 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
+    [AddComponentMenu("Game Framework/UI/Other/TimeRemaining")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class TimeRemaining : MonoBehaviour
     {
         public enum CounterModeType { Up, Down }

@@ -40,6 +40,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// You can override this class to add additional functionality.
     /// </summary>
     [RequireComponent(typeof(DialogInstance))]
+    [AddComponentMenu("Game Framework/UI/Dialogs/Settings")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class Settings : Singleton<Settings>
     {
         GameObject _canvas;

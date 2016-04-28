@@ -23,9 +23,12 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 {
+    [AddComponentMenu("Game Framework/GameStructure/Levels/UnlockLevelButton")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class UnlockLevelButton : UnlockGameItemButton<Level>
     {
         protected override GameItemsManager<Level, GameItem> GetGameItemsManager()

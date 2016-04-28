@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components {
     /// <summary>
     /// Size all the Text components so that they are the same.
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Other/MatchTextSizes")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class MatchTextSizes : RunOnState
     {
         public Text[] TextComponents;

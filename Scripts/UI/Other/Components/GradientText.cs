@@ -8,6 +8,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
     /// code changed from Unity3D gradient effect for Unity3D 5.2
     /// REF : http://pastebin.com/dJabCfWn
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Other/GradientText")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GradientText : BaseMeshEffect
     {
         [SerializeField] Color32 _topColor = Color.white;

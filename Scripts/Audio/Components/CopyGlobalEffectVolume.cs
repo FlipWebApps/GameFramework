@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
     /// TODO: We should have notification when teh global effect volume changes and update this.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
+    [AddComponentMenu("Game Framework/Audio/CopyGlobalEffectVolume")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CopyGlobalEffectVolume : MonoBehaviour
     {
         void Awake()

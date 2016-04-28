@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Social.Components
     /// <summary>
     /// Functions for showing the game feedback dialog
     /// </summary>
+    [AddComponentMenu("Game Framework/Social/ShowGameFeedback")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowGameFeedback : MonoBehaviour
     {
         /// <summary>

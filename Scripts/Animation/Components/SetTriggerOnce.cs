@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
     /// <summary>
     /// Set an animation trigger only one time and optionally after another animation has already been triggered
     /// </summary>
+    [AddComponentMenu("Game Framework/Animation/SetTriggerOnce")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetTriggerOnce : RunOnceGameObject
     {
         public Animator Animator;

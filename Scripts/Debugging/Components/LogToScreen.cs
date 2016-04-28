@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
     /// <summary>
     /// Displays the current log onto the screen for debugging purposes
     /// </summary>
+    [AddComponentMenu("Game Framework/Debugging/LogToScreen")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LogToScreen : MonoBehaviour
     {
         static string _myLog;

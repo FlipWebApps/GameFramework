@@ -39,6 +39,8 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
     /// <summary>
     /// Functionality to handle logging into facebook and interactions such as posting updates, inviting friends etc.
     /// </summary>
+    [AddComponentMenu("Game Framework/Facebook/FacebookManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class FacebookManager : SingletonPersistant<FacebookManager>
     {
         public enum FacebookHelperResultType { ERROR, CANCELLED, OK };

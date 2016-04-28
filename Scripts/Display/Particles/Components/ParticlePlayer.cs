@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
     /// <summary>
     /// Provides a callback for creating a new particle system.
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Particles/ParticlePlayer")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ParticlePlayer : MonoBehaviour
     {
         public ParticleSystem ParticleSystem;

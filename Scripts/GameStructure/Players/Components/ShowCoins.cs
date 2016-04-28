@@ -22,6 +22,7 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
@@ -29,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Show the number of coins that a player has.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Players/ShowCoins")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowCoins : ShowValueAnimatedMessaging<int, PlayerCoinsChangedMessage>
     {
         Player _player;

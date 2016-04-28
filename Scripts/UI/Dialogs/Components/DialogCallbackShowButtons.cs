@@ -32,6 +32,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// shown. This can be used to stop the user clicking and exiting a dialog before we have shown what we
     /// want to show.
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Dialogs/DialogCallbackShowButtons")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DialogCallbackShowButtons : MonoBehaviour
     {
         public DialogInstance.DialogButtonsType Buttons = DialogInstance.DialogButtonsType.Ok;

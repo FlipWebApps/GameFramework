@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     /// Shows the amount of time until the free prize is available
     /// </summary>
     [RequireComponent(typeof(UnityEngine.UI.Text))]
+    [AddComponentMenu("Game Framework/FreePrize/TimeToFreePrizeDisplay")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class TimeToFreePrizeDisplay : RunOnState
     {
         UnityEngine.UI.Text _text;

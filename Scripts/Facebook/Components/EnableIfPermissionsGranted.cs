@@ -21,12 +21,15 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 {
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon whether the specified facebook permissions are granted
     /// </summary>
+    [AddComponentMenu("Game Framework/Facebook/EnableIfPermissionsGranted")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfPermissionsGranted : EnableDisableGameObject
     {
         public bool PermissionUserFriends;

@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickLoadUrl")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickLoadUrl : MonoBehaviour
     {
         public string AndroidUrl;

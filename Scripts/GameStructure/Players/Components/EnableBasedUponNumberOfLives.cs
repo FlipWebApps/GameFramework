@@ -29,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon the number of lives the player has.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Players/EnableBasedUponNumberOfLives")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableBasedUponNumberOfLives : EnableDisableGameObjectMessaging<LivesChangedMessage>
     {
         /// <summary>

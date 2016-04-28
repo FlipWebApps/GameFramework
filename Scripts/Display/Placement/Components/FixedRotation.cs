@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Rotate this gameobject at a given rate.
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Placement/FixedRotation")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class FixedRotation : MonoBehaviour
     {
         public Space Space;

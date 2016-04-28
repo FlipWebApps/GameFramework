@@ -22,6 +22,7 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
@@ -29,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Show the high score that the level has.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelHighScore")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowLevelHighScore : ShowValueAnimatedMessaging<int, LevelHighScoreChangedMessage>
     {
         Level _level;

@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Sets the current players number of lives.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Players/SetLives")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetLives : MonoBehaviour
     {
         /// <summary>

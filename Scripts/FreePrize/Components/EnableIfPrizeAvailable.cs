@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon whether there is a free prize available
     /// </summary>
+    [AddComponentMenu("Game Framework/FreePrize/EnableIfPrizeAvailable")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfPrizeAvailable : RunOnState
     {
         public GameObject PrizeAvailableGameObject;

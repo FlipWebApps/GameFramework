@@ -22,6 +22,7 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
@@ -29,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Show the current level score that a player has.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelScore")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowLevelScore : ShowValueAnimatedMessaging<int, LevelScoreChangedMessage>
     {
         Level _level;

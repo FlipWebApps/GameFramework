@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
     /// Destroy or disable the specified gameobject once the particle system is finished playing.
     /// </summary>
     [RequireComponent(typeof(ParticleSystem))]
+    [AddComponentMenu("Game Framework/Display/Particles/AutoDestructWhenParticleSystemFinished")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class AutoDestructWhenParticleSystemFinished : MonoBehaviour
     {
         public bool OnlyDeactivate;

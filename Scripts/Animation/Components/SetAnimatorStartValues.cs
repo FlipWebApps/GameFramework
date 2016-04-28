@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
     /// Set the specified start values on the animator
     /// </summary>
     [RequireComponent(typeof(Animator))]
+    [AddComponentMenu("Game Framework/Animation/SetAnimatorStartValues")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetAnimatorStartValues : MonoBehaviour
     {
         public string[] IntValueNames;

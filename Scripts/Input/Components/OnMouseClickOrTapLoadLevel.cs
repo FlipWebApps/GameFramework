@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Input.Components
 {
@@ -28,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
     /// 
     /// By setting a list of UI game objects you can set areas that wonwill block the change.
     /// </summary>
+    [AddComponentMenu("Game Framework/Input/OnMouseClickOrTapLoadLevel")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnMouseClickOrTapLoadLevel : OnMouseClickOrTap
     {
         public string SceneName;

@@ -31,6 +31,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Creates instances of a life icon
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Players/CreateLivesIcons")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CreateLivesIcons : MonoBehaviour
     {
         /// <summary>

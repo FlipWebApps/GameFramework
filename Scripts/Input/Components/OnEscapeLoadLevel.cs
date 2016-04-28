@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
     /// <summary>
     /// Loads the specified scene when the escape key or android back button is pressed
     /// </summary>
+    [AddComponentMenu("Game Framework/Input/OnEscapeLoadLevel")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnEscapeLoadLevel : MonoBehaviour
     {
         public string SceneName;

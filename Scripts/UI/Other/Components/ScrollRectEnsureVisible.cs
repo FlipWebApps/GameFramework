@@ -5,6 +5,8 @@ using UnityEngine.UI;
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
     [RequireComponent(typeof(ScrollRect))]
+    [AddComponentMenu("Game Framework/UI/Other/ScrollRectEnsureVisible")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ScrollRectEnsureVisible : MonoBehaviour
     {
         public float Time = 0.1f;

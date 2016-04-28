@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
@@ -29,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     /// 
     /// This automatically hooks up the button onClick listener
     /// </summary>
+    [AddComponentMenu("Game Framework/FreePrize/OnButtonClickShowFreePrizeDialog")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickShowFreePrizeDialog : OnButtonClick
     {
         public override void OnClick()

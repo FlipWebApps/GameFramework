@@ -26,6 +26,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Aligh this game object with the screen bounds. Useful when catering for dynamic screen sizes.
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Placement/AlignScreenBounds")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class AlignScreenBounds : MonoBehaviour
     {
         public enum BorderType { Top, Bottom, Left, Right }

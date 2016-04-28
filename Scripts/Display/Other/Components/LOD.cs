@@ -20,7 +20,8 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 {
 
-    [AddComponentMenu("Level Of Detail")]
+    [AddComponentMenu("Game Framework/Display/Other/LOD")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LOD : MonoBehaviour
     {
 

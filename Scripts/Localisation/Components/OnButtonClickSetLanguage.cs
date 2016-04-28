@@ -21,6 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
@@ -31,6 +32,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
     /// 
     /// This automatically hooks up the button onClick listener
     /// </summary>
+    [AddComponentMenu("Game Framework/Localisation/OnButtonClickSetLanguage")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickSetLanguage : OnButtonClick
     {
         /// <summary>

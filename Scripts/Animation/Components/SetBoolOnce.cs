@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
     /// <summary>
     /// Set an animation bool only one time and optionally after another animation has already been triggered
     /// </summary>
+    [AddComponentMenu("Game Framework/Animation/SetBoolOnce")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetBoolOnce : RunOnceGameObject
     {
         public Animator Animator;

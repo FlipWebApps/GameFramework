@@ -25,6 +25,8 @@ namespace FlipWebApps.GameFramework.Scripts.Weighting.Components {
     /// <summary>
     /// Used for holding a list of weight values for different distances.
     /// </summary>
+    [AddComponentMenu("Game Framework/Weighting/DistanceWeight")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DistanceWeight : MonoBehaviour
     {
         public DistanceWeightValue[] Weights;

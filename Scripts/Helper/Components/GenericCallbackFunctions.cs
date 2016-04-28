@@ -29,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.Helper.Components
     /// 
     /// You can specify a reference to have these operate on a gameobject other than the one where this is currently attached.
     /// </summary>
+    [AddComponentMenu("Game Framework/Helper/GenericCallbackFunctions")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GenericCallbackFunctions : MonoBehaviour
     {
         public GameObject GameObject;

@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
     /// Set the renderers sorting layer
     /// </summary>
     [RequireComponent(typeof(Renderer))]
+    [AddComponentMenu("Game Framework/Display/Other/SetSortingLayer")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetSortingLayer : MonoBehaviour
     {
         public string SortingLayerName = "Foreground";

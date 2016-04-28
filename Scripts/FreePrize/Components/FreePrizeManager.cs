@@ -29,6 +29,8 @@ using FlipWebApps.GameFramework.Scripts.Debugging;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {
+    [AddComponentMenu("Game Framework/FreePrize/FreePrizeManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class FreePrizeManager : SingletonPersistantSavedState<FreePrizeManager>
     {
         [Header("Time")]

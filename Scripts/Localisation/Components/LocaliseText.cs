@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
     /// Localises a Text field based upon the given Key
     /// </summary>
     [RequireComponent(typeof(UnityEngine.UI.Text))]
+    [AddComponentMenu("Game Framework/Localisation/LocaliseText")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LocaliseText : MonoBehaviour
     {
         /// <summary>

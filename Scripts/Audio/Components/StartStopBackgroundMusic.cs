@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
     /// <summary>
     /// Start or stop the global background music when enabled / disabled
     /// </summary>
+    [AddComponentMenu("Game Framework/Audio/StartStopBackgroundMusic")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class StartStopBackgroundMusic : MonoBehaviour
     {
         public enum ModeType { None, Play, Stop };

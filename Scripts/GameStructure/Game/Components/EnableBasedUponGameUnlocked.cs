@@ -21,6 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Components
@@ -28,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Components
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon whether the game is unlocked.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Game/EnableBasedUponGameUnlocked")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableBasedUponGameUnlocked : EnableDisableGameObjectMessaging<GameUnlockedMessage>
     {
         /// <summary>

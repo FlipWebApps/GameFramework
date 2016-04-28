@@ -28,6 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Move this gameobject at a given rate.
     /// </summary>
+    [AddComponentMenu("Game Framework/Display/Placement/FixedMovement")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class FixedMovement : MonoBehaviour
     {
         /// <summary>

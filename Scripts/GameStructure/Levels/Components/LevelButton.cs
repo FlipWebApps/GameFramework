@@ -36,6 +36,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Level Details Button
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/LevelButton")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LevelButton : GameItemButton<Level>
     {
         public new void Awake()

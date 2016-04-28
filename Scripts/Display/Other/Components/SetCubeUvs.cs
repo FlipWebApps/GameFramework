@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
     /// Set the UV co-ordinates of a cube
     /// </summary>
     [RequireComponent(typeof(MeshFilter))]
+    [AddComponentMenu("Game Framework/Display/Other/SetCubeUvs")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetCubeUvs : MonoBehaviour
     {
 

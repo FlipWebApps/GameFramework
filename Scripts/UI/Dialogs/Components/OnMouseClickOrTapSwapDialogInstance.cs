@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.Input.Components;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
@@ -28,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// 
     /// By setting a list of UI game objects you can set areas that wonwill block the change.
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Dialogs/OnMouseClickOrTapSwapDialogInstance")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnMouseClickOrTapSwapDialogInstance : OnMouseClickOrTap
     {
         public DialogInstance Source;

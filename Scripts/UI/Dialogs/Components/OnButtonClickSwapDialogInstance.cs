@@ -31,6 +31,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/UI/Dialogs/OnButtonClickSwapDialogInstance")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickSwapDialogInstance : MonoBehaviour
     {
         public DialogInstance Source;

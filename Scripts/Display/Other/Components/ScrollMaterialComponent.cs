@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
     /// Used for scrolling a material within the gameobjects renderer
     /// </summary>
     [RequireComponent(typeof(Renderer))]
+    [AddComponentMenu("Game Framework/Display/Other/ScrollMaterialComponent")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ScrollMaterialComponent : MonoBehaviour
     {
         public int MaterialIndex;

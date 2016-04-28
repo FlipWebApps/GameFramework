@@ -43,6 +43,8 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
     /// Provides code for setting up and callind in app billing. This derives from IStoreListener to enable it to receive 
     /// messages from Unity Purchasing.
     /// </summary>
+    [AddComponentMenu("Game Framework/Billing/PaymentManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class PaymentManager : SingletonPersistant<PaymentManager>, IStoreListener
     {
         [Category("Payment Setup")]

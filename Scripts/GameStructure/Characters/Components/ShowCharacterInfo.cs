@@ -31,6 +31,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Show information about the currently selected character
     /// </summary>
     [RequireComponent(typeof(Text))]
+    [AddComponentMenu("Game Framework/GameStructure/Characters/ShowCharacterInfo")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowCharacterInfo : MonoBehaviour
     {
         [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]

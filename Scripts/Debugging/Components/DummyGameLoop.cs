@@ -33,6 +33,8 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
     /// 
     /// It doesn't make any sense to use this in an actual game!!
     /// </summary>
+    [AddComponentMenu("Game Framework/Debugging/DummyGameLoop")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DummyGameLoop : MonoBehaviour
     {
         public enum PlacementType { TopRight, TopLeft, BottomRight, BottomLeft}

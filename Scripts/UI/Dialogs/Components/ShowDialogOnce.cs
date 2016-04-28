@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// <summary>
     /// Shows the given dialog a single time
     /// </summary>
+    [AddComponentMenu("Game Framework/UI/Dialogs/ShowDialogOnce")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowDialogOnce : MonoBehaviour
     {
         public string DialogKey;

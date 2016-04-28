@@ -29,6 +29,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Creates instances of a star icon
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/CreateStarIcons")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CreateStarIcons : MonoBehaviour
     {
         /// <summary>

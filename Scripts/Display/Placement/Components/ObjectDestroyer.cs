@@ -24,6 +24,8 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
 {
 
+    [AddComponentMenu("Game Framework/Display/Placement/ObjectDestroyer")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ObjectDestroyer : MonoBehaviour
     {
         public enum DestroyModeType { DestroyCollidingGameObject, DestroyCollidingParentGameObject }

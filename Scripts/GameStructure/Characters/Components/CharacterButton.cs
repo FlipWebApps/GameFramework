@@ -26,12 +26,15 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
 {
     /// <summary>
     /// Character Details Button
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Characters/CharacterButton")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CharacterButton : GameItemButton<Character>
     {
 

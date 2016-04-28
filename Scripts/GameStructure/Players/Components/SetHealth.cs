@@ -27,6 +27,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// <summary>
     /// Sets the current players health.
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Players/SetHealth")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class SetHealth : MonoBehaviour
     {
         /// <summary>

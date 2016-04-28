@@ -30,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
     /// 
     /// NOTE: This class is beta and subject to changebreaking change without warning.
     /// </summary>
+    [AddComponentMenu("Game Framework/Advertising/AdMob/AdMobManager")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class AdMobManager : SingletonPersistant<GameManager>
     {
         [Header("Advertising")]
