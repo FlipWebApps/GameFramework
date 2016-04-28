@@ -20,8 +20,13 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.Billing;
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
 using FlipWebApps.GameFramework.Scripts.FreePrize.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -85,6 +90,10 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
                 PlayerPrefs.DeleteAll();
                 PlayerPrefs.Save();
                 Debug.Log("Player prefs deleted. Note: Some gameobjects might hold values and write these out after this call!");
+            }
+            if (GUILayout.Button("List Preferences to Console", GUILayout.Width(200)))
+            {
+                WriteWindowsPreferences();
             }
             GUILayout.EndHorizontal();
         }
@@ -480,7 +489,91 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             }
             else
             {
-                Debug.LogWarning("THis only works in play mode.");
+                Debug.LogWarning("This only works in play mode.");
+            }
+        }
+
+
+        /// <summary>
+        /// Call the appropriate function for writing out the preferences.
+        /// </summary>
+        void WritePreferences()
+        {
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                WriteWindowsPreferences();
+            }
+            else if (Application.platform == RuntimePlatform.OSXEditor)
+            {
+                WriteOSXPreferences();
+            }
+            else
+            {
+                Debug.Log("This currently only works on Windows and Mac.");
+            }
+        }
+
+
+        /// <summary>
+        /// On Windows, PlayerPrefs are stored in the registry under HKCU\Software\[company name]\[product name] key, where 
+        /// company and product names are the names set up in Project Settings. (http://docs.unity3d.com/ScriptReference/PlayerPrefs.html)
+        /// </summary>
+        void WriteWindowsPreferences()
+        {
+            var prefsKeyStore = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
+            var prefsKeyNames = prefsKeyStore.GetValueNames();
+            prefsKeyNames.ToList().Sort();
+            var output = new StringBuilder();
+            foreach (var prefsKey in prefsKeyNames)
+            {
+                OutputPrefsValue(output, prefsKey);
+            }
+            Debug.Log(output.ToString());
+        }
+
+
+        /// <summary>
+        /// On Mac OS X PlayerPrefs are stored in ~/Library/Preferences folder, in a file named unity.[company name].[product name].plist, 
+        /// where company and product names are the names set up in Project Settings. The same .plist file is used for both Projects run 
+        /// in the Editor and standalone players. (http://docs.unity3d.com/ScriptReference/PlayerPrefs.html)
+        /// </summary>
+        void WriteOSXPreferences()
+        {
+            var prefsPath = "~/Library/Preferences/unity." + PlayerSettings.companyName + "." + PlayerSettings.productName + ".plist";
+
+            if (File.Exists(prefsPath))
+            {
+                var prefsPlist = (Dictionary<string, object>)Plist.readPlist(prefsPath);
+                var output = new StringBuilder();
+                foreach (var prefsKey in prefsPlist.Keys)
+                {
+                    OutputPrefsValue(output, prefsKey);
+                }
+                Debug.Log(output.ToString());
+            }
+            else
+            {
+                Debug.Log("OSX Prefs file not found '" + prefsPath + "'");
+            }
+        }
+
+        private static void OutputPrefsValue(StringBuilder output, string prefsKey)
+        {
+            var keyName = prefsKey.Substring(0, prefsKey.LastIndexOf("_"));
+            var stringValue = PlayerPrefs.GetString(keyName, "DUMMY STRING");
+            if (stringValue != "DUMMY STRING")
+                output.AppendFormat("{0} (string): {1}\n", keyName, stringValue);
+            else
+            {
+                var intValue = PlayerPrefs.GetInt(keyName, int.MinValue + 10);
+                if (intValue != int.MinValue + 10)
+                    output.AppendFormat("{0} (int): {1}\n", keyName, intValue);
+                else
+                {
+                    var floatValue = PlayerPrefs.GetFloat(keyName, float.MinValue + 10);
+                    if (floatValue != float.MinValue + 10)
+                        output.AppendFormat("{0} (float): {1}\n", keyName, floatValue);
+                }
             }
         }
     }
