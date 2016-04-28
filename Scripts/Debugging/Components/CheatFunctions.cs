@@ -31,12 +31,21 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components {
     /// You can override this class and HandleCheatInput() to provide your own custom cheat functions. Call base.HandleCheatInput()
     /// to run the standard ones in addition.
     /// </summary>
+
+    [System.Obsolete("Discontinued in favour of the cheat editor window")]
     public class CheatFunctions : MonoBehaviour {
         /// <summary>
         /// The key that needs to be pressed before any cheat input is processed.
         /// </summary>
         public KeyCode ActivationKeyCode = KeyCode.LeftShift;
 
+        void Start()
+        {
+            Debug.LogWarning(
+                "The CheatFunctions component used on " + gameObject.name + " is deprecated in favour of the cheat functions editor window.");
+
+        }
+ 
         /// <summary>
         /// Check whether cheat input should be processed.
         /// </summary>
