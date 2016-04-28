@@ -61,5 +61,31 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
         {
             GUILayout.Label(text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
         }
+
+
+        #region GUIStyle
+        /// <summary>
+        /// Get an italic style for a label
+        /// </summary>
+        /// <returns></returns>
+        public static GUIStyle ItalicLabelStyle(TextAnchor alignment = TextAnchor.MiddleLeft) {
+            GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+            labelStyle.fontStyle = FontStyle.Italic;
+            labelStyle.alignment = alignment;
+            return labelStyle;
+        }
+
+        /// <summary>
+        /// Get a bold style for a label
+        /// </summary>
+        /// <returns></returns>
+        public static GUIStyle BoldLabelStyle(TextAnchor alignment = TextAnchor.MiddleLeft)
+        {
+            GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+            labelStyle.fontStyle = FontStyle.Bold;
+            labelStyle.alignment = alignment;
+            return labelStyle;
+        }
+        #endregion GUIStyle
     }
 }
