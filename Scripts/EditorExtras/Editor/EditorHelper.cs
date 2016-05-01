@@ -40,6 +40,21 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
 
 
         /// <summary>
+        /// Show a button trimmed to the length of the text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static bool ButtonTrimmed(string text, Texture2D texture, GUIStyle style, string tooltip = null)
+        {
+            if (texture != null)
+                return GUILayout.Button(new GUIContent(text, texture, tooltip), style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x + texture.width));
+            else
+                return ButtonTrimmed(text, style);
+        }
+
+        
+        /// <summary>
         /// Show a toggle trimmed to the length of the text
         /// </summary>
         /// <param name="value"></param>
