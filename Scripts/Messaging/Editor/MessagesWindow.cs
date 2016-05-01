@@ -142,7 +142,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// </summary>
         void DrawToolbar()
         {
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             if(EditorHelper.ButtonTrimmed("Clear", EditorStyles.toolbarButton))
             {
                 _messageLog.Clear();
