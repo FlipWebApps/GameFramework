@@ -24,6 +24,7 @@ using System.Linq;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
+using FlipWebApps.GameFramework.Scripts.Debugging;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
 {
@@ -67,7 +68,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
 
         public GameItemsManager(TParent parent)
         {
-            Debug.Log(TypeNameFull + ": Constructor");
+            MyDebug.Log(TypeNameFull + ": Constructor");
             Parent = parent;
 
             // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this e.g. worlds->levels
