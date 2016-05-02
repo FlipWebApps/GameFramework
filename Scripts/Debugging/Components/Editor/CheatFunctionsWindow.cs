@@ -153,8 +153,8 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             {
                 if (Application.isPlaying && GameManager.IsActive)
                 {
-                    GameManager.Instance.Player.Health -= 0.1f;
-                    GameManager.Instance.Player.Health = Mathf.Max(GameManager.Instance.Player.Health, 0);
+                    // only assign once!
+                    GameManager.Instance.Player.Health = GameManager.Instance.Player.Health - 0.1f < 0 ? 0 : GameManager.Instance.Player.Health - 0.1f;
                 }
                 else
                 {
