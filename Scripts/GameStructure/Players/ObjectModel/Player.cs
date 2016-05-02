@@ -47,7 +47,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
                 var oldValue = Lives;
                 _lives = value;
                 if (IsInitialised && oldValue != Lives)
-                    GameManager.SafeTriggerMessage(new LivesChangedMessage(Lives, oldValue));
+                    GameManager.SafeQueueMessage(new LivesChangedMessage(Lives, oldValue));
             }
         }
         int _lives;
@@ -65,7 +65,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
                 var oldValue = Health;
                 _health = value;
                 if (IsInitialised && !Mathf.Approximately(oldValue, Health))
-                    GameManager.SafeTriggerMessage(new HealthChangedMessage(Health, oldValue));
+                    GameManager.SafeQueueMessage(new HealthChangedMessage(Health, oldValue));
             }
         }
         float _health;
