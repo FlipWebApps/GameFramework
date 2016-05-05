@@ -130,11 +130,11 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             {
                 Assert.IsNotNull(starsGameObject, "GameOver->ShowStars is enabled, but could not find a 'Stars' gameobject. Disable the option or fix the structure.");
                 starsGameObject.SetActive(ShowStars);
-                int newStarsWon = GetNewStarsWon();
+                var newStarsWon = GetNewStarsWon();
                 currentLevel.StarsWon |= newStarsWon;
-                GameObject star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star1", true);
-                GameObject star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star2", true);
-                GameObject star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star3", true);
+                var star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star1", true);
+                var star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star2", true);
+                var star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(starsGameObject, "Star3", true);
                 StarWon(currentLevel.StarsWon, newStarsWon, star1WonGameObject, 1);
                 StarWon(currentLevel.StarsWon, newStarsWon, star2WonGameObject, 2);
                 StarWon(currentLevel.StarsWon, newStarsWon, star3WonGameObject, 4);
@@ -222,7 +222,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             // if just won then animate
             if ((newStarsWon & bitMask) == bitMask)
             {
-                UnityEngine.Animation animation = starGameObject.GetComponent<UnityEngine.Animation>();
+                var animation = starGameObject.GetComponent<UnityEngine.Animation>();
                 if (animation != null)
                     animation.Play();
             }
@@ -239,8 +239,19 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         }
 
 
+        /// <summary>
+        /// If LevelManager is in use then we return the difference between stars that were recorded at the start and those that are recorded now.
+        /// 
+        /// You may also override this function if you wish to provide your own handling such as allocating stars only on completion.
+        /// </summary>
+        /// <returns></returns>
         public virtual int GetNewStarsWon()
         {
+            if (LevelManager.IsActive && LevelManager.Instance.Level != null)
+            {
+                return LevelManager.Instance.Level.StarsWon - LevelManager.Instance.StartStarsWon;
+            }
+
             return 0;
         }
 
