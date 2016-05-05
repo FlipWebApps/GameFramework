@@ -148,6 +148,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                 _messageLog.Clear();
             }
             _messageLog.ClearOnPlay = EditorHelper.ToggleTrimmed(_messageLog.ClearOnPlay, "Clear On Play", EditorStyles.toolbarButton);
+
+            GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
 
