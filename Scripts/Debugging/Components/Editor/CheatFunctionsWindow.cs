@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -272,26 +273,30 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
 
         private void LevelMenuOptions()
         {
+            if (!Application.isPlaying)
+            {
+                GUILayout.Label("These functions are only available in play mode.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+            if (!GameManager.IsActive || GameManager.Instance.Levels == null)
+            {
+                GUILayout.Label("These functions are only available when a GameManager is active and a level selected.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+
             GUILayout.Label("Level", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             // general
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current Levels", GUILayout.Width(100));
             if (GUILayout.Button("Unlock All", GUILayout.Width(100)))
             {
-                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Levels != null)
+                foreach (var level in GameManager.Instance.Levels.Items)
                 {
-                    foreach (var level in GameManager.Instance.Levels.Items)
-                    {
-                        level.IsUnlocked = true;
-                        level.IsUnlockedAnimationShown = true;
-                        level.UpdatePlayerPrefs();
-                    }
-                    PlayerPrefs.Save();
+                    level.IsUnlocked = true;
+                    level.IsUnlockedAnimationShown = true;
+                    level.UpdatePlayerPrefs();
                 }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have levels setup.");
-                }
+                PlayerPrefs.Save();
             }
             if (GUILayout.Button("Lock All", GUILayout.Width(100)))
             {
@@ -338,7 +343,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             }
             GUILayout.EndHorizontal();
 
-            // player coins
+            // level coins
             GUILayout.BeginHorizontal();
             string levelCoins = (GameManager.IsActive && GameManager.Instance.Levels != null) ? " (" + GameManager.Instance.Levels.Selected.Coins + ")" : "";
             GUILayout.Label("Coins" + levelCoins, GUILayout.Width(100));
@@ -362,6 +367,19 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             {
                 UpdateLevelCoins(100);
             }
+            GUILayout.EndHorizontal();
+
+            // level stars
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Stars", GUILayout.Width(100));
+            GameManager.Instance.Levels.Selected.StarWon(1,
+                GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(1), "1", GUILayout.Width(50)));
+            GameManager.Instance.Levels.Selected.StarWon(2,
+                GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(2), "2", GUILayout.Width(50)));
+            GameManager.Instance.Levels.Selected.StarWon(3,
+                GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(3), "3", GUILayout.Width(50)));
+            GameManager.Instance.Levels.Selected.StarWon(4,
+                GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(4), "4", GUILayout.Width(50)));
             GUILayout.EndHorizontal();
         }
 
