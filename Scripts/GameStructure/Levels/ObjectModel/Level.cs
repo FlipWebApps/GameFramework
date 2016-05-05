@@ -99,7 +99,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// <returns></returns>
         public bool IsStarWon(int starNumber)
         {
-            return (StarsWon &= 1 >> (starNumber - 1)) != 0;
+            return (StarsWon & (1 << (starNumber - 1))) != 0;
+        }
+
+
+        /// <summary>
+        /// Set whether a specified star has been won.
+        /// </summary>
+        /// <param name="starNumber"></param>
+        /// <param name="isWon"></param>
+        /// <returns></returns>
+        public void StarWon(int starNumber, bool isWon)
+        {
+            if (isWon)
+                StarsWon |= (1 << (starNumber - 1));
+            else
+                StarsWon &= (~(1 << (starNumber - 1)));
         }
 
 
