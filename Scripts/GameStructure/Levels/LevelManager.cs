@@ -38,12 +38,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         /// </summary>
         public bool AutoStart;
 
-        [Header("Auto Game Over")] public float ShowGameOverDialogDelay;
-        [Header("Auto Game Over Conditions")] public bool GameOverWhenLivesIsZero;
+        [Header("Auto Game Over")]
+        public float ShowGameOverDialogDelay;
+
+        [Header("Auto Game Over Conditions")]
+        public bool GameOverWhenLivesIsZero;
         public bool GameOverWhenHealthIsZero;
 
         public DateTime StartTime { get; set; }
+        public int StartStarsWon { get; set; }
+
         public float SecondsRunning { get; set; }
+
         public bool IsLevelStarted { get; set; }
         public bool IsLevelFinished { get; set; }
 
@@ -95,6 +101,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         public void LevelStarted()
         {
             StartTime = DateTime.Now;
+            if (Level != null)
+                StartStarsWon = Level.StarsWon;
+
             SecondsRunning = 0f;
             IsLevelStarted = true;
         }
