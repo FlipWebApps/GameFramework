@@ -1,4 +1,4 @@
-Game Framework - Free v2.2.2
+Game Framework - Free v2.3
 
 Thank you for using Game Framework. 
 
@@ -7,7 +7,8 @@ this framework also contains a lot of useful additional content to get you up an
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
-	- THe full Pro Pooling asset for advanced gameobject pooling
+	- The full Pro Pooling asset for advanced gameobject pooling
+	- The full Prefs Editor asset for managing your player prefs.
 	- Full 2D runner framework and game sample.
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
@@ -49,6 +50,7 @@ CREDIT
 
 ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com)
 EditorList - courtesy of catlikecoding.com
+ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 		
 - - - - - - - - - -
 
