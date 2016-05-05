@@ -19,8 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.Display.Other;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,13 +29,21 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
     /// <summary>
     /// Show the health that a player has by updating the fill amount on an image that is set to image type filled.
+    /// Optinally lerps the image color between two values.
     /// </summary>
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowHealthImage")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class ShowHealthImage : RunOnMessage<HealthChangedMessage>
     {
+        [Tooltip("A tint to apply to the attached image when the user has full health.")]
+        public Color HealthTintFull = Color.white;
+        [Tooltip("A tint to apply to the attached image when the user has no health left.")]
+        public Color HealthTintEmpty = Color.white;
+
         Image _image;
+        ColorHSV _fullColor;
+        ColorHSV _emptyColor;
 
         /// <summary>
         /// Get a reference to the attached image and cache for later use.
@@ -43,6 +51,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         void Awake()
         {
             _image = GetComponent<Image>();
+            _fullColor = HealthTintFull.ToHSV();
+            _emptyColor = HealthTintEmpty.ToHSV();
+        }
+
+
+        /// <summary>
+        /// Called during the Start() phase for your own custom initialisation.
+        /// </summary>
+        public override void CustomStart()
+        {
+            RunMethod(new HealthChangedMessage(GameManager.Instance.Player.Health, GameManager.Instance.Player.Health));
         }
 
 
@@ -54,6 +73,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         public override bool RunMethod(HealthChangedMessage message)
         {
             _image.fillAmount = message.NewHealth;
+            _image.color = ColorHelper.LerpHSV(_emptyColor, _fullColor, message.NewHealth);
             return true;
         }
     }
