@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -56,7 +55,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         /// <summary>
         /// Create star icons and update for correctly displaying the number of stars..
         /// </summary>
-        public void Awake()
+        public void Start()
         {
             Assert.IsTrue(LevelManager.IsActive, "You need to add a LevelManager to your scene to be able to use CreateStarIcons.");
 
