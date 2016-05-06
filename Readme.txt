@@ -56,6 +56,54 @@ ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 
 CHANGE LOG
 
+v2.3
+
+	Game Framework Core - Improvements
+	- All: Added all components to editor component menu and added editor help link
+	- Debugging: Option to show all current player prefs
+	- Debugging: Deprecated Cheat Functions component in favor of Cheat Functions Window
+	- Debugging: Added star options to cheat functions window.
+	- Debugging: Improved checks before showing level cheat options.
+	- Display: Added Color HSV with Lerp support
+	- EditorExtras: Added methods to quickly get new label styles
+	- EditorExtras: Added ButtonTrimmed with texture
+	- GameStructure: Changed GameItemsManager constructor to use MyDebug to avoid spamming the console
+	- GameStructure: Option to give health bar a value specific color tint
+	- GameStructure: Added DecreaseLivesWhenHealthIsZero component
+	- GameStructure: Added StarsWonHandlerCoins and StarsWonHandlerScore components for coin and score based stars
+	- GameStructure: Added several prefabs for Lives, Health and Stars
+	- GameStructure: Added StarWon method for checking if a star is won.
+	- GameStructure: Fix for IsStarWon not returning correct value.
+	- GameStructure: Added StarIcon prefab
+	- GameStructure: Record stars won before the level starts for later use
+	- Messaging: Added statistics to the Messages Window
+	- Messaging: Minor UI improvements for messages editor window
+	- Sprites: Added default white rectangle and grey gradient sprites
+	- UI: Added default show star condition to Game Over dialog
+	
+	Game Framework Core - Fixes
+	- Debugging: Fix for double assign of health in cheat functions window
+	- GameStructure: Changed update messaging from Trigger to Queue to allow existing messages to be processed first.
+	- GameStructure: Fix for execution order in CreateStarIcons by changing Awake->Start
+	
+	Game Framework Extras (Extras Bundle) - Improvements
+	- GameStructure: Added ShakeScreenWhenLivesLost component
+	- Themes: Added several prefabs for Lives, Health and Stars
+	- Themes: Added health bar images
+	- Themes: Added white and grey gradient images
+
+	Game Framework Extras (Extras Bundle) - Fixes
+	- Scrolling: Corrected namespace
+	- Themes: Updates to remove use of deprecated Beautiful Transitions components
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- GettingStarted: Added part 7 tutorial files as an extension of part 6
+	
+	Game Framework Tutorials (Extras Bundle) - Fixes
+	- Various: Updates to remove use of deprecated Beautiful Transitions components
+
+	Prefs Editor (Extras Bundle) - New asset now included in the extras bundle
+
 v2.2.2
 
 	Game Framework Core - Improvements
