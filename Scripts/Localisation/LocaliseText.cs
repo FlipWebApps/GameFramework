@@ -357,8 +357,9 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
         /// <summary>
         /// Localise the specified value.
+        /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
         /// </summary>
-        public static string Get(string key)
+        public static string Get(string key, string language = null)
         {
             // Ensure we have a Language to work with
             if (!IsLocalisationLoaded)
@@ -372,8 +373,21 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
             string[] vals;
             if (_localisations.TryGetValue(key, out vals))
             {
-                if (_languageIndex < vals.Length)
-                    return vals[_languageIndex];
+                if (language == null)
+                {
+                    if (_languageIndex < vals.Length)
+                        return vals[_languageIndex];
+                }
+                else
+                {
+                    // get value for a specific language
+                    var index = Array.IndexOf(Languages, language);
+                    if (index == -1) return null;
+                    if (index < vals.Length)
+                        return vals[index];
+                    else
+                        return null;
+                }
             }
 
 		    MyDebug.LogWarningF("Localisation key not found: '{0}' for Language {1}", key, Language);
