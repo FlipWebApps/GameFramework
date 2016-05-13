@@ -1,11 +1,14 @@
-﻿KEY,English,Norwegian
-Advertising.UnityAds.WatchForCoins.Button,Free Coins,Gratis Penger
-Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,Du nå har {0} ekstra mynter.
-Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,Vennligst se hele videoen for å få penger.
+﻿KEY,English,Norwegian,Portuguese,Spanish
+Language.LocalisedName,English,Norsk,Português,Español
+Advertising.UnityAds.WatchForCoins.Button,Free Coins,Gratis Penger,Moedas Grátis,monedas gratis
+Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,Du nå har {0} ekstra mynter.,Você tem {0} moedas extras.,Tienes {0} monedas extra.
+Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,Vennligst se hele videoen for å få penger.,Por favor assista todo o video para ganhar moedas,"Por favor, ver el vídeo entero para ganar monedas"
 Advertising.UnityAds.UnableToShow,"Unable to load adverts!
 Please try again later.","Kunne ikke laste reklame!
-Prøv igjen senere."
-Billing.NotInitialised,Billing not accessible. Please check settings and try again later.,Kjøp ikke tilgjengelig. Vennligst sjekk innstillingene og prøv igjen senere.
+Prøv igjen senere.","Impossível carregar anúncios!
+Por Favor tente mais tarde.","No se puede cargar anuncios! 
+"
+Billing.NotInitialised,Billing not accessible. Please check settings and try again later.,Kjøp ikke tilgjengelig. Vennligst sjekk innstillingene og prøv igjen senere.,Compra nao acessível. Por Favor verifique as configurações e tente mais tarde.,"Por favor, inténtelo de nuevo más tarde ""."
 Billing.NotAvailable,"Unable to purchase.
 
 Either the item is not found or is not currently available for purchase.
@@ -14,120 +17,161 @@ Please try again later.","Kjøp ikke gjennomførbart.
 
 Varen er enten ikke funnet eller midlertidig utilgjengelig.
 
-Vennligst prøv igjen senere.  "
-Billing.RestoreSucceeded,Purchases have been restored.,Kjøp gjenopprettet.
-Billing.RestoreFailed,Unable to restore purchases.,Kunne ikke gjenopprette kjøp.
-Facebook.Logout,Logout,Logg ut
-Facebook.Reconnect,Reconnect,Tilkobler
+Vennligst prøv igjen senere.  ","Impossivel realizar a compra.
+
+O item não foi encontrado ou não esta disponível para compra.
+
+Por Favor tente mais tarde.","Imposible de hacer la compra.
+
+El artículo no se ha encontrado o no está disponible para compra.
+
+Por favor, inténtelo de nuevo más tarde."
+Billing.RestoreSucceeded,Purchases have been restored.,Kjøp gjenopprettet.,A compra foi restaurada,La compra fue restaurada
+Billing.RestoreFailed,Unable to restore purchases.,Kunne ikke gjenopprette kjøp.,Impossível restaurar compra,No se puede restaurar la compra
+Facebook.Logout,Logout,Logg ut,Sair,dejar
+Facebook.Reconnect,Reconnect,Tilkobler,Reconectar,reconexión
 Facebook.Connect,"Facebook
 Connect","Kobler til
-Facebook"
-Facebook.Connecting,Connecting…,Tilkobler…
-Facebook.Share.Caption,Come play the new hit game,Prøv det nye spillet
-Facebook.Share.Description,Try out {0},Prøv ut {0}
-Facebook.Invite.Caption,{0} is great! Check it out.,{0} er bra! Prøv det. 
-Facebook.Invite.Description,Join me and play {0}!,Bli med og spill {0}!
+Facebook","Facebook
+Conectar","Facebook
+Conectar"
+Facebook.Connecting,Connecting…,Tilkobler…,Conectando…,Conectando ...
+Facebook.Share.Caption,Come play the new hit game,Prøv det nye spillet,Venhha jogar a nova sensação,Ven a jugar a la nueva sensación
+Facebook.Share.Description,Try out {0},Prøv ut {0},Experimente {0},Try {0}
+Facebook.Invite.Caption,{0} is great! Check it out.,{0} er bra! Prøv det. ,{0} É incrível! confira.,{0} es increíble! comprobar.
+Facebook.Invite.Description,Join me and play {0}!,Bli med og spill {0}!,Jogue comigo {0}!,Juega conmigo {0}!
 Facebook.Error.Login.Description,"We were unable to log into Facebook and will continue in offline mode.
 Try connecting again later.","Det var ikke mulig å koble til Facebook og spillet fortsetter offline.
-Prøv å koble til senere. "
-FreePrize,Free Prize,Gratis Premie
-FreePrize.NewPrize,New prize in {0:D2}:{1:D2}:{2:D2},Ny premie om {0:D2}:{1:D2}:{2:D2}
-FreePrize.Title,FREE PRIZE,GRATIS PREMIE
-FreePrize.Text1,You won {0} coins,Du vant {0} mynter
-FreePrize.Text2,New prize available soon.,Ny premie tilgjengelig snart.
-GameFeedback.FeedbackTitle,Feedback,Tilbakemelding
-GameFeedback.RateTitle,Rate us!,Evaluer oss!
-GameFeedback.RateThanks,Thank you for any positive feedback and for rating our app!,Takk for kommentaren og for at du evaluerte vår app!
-GameFeedback.Unsure,Are you enjoying '{0}'?,Liker du {0}?
-GameFeedback.Unsure.No,We're sorry that you don't like our game. Please leave your comments and suggestions on our support site at www.flipwebapps.com so we can improve.,Vi beklager at du ikke liker spillet. Vennligst legg igjen dine kommentarer og forslag til endringer på wwwlflipweapps.com
+Prøv å koble til senere. ","Impossivel conectar ao Facebook, continuar em modo offline.
+Tente reconectar mais tarde.","Imposible conectarse a Facebook, continuará el modo offline.
+Intentará volver a conectarse más tarde"
+FreePrize,Free Prize,Gratis Premie,Prêmio grátis,Regalo Gratis
+FreePrize.NewPrize,New prize in {0:D2}:{1:D2}:{2:D2},Ny premie om {0:D2}:{1:D2}:{2:D2},Novo prêmio em {0:D2}:{1:D2}:{2:D2},Nuevo premio {0: D 2}: {1: D 2}: {2: D2}
+FreePrize.Title,FREE PRIZE,GRATIS PREMIE,PRÊMIO GRATIS,REGALO GRATIS
+FreePrize.Text1,You won {0} coins,Du vant {0} mynter,Você ganhou {0} moedas,Te has ganado {0} monedas
+FreePrize.Text2,New prize available soon.,Ny premie tilgjengelig snart.,Novo prêmio disponível em breve.,Nuevo premio disponible pronto.
+GameFeedback.FeedbackTitle,Feedback,Tilbakemelding,Comentários,comentarios
+GameFeedback.RateTitle,Rate us!,Evaluer oss!,Avalie!,Vota
+GameFeedback.RateThanks,Thank you for any positive feedback and for rating our app!,Takk for kommentaren og for at du evaluerte vår app!,Obrigado por avaliar e comentar o app!,Gracias por calificar y comentar la aplicación!
+GameFeedback.Unsure,Are you enjoying '{0}'?,Liker du {0}?,Está gostando '{0}'?,Usted está disfrutando '{0}'?
+GameFeedback.Unsure.No,We're sorry that you don't like our game. Please leave your comments and suggestions on our support site at www.flipwebapps.com so we can improve.,Vi beklager at du ikke liker spillet. Vennligst legg igjen dine kommentarer og forslag til endringer på wwwlflipweapps.com,Sentimos muito por você não gostar do jogo. Por favor deixe seus comentarios e sugestões em nosso site para melhorarmos. www.flipwebapps.com,"Lo sentimos que no te gusta el juego. Por favor, deje sus comentarios y sugerencias en nuestro sitio web para mejorar. 
+www.flipwebapps.com"
 GameFeedback.AssumeLike,"Thanks you for choosing to rate '{0}'.
 
 Your support is much appreciated.","Takk for tilbakemeldingen! 
 
-Din setter stor pris på din støtte."
+Vi setter stor pris på din støtte.","Obrigado por avaliar '{0}'.
+
+Sua ajuda é muito bem vinda.","¡Gracias por votar '{0}' .
+
+Su ayuda es muy bienvenida."
 GameFeedback.AssumeLikeOptionalAndroid,"We hope that you like '{0}'.
 
 It'd be really helpful if you rated us in the Play store.
 Many thanks for your support.","Vi håper du liker  {0}.
 
 Vi setter stor pris på din tilbakemelding i Play store.
-Takk for din støtte. "
+Takk for din støtte. ","Esperamos que tenha gostado '{0}'.
+
+É de grande ajuda se nos avaliar na Play Store.
+Muito obrigado pela ajuda.","Esperamos que hayan disfrutado '{0}' .
+
+Nos ayuda a evaluar si el Juego Store.
+Gracias por la ayuda."
 GameFeedback.AssumeLikeOptionaliOS,"We hope that you like '{0}'.
 
 It'd be really helpful if you rated us in the App store.
 Many thanks for your support.","Vi håper du liker  {0}.
 
 Vi setter stor pris på din tilbakemelding i app store.
-Takk for din støtte. "
-GeneralMessage.Ok,OK,Ok
-GeneralMessage.Cancel,Cancel,Kansellere
-GeneralMessage.Error.Title,Error,Feil
-GeneralMessage.Info.Title,Info,Info
-GeneralMessage.Error.GeneralError,An error occurred: {0},Det oppstod en feil: {0}
-GameOver.Title,GAME OVER,SPILL OVER
-GameOver.Won,CONGRATULATIONS,GRATULERER
-GameOver.GameWon,GAME COMPLETE,SPILL FERDIG
-GameOver.WorldWon,WORLD COMPLETE,VERDEN FERDIG
-GameOver.LevelWon,LEVEL COMPLETE,LEVEL FERDIG
-GameOver.Lost,YOU LOST,DU TAPTE
-GameOver.Achievement,x,x
-GameOver.Time,Time,Tid
-GameOver.Coins,Coins,Penger
-GameOver.Score,Score,Score
-GameOver.ScoreResult,{0},{0}
-GameOver.HighScoreText,High Score,Rekord
-GameOver.NewHighScore,New High Score,Ny Rekord
-GameOver.TargetCoins,Get {0} more coins to unlock a new level,Få {0} mynter til for å låse opp en ny level
-GameOver.TargetCoinsGot,New level available,Ny level tilgjengelig
-GameOver.FacebookPost,Facebook,Facebook
-GameOver.Rate,Rate,Evaluer
-GameOver.Retry,Retry,Prøv Igjen
-GameOver.Continue,Continue,Fortsette
-Settings.Title,Settings,Instillinger
-Settings.Music,Music,Lyd
-Settings.FX,FX,FX
-Settings.Language,Language,Språk
-Settings.RestorePurchases,Restore Purchases,Gjenopprette Kjøp
-P0.Name,Player 1,Spiller 1
-Level.Buy.Title,BUY,KJØP
-Level.Buy.Text1,Purchase this level?,Vil du kjøpe denne levelen? 
-Level.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp
-Level.Buy.NotEnabled,Collect coins to unlock this level,Få flere mynter for å låse opp denne levelen
-Level.Unlock,Unlock,Lås opp
-Level.Unlock.Title,UNLOCK LEVEL,Lås opp level. 
+Takk for din støtte. ","Esperamos que tenha gostado '{0}'.
+
+É de grande ajuda se nos avaliar na Play Store.
+Muito obrigado pela ajuda.","Esperamos que hayan disfrutado '{0}' .
+
+Nos ayuda a evaluar si el Juego Store.
+Gracias por la ayuda."
+GeneralMessage.Ok,OK,Ok,OK,Bueno
+GeneralMessage.Cancel,Cancel,Kansellere,Cancelar,Cancelar
+GeneralMessage.Error.Title,Error,Feil,Erro,Error
+GeneralMessage.Info.Title,Info,Info,Informação,Información
+GeneralMessage.Error.GeneralError,An error occurred: {0},Det oppstod en feil: {0},Um erro aconteceu: {0},Se ha producido un error: {0}
+GameOver.Title,GAME OVER,SPILL OVER,FIM DE JOGO,FIN DEL JUEGO
+GameOver.Won,CONGRATULATIONS,GRATULERER,PARABÉNS,FELICIDADES
+GameOver.GameWon,GAME COMPLETE,SPILL FERDIG,JOGO CONCLUÍDO,JUEGO TERMINADO
+GameOver.WorldWon,WORLD COMPLETE,VERDEN FERDIG,MUNDO CONCLUÍDO,MUNDO COMPLETADO
+GameOver.LevelWon,LEVEL COMPLETE,LEVEL FERDIG,FASE CONCLUÍDA,FASE COMPLETADA
+GameOver.Lost,YOU LOST,DU TAPTE,VOCÊ PERDEU,TÚ PERDISTE
+GameOver.Achievement,x,x,x,x
+GameOver.Time,Time,Tid,tempo,tiempo
+GameOver.Coins,Coins,Penger,moedas Grátis,monedas gratis
+GameOver.Score,Score,Score,pontuação,puntuacion
+GameOver.ScoreResult,{0},{0},{0},{0}
+GameOver.HighScoreText,High Score,Rekord,Pontuação mais alta,La puntuación más alta
+GameOver.NewHighScore,New High Score,Ny Rekord,Nova pontuação mais alta,Nueva puntuación
+GameOver.TargetCoins,Get {0} more coins to unlock a new level,Få {0} mynter til for å låse opp en ny level,Consiga mais {0} para desbloquear uma nova fase,Consigue {0} para desbloquear una nueva fase
+GameOver.TargetCoinsGot,New level available,Ny level tilgjengelig,Nova fase disponível,Nueva fase disponibles
+GameOver.FacebookPost,Facebook,Facebook,Facebook,Facebook
+GameOver.Rate,Rate,Evaluer,Avalie!,Vota
+GameOver.Retry,Retry,Prøv Igjen,Recomeçar,recomenzar
+GameOver.Continue,Continue,Fortsette,Continuar,continuar
+Settings.Title,Settings,Instillinger,Configurações,ajustes
+Settings.Music,Music,Lyd,Música,música
+Settings.FX,FX,FX,Efeitos Sonoros,Efectos sonoros
+Settings.Language,Language,Språk,Idioma,idioma
+Settings.RestorePurchases,Restore Purchases,Gjenopprette Kjøp,Restaurar compras,restaurar las compras
+P0.Name,Player 1,Spiller 1,Jogador 1,El jugador 1
+Level.Buy.Title,BUY,KJØP,COMPRAR,COMPRAR
+Level.Buy.Text1,Purchase this level?,Vil du kjøpe denne levelen? ,Comprar esta fase?,Comprar esta fase?
+Level.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp,Você pode coletar moedas para desbloquear,Puede recoger las monedas para desbloquear
+Level.Buy.NotEnabled,Collect coins to unlock this level,Få flere mynter for å låse opp denne levelen,Colete moedas para desbloquear esta fase,Recoger las monedas para desbloquear esta etapa
+Level.Unlock,Unlock,Lås opp,Desbloquear,desbloquear
+Level.Unlock.Title,UNLOCK LEVEL,Lås opp level. ,Desbloquear fase,desbloquear fase
 Level.Unlock.New.Text1,"Congratulations!
 New level Unlocked","Gratulerer!
-Ny level låst opp. "
-Level.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.
+Ny level låst opp. ","Parabéns!
+Nova fase desbloqueada","¡Felicitaciones!
+Nueva fase de desbloqueo "
+Level.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.,Colete mais moedas para desbloquear,Recoger las monedas más para desbloquear
 Level.Unlock.Existing.Text1,"Bad Luck!
 Level Already Unlocked.","Uflaks!
-Level er allerede låst opp. "
-Level.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
-World.Buy.Title,BUY,KJØP
-World.Buy.Text1,Purchase this world?,Vil du kjøpe denne verden? 
-World.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp
-World.Buy.NotEnabled,Collect coins to unlock this world,Få flere mynter for å låse opp denne verden
-World.Unlock,Unlock,Lås opp
-World.Unlock.Title,UNLOCK WORLD,Lås opp verden. 
+Level er allerede låst opp. ","Deu Azar!
+Fase já esta desbloqueada.","Él Azar! 
+Fase ya está desbloqueado"
+Level.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. ,Colete mais moedas para tentar novamente.,Recoger las monedas más para intentarlo de nuevo.
+World.Buy.Title,BUY,KJØP,COMPRAR,COMPRAR
+World.Buy.Text1,Purchase this world?,Vil du kjøpe denne verden? ,Comprar mundo?,Compra mundo?
+World.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp,Você pode coletar moedas para desbloquear,Puede recoger las monedas para desbloquear
+World.Buy.NotEnabled,Collect coins to unlock this world,Få flere mynter for å låse opp denne verden,Colete moedas para desbloquear este mundo,Recoger las monedas para desbloquear este mundo
+World.Unlock,Unlock,Lås opp,Desbloquear,descubrir
+World.Unlock.Title,UNLOCK WORLD,Lås opp verden. ,DESBLOQUEAR MUNDO,DESBLOQUEAR EL MUNDO
 World.Unlock.New.Text1,"Congratulations!
 New world Unlocked","Gratulerer!
-Ny verden låst opp. "
-World.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.
+Ny verden låst opp. ","Parabéns!
+Novo mundo desbloqueado","¡Felicitaciones! 
+Nueva fase de desbloqueo "
+World.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.,Colete mais moedas para desbloquear,Recoger las monedas más para desbloquear
 World.Unlock.Existing.Text1,"Bad Luck!
 World Already Unlocked.","Uflaks!
-Verden er allerede låst opp. "
-World.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
-Character.Buy.Title,BUY,KJØP
-Character.Buy.Text1,Purchase this character?,Vil du kjøpe denne karakteren? 
-Character.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp
-Character.Buy.NotEnabled,Collect coins to unlock this character,Få flere mynter for å låse opp denne karakteren
-Character.Unlock,Unlock,Lås opp
-Character.Unlock.Title,UNLOCK CHARACTER,Lås opp karakteren. 
+Verden er allerede låst opp. ","Deu Azar!
+Fase já esta desbloqueada.","Él Azar! 
+Fase ya está desbloqueado"
+World.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. ,Colete mais moedas para tentar novamente.,Recoger las monedas más para intentarlo de nuevo.
+Character.Buy.Title,BUY,KJØP,COMPRAR,COMPRAR
+Character.Buy.Text1,Purchase this character?,Vil du kjøpe denne karakteren? ,Comprar este personagem?,Comprar este personaje?
+Character.Buy.Text2,You can also collect coins to unlock,Du kan også samle mynter for å låse opp,Você pode coletar moedas para desbloquear,Puede recoger las monedas para desbloquear
+Character.Buy.NotEnabled,Collect coins to unlock this character,Få flere mynter for å låse opp denne karakteren,Colete moedas para desbloquear este personagem.,Recoger las monedas para desbloquear este personaje.
+Character.Unlock,Unlock,Lås opp,Desbloquear,descubrir
+Character.Unlock.Title,UNLOCK CHARACTER,Lås opp karakteren. ,DESBLOQUEAR PERSONAGEM,CARÁCTER DE DESBLOQUEO
 Character.Unlock.New.Text1,"Congratulations!
 New character Unlocked","Gratulerer!
-Ny karakter låst opp. "
-Character.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.
+Ny karakter låst opp. ","Parabéns!
+Novo personagem desbloqueado","¡Felicitaciones! 
+Nuevo personaje desbloqueado"
+Character.Unlock.New.Text2,Collect more coins to unlock others.,Samle mer penger for å låse opp andre.,Colete mais moedas para desbloquear,Recoger las monedas más para desbloquear
 Character.Unlock.Existing.Text1,"Bad Luck!
 Character Already Unlocked.","Uflaks!
-Karakteren er allerede låst opp. "
-Character.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. 
+Karakteren er allerede låst opp. ","Deu Azar!
+Personagem já desbloqueado","Él Azar! 
+Personaje ya desbloqueado"
+Character.Unlock.Existing.Text2,Collect more coins to try again.,Samle mer penger for å prøve igjen. ,Colete mais moedas para tentar novamente.,Recoger las monedas más para intentarlo de nuevo.
