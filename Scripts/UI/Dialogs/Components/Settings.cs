@@ -68,7 +68,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             _oldBackGroundAudioVolume = GameManager.Instance.BackGroundAudioVolume;
             _musicVolume.value = GameManager.Instance.BackGroundAudioVolume;
             _sfxVolume.value = GameManager.Instance.EffectAudioVolume;
-            _language.options = (from item in LocaliseText.AllowedLanguages select new Dropdown.OptionData(item)).ToList();
+            _language.options = (from item in LocaliseText.AllowedLanguages select new Dropdown.OptionData(LocaliseText.Get("Language.LocalisedName", item))).ToList();
             for (int i = 0; i < _language.options.Count; i++)
                 if (_language.options[i].text == LocaliseText.Language)
                     _language.value = i;
