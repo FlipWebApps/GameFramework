@@ -132,7 +132,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
             // if no listeners then just return.
             if (!_listeners.ContainsKey(msg.Name))
             {
-                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
+                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "No listeners are setup. Discarding message!");
                 return false;
             }
 
@@ -150,7 +150,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         {
             if (!_listeners.ContainsKey(msg.Name))
             {
-                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "No listeners are setup. Discarding message!");
+                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "No listeners are setup. Discarding message!");
                 return false;
             }
 
@@ -161,11 +161,11 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
 
                 if (msg.SendMode == BaseMessage.SendModeType.SendToFirst && sent)
                 {
-                    MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to first listener.");
+                    MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "Sent to first listener.");
                     return true;
                 }
             }
-            MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, "", "Sent to " + listenerList.Count + " listeners.");
+            MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "Sent to " + listenerList.Count + " listeners.");
             return true;
         }
 
