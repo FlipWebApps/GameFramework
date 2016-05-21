@@ -39,5 +39,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
             NewCoins = newCoins;
             OldCoins = oldCoins;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Level {0}, New Coins {1}, Old Coins {2}", Level.Number, NewCoins, OldCoins);
+        }
     }
 }

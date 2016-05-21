@@ -34,5 +34,14 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
         {
             CharacterNumber = characterNumber;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Character Purchased {0}", CharacterNumber);
+        }
     }
 }

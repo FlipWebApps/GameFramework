@@ -36,5 +36,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
             NewHealth = newHealth;
             OldHealth = oldHealth;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New Health {0}, Old Health {1}", NewHealth, OldHealth);
+        }
     }
 }

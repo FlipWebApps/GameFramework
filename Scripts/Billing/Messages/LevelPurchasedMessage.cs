@@ -34,5 +34,14 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
         {
             LevelNumber = levelNumber;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Level Purchased {0}", LevelNumber);
+        }
     }
 }

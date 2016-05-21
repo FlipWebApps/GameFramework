@@ -39,5 +39,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
             NewHighScore = newHighScore;
             OldHighScore = oldHighScore;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Level {0}, New High Score {1}, Old High Score {2}", Level.Number, NewHighScore, OldHighScore);
+        }
     }
 }

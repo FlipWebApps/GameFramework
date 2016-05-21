@@ -34,5 +34,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages
         {
             IsUnlocked = isUnlocked;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Is Unlocked {0}", IsUnlocked);
+        }
+
     }
 }

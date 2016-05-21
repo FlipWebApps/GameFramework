@@ -39,5 +39,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
             NewScore = newScore;
             OldScore = oldScore;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New Score {0}, Old Score {1}", NewScore, OldScore);
+        }
     }
 }

@@ -34,5 +34,14 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
         {
             WorldNumber = worldNumber;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("World Purchased {0}", WorldNumber);
+        }
     }
 }

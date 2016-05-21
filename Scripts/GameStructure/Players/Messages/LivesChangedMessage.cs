@@ -36,5 +36,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
             NewLives = newLives;
             OldLives = oldLives;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New Lives {0}, Old Lives {1}", NewLives, OldLives);
+        }
     }
 }

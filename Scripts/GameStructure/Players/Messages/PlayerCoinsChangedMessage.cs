@@ -39,5 +39,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
             NewCoins = newCoins;
             OldCoins = oldCoins;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New Coins {0}, Old Coins {1}", NewCoins, OldCoins);
+        }
     }
 }

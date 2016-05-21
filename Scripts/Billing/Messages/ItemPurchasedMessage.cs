@@ -36,5 +36,14 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
         {
             ProductID = productID;
         }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Item Purchased {0}", ProductID);
+        }
     }
 }
