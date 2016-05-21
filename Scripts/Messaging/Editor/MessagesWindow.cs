@@ -34,12 +34,17 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         string[] _tabNames = { "Activity Log", "Statistics" };
         int _tabSelected;
 
-        Vector2 scrollPosition = Vector2.zero;
-        Color LineColour1;
-        Color LineColour2;
-        //Texture2D SmallErrorIcon;
-        //Texture2D SmallWarningIcon;
-        //Texture2D SmallMessageIcon;
+        float _topPanelHeight;
+        Vector2 _messageLogScrollPosition;
+        Vector2 _messageDetailsScrollPosition;
+        int _newSelectedRow = -1;
+        int _selectedRow = -1;
+        Color _lineColour1;
+        Color _lineColour2;
+        Color _resizeAreaColour;
+        bool _isResizing;
+
+        Vector2 _statisticsScrollPosition;
 
         //Serialise the logger field so that Unity doesn't forget about the logger when you hit Play
         [UnityEngine.SerializeField]
@@ -51,8 +56,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
-            //var window = 
-                GetWindow(typeof(MessagesWindow));
+            var window = GetWindow(typeof(MessagesWindow)) as MessagesWindow;
+            window._topPanelHeight = window.position.height / 2;
         }
 
 
@@ -60,11 +65,9 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         {
             titleContent.text = "Messages";
 
-            LineColour1 = GUI.backgroundColor;
-            LineColour2 = new Color(GUI.backgroundColor.r * 0.9f, GUI.backgroundColor.g * 0.9f, GUI.backgroundColor.b * 0.9f);
-            //SmallErrorIcon = EditorGUIUtility.FindTexture("d_console.erroricon.sml");
-            //SmallWarningIcon = EditorGUIUtility.FindTexture("d_console.warnicon.sml");
-            //SmallMessageIcon = EditorGUIUtility.FindTexture("d_console.infoicon.sml");
+            _lineColour1 = GUI.backgroundColor;
+            _lineColour2 = new Color(GUI.backgroundColor.r * 0.8f, GUI.backgroundColor.g * 0.8f, GUI.backgroundColor.b * 0.8f);
+            _resizeAreaColour = new Color(_lineColour1.r * 0.5f, _lineColour1.g * 0.5f, _lineColour1.b * 0.5f);
 
             // Get or create the backend
             if (_messageLog == null)
@@ -90,7 +93,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
 
 
         /// <summary>
-        /// WHen a log entry is added then repaint the window.
+        /// When a log entry is added then repaint the window.
         /// </summary>
         void OnLogEntryAdded()
         {
@@ -114,17 +117,42 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// </summary>
         void OnGUI()
         {
-            DrawToolbar();
-            DrawTabs();
+
+            // actions to take at the start, so the elements aren't affected between layout and repaint steps.
+            if (Event.current.type == EventType.Layout)
+            {
+                if (_newSelectedRow != _selectedRow)
+                {
+                    _selectedRow = _newSelectedRow;
+                }
+                //
+            }
+
             switch (_tabSelected)
             {
                 case 0:
-                    DrawLogEntries();
+                    GUILayout.BeginVertical(GUILayout.Height(_topPanelHeight), GUILayout.MinHeight(100));
+                    DrawToolbar();
+                    DrawTabs();
+                    DrawMessageEntries();
+                    GUILayout.EndVertical();
+                    HandleResize();
+                    GUILayout.Space(10);
+                    GUILayout.BeginVertical();
+                    DrawMessageDetails();
+                    GUILayout.EndVertical();
                     break;
                 case 1:
+                    DrawToolbar();
+                    DrawTabs();
                     DrawStatistics();
                     break;
             }
+
+            // actions to take at the end, so the elements aren't affected between layout and repaint events.
+            //if (Event.current.type == EventType.Repaint)
+            //{
+            //}
         }
 
 
@@ -155,43 +183,134 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
 
 
         /// <summary>
-        /// Draw the log entries
+        /// Draw the message entries
         /// </summary>
-        private void DrawLogEntries()
+        private void DrawMessageEntries()
         {
             var drawnLines = 0;
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+            _messageLogScrollPosition = GUILayout.BeginScrollView(_messageLogScrollPosition);
 
+            // don't optimise at this time due to issues with multiple calls to OnGUI andchanging the number of drawn items.
+            //int start = (int)(_messageLogScrollPosition.y / EditorGUIUtility.singleLineHeight);
+            //int end = (int)((_messageLogScrollPosition.y + _topPanelHeight) / EditorGUIUtility.singleLineHeight);
+            //Debug.Log(start + ", " + end);
+            //// don't draw anything outside the visible display for performance - just add space as a dummy container
+            //GUILayout.Space(start * EditorGUIUtility.singleLineHeight);
 
+            // draw all visible items
+            //for (var i = start; i < end && i < _messageLog.LogEntries.Count; i++)
             for (var i = 0; i < _messageLog.LogEntries.Count; i++)
             {
-                drawnLines++;
-                GUIStyle s = new GUIStyle();
-                s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
-                GUILayout.BeginHorizontal(s);
-                GUI.backgroundColor = (drawnLines % 2 == 0) ? LineColour1 : LineColour2;
-                GUILayout.Label(_messageLog.LogEntries[i].LogEntryType.ToString(), GUILayout.Width(100));
-                GUILayout.Label(_messageLog.LogEntries[i].Time.ToString(), GUILayout.Width(100));
-                GUILayout.BeginVertical();
-                GUILayout.Label(_messageLog.LogEntries[i].MessageType);
-                if (!string.IsNullOrEmpty(_messageLog.LogEntries[i].Contents))
-                    GUILayout.Label(_messageLog.LogEntries[i].Contents);
-                if (!string.IsNullOrEmpty(_messageLog.LogEntries[i].Message))
-                    GUILayout.Label(_messageLog.LogEntries[i].Message);
-                GUILayout.EndVertical();
-                GUILayout.EndHorizontal();
-                //Rect guiRect = GUILayoutUtility.GetLastRect();
-                //if (Event.current != null && Event.current.isMouse)
+                //if (i >= start && i <= end)
                 //{
-                //    bool overGUI = guiRect.Contains(Event.current.mousePosition);
-                //    if (overGUI)
-                //        Debug.Log("CLicked row" + Messenger._messageLog[i].Time.ToString());
+                    drawnLines++;
+                    var oldBackgrounColor = GUI.backgroundColor;
+
+                    GUIStyle s = new GUIStyle();
+                    s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
+                    GUI.backgroundColor = _selectedRow == i ? Color.blue : (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
+                    GUILayout.BeginHorizontal(s);
+                    GUILayout.Label(_messageLog.LogEntries[i].LogEntryType.ToString(), GUILayout.Width(100));
+                    GUILayout.Label(_messageLog.LogEntries[i].Time.ToShortTimeString(), GUILayout.Width(100));
+                    var text = string.IsNullOrEmpty(_messageLog.LogEntries[i].Message) ?
+                        _messageLog.LogEntries[i].MessageType :
+                        _messageLog.LogEntries[i].MessageType + " - " + _messageLog.LogEntries[i].Message;
+                    GUILayout.Label(text);
+                    GUILayout.EndHorizontal();
+
+                    Rect guiRect = GUILayoutUtility.GetLastRect();
+                    if (Event.current.type == EventType.MouseDown)
+                    {
+                        bool overGUI = guiRect.Contains(Event.current.mousePosition);
+                        if (overGUI)
+                        {
+                            _newSelectedRow = i;
+                            Repaint();
+                        }
+                    }
+
+                    GUI.backgroundColor = oldBackgrounColor;
+                //}   
+                //else
+                //{
+                //    GUILayout.Space(EditorGUIUtility.singleLineHeight);
                 //}
             }
+
+            // don't draw anything outside the visible display for performance - just add space as a dummy container
+            //var afterEndCount = _messageLog.LogEntries.Count - end;
+            //if (afterEndCount > 0)
+            //GUILayout.Space(afterEndCount * EditorGUIUtility.singleLineHeight);
+            //else
+            //    GUILayout.Space(0);
 
             GUILayout.EndScrollView();
         }
 
+
+        /// <summary>
+        /// Draw the currently selected message
+        /// </summary>
+        private void DrawMessageDetails()
+        {
+            if (_selectedRow >= 0 && _selectedRow < _messageLog.LogEntries.Count)
+            {
+                var boldLabelStyle = EditorHelper.BoldLabelStyle();
+
+                _messageDetailsScrollPosition = EditorGUILayout.BeginScrollView(_messageDetailsScrollPosition);
+
+                var currentLogEntry = _messageLog.LogEntries[_selectedRow];
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Log Entry Type", boldLabelStyle, GUILayout.Width(100));
+                GUILayout.Label(currentLogEntry.LogEntryType.ToString(), GUILayout.Width(position.width - 100));
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Message Type", boldLabelStyle, GUILayout.Width(100));
+                GUILayout.Label(currentLogEntry.MessageType, GUILayout.Width(position.width - 100));
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Time", boldLabelStyle, GUILayout.Width(100));
+                GUILayout.Label(currentLogEntry.Time.ToShortTimeString(), GUILayout.Width(position.width - 100));
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Message", boldLabelStyle, GUILayout.Width(100));
+                GUILayout.Label(currentLogEntry.Message, GUILayout.Width(position.width - 100));
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Contents:", boldLabelStyle, GUILayout.Width(100));
+                GUILayout.Label(currentLogEntry.Contents, GUILayout.Width(position.width - 100));
+                GUILayout.EndHorizontal();
+
+                EditorGUILayout.EndScrollView();
+            }
+        }
+
+
+        /// <summary>
+        /// Handle resize of the split messages window
+        /// </summary>
+        private void HandleResize()
+        {
+            var dragRect = new Rect(0, _topPanelHeight, position.width, 3f);
+
+            GUI.DrawTexture(dragRect, MakeColoredTexture(1, 1, _resizeAreaColour));
+            EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeVertical);
+
+            if (Event.current.type == EventType.mouseDown && dragRect.Contains(Event.current.mousePosition))
+            {
+                _isResizing = true;
+            }
+
+            if (_isResizing)
+            {
+                _topPanelHeight = Mathf.Clamp(Event.current.mousePosition.y, 100, position.height - 100);
+                Repaint();
+            }
+
+            if (Event.current.type == EventType.MouseUp)
+                _isResizing = false;
+
+        }
 
         /// <summary>
         /// Draw the statistics
@@ -212,9 +331,8 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                 GUILayout.Label("Active Handlers", boldLabelStyle, GUILayout.Width(150));
                 GUILayout.EndHorizontal();
 
-
                 var drawnLines = 0;
-                scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+                _statisticsScrollPosition = GUILayout.BeginScrollView(_statisticsScrollPosition);
 
                 // Acquire keys and sort them.
                 var list = _messageLog.Statistics.Keys.ToList();
@@ -228,7 +346,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                     GUIStyle s = new GUIStyle();
                     s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
                     GUILayout.BeginHorizontal(s);
-                    GUI.backgroundColor = (drawnLines % 2 == 0) ? LineColour1 : LineColour2;
+                    GUI.backgroundColor = (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
                     GUILayout.Label(key, GUILayout.Width(250));
                     GUILayout.Label(statisticsEntry.MessageCount.ToString(), GUILayout.Width(150));
                     GUILayout.Label(statisticsEntry.HandlerCount.ToString(), GUILayout.Width(150));
