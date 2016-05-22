@@ -1,4 +1,4 @@
-Game Framework - Free v2.3
+Game Framework - Free v2.4
 
 Thank you for using Game Framework. 
 
@@ -19,7 +19,7 @@ this framework also contains a lot of useful additional content to get you up an
 	- Secures future development of this framework
 	
 Feel free to try this version, however if you like the framework then please consider the small 
-price of purchasing the pro bundle to support our efforts in developing this framework further.
+price of purchasing the extras bundle to support our efforts in developing this framework further.
 
 Our goal is to create something that you enjoy and want to use. If you have any thoughts, comments, suggestions or 
 otherwise then please contact us through our website or drop me a mail directly on mark_a_hewitt@yahoo.co.uk
@@ -52,10 +52,15 @@ ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com
 EditorList - courtesy of catlikecoding.com
 ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 Portuguese and Spanish Translations - Bryan Jonson
+French Translation -  Fabrice Pilet
+Chinese Translation - luochuanyuewu
 		
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.4
+
 
 v2.3
 
