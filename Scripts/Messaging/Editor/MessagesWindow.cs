@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
     /// </summary>
     public class MessagesWindow : EditorWindow
     {
-        string[] _tabNames = { "Activity Log", "Statistics" };
+        readonly string[] _tabNames = { "Activity Log", "Statistics" };
         int _tabSelected;
 
         float _topPanelHeight;
@@ -52,7 +52,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
 
 
         // Add menu item for showing the window
-        [MenuItem("Window/Flip Web Apps/Message Activity Windows")]
+        [MenuItem("Window/Game Framework/Message Activity Window", priority = 2)]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
@@ -121,11 +121,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
             // actions to take at the start, so the elements aren't affected between layout and repaint steps.
             if (Event.current.type == EventType.Layout)
             {
-                if (_newSelectedRow != _selectedRow)
-                {
-                    _selectedRow = _newSelectedRow;
-                }
-                //
+                _selectedRow = _newSelectedRow;
             }
 
             switch (_tabSelected)
@@ -138,7 +134,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                     GUILayout.EndVertical();
                     HandleResize();
                     GUILayout.Space(10);
-                    GUILayout.BeginVertical();
+                    GUILayout.BeginVertical(GUILayout.Height(position.height - _topPanelHeight));
                     DrawMessageDetails();
                     GUILayout.EndVertical();
                     break;
@@ -185,7 +181,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// <summary>
         /// Draw the message entries
         /// </summary>
-        private void DrawMessageEntries()
+        void DrawMessageEntries()
         {
             var drawnLines = 0;
             _messageLogScrollPosition = GUILayout.BeginScrollView(_messageLogScrollPosition);
@@ -206,7 +202,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                     drawnLines++;
                     var oldBackgrounColor = GUI.backgroundColor;
 
-                    GUIStyle s = new GUIStyle();
+                    var s = new GUIStyle();
                     s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
                     GUI.backgroundColor = _selectedRow == i ? Color.blue : (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
                     GUILayout.BeginHorizontal(s);
@@ -221,7 +217,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                     Rect guiRect = GUILayoutUtility.GetLastRect();
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        bool overGUI = guiRect.Contains(Event.current.mousePosition);
+                        var overGUI = guiRect.Contains(Event.current.mousePosition);
                         if (overGUI)
                         {
                             _newSelectedRow = i;
@@ -251,7 +247,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// <summary>
         /// Draw the currently selected message
         /// </summary>
-        private void DrawMessageDetails()
+        void DrawMessageDetails()
         {
             if (_selectedRow >= 0 && _selectedRow < _messageLog.LogEntries.Count)
             {
@@ -280,6 +276,15 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                 GUILayout.Label("Contents:", boldLabelStyle, GUILayout.Width(100));
                 GUILayout.Label(currentLogEntry.Contents, GUILayout.Width(position.width - 100));
                 GUILayout.EndHorizontal();
+                GUILayout.Label("Call Stack", boldLabelStyle, GUILayout.Width(100));
+                if (currentLogEntry.StackTrace != null && currentLogEntry.StackTrace.GetFrames() != null)
+                {
+                    foreach (var frame in currentLogEntry.StackTrace.GetFrames())
+                    {
+                        GUILayout.Label(frame.ToString());
+                    }
+                    GUILayout.Label(currentLogEntry.Contents);
+                }
 
                 EditorGUILayout.EndScrollView();
             }
@@ -289,7 +294,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// <summary>
         /// Handle resize of the split messages window
         /// </summary>
-        private void HandleResize()
+        void HandleResize()
         {
             var dragRect = new Rect(0, _topPanelHeight, position.width, 3f);
 
@@ -315,7 +320,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         /// <summary>
         /// Draw the statistics
         /// </summary>
-        private void DrawStatistics()
+        void DrawStatistics()
         {
             if (_messageLog.LogEntries.Count == 0)
             {
@@ -343,7 +348,7 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
                 {
                     var statisticsEntry = _messageLog.Statistics[key];
                     drawnLines++;
-                    GUIStyle s = new GUIStyle();
+                    var s = new GUIStyle();
                     s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
                     GUILayout.BeginHorizontal(s);
                     GUI.backgroundColor = (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
@@ -358,18 +363,18 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
         }
 
 
-        private Texture2D MakeColoredTexture(int width, int height, Color col)
+        Texture2D MakeColoredTexture(int width, int height, Color col)
         {
-            Color[] pix = new Color[width * height];
+            var pixels = new Color[width * height];
 
-            for (int i = 0; i < pix.Length; i++)
-                pix[i] = col;
+            for (var i = 0; i < pixels.Length; i++)
+                pixels[i] = col;
 
-            Texture2D result = new Texture2D(width, height);
-            result.SetPixels(pix);
-            result.Apply();
+            var texture = new Texture2D(width, height);
+            texture.SetPixels(pixels);
+            texture.Apply();
 
-            return result;
+            return texture;
         }
     }
 }

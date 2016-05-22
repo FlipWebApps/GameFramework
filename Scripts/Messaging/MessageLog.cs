@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Messaging
@@ -104,14 +105,18 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         public string MessageType;
         public string Contents;
         public string Message;
+        public StackTrace StackTrace;
 
-        public MessageLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
+        public MessageLogEntry() { }
+
+        public MessageLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null, StackTrace stackTrace = null)
         {
             LogEntryType = logEntryType;
             Time = System.DateTime.Now;
             MessageType = messageType;
             Contents = contents;
             Message = message;
+            StackTrace = stackTrace;
         }
     }
 
@@ -140,12 +145,15 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         /// Add a message to the log.
         /// </summary>
         /// <param name="logEntryType"></param>
+        /// <param name="messageType"></param>
+        /// <param name="contents"></param>
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void AddLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
         {
             if (MessageLog != null)
             {
-                MessageLog.AddLogEntry(new MessageLogEntry(logEntryType, messageType, contents, message));
+                MessageLog.AddLogEntry(new MessageLogEntry(logEntryType, messageType, contents, message, new StackTrace(true)));
             }
         }
     }
