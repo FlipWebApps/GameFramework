@@ -155,42 +155,42 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
 
 
         #region Menu items
-        [MenuItem("Window/Flip Web Apps/Select Items/Visible From Camera/Visible")]
+        [MenuItem("Window/Game Framework/Select Items/Visible From Camera/Visible")]
         static void SelectVisibleFromMainCamera0()
         {
             SelectVisibleFromMainCamera(true);
         }
-        [MenuItem("Window/Flip Web Apps/Select Items/Visible From Camera/Not Visible")]
+        [MenuItem("Window/Game Framework/Select Items/Visible From Camera/Not Visible")]
         static void SelectVisibleFromMainCamera1()
         {
             SelectVisibleFromMainCamera(false);
         }
 
 
-        [MenuItem("Window/Flip Web Apps/Select Items/Select Colliders")]
+        [MenuItem("Window/Game Framework/Select Items/Select Colliders")]
         static void RemovePhysicsComponents0() {
             FindPhysicsComponentsFromSelected(false);
         }
 
-        [MenuItem("Window/Flip Web Apps/Select Items/Remove Colliders")]
+        [MenuItem("Window/Game Framework/Select Items/Remove Colliders")]
         static void RemovePhysicsComponents1()
         {
             FindPhysicsComponentsFromSelected(true);
         }
 
-        [MenuItem("Window/Flip Web Apps/Select Items/Select Empty")]
+        [MenuItem("Window/Game Framework/Select Items/Select Empty")]
         static void SelectEmptyGameObjects0()
         {
             SelectEmptyGameObjects();
         }
 
-        [MenuItem("Window/Flip Web Apps/Select Items/With Layer/0")]
+        [MenuItem("Window/Game Framework/Select Items/With Layer/0")]
         static void SelectLayer0()
         {
             SelectLayer(0);
         }
 
-        [MenuItem("Window/Flip Web Apps/Select Items/With Layer/1")]
+        [MenuItem("Window/Game Framework/Select Items/With Layer/1")]
         static void SelectLayer1()
         {
             SelectLayer(1);

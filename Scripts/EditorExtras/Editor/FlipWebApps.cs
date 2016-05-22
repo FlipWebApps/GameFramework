@@ -27,22 +27,27 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
     /// <summary>
     /// Flip Web Apps links and documentation
     /// </summary>
-
     public class FlipWebApps : MonoBehaviour {
 
-        [MenuItem("Window/Flip Web Apps/Homepage", false, 1100)]
+        [MenuItem("Window/Game Framework/Homepage", false, 1100)]
         static void ShowHomepage()
         { 
             Process.Start(@"http://www.flipwebapps.com/");
         }
 
-        [MenuItem("Window/Flip Web Apps/Documentation", false, 1101)]
+        [MenuItem("Window/Game Framework/Documentation", false, 1102)]
         static void ShowDocumentation()
         {
             Process.Start(@"http://www.flipwebapps.com/game-framework/");
         }
 
-        [MenuItem("Window/Flip Web Apps/Contact", false, 1101)]
+        [MenuItem("Window/Game Framework/Support Forum", false, 1103)]
+        static void ShowSupportForum()
+        {
+            Process.Start(@"http://www.flipwebapps.com/forum/");
+        }
+
+        [MenuItem("Window/Game Framework/Contact", false, 1104)]
         static void ShowContact()
         {
             Process.Start(@"http://www.flipwebapps.com/contact/");

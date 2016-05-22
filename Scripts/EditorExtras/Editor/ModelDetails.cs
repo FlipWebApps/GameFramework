@@ -56,7 +56,7 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
         }
 
         #region Menu items
-        [MenuItem("Window/Flip Web Apps/3D/Model Details")]
+        [MenuItem("Window/Game Framework/3D/Model Details")]
         static void ModelDetails0()
         {
             GetModelDetails();

@@ -38,12 +38,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
     /// </summary>
     public class CheatFunctionsWindow : EditorWindow
     {
-        string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize"};
+        readonly string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize"};
         int _tabSelected;
-        string productId;
+        string _productId;
 
         // Add menu item
-        [MenuItem("Window/Flip Web Apps/Cheat Functions Windows")]
+        [MenuItem("Window/Game Framework/Cheat Functions Window", priority=1)]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
@@ -105,11 +105,11 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
             GUILayout.Label("In App Purchase Simulation", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             EditorGUILayout.HelpBox("Simulate a purchase by entering a product id, either your own or a built in one (unlockgame, unlock.world.xx, unlock.level.xx, unlock.characher.xx)", MessageType.None);
             GUILayout.BeginHorizontal();
-            productId = EditorGUILayout.TextField("Product Id: ", productId, GUILayout.Width(300));
+            _productId = EditorGUILayout.TextField("Product Id: ", _productId, GUILayout.Width(300));
             if (GUILayout.Button("Simulate Purchase", GUILayout.Width(150)))
             {
-                if (!string.IsNullOrEmpty(productId))
-                    Payment.ProcessPurchase(productId);
+                if (!string.IsNullOrEmpty(_productId))
+                    Payment.ProcessPurchase(_productId);
             }
 
             GUILayout.EndHorizontal();
