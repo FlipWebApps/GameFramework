@@ -61,6 +61,33 @@ CHANGE LOG
 
 v2.4
 
+NOTE: To update you will need to remove the old /FlipWebApps/BeautifulTransitions/ folder before updating, or delete the file 
+/FlipWebApps/BeautifulTransitions/Scripts/Transitions/GameObject/TransitionMoveAnchoredPosition.cs after updating.
+
+	Game Framework Core - Improvements
+	- EditorExtras: Menu cleanup
+	- GameStructure: Added OnLifeLostEnableGameobject component
+	- Localisation: Added portuguese and spanish translations (Thanks to Bryan Jonson)
+	- Localisation: French translation courtesy of Fabrice Pilet
+	- Localisation: Added Chinese translation courtesy of luochuanyuewu.
+	- Localisation: Support for specifying the language to get text for (rather than just the currently set one)
+	- Messaging: Added description to all messages for display in message log.
+	- Messaging: Improved Message Activity window including message details when an entry is selected
+	- Messaging: Show call stack in message window detail view.
+	- UI: Settings window shows the language with the localised name
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Localisation: Updated tutorial for new languages
+	- GettingStarted: Added getting started part 8 tutorial files as an extension of part 6-7
+	
+	BeautifulTransitions (Extras Bundle): Updated to v3.0 that includes:
+	- Rewritten from the ground up to expose the whole API through scripting including calls and notifications.
+	- GameObject: Removed deprecated TransitionMoveAnchoredPosition component
+	- Demo: New scripting demo
+	- Demo: Added auto transition in / out button to GameObject demo
+
+	Prefs Editor (Extras Bundle): Updated to v1.0.1 that includes:
+	- Fix for OSX path and key format
 
 v2.3
 
