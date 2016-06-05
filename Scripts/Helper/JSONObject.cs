@@ -134,10 +134,10 @@ namespace FlipWebApps.GameFramework.Scripts.Helper {
 		}
 #else
 		public static void Log(string str) {
-			Debug.WriteLine(str);
+			//Debug.WriteLine(str);
 		}
 		public static void Error(string str) {
-			Debug.WriteLine(str);
+			//Debug.WriteLine(str);
 		}
 #endif
 	}
