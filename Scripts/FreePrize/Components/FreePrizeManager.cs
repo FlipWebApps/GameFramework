@@ -34,32 +34,63 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     public class FreePrizeManager : SingletonPersistantSavedState<FreePrizeManager>
     {
         [Header("Time")]
+        [Tooltip("The delay in seconds before starting the next countdown. 0 = no wait")]
         public MinMax DelayRangeToNextCountdown = new MinMax {Min= 0, Max = 0};       // wait range before starting next countdown. 0 = no wait
+        [Tooltip("The time in seconds before another prize becomes available.")]
         public MinMax TimeRangeToNextPrize = new MinMax { Min = 600, Max = 1800 };    // countdown range to next prize. 10 minutes to 30 minutes
+        [Tooltip("Whether to save times for the next prize becoming available across game restarts.")]
+        public bool SaveAcrossRestarts;
 
         [Header("Prize")]
+        [Tooltip("A minimum and maxximum value for the prize.")]
         public MinMax ValueRange = new MinMax { Min = 10, Max = 20 };                // value defaults
-        public AudioClip PrizeDialogClosedAudioClip;
 
-        [Header("Display")]
+        [Header("Free Prize Dialog")]
+        [Tooltip("An optional audio clip to play when the free prize window is closed.")]
+        public AudioClip PrizeDialogClosedAudioClip;
+        [Tooltip("An optional prefab to use for displaying custom content in the free prize window.")]
         public GameObject ContentPrefab;
+        [Tooltip("An optional animation controller to animate the free prize window content.")]
         public RuntimeAnimatorController ContentAnimatorController;
+        [Tooltip("DoesnWhether the content shows the dialog buttons. Setting this hides the dialog buttons so that they can be displayed at the appropriate point e.g. after an animation has played.")]
         public bool ContentShowsButtons;
 
+        /// <summary>
+        /// DateTime then the next free prize countdown should start
+        /// </summary>
         public DateTime NextCountdownStart { get; set; }
+
+        /// <summary>
+        /// DateTime then the free prize will become available
+        /// </summary>
         public DateTime NextFreePrizeAvailable { get; set; }
+
+        /// <summary>
+        /// The current prize amount.
+        /// </summary>
         public int CurrentPrizeAmount {get; set; }
 
+        /// <summary>
+        /// Called from singletong Awake() - Load saved prize times, or setup new if first run or not saving across restarts
+        /// </summary>
         protected override void GameSetup()
         {
             base.GameSetup();
 
-            StartNewCountdown();
-
-            NextCountdownStart = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
-            NextFreePrizeAvailable = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
+            if (SaveAcrossRestarts && PlayerPrefs.HasKey("FreePrize.NextCountdownStart"))
+            {
+                NextCountdownStart = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
+                NextFreePrizeAvailable = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
+            }
+            else
+            {
+                StartNewCountdown();
+            }
         }
 
+        /// <summary>
+        /// Save the current state including free prize times
+        /// </summary>
         public override void SaveState()
         {
             MyDebug.Log("FreePrizeManager: SaveState");
@@ -69,6 +100,9 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             PlayerPrefs.Save();
         }
 
+        /// <summary>
+        /// Make the free prize immediately available
+        /// </summary>
         public void MakePrizeAvailable()
         {
             NextCountdownStart = DateTime.UtcNow;
