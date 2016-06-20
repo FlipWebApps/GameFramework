@@ -34,13 +34,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Components
     public class EnableBasedUponGameUnlocked : EnableDisableGameObjectMessaging<GameUnlockedMessage>
     {
         /// <summary>
-        /// Called during the Start() phase for your own custom initialisation.
+        /// Custom initialisation
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use EnableBasedUponNumberOfStarsWon.");
 
             RunMethod(new GameUnlockedMessage(GameManager.Instance.IsUnlocked));
+            base.Start();
         }
 
 

@@ -42,14 +42,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 
 
         /// <summary>
-        /// Called during the Start() phase for your own custom initialisation.
+        /// Custom initialisation
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             Assert.IsTrue(LevelManager.IsActive, "You need to add a LevelManager to your scene to be able to use EnableBasedUponNumberOfStarsWon.");
 
             var level = LevelManager.Instance.Level;
             RunMethod(new StarsWonMessage(level, level.StarsWon, level.StarsWon));
+            base.Start();
         }
 
 

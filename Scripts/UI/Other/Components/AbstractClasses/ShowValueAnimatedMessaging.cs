@@ -57,9 +57,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
 
 
         /// <summary>
-        /// Called during the Start() phase for your own custom initialisation. Call base.Start() if you override this!
+        /// Custom initialisation.
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             // if text not specified then get from current gameobject
             if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
@@ -75,6 +75,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
             // set the current value and display it
             _valuesPendingDisplay.Enqueue(GetValueFromMessage(null));
             UpdateDisplay();
+
+            base.Start();
         }
 
         /// <summary>

@@ -33,22 +33,84 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
     /// </summary>
     public abstract class RunOnMessage<T> : MonoBehaviour where T : BaseMessage
     {
+        protected RunOnMessageAttribute.SubscribeTypeOptions SubscribeType = RunOnMessageAttribute.SubscribeTypeOptions.EnableDisable;
+        bool _isListenerAdded = false;
+
         /// <summary>
-        ///  Register the listener.
+        /// Get and record and attribute options.
         /// </summary>
-        void Start()
+        public RunOnMessage()
         {
-            GameManager.Messenger.AddListener<T>(MessageListener);
-            CustomStart();
+            var runOnMessageAttribute = (RunOnMessageAttribute)System.Attribute.GetCustomAttribute(typeof(RunOnMessage<T>), typeof(RunOnMessageAttribute));
+            if (runOnMessageAttribute != null)
+                SubscribeType = runOnMessageAttribute.SubscribeType;
         }
 
         /// <summary>
-        ///  Register the listener.
+        ///  Register the listener if RunOnMessage attribute has SubscribeType of AwakeDestroy.
+        ///  
+        /// If you override this method then be sure to call the base function
         /// </summary>
-        void OnDestroy()
+        public virtual void Awake()
         {
-            if (GameManager.IsActive)
-                GameManager.Messenger.RemoveListener<T>(MessageListener);
+            if (SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.AwakeDestroy)
+            {
+                _isListenerAdded = GameManager.SafeAddListener<T>(MessageListener);
+            }
+        }
+
+        /// <summary>
+        ///  Register the listener if RunOnMessage attribute has SubscribeType of StartDestroy.
+        ///  
+        /// If you override this method then be sure to call the base function
+        /// </summary>
+        public virtual void Start()
+        {
+            if (SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.StartDestroy)
+            {
+                _isListenerAdded = GameManager.SafeAddListener<T>(MessageListener);
+            }
+        }
+
+        /// <summary>
+        ///  Register the listener if RunOnMessage attribute has SubscribeType of EnableDisable or is not present.
+        ///  
+        /// If you override this method then be sure to call the base function
+        /// </summary>
+        public virtual void OnEnable()
+        {
+            if (SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.EnableDisable)
+            {
+                _isListenerAdded = GameManager.SafeAddListener<T>(MessageListener);
+            }
+        }
+
+        /// <summary>
+        /// Remove the listener if RunOnMessage attribute has SubscribeType of EnableDisable or is not present.
+        ///  
+        /// If you override this method then be sure to call the base function
+        /// </summary>
+        public virtual void OnDisable()
+        {
+            if (SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.EnableDisable && _isListenerAdded)
+            {
+                GameManager.SafeRemoveListener<T>(MessageListener);
+            }
+        }
+
+
+        /// <summary>
+        ///  Remove the listener if RunOnMessage attribute has SubscribeType of AwakeDestroy.
+        ///  
+        /// If you override this method then be sure to call the base function
+        /// </summary>
+        public virtual void OnDestroy()
+        {
+            if ((SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.AwakeDestroy ||
+                SubscribeType == RunOnMessageAttribute.SubscribeTypeOptions.StartDestroy) && _isListenerAdded)
+            {
+                GameManager.SafeRemoveListener<T>(MessageListener);
+            }
         }
 
         /// <summary>
@@ -59,13 +121,6 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
         bool MessageListener(BaseMessage message)
         {
             return RunMethod(message as T);
-        }
-
-        /// <summary>
-        /// Called during the Start() phase for your own custom initialisation.
-        /// </summary>
-        public virtual void CustomStart()
-        {          
         }
 
         /// <summary>

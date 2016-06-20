@@ -48,7 +48,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// <summary>
         /// Get a reference to the attached image and cache for later use.
         /// </summary>
-        void Awake()
+        public override void Awake()
         {
             _image = GetComponent<Image>();
             _fullColor = HealthTintFull.ToHSV();
@@ -57,11 +57,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 
 
         /// <summary>
-        /// Called during the Start() phase for your own custom initialisation.
+        /// Cache player reference and call base class.
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             RunMethod(new HealthChangedMessage(GameManager.Instance.Player.Health, GameManager.Instance.Player.Health));
+            base.Start();
         }
 
 

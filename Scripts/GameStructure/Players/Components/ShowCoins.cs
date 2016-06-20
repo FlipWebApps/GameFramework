@@ -39,12 +39,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         /// <summary>
         /// Cache player reference and call base class.
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowCoins.");
 
             _player = GameManager.Instance.GetPlayer();
-            base.CustomStart();
+            base.Start();
         }
 
 

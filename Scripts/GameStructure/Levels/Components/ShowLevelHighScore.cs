@@ -39,12 +39,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         /// <summary>
         /// Cache level reference and call base class.
         /// </summary>
-        public override void CustomStart()
+        public override void Start()
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use ShowCoins.");
 
             _level = LevelManager.Instance.Level;
-            base.CustomStart();
+            base.Start();
         }
 
 

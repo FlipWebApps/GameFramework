@@ -19,43 +19,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses;
-using UnityEngine;
-using UnityEngine.Assertions;
-
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
 {
     /// <summary>
-    /// Show the current level score that a player has.
+    /// Attribute for controlling usage of the RunOnMessage class
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelScore")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class ShowLevelScore : ShowValueAnimatedMessaging<int, LevelScoreChangedMessage>
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class RunOnMessageAttribute : System.Attribute
     {
-        Level _level;
+        /// <summary>
+        /// List of options for when RunOnMessage should subscribe / unsubscribe for messages.
+        /// </summary>
+        public enum SubscribeTypeOptions { AwakeDestroy, StartDestroy, EnableDisable }
 
         /// <summary>
-        /// Cache level reference and call base class.
+        /// How RunOnMessage should subscribe / unsubscribe for messages.
         /// </summary>
-        public override void Start()
+        public SubscribeTypeOptions SubscribeType { get; set; }
+
+        public RunOnMessageAttribute(SubscribeTypeOptions subscribeType)
         {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use ShowCoins.");
-
-            _level = LevelManager.Instance.Level;
-            base.Start();
+            SubscribeType = subscribeType;
         }
-
-
-        /// <summary>
-        /// Return the players score.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetValueFromMessage(LevelScoreChangedMessage message)
-        {
-            return message == null ? _level.Score : message.NewScore;
-        }
-
     }
 }
