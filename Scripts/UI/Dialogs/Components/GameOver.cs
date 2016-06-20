@@ -34,6 +34,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 #if FACEBOOK_SDK
 using FlipWebApps.GameFramework.Scripts.Facebook.Components;
@@ -184,7 +185,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             // save game state.
             GameManager.Instance.Player.UpdatePlayerPrefs();
             currentLevel.UpdatePlayerPrefs();
-            PlayerPrefs.Save();
+            PreferencesFactory.Save();
 
             //show dialog
             DialogInstance.Show();

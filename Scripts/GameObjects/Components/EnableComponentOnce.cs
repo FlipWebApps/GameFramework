@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
@@ -38,12 +39,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         {
             // show hint panel first time only
             var shouldEnable = false;
-            if (string.IsNullOrEmpty(EnableAfterKey) || PlayerPrefs.GetInt("EnableComponentOnce." + EnableAfterKey, 0) == 1)
+            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt("EnableComponentOnce." + EnableAfterKey, 0) == 1)
             {
-                if (PlayerPrefs.GetInt("EnableComponentOnce." + Key, 0) == 0)
+                if (PreferencesFactory.GetInt("EnableComponentOnce." + Key, 0) == 0)
                 {
-                    PlayerPrefs.SetInt("EnableComponentOnce." + Key, 1);
-                    PlayerPrefs.Save();
+                    PreferencesFactory.SetInt("EnableComponentOnce." + Key, 1);
+                    PreferencesFactory.Save();
 
                     shouldEnable = true;
                 }

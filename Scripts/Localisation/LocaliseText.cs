@@ -1,5 +1,5 @@
 ﻿
- //----------------------------------------------
+//----------------------------------------------
 // Flip Web Apps: Game Framework
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //
@@ -28,6 +28,8 @@ using System.Text;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation
 {
@@ -95,7 +97,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
             set
             {
                 // make sure we change something
-                if (_language == value) return;
+                var oldLanguage = _language;
+                if (oldLanguage == value) return;
 
                 // make sure it is loaded
                 var index = Array.IndexOf(Languages, value);
@@ -103,9 +106,10 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
                 _language = value;
                 _languageIndex = index;
-                PlayerPrefs.SetString("Language", Language);
+                PreferencesFactory.SetString("Language", Language);
 
                 // notify of change here
+                GameManager.SafeQueueMessage(new LocalisationChangedMessage(_language, oldLanguage));
                 if (OnLocalise != null)
                     OnLocalise();
             }
@@ -325,7 +329,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
         static void SetDefaultLanguage()
         {
             // 1. try and set from prefs
-            if (TrySetAllowedLanguage(PlayerPrefs.GetString("Language"))) return;
+            if (TrySetAllowedLanguage(PreferencesFactory.GetString("Language"))) return;
 
             // 2. if not then try and set system Language.
             if (TrySetAllowedLanguage(Application.systemLanguage.ToString())) return;

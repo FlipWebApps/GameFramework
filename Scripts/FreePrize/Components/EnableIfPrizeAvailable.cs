@@ -32,10 +32,16 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfPrizeAvailable : RunOnState
     {
+        [Tooltip("Optional Gameobject to show when a prize is available.")]
         public GameObject PrizeAvailableGameObject;
+        [Tooltip("Optional Gameobject to show when the countdown is taking place.")]
         public GameObject PrizeCountdownGameObject;
+        [Tooltip("Optional Gameobject to show when waiting for a new countdown to start.")]
         public GameObject DelayGameObject;
 
+        /// <summary>
+        /// Show the correct gameobject based upon the current state.
+        /// </summary>
         public override void RunMethod()
         {
             Assert.IsTrue(FreePrizeManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.FreePrize.Components.FreePrizeManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +

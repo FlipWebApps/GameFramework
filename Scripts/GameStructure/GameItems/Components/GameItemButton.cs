@@ -35,6 +35,9 @@ using UnityEngine.UI;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.Localisation;
+using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using System;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 {
@@ -107,6 +110,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             CurrentItem = GetGameItemsManager().GetItem(Number);
             Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
+
+            GameManager.SafeAddListener<LocalisationChangedMessage>(OnLocalisationChanged);
+            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
         public void Start()
@@ -118,16 +124,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
                 Unlock();
 
             // add event and message listeners.
-            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
             GetGameItemsManager().Unlocked += UnlockIfGameItemMatches;
             GetGameItemsManager().SelectedChanged += SelectedChanged;
         }
 
         protected void OnDestroy()
         {
+            GameManager.SafeRemoveListener<LocalisationChangedMessage>(OnLocalisationChanged);
+            GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
+
             GetGameItemsManager().SelectedChanged -= SelectedChanged;
             GetGameItemsManager().Unlocked -= UnlockIfGameItemMatches;
-            GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
         public virtual void SetupDisplay()
@@ -185,7 +192,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         public virtual void ClickUnlocked()
         {
             GetGameItemsManager().Selected = CurrentItem;
-            PlayerPrefs.Save();
+            PreferencesFactory.Save();
 
             if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
             {
@@ -238,7 +245,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             CurrentItem.IsUnlocked = true;
             CurrentItem.IsUnlockedAnimationShown = true;
             CurrentItem.UpdatePlayerPrefs();
-            PlayerPrefs.Save();
+            PreferencesFactory.Save();
 
             Animator animator = GetComponent<Animator>();
             if (animator != null)
@@ -249,7 +256,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
 
         /// <summary>
-        /// Receives a PlayerCoinsChangedMessage and updates the coin to unlock color.
+        /// This method is triggered when a the players coins are changed and updates the coin to unlock color.
         /// 
         /// Override to provide your own custom handling.
         /// </summary>
@@ -265,5 +272,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             }
             return false;
         }
+
+
+        /// <summary>
+        /// This method is triggered when a localisation change is detected, and triggers an update of the display.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private bool OnLocalisationChanged(BaseMessage message)
+        {
+            SetupDisplay();
+            return true;
+        }
+
     }
 }

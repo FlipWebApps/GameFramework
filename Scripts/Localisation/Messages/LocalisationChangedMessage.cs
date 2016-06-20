@@ -19,36 +19,32 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace FlipWebApps.GameFramework.Scripts.Localisation.Messages
 {
     /// <summary>
-    /// An abstract class to show run something one time only.
-    /// 
-    /// Override and implement the condition as you best see fit.
+    /// A message that is generated when the localisation changes.
     /// </summary>
-    public abstract class RunOnceGameObject : RunOnState
+    public class LocalisationChangedMessage : BaseMessage
     {
-        public string Key;
-        public string EnableAfterKey;
+        public readonly string OldLocalisation;
+        public readonly string NewLocalisation;
 
-        public override void RunMethod()
+        public LocalisationChangedMessage(string newLocalisation, string oldLocalisation)
         {
-            // show hint panel first time only
-            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt("AnimationTriggerOnce." + EnableAfterKey, 0) == 1)
-            {
-                if (PreferencesFactory.GetInt("AnimationTriggerOnce." + Key, 0) == 0)
-                {
-                    PreferencesFactory.SetInt("AnimationTriggerOnce." + Key, 1);
-                    PreferencesFactory.Save();
-
-                    RunOnce();
-                }
-            }
+            NewLocalisation = newLocalisation;
+            OldLocalisation = oldLocalisation;
         }
 
-        public abstract void RunOnce();
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Old Localisation {0}, New Localisation {1}", OldLocalisation, NewLocalisation);
+        }
     }
 }

@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
@@ -40,30 +41,30 @@ namespace FlipWebApps.GameFramework.Scripts.Social
 
         public GameFeedback()
         {
-            HasRated = PlayerPrefs.GetInt("HasRated", 0) == 1;
-            HasAskedToRate = PlayerPrefs.GetInt("HasAskedToRate", 0) == 1;
-            HasAskedToRate2 = PlayerPrefs.GetInt("HasAskedToRate2", 0) == 1;
+            HasRated = PreferencesFactory.GetInt("HasRated", 0) == 1;
+            HasAskedToRate = PreferencesFactory.GetInt("HasAskedToRate", 0) == 1;
+            HasAskedToRate2 = PreferencesFactory.GetInt("HasAskedToRate2", 0) == 1;
         }
 
         public void SetHasRated(bool hasRated)
         {
             HasRated = hasRated;
-            PlayerPrefs.SetInt("HasRated", HasRated ? 1 : 0);
-            PlayerPrefs.Save();
+            PreferencesFactory.SetInt("HasRated", HasRated ? 1 : 0);
+            PreferencesFactory.Save();
         }
 
         public void SetHasAskedToRate(bool hasAskedToRate)
         {
             HasAskedToRate = hasAskedToRate;
-            PlayerPrefs.SetInt("HasAskedToRate", HasAskedToRate ? 1 : 0);
-            PlayerPrefs.Save();
+            PreferencesFactory.SetInt("HasAskedToRate", HasAskedToRate ? 1 : 0);
+            PreferencesFactory.Save();
         }
 
         public void SetHasAskedToRate2(bool hasAskedToRate2)
         {
             HasAskedToRate2 = hasAskedToRate2;
-            PlayerPrefs.SetInt("HasAskedToRate2", HasAskedToRate2 ? 1 : 0);
-            PlayerPrefs.Save();
+            PreferencesFactory.SetInt("HasAskedToRate2", HasAskedToRate2 ? 1 : 0);
+            PreferencesFactory.Save();
         }
 
         public void Reset()

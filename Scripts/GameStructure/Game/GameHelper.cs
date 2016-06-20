@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game
@@ -127,7 +128,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game
             }
 
             // save any settings and preferences.
-            PlayerPrefs.Save();
+            PreferencesFactory.Save();
         }
     }
 }

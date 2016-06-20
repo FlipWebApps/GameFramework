@@ -25,6 +25,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 
 #if UNITY_ADS
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
@@ -58,7 +59,7 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds
                             case (ShowResult.Finished):
                                 GameManager.Instance.GetPlayer().Coins += coins;
                                 GameManager.Instance.GetPlayer().UpdatePlayerPrefs();
-                                PlayerPrefs.Save();
+                                PreferencesFactory.Save();
                                 DialogManager.Instance.Show(title: "Coins", text: LocaliseText.Format("Advertising.UnityAds.WatchForCoins.Finished", coins));
                                 break;
                             case (ShowResult.Skipped):

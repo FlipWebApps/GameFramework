@@ -30,6 +30,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
@@ -82,7 +83,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             {
                 // set values not updated automatically
                 GameManager.Instance.EffectAudioVolume = _sfxVolume.value;
-                PlayerPrefs.Save();
+                PreferencesFactory.Save();
             }
             else
             {

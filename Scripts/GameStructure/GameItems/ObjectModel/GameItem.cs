@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
@@ -30,7 +31,7 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
-    /// Game Item class. This represents most in game items that have features such as a name and description, 
+    /// Game Item class represents most in game items that have features such as a name and description, 
     /// the ability to unlock, a score or value. 
     /// 
     /// This might include players, worlds, levels and characters...
@@ -47,12 +48,44 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         //public GameItem Parent;
 
         /// <summary>
-        /// Global settings
+        /// A number that represents this game item
         /// </summary>
         public int Number { get; protected set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
 
+        /// <summary>
+        /// The name of this gameitem. Through teh constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// </summary>
+        public string Name {
+            get
+            {
+                return _localiseName? LocaliseText.Get(FullKey(_name ?? "Name")) : _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+        string _name;
+
+        /// <summary>
+        /// A description of this gameitem. Through teh constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// </summary>
+        public string Description
+        {
+            get
+            {
+                return _localiseDescription ? LocaliseText.Get(FullKey(_description ?? "Desc")) : _description;
+            }
+            set
+            {
+                _description = value;
+            }
+        }
+        string _description;
+
+        /// <summary>
+        /// A sprite that is associated with this gameitem. Loaded from resources on first access.
+        /// </summary>
         public Sprite Sprite {
             // delayed load from resources.
             get
@@ -66,7 +99,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             }
             set { _sprite = value; }
         }
-
         Sprite _sprite;
         bool _spriteTriedLoading;
 
@@ -160,6 +192,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public JSONObject JsonConfigurationData { get; set; }
 
         bool _isPlayer;
+        bool _localiseName;
+        bool _localiseDescription;
 
         #region Initialisation
 
@@ -189,20 +223,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
             Player = player ?? (_isPlayer ? null : GameManager.Instance.Player);
             //Parent = parent;
-            Name = localiseName ? LocaliseText.Get(FullKey(name ?? "Name")) : name;
-            Description = localiseDescription ? LocaliseText.Get(FullKey(description ?? "Desc")) : description;
+            _localiseName = localiseName;
+            Name = name;
+            _localiseDescription = localiseDescription;
+            Description = description;
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            HighScoreLocalPlayers = PlayerPrefs.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than pre player.
-            HighScoreLocalPlayersPlayerNumber = PlayerPrefs.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than pre player.
+            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than pre player.
+            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than pre player.
             OldHighScoreLocalPlayers = HighScoreLocalPlayers;
 
             Coins = 0;
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            IsBought = PlayerPrefs.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than pre player.
+            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than pre player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
@@ -307,8 +343,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             IsBought = true;
             IsUnlocked = true;
-            PlayerPrefs.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
-            PlayerPrefs.Save();
+            PreferencesFactory.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
+            PreferencesFactory.Save();
         }
 
         /// <summary>
@@ -324,11 +360,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             SetSetting("HS", HighScore);
 
             if (IsBought)
-                PlayerPrefs.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
+                PreferencesFactory.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
             if (HighScoreLocalPlayers != 0)
-                PlayerPrefs.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
+                PreferencesFactory.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
             if (HighScoreLocalPlayersPlayerNumber != -1)
-                PlayerPrefs.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
+                PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
 
         #region Score Related
@@ -411,11 +447,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 // only set or keep values that aren't the default
                 if (value != defaultValue)
                 {
-                    PlayerPrefs.SetString(FullKey(key), value);
+                    PreferencesFactory.SetString(FullKey(key), value);
                 }
                 else
                 {
-                    PlayerPrefs.DeleteKey(FullKey(key));
+                    PreferencesFactory.DeleteKey(FullKey(key));
                 }
             }
             //else if (Parent != null)
@@ -431,11 +467,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 // only set or keep values that aren't the default
                 if (value != defaultValue)
                 {
-                    PlayerPrefs.SetInt(FullKey(key), value ? 1 : 0);
+                    PreferencesFactory.SetInt(FullKey(key), value ? 1 : 0);
                 }
                 else
                 {
-                    PlayerPrefs.DeleteKey(FullKey(key));
+                    PreferencesFactory.DeleteKey(FullKey(key));
                 }
             }
             //else if (Parent != null)
@@ -450,11 +486,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 // only set or keep values that aren't the default
                 if (value != defaultValue)
                 {
-                    PlayerPrefs.SetInt(FullKey(key), value);
+                    PreferencesFactory.SetInt(FullKey(key), value);
                 }
                 else
                 {
-                    PlayerPrefs.DeleteKey(FullKey(key));
+                    PreferencesFactory.DeleteKey(FullKey(key));
                 }
             }
             //else if (Parent != null)
@@ -471,11 +507,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 // only set or keep values that aren't the default
                 if (!Mathf.Approximately(value, defaultValue))
                 {
-                    PlayerPrefs.SetFloat(FullKey(key), value);
+                    PreferencesFactory.SetFloat(FullKey(key), value);
                 }
                 else
                 {
-                    PlayerPrefs.DeleteKey(FullKey(key));
+                    PreferencesFactory.DeleteKey(FullKey(key));
                 }
             }
             //else if (Parent != null)
@@ -488,7 +524,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public string GetSettingString(string key, string defaultValue)
         {
             if (_isPlayer)
-               return PlayerPrefs.GetString(FullKey(key), defaultValue);
+               return PreferencesFactory.GetString(FullKey(key), defaultValue);
             //else if (Parent != null)
             //    return Parent.GetSettingString(FullKey(key), defaultValue);
             else
@@ -499,7 +535,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public int GetSettingInt(string key, int defaultValue)
         {
             if (_isPlayer)
-                return PlayerPrefs.GetInt(FullKey(key), defaultValue);
+                return PreferencesFactory.GetInt(FullKey(key), defaultValue);
             //else if (Parent != null)
             //    return Parent.GetSettingInt(FullKey(key), defaultValue);
             else
@@ -510,7 +546,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public bool GetSettingBool(string key, bool defaultValue)
         {
             if (_isPlayer)
-                return PlayerPrefs.GetInt(FullKey(key), defaultValue ? 1 : 0) == 1;
+                return PreferencesFactory.GetInt(FullKey(key), defaultValue ? 1 : 0) == 1;
             //else if (Parent != null)
             //    return Parent.GetSettingInt(FullKey(key), defaultValue);
             else
@@ -521,7 +557,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public float GetSettingFloat(string key, float defaultValue)
         {
             if (_isPlayer)
-                return PlayerPrefs.GetFloat(FullKey(key), defaultValue);
+                return PreferencesFactory.GetFloat(FullKey(key), defaultValue);
             //else if (Parent != null)
             //    return Parent.GetSettingInt(FullKey(key), defaultValue);
             else

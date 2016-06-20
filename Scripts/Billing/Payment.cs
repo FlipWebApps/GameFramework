@@ -29,6 +29,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using System;
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing
 {
@@ -55,8 +56,8 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
                 // update on GameManager
                 if (GameManager.IsActive)
                     GameManager.Instance.IsUnlocked = true;
-                PlayerPrefs.SetInt("IsUnlocked", 1);
-                PlayerPrefs.Save();
+                PreferencesFactory.SetInt("IsUnlocked", 1);
+                PreferencesFactory.Save();
 
                 // notify all subscribers of the purchase
                 GameManager.SafeQueueMessage(new UnlockGamePurchasedMessage());

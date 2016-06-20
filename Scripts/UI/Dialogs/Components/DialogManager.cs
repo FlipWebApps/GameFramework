@@ -26,6 +26,7 @@ using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
 using UnityEngine.Assertions;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
@@ -49,10 +50,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public DialogInstance ShowOnce(string dialogKey, string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
             // show hint panel first time only
-            if (PlayerPrefs.GetInt("GeneralMessage." + dialogKey, 0) == 0)
+            if (PreferencesFactory.GetInt("GeneralMessage." + dialogKey, 0) == 0)
             {
-                PlayerPrefs.SetInt("GeneralMessage." + dialogKey, 1);
-                PlayerPrefs.Save();
+                PreferencesFactory.SetInt("GeneralMessage." + dialogKey, 1);
+                PreferencesFactory.Save();
 
                 return Show(prefab, title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons);
             }

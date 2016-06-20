@@ -39,6 +39,7 @@ using UnityEngine.Serialization;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -68,6 +69,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public string IdentifierBase;
         [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
         public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
+        [Tooltip("Whether secured preferences should be used.")]
+        public bool SecurePreferences;
 
         // Display related
         [Header("Display")]
@@ -243,15 +246,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
 
             // Gameplay related properties
-            IsUnlocked = PlayerPrefs.GetInt("IsUnlocked", 0) != 0;
+            IsUnlocked = PreferencesFactory.GetInt("IsUnlocked", 0) != 0;
 #pragma warning disable 618
             IsUserInteractionEnabled = true;
 #pragma warning restore 618
             IsSplashScreenShown = false;
-            TimesGamePlayed = PlayerPrefs.GetInt("TimesGamePlayed", 0);
+            TimesGamePlayed = PreferencesFactory.GetInt("TimesGamePlayed", 0);
             TimesGamePlayed++;
-            TimesLevelsPlayed = PlayerPrefs.GetInt("TimesLevelsPlayed", 0);
-            TimesPlayedForRatingPrompt = PlayerPrefs.GetInt("TimesPlayedForRatingPrompt", 0);
+            TimesLevelsPlayed = PreferencesFactory.GetInt("TimesLevelsPlayed", 0);
+            TimesPlayedForRatingPrompt = PreferencesFactory.GetInt("TimesPlayedForRatingPrompt", 0);
             TimesPlayedForRatingPrompt++;
             sb.Append("\nTimesGamePlayed: ").Append(TimesGamePlayed);
             sb.Append("\nTimesLevelsPlayed: ").Append(TimesLevelsPlayed);
@@ -284,8 +287,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 }
             }
 
-            BackGroundAudioVolume = PlayerPrefs.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
-            EffectAudioVolume = PlayerPrefs.GetFloat("EffectAudioVolume", EffectAudioVolume);
+            BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
+            EffectAudioVolume = PreferencesFactory.GetFloat("EffectAudioVolume", EffectAudioVolume);
 
 
             // display related properties
@@ -426,14 +429,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             MyDebug.Log("GameManager: SaveState");
 
-            PlayerPrefs.SetInt("TimesPlayedForRatingPrompt", TimesPlayedForRatingPrompt);
-            PlayerPrefs.SetInt("TimesGamePlayed", TimesGamePlayed);
-            PlayerPrefs.SetInt("TimesLevelsPlayed", TimesLevelsPlayed);
+            PreferencesFactory.SetInt("TimesPlayedForRatingPrompt", TimesPlayedForRatingPrompt);
+            PreferencesFactory.SetInt("TimesGamePlayed", TimesGamePlayed);
+            PreferencesFactory.SetInt("TimesLevelsPlayed", TimesLevelsPlayed);
 
-            PlayerPrefs.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
-            PlayerPrefs.SetFloat("EffectAudioVolume", EffectAudioVolume);
+            PreferencesFactory.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
+            PreferencesFactory.SetFloat("EffectAudioVolume", EffectAudioVolume);
 
-            PlayerPrefs.Save();
+            PreferencesFactory.Save();
         }
 
         #region Audio
@@ -527,10 +530,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public static void SafeAddListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
+        public static bool SafeAddListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
         {
-            if (!IsActive || Messenger == null) return;
+            if (!IsActive || Messenger == null) return false;
             Messenger.AddListener<T>(handler);
+            return true;
         }
 
         /// <summary>
@@ -538,10 +542,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public static void SafeRemoveListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
+        public static bool SafeRemoveListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
         {
-            if (!IsActive || Messenger == null) return;
+            if (!IsActive || Messenger == null) return false;
             Messenger.RemoveListener<T>(handler);
+            return true;
         }
 
         /// <summary>

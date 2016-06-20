@@ -24,6 +24,7 @@ using System.Collections;
 using UnityEditor;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure
 {
@@ -40,6 +41,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         SerializedProperty _playMarketUrlProperty;
         SerializedProperty _iOSWebUrlProperty;
         SerializedProperty _debugLevelProperty;
+        SerializedProperty _useSecurePreferences;
         SerializedProperty _referencePhysicalScreenHeightInInchesProperty;
         SerializedProperty _displayChangeCheckDelayProperty;
         SerializedProperty _identifierBaseProperty;
@@ -77,6 +79,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             _playMarketUrlProperty = serializedObject.FindProperty("PlayMarketUrl");
             _iOSWebUrlProperty = serializedObject.FindProperty("iOSWebUrl");
             _debugLevelProperty = serializedObject.FindProperty("DebugLevel");
+            _useSecurePreferences = serializedObject.FindProperty("SecurePreferences");
             _identifierBaseProperty = serializedObject.FindProperty("IdentifierBase");
             _referencePhysicalScreenHeightInInchesProperty = serializedObject.FindProperty("ReferencePhysicalScreenHeightInInches");
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
@@ -144,6 +147,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             {
                 EditorGUILayout.PropertyField(_identifierBaseProperty);
                 EditorGUILayout.PropertyField(_debugLevelProperty);
+                if (!PreferencesFactory.SupportsSecurePrefs)
+                    GUI.enabled = false;
+                EditorGUILayout.PropertyField(_useSecurePreferences, new GUIContent("Secure Prefs"));
+                if (!PreferencesFactory.SupportsSecurePrefs)
+                    EditorGUILayout.HelpBox("Unity preferences are not encrypted. See the integrations window for options that let you use encrypted preferences instead.", MessageType.Warning);
+                GUI.enabled = true;
                 EditorGUILayout.PropertyField(_referencePhysicalScreenHeightInInchesProperty);
                 EditorGUILayout.PropertyField(_displayChangeCheckDelayProperty);
             }

@@ -26,6 +26,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Debugging;
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {
@@ -77,10 +78,10 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         {
             base.GameSetup();
 
-            if (SaveAcrossRestarts && PlayerPrefs.HasKey("FreePrize.NextCountdownStart"))
+            if (SaveAcrossRestarts && PreferencesFactory.HasKey("FreePrize.NextCountdownStart"))
             {
-                NextCountdownStart = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
-                NextFreePrizeAvailable = DateTime.Parse(PlayerPrefs.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
+                NextCountdownStart = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
+                NextFreePrizeAvailable = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
             }
             else
             {
@@ -95,9 +96,9 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         {
             MyDebug.Log("FreePrizeManager: SaveState");
 
-            PlayerPrefs.SetString("FreePrize.NextCountdownStart", NextCountdownStart.ToString());
-            PlayerPrefs.SetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString());
-            PlayerPrefs.Save();
+            PreferencesFactory.SetString("FreePrize.NextCountdownStart", NextCountdownStart.ToString());
+            PreferencesFactory.SetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString());
+            PreferencesFactory.Save();
         }
 
         /// <summary>
@@ -111,6 +112,9 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             SaveState();
         }
 
+        /// <summary>
+        /// Recalculate new times for a new countdown
+        /// </summary>
         public void StartNewCountdown()
         {
             CurrentPrizeAmount = UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
@@ -122,28 +126,44 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             SaveState();
         }
 
+        /// <summary>
+        /// Returns whether a countdown is taking place. If waiting for the countdown to begin or a Free Prize is available then this will return false
+        /// </summary>
+        /// <returns></returns>
         public bool IsCountingDown()
         {
             return GetTimeToPrize().TotalSeconds > 0 && GetTimeToCountdown().TotalSeconds <= 0;
         }
 
+        /// <summary>
+        /// Returns whether a prize is available
+        /// </summary>
+        /// <returns></returns>
         public bool IsPrizeAvailable()
         {
             return GetTimeToPrize().TotalSeconds <= 0;
         }
 
+        /// <summary>
+        /// Returns the time until the next countdown will start.
+        /// </summary>
+        /// <returns></returns>
         TimeSpan GetTimeToCountdown()
         {
             return NextCountdownStart.Subtract(DateTime.UtcNow);
         }
 
+        /// <summary>
+        /// Returns the time until the next free prize will be available.
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan GetTimeToPrize()
         {
             return NextFreePrizeAvailable.Subtract(DateTime.UtcNow);
         }
 
         /// <summary>
-        /// Free prize dialog that giges the user coins. We default to the standard General Message window, adding any additional
+        /// Show a free prize dialog that gives the user coins. We default to the standard General Message window, adding any additional
         /// content as setup in the FreePrizeManager configuration.
         /// </summary>
         public void ShowFreePrizeDialog()
@@ -154,6 +174,10 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), text: text, text2Key: "FreePrize.Text2", doneCallback: ShowFreePrizeDone, dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
         }
 
+        /// <summary>
+        ///  Callback when the free prize dialog is closed. You may override this in your own subclasses, but be sure to call this base class instance.
+        /// </summary>
+        /// <param name="dialogInstance"></param>
         public virtual void ShowFreePrizeDone(DialogInstance dialogInstance)
         {
             GameManager.Instance.GetPlayer().Coins += CurrentPrizeAmount;
