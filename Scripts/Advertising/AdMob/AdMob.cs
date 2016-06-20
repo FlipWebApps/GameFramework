@@ -18,6 +18,7 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
+using UnityEngine;
 #if GOOGLE_ADS
 using GoogleMobileAds.Api;
 #endif
@@ -25,7 +26,7 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
 {
     /// <summary>
     /// Helper class for using AdMob.
-    /// If you want to use Admob then be sure to define GOOGLE_ADS in the player settings.
+    /// If you want to use Admob then be sure to enable through the integrations window or define GOOGLE_ADS in the player settings.
     /// 
     /// NOTE: This class is beta and subject to changebreaking change without warning.
     /// </summary>
@@ -33,6 +34,11 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
     {
         public bool TagForChildDirectedTreatment = true;
         public bool IsDesignedForFamilies = true;
+        public string[] KeyWords = { };
+        public string[] TestDevices = { };
+        public System.DateTime Birthday = new System.DateTime(1985, 1, 1);
+        public Color BackgroundColor = Color.white;
+
 #if GOOGLE_ADS
         readonly BannerView _bannerView;
         readonly InterstitialAd _interstitialAd;
@@ -42,9 +48,9 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
 #if UNITY_EDITOR
             string adUnitId = "unused";
 #elif UNITY_ANDROID
-            string adUnitId = GameManager.Instance.AdmobUnitIdAndroid;
+            string adUnitId = AdMobManager.Instance.AdmobUnitIdAndroid;
 #elif UNITY_IPHONE
-            string adUnitId = GameManager.Instance.AdmobUnitIdIos;
+            string adUnitId = AdMobManager.Instance.AdmobUnitIdIos;
 #else
             string adUnitId = "unexpected_platform";
 #endif

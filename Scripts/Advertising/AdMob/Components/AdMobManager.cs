@@ -26,7 +26,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
 {
     /// <summary>
-    /// manager class for setting up and accessing AdMob functionality.
+    /// Manager class for setting up and accessing AdMob functionality.
     /// 
     /// NOTE: This class is beta and subject to changebreaking change without warning.
     /// </summary>
