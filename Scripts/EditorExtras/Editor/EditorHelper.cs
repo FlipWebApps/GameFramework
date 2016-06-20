@@ -18,6 +18,7 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
+using UnityEditor;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
@@ -53,7 +54,31 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
                 return ButtonTrimmed(text, style);
         }
 
-        
+
+        /// <summary>
+        /// Show a button that is styled to look like a link
+        /// </summary>
+        /// <param name="caption"></param>
+        /// <param name="url"></param>
+        public static bool LinkButton(string text, bool restrictWidth = false, params GUILayoutOption[] options)
+        {
+            var style = GUI.skin.label;
+            style.richText = true;
+            text = string.Format("<color=#0000FF>{0}</color>", text);
+
+            bool wasClicked;
+            if (restrictWidth)
+                wasClicked = GUILayout.Button(text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
+            else
+                wasClicked = GUILayout.Button(text, style, options);
+
+            var rect = GUILayoutUtility.GetLastRect();
+            rect.width = style.CalcSize(new GUIContent(text)).x;
+            EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
+
+            return wasClicked;
+        }
+
         /// <summary>
         /// Show a toggle trimmed to the length of the text
         /// </summary>
