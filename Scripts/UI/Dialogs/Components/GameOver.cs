@@ -55,6 +55,13 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameOver : Singleton<GameOver>
     {
+        public enum CopyType
+        {
+            None,
+            Always,
+            OnWin
+        };
+
         [Header("General")]
         public string LocalisationBase = "GameOver";
         public int TimesPlayedBeforeRatingPrompt = -1;
@@ -63,6 +70,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public bool ShowCoins = true;
         public bool ShowScore = true;
         public string ContinueScene = "Menu";
+
+        [Header("Reward Handling")]
+        [Tooltip("Specifies how the players overall score should be updated with the score obtained for the level.")]
+        public CopyType UpdatePlayerScore = CopyType.None;
+        [Tooltip("Specifies how the players overall coins should be updated with the coins obtained for the level.")]
+        public CopyType UpdatePlayerCoins = CopyType.None;
 
         [Header("Tuning")]
         public float PeriodicUpdateDelay = 1f;
@@ -80,7 +93,19 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             Assert.IsTrue(LevelManager.IsActive, "Ensure that you have a LevelManager component attached to your scene.");
 
-            Level currentLevel = GameManager.Instance.Levels.Selected;
+            var currentLevel = GameManager.Instance.Levels.Selected;
+
+            // update the player score if necessary
+            if ((UpdatePlayerScore == CopyType.Always) || (UpdatePlayerScore == CopyType.OnWin && isWon))
+            {
+                GameManager.Instance.Player.AddPoints(currentLevel.Score);
+            }
+
+            // update the player coins if necessary
+            if ((UpdatePlayerCoins == CopyType.Always) || (UpdatePlayerCoins == CopyType.OnWin && isWon))
+            {
+                GameManager.Instance.Player.AddCoins(currentLevel.Coins);
+            }
 
             // show won / lost game objects as appropriate
             GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Lost", true), !isWon);
@@ -114,7 +139,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                 //// else won with some other condition
                 //else
                 //{
-                    GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), true);
+                GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Won", true), true);
                 //}
 
                 // process and update game state - do this last so we can check some bits above.
@@ -139,9 +164,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                 StarWon(currentLevel.StarsWon, newStarsWon, star1WonGameObject, 1);
                 StarWon(currentLevel.StarsWon, newStarsWon, star2WonGameObject, 2);
                 StarWon(currentLevel.StarsWon, newStarsWon, star3WonGameObject, 4);
-                GameObjectHelper.SafeSetActive(
-                    GameObjectHelper.GetChildNamedGameObject(starsGameObject, "StarWon", true),
-                    newStarsWon != 0);
+                GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(starsGameObject, "StarWon", true), newStarsWon != 0);
             }
 
             // set time
@@ -150,11 +173,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             GameObjectHelper.SafeSetActive(timeGameObject, ShowTime);
             if (ShowTime)
             {
-                Assert.IsNotNull(timeGameObject,
-                    "GameOver->ShowTime is enabled, but could not find a 'Time' gameobject. Disable the option or fix the structure.");
-                
-                UIHelper.SetTextOnChildGameObject(timeGameObject, "TimeResult",
-                    difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
+                Assert.IsNotNull(timeGameObject, "GameOver->ShowTime is enabled, but could not find a 'Time' gameobject. Disable the option or fix the structure.");
+
+                UIHelper.SetTextOnChildGameObject(timeGameObject, "TimeResult", difference.Minutes.ToString("D2") + "." + difference.Seconds.ToString("D2"), true);
             }
 
             // set coins
@@ -162,10 +183,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             GameObjectHelper.SafeSetActive(coinsGameObject, ShowCoins);
             if (ShowCoins)
             {
-                Assert.IsNotNull(coinsGameObject,
-                    "GameOver->ShowCoins is enabled, but could not find a 'Coins' gameobject. Disable the option or fix the structure.");
-                UIHelper.SetTextOnChildGameObject(coinsGameObject, "CoinsResult",
-                    currentLevel.Coins.ToString(), true);
+                Assert.IsNotNull(coinsGameObject, "GameOver->ShowCoins is enabled, but could not find a 'Coins' gameobject. Disable the option or fix the structure.");
+                UIHelper.SetTextOnChildGameObject(coinsGameObject, "CoinsResult", currentLevel.Coins.ToString(), true);
             }
 
             // set score
@@ -198,7 +217,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
 
 #if UNITY_ANALYTICS
-            // record some analytics on the level played
+    // record some analytics on the level played
             var values = new Dictionary<string, object>
                 {
                     { "score", currentLevel.Score },
@@ -280,8 +299,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         public void Retry()
         {
-            var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ?
-                SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;
+            var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ? SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;
             GameManager.LoadSceneWithTransitions(sceneName);
         }
     }
