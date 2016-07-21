@@ -22,6 +22,9 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
 
+#if NETFX_CORE
+using System.Reflection;
+#endif
 
 namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
 {
@@ -41,7 +44,11 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
         /// </summary>
         public RunOnMessage()
         {
+#if NETFX_CORE          
+            var runOnMessageAttribute = typeof(RunOnMessage<T>).GetTypeInfo().GetCustomAttribute<RunOnMessageAttribute>();
+#else
             var runOnMessageAttribute = (RunOnMessageAttribute)System.Attribute.GetCustomAttribute(typeof(RunOnMessage<T>), typeof(RunOnMessageAttribute));
+#endif
             if (runOnMessageAttribute != null)
                 SubscribeType = runOnMessageAttribute.SubscribeType;
         }

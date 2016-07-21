@@ -20,9 +20,13 @@
 //----------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
+#if NETFX_CORE
+using System.Reflection;
+#endif
 
 namespace FlipWebApps.GameFramework.Scripts.GameObjects
 {
@@ -39,10 +43,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         /// <returns></returns>
         public static T[] GetInterfaces<T>(this GameObject gObj)
         {
+#if !NETFX_CORE
             if (!typeof(T).IsInterface) throw new SystemException("Specified type is not an interface!");
+#endif
             var mObjs = gObj.GetComponents<MonoBehaviour>();
 
+
+#if NETFX_CORE
+            return (from a in mObjs where a.GetType().GetTypeInfo().ImplementedInterfaces.Any(k => k == typeof(T)) select (T)(object)a).ToArray();
+#else
             return (from a in mObjs where a.GetType().GetInterfaces().Any(k => k == typeof(T)) select (T)(object)a).ToArray();
+#endif
         }
 
         /// <summary>
@@ -53,7 +64,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         /// <returns></returns>
         public static T GetInterface<T>(this GameObject gObj)
         {
+#if !NETFX_CORE
             if (!typeof(T).IsInterface) throw new SystemException("Specified type is not an interface!");
+#endif
             return gObj.GetInterfaces<T>().FirstOrDefault();
         }
 
@@ -65,7 +78,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         /// <returns></returns>
         public static T GetInterfaceInChildren<T>(this GameObject gObj)
         {
+#if !NETFX_CORE
             if (!typeof(T).IsInterface) throw new SystemException("Specified type is not an interface!");
+#endif
             return gObj.GetInterfacesInChildren<T>().FirstOrDefault();
         }
 
@@ -77,11 +92,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         /// <returns></returns>
         public static T[] GetInterfacesInChildren<T>(this GameObject gObj)
         {
+#if !NETFX_CORE
             if (!typeof(T).IsInterface) throw new SystemException("Specified type is not an interface!");
-
+#endif
             var mObjs = gObj.GetComponentsInChildren<MonoBehaviour>();
 
+#if NETFX_CORE
+            return (from a in mObjs where a.GetType().GetTypeInfo().ImplementedInterfaces.Any(k => k == typeof(T)) select (T)(object)a).ToArray();
+#else
             return (from a in mObjs where a.GetType().GetInterfaces().Any(k => k == typeof(T)) select (T)(object)a).ToArray();
+#endif
         }
 
         /// <summary>

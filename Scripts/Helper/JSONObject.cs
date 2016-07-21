@@ -860,7 +860,7 @@ namespace FlipWebApps.GameFramework.Scripts.Helper {
 				string s = m.Groups[1].Captures[0].Value;
 				unicodeBytes[1] = byte.Parse(s.Substring(0, 2), NumberStyles.HexNumber);
 				unicodeBytes[0] = byte.Parse(s.Substring(2, 2), NumberStyles.HexNumber);
-				s = Encoding.Unicode.GetString(unicodeBytes);
+				s = Encoding.Unicode.GetString(unicodeBytes, 0, 2);
 
 				result = result.Replace(m.Value, s);
 			} while (true);

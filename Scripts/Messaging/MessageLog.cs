@@ -120,6 +120,20 @@ namespace FlipWebApps.GameFramework.Scripts.Messaging
         }
     }
 
+    // Windows Phone 8 .net profile doesn't include StackTrace so for that platform we substitute a dummy class
+#if NETFX_CORE
+    public class StackTrace
+    {
+        public StackTrace(bool dummy)
+        {
+        }
+
+        public string[] GetFrames()
+        {
+            return null;
+        }
+    }
+#endif
 
     /// <summary>
     /// An instance within the statistics

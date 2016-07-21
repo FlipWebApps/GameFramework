@@ -31,7 +31,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras
+namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
 {
     public static class Plist
     {

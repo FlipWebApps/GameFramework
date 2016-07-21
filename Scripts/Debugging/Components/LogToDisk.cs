@@ -19,6 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+// Windows Phone 8 .net profile doesn't include all features so set define to skip some code
+#if UNITY_WP_8 || UNITY_WP_8_1
+#define SKIP_CODE
+#endif
+
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using UnityEngine;
 
@@ -43,18 +48,22 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
 
             base.GameSetup();
 
+#if !SKIP_CODE
             //Create string writer object
             _sw = new System.IO.StreamWriter(Application.persistentDataPath + "/" + LogFileName);
             MyDebug.Log("ExceptionLogger to :" + Application.persistentDataPath + "/" + LogFileName);
+#endif
         }
 
         protected override void GameDestroy()
         {
+#if !SKIP_CODE
             //Close file
             if (_sw != null)
             {
                 _sw.Close();
             }
+#endif
             base.GameDestroy();
         }
 
@@ -63,10 +72,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         /// </summary>
         void OnEnable()
         {
+#if !SKIP_CODE
             if (Debug.isDebugBuild)
             {
                 Application.logMessageReceived += HandleLogMessage;
             }
+#endif
         }
 
         /// <summary>
@@ -74,10 +85,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         /// </summary>
         void OnDisable()
         {
+#if !SKIP_CODE
             if (Debug.isDebugBuild)
             {
                 Application.logMessageReceived -= HandleLogMessage;
             }
+#endif
         }
 
         /// <summary>
@@ -88,11 +101,13 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         /// <param name="type"></param>
         void HandleLogMessage(string logString, string stackTrace, LogType type)
         {
+#if !SKIP_CODE
             //If an exception or error, then log to file
             if (type == LogType.Exception || type == LogType.Error)
             {
                 _sw.WriteLine("Logged at: " + System.DateTime.Now + " - Log Desc: " + logString + " - Trace: " + stackTrace + " - Type: " + type);
             }
+#endif
         }
     }
 }

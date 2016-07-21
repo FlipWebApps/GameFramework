@@ -47,7 +47,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class PaymentManager : SingletonPersistant<PaymentManager>, IStoreListener
     {
-        [Category("Payment Setup")]
+        [Header("Payment Setup")]
         // setup values
         public bool InitOnAwake = true;
         public PaymentProduct[] Products;
