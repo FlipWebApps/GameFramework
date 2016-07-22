@@ -20,7 +20,9 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefsIntegration;
+#if PREFS_EDITOR
 using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditorIntegration;
+#endif
 
 namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
 {
