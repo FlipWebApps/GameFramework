@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefsIntegration
+namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PlayerPrefsIntegration
 {
     /// <summary>
     /// Implements the IPreferences interface for using the standard Unity PlayerPrefs.
@@ -47,6 +47,13 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefs
         public bool UseSecurePrefs { get; set; }
 
         /// <summary>
+        /// Flag indicating whether to migrate unsecure values automatically (only when UseSecurePrefs is set).
+        /// 
+        /// Note: This property has no effect for standard Player Prefs.
+        /// </summary>
+        public bool AutoConvertUnsecurePrefs { get; set; }
+
+        /// <summary>
         /// Wrapper for the same method in PlayerPrefs.
         /// </summary>
         public void DeleteAll()
@@ -57,7 +64,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefs
         /// <summary>
         /// Wrapper for the same method in PlayerPrefs.
         /// </summary>
-        public void DeleteKey(string key)
+        public void DeleteKey(string key, bool? useSecurePrefs = null)
         {
             PlayerPrefs.DeleteKey(key);
         }
@@ -89,7 +96,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefs
         /// <summary>
         /// Wrapper for the same method in PlayerPrefs.
         /// </summary>
-        public bool HasKey(string key)
+        public bool HasKey(string key, bool? useSecurePrefs = null)
         {
             return PlayerPrefs.HasKey(key);
         }

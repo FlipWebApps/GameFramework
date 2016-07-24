@@ -34,7 +34,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
 
 #if FACEBOOK_SDK
 using FlipWebApps.GameFramework.Scripts.Facebook.Components;

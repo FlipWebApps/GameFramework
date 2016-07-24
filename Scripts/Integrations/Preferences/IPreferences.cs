@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
+namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
 {
     /// <summary>
     /// Abstracts away the underlying preferences clases allowing us to extend and use other assets.
@@ -35,11 +35,13 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
 
         /// <summary>
         /// Flag indicating whether to use secure prefs.
-        /// 
-        /// Note: at the current time all prefs used through this interface must adhere to this flag. The only way to mix 
-        /// secure and standard prefs is to mix calls with standard PlayerPrefs calls.
         /// </summary>
         bool UseSecurePrefs { get; set; }
+
+        /// <summary>
+        /// Flag indicating whether to migrate unsecure values automatically (only when UseSecurePrefs is set).
+        /// </summary>
+        bool AutoConvertUnsecurePrefs { get; set; }
 
         /// <summary>
         /// For the similar method in PlayerPrefs.
@@ -49,7 +51,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
         /// <summary>
         /// For the similar method in PlayerPrefs.
         /// </summary>
-        void DeleteKey(string key);
+        void DeleteKey(string key, bool? useSecurePrefs = null);
 
         /// <summary>
         /// For the similar method in PlayerPrefs.
@@ -69,7 +71,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
         /// <summary>
         /// For the similar method in PlayerPrefs.
         /// </summary>
-        bool HasKey(string key);
+        bool HasKey(string key, bool? useSecurePrefs = null);
 
         /// <summary>
         /// For the similar method in PlayerPrefs.

@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefsIntegration;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditorIntegration;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PlayerPrefsIntegration;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditorIntegration;
 
-namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
+namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
 {
     /// <summary>
     /// Abstracts away the underlying preferences classes allowing us to extend and use other assets.
@@ -72,6 +72,21 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences
             set
             {
                 Instance.UseSecurePrefs = value;
+            }
+        }
+
+        /// <summary>
+        /// Flag indicating whether to migrate unsecure values automatically (only when UseSecurePrefs is set).
+        /// </summary>
+        public static bool AutoConvertUnsecurePrefs
+        {
+            get
+            {
+                return Instance.AutoConvertUnsecurePrefs;
+            }
+            set
+            {
+                Instance.AutoConvertUnsecurePrefs = value;
             }
         }
 

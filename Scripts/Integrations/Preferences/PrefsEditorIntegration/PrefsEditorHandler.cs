@@ -22,7 +22,7 @@
 using FlipWebApps.PrefsEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditorIntegration
+namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditorIntegration
 {
     /// <summary>
     /// Abstracts away the underlying preferences clases allowing us to extend and use other assets.
@@ -46,7 +46,22 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// Note: at the current time all prefs used through this interface must adhere to this flag. The only way to mix 
         /// secure and standard prefs is to mix calls with standard PlayerPrefs calls.
         /// </summary>
-        public bool UseSecurePrefs { get; set; }
+        public bool UseSecurePrefs {
+            get { return SecurePlayerPrefs.UseSecurePrefs; }
+            set { SecurePlayerPrefs.UseSecurePrefs = value; }
+        }
+
+        /// <summary>
+        /// Flag indicating whether to migrate unsecure values automatically (only when UseSecurePrefs is set).
+        /// 
+        /// Note: at the current time all prefs used through this interface must adhere to this flag. The only way to mix 
+        /// secure and standard prefs is to mix calls with standard PlayerPrefs calls.
+        /// </summary>
+        public bool AutoConvertUnsecurePrefs
+        {
+            get { return SecurePlayerPrefs.AutoConvertUnsecurePrefs; }
+            set { SecurePlayerPrefs.AutoConvertUnsecurePrefs = value; }
+        }
 
         /// <summary>
         /// Wrapper for the same method in PlayerPrefs but works with encrypted player prefs.
@@ -59,9 +74,9 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// <summary>
         /// Wrapper for the same method in PlayerPrefs but works with encrypted player prefs.
         /// </summary>
-        public void DeleteKey(string key)
+        public void DeleteKey(string key, bool? useSecurePrefs = null)
         {
-            SecurePlayerPrefs.DeleteKey(key);
+            SecurePlayerPrefs.DeleteKey(key, useSecurePrefs);
         }
 
         /// <summary>
@@ -69,7 +84,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public float GetFloat(string key, float defaultValue = 0.0f, bool? useSecurePrefs = null)
         {
-            return SecurePlayerPrefs.GetFloat(key, defaultValue);
+            return SecurePlayerPrefs.GetFloat(key, defaultValue, useSecurePrefs);
         }
 
         /// <summary>
@@ -77,7 +92,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public int GetInt(string key, int defaultValue = 0, bool? useSecurePrefs = null)
         {
-            return SecurePlayerPrefs.GetInt(key, defaultValue);
+            return SecurePlayerPrefs.GetInt(key, defaultValue, useSecurePrefs);
         }
 
         /// <summary>
@@ -85,15 +100,15 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public string GetString(string key, string defaultValue = "", bool? useSecurePrefs = null)
         {
-            return SecurePlayerPrefs.GetString(key, defaultValue);
+            return SecurePlayerPrefs.GetString(key, defaultValue, useSecurePrefs);
         }
 
         /// <summary>
         /// Wrapper for the same method in PlayerPrefs but works with encrypted player prefs.
         /// </summary>
-        public bool HasKey(string key)
+        public bool HasKey(string key, bool? useSecurePrefs = null)
         {
-            return SecurePlayerPrefs.HasKey(key);
+            return SecurePlayerPrefs.HasKey(key, useSecurePrefs);
         }
 
         /// <summary>
@@ -109,7 +124,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public void SetFloat(string key, float value, bool? useSecurePrefs = null)
         {
-            SecurePlayerPrefs.SetFloat(key, value);
+            SecurePlayerPrefs.SetFloat(key, value, useSecurePrefs);
         }
 
         /// <summary>
@@ -117,7 +132,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public void SetInt(string key, int value, bool? useSecurePrefs = null)
         {
-            SecurePlayerPrefs.SetInt(key, value);
+            SecurePlayerPrefs.SetInt(key, value, useSecurePrefs);
         }
 
         /// <summary>
@@ -125,7 +140,7 @@ namespace FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditor
         /// </summary>
         public void SetString(string key, string value, bool? useSecurePrefs = null)
         {
-            SecurePlayerPrefs.SetString(key, value);
+            SecurePlayerPrefs.SetString(key, value, useSecurePrefs);
         }
     }
 }

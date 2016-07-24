@@ -26,7 +26,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {

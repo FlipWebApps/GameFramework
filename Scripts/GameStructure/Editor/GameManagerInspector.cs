@@ -19,30 +19,34 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using UnityEditor;
+using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 {
     [CustomEditor(typeof(GameManager))]
-    public class GameManagerInspector : Editor
+    public class GameManagerInspector : UnityEditor.Editor
     {
         GameManager _gameManager;
-        bool showLinks = false;
-        bool showAdvanced = false;
-        bool showPlayerAdvanced = false;
+        bool _showLinks;
+        bool _showAdvanced;
+        bool _showPrefs;
+        bool _showPlayerAdvanced;
 
         SerializedProperty _gameNameProperty;
         SerializedProperty _playWebUrlProperty;
         SerializedProperty _playMarketUrlProperty;
         SerializedProperty _iOSWebUrlProperty;
         SerializedProperty _debugLevelProperty;
-        SerializedProperty _useSecurePreferences;
         SerializedProperty _referencePhysicalScreenHeightInInchesProperty;
+
+        SerializedProperty _useSecurePreferences;
+        SerializedProperty _preferencesPassPhrase;
+        SerializedProperty _autoConvertUnsecurePrefs;
+
         SerializedProperty _displayChangeCheckDelayProperty;
         SerializedProperty _identifierBaseProperty;
 
@@ -79,8 +83,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             _playMarketUrlProperty = serializedObject.FindProperty("PlayMarketUrl");
             _iOSWebUrlProperty = serializedObject.FindProperty("iOSWebUrl");
             _debugLevelProperty = serializedObject.FindProperty("DebugLevel");
-            _useSecurePreferences = serializedObject.FindProperty("SecurePreferences");
             _identifierBaseProperty = serializedObject.FindProperty("IdentifierBase");
+
+            _useSecurePreferences = serializedObject.FindProperty("SecurePreferences");
+            _preferencesPassPhrase = serializedObject.FindProperty("PreferencesPassPhrase");
+            _autoConvertUnsecurePrefs = serializedObject.FindProperty("AutoConvertUnsecurePrefs");
+
             _referencePhysicalScreenHeightInInchesProperty = serializedObject.FindProperty("ReferencePhysicalScreenHeightInInches");
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
 
@@ -135,27 +143,42 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.PropertyField(_gameNameProperty);
             EditorGUI.indentLevel += 1;
-            showLinks = EditorGUILayout.Foldout(showLinks, "Links");
-            if (showLinks)
+            _showLinks = EditorGUILayout.Foldout(_showLinks, "Links");
+            if (_showLinks)
             {
                 EditorGUILayout.PropertyField(_playWebUrlProperty);
                 EditorGUILayout.PropertyField(_playMarketUrlProperty);
                 EditorGUILayout.PropertyField(_iOSWebUrlProperty);
             }
-            showAdvanced = EditorGUILayout.Foldout(showAdvanced, "Advanced");
-            if (showAdvanced)
+            _showPrefs = EditorGUILayout.Foldout(_showPrefs, "Player Preferences");
+            if (_showPrefs)
+            {
+                if (!PreferencesFactory.SupportsSecurePrefs)
+                {
+                    EditorGUILayout.HelpBox("Unity preferences are not encrypted!\n\nSee the integrations window (Window Menu | Game Framework) for assets that let you use encrypted preferences instead (e.g. Prefs Editor).", MessageType.Warning);
+                    GUI.enabled = false;
+                }
+                else if (!_gameManager.SecurePreferences)
+                {
+                    EditorGUILayout.HelpBox("Unity preferences are not encrypted!\n\nOn certain platforms Unity stores preferences as plain text and it may be possible for others to manually modify them. Depending on your game needs, consider enabling secure preferences below.", MessageType.Warning);
+                }
+                EditorGUILayout.PropertyField(_useSecurePreferences, new GUIContent("Secure Prefs"));
+                if (_gameManager.SecurePreferences)
+                {
+                    EditorGUILayout.PropertyField(_preferencesPassPhrase, new GUIContent("Pass Phrase"));
+                    EditorGUILayout.PropertyField(_autoConvertUnsecurePrefs, new GUIContent("Convert Unsecure Prefs"));
+                }
+                GUI.enabled = true;
+            }
+            _showAdvanced = EditorGUILayout.Foldout(_showAdvanced, "Advanced");
+            if (_showAdvanced)
             {
                 EditorGUILayout.PropertyField(_identifierBaseProperty);
                 EditorGUILayout.PropertyField(_debugLevelProperty);
-                if (!PreferencesFactory.SupportsSecurePrefs)
-                    GUI.enabled = false;
-                EditorGUILayout.PropertyField(_useSecurePreferences, new GUIContent("Secure Prefs"));
-                if (!PreferencesFactory.SupportsSecurePrefs)
-                    EditorGUILayout.HelpBox("Unity preferences are not encrypted. See the integrations window for options that let you use encrypted preferences instead.", MessageType.Warning);
-                GUI.enabled = true;
                 EditorGUILayout.PropertyField(_referencePhysicalScreenHeightInInchesProperty);
                 EditorGUILayout.PropertyField(_displayChangeCheckDelayProperty);
             }
+
             EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }
@@ -168,8 +191,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.PropertyField(_defaultLivesProperty);
             EditorGUI.indentLevel += 1;
-            showPlayerAdvanced = EditorGUILayout.Foldout(showPlayerAdvanced, "Advanced");
-            if (showPlayerAdvanced)
+            _showPlayerAdvanced = EditorGUILayout.Foldout(_showPlayerAdvanced, "Advanced");
+            if (_showPlayerAdvanced)
             {
                 EditorGUILayout.PropertyField(_playerCountProperty);
             }

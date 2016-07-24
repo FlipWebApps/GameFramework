@@ -39,7 +39,7 @@ using UnityEngine.Serialization;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -69,8 +69,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public string IdentifierBase;
         [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
         public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
+
+        // Preferences related
         [Tooltip("Whether secured preferences should be used.")]
         public bool SecurePreferences;
+        [Tooltip("A pass phase to use whem securing preferences.\n\nNote that advanced hackers may be able to find this pass phrase in you executable. For optimum security some sort of online lookup would be needed so no pass phrase is stored locally.")]
+        public string PreferencesPassPhrase;
+        [Tooltip("Whether to migrate old unsecure values.\n\nFor existing games you should set this to true if you want to keep their current progress.\n\nFor new games set to false for performance as there will be nothing to convert.")]
+        public bool AutoConvertUnsecurePrefs;
 
         // Display related
         [Header("Display")]
@@ -149,6 +155,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 _isUnlocked = value;
                 if (IsInitialised && oldValue != IsUnlocked)
                     SafeQueueMessage(new GameUnlockedMessage(IsUnlocked));
+
+                // save
+                PreferencesFactory.SetInt("IsUnlocked", IsUnlocked ? 1 : 0);
+                PreferencesFactory.Save();
             }
         }
         bool _isUnlocked;
@@ -244,6 +254,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             sb.Append("GameManager: GameSetup()");
             sb.Append("\nApplication.systemLanguage: ").Append(Application.systemLanguage);
 
+            // secure preferences
+            PreferencesFactory.UseSecurePrefs = SecurePreferences;
+            Debug.LogWarning("TODO: PASSPHRASE SETTING NOT IMPLEMENTED");
+            Debug.LogWarning("TODO: VERIFY AUTOCONVERT COPIES VALUES");
+            PreferencesFactory.AutoConvertUnsecurePrefs = AutoConvertUnsecurePrefs;
 
             // Gameplay related properties
             IsUnlocked = PreferencesFactory.GetInt("IsUnlocked", 0) != 0;
@@ -287,9 +302,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 }
             }
 
-            BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
-            EffectAudioVolume = PreferencesFactory.GetFloat("EffectAudioVolume", EffectAudioVolume);
-
+            BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
+            EffectAudioVolume = PreferencesFactory.GetFloat("EffectAudioVolume", EffectAudioVolume, false);
 
             // display related properties
             SetDisplayProperties();
@@ -433,8 +447,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             PreferencesFactory.SetInt("TimesGamePlayed", TimesGamePlayed);
             PreferencesFactory.SetInt("TimesLevelsPlayed", TimesLevelsPlayed);
 
-            PreferencesFactory.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume);
-            PreferencesFactory.SetFloat("EffectAudioVolume", EffectAudioVolume);
+            PreferencesFactory.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
+            PreferencesFactory.SetFloat("EffectAudioVolume", EffectAudioVolume, false);
 
             PreferencesFactory.Save();
         }

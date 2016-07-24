@@ -29,7 +29,7 @@ using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
-using FlipWebApps.GameFramework.Scripte.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation
 {
@@ -106,7 +106,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
                 _language = value;
                 _languageIndex = index;
-                PreferencesFactory.SetString("Language", Language);
+                PreferencesFactory.SetString("Language", Language, false);
 
                 // notify of change here
                 GameManager.SafeQueueMessage(new LocalisationChangedMessage(_language, oldLanguage));
@@ -329,7 +329,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
         static void SetDefaultLanguage()
         {
             // 1. try and set from prefs
-            if (TrySetAllowedLanguage(PreferencesFactory.GetString("Language"))) return;
+            if (TrySetAllowedLanguage(PreferencesFactory.GetString("Language", useSecurePrefs: false))) return;
 
             // 2. if not then try and set system Language.
             if (TrySetAllowedLanguage(Application.systemLanguage.ToString())) return;
