@@ -19,8 +19,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+<<<<<<< HEAD
 using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PlayerPrefsIntegration;
 using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditorIntegration;
+=======
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PlayerPrefsIntegration;
+#if PREFS_EDITOR
+using FlipWebApps.GameFramework.Scripte.Integrations.Preferences.PrefsEditorIntegration;
+#endif
+>>>>>>> 0707c8aa35dfa4e9878569056e751ef596cd8571
 
 namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
 {

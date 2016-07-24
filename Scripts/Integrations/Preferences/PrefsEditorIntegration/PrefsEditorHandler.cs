@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+#if PREFS_EDITOR
 using FlipWebApps.PrefsEditor;
 using UnityEngine;
 
@@ -145,3 +146,4 @@ namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditor
     }
 }
 
+#endif
