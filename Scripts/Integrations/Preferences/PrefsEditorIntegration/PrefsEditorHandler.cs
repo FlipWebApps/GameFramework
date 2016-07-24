@@ -33,12 +33,8 @@ namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditor
         /// <summary>
         /// Indicate that this implementaiton supports secure prefs.
         /// </summary>
-        public bool SupportsSecurePrefs
-        {
-            get
-            {
-                return true;
-            }
+        public bool SupportsSecurePrefs {
+            get { return true; }
         }
 
         /// <summary>
@@ -62,6 +58,16 @@ namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditor
         {
             get { return SecurePlayerPrefs.AutoConvertUnsecurePrefs; }
             set { SecurePlayerPrefs.AutoConvertUnsecurePrefs = value; }
+        }
+
+        /// <summary>
+        /// The pass phrase that should be used. Be sure to override this with your own value.
+        /// 
+        /// Note: This property has no effect for standard Player Prefs.
+        /// </summary>
+        public string PassPhrase
+        {
+            set { SecurePlayerPrefs.PassPhrase = value; }
         }
 
         /// <summary>

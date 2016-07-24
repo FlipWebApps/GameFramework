@@ -73,7 +73,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         // Preferences related
         [Tooltip("Whether secured preferences should be used.")]
         public bool SecurePreferences;
-        [Tooltip("A pass phase to use whem securing preferences.\n\nNote that advanced hackers may be able to find this pass phrase in you executable. For optimum security some sort of online lookup would be needed so no pass phrase is stored locally.")]
+        [Tooltip("A pass phase to use when securing preferences. This should ideally be a random string of 10 or more characters.\n\nNote that advanced hackers may be able to find this pass phrase in you executable. For optimum security some sort of online lookup would be needed so no pass phrase is stored locally.")]
         public string PreferencesPassPhrase;
         [Tooltip("Whether to migrate old unsecure values.\n\nFor existing games you should set this to true if you want to keep their current progress.\n\nFor new games set to false for performance as there will be nothing to convert.")]
         public bool AutoConvertUnsecurePrefs;
@@ -256,11 +256,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
             // secure preferences
             PreferencesFactory.UseSecurePrefs = SecurePreferences;
-            Debug.LogWarning("TODO: PASSPHRASE SETTING NOT IMPLEMENTED");
-            Debug.LogWarning("TODO: VERIFY AUTOCONVERT COPIES VALUES");
-            PreferencesFactory.AutoConvertUnsecurePrefs = AutoConvertUnsecurePrefs;
+            if (SecurePreferences)
+            {
+                if (string.IsNullOrEmpty(PreferencesPassPhrase))
+                    Debug.LogWarning("You have not set a custom pass phrase in GameManager | Player Preferences. Please correct for improved security.");
+                else
+                    PreferencesFactory.PassPhrase = PreferencesPassPhrase;
+                PreferencesFactory.AutoConvertUnsecurePrefs = AutoConvertUnsecurePrefs;
+            }
 
-            // Gameplay related properties
+        // Gameplay related properties
             IsUnlocked = PreferencesFactory.GetInt("IsUnlocked", 0) != 0;
 #pragma warning disable 618
             IsUserInteractionEnabled = true;

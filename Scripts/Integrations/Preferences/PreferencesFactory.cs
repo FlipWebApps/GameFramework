@@ -93,6 +93,17 @@ namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
         }
 
         /// <summary>
+        /// The pass phrase that should be used. Be sure to override this with your own value.
+        /// </summary>
+        public static string PassPhrase
+        {
+            set
+            {
+                Instance.PassPhrase = value;
+            }
+        }
+
+        /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
         public static void DeleteAll()

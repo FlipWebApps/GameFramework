@@ -44,6 +44,11 @@ namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
         bool AutoConvertUnsecurePrefs { get; set; }
 
         /// <summary>
+        /// The pass phrase that should be used. Be sure to override this with your own value.
+        /// </summary>
+        string PassPhrase { set; }
+
+        /// <summary>
         /// For the similar method in PlayerPrefs.
         /// </summary>
         void DeleteAll();
