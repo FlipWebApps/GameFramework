@@ -61,9 +61,6 @@ CHANGE LOG
 
 v2.5
 
-NOTE: To update you will need to remove the old /FlipWebApps/BeautifulTransitions/ folder before updating, or delete the file 
-/FlipWebApps/BeautifulTransitions/_Demo/DisplayItem/Scripts/TestController.cs after updating.
-
 	Game Framework Core - Improvements
 	- Advertising: Improved AdMob support
 	- EditorExtras: Added EditorHelper LinkButton() helper method
