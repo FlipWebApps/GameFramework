@@ -1,4 +1,4 @@
-Game Framework - Free v2.4
+Game Framework - Free v2.5
 
 Thank you for using Game Framework. 
 
@@ -58,6 +58,55 @@ Chinese Translation - luochuanyuewu
 - - - - - - - - - -
 
 CHANGE LOG
+
+v2.5
+
+NOTE: To update you will need to remove the old /FlipWebApps/BeautifulTransitions/ folder before updating, or delete the file 
+/FlipWebApps/BeautifulTransitions/_Demo/DisplayItem/Scripts/TestController.cs after updating.
+
+	Game Framework Core - Improvements
+	- Advertising: Improved AdMob support
+	- EditorExtras: Added EditorHelper LinkButton() helper method
+	- EditorExtras: Added PlayerSettingsHelper class for dealing with Player Settings.
+	- Free Prize: Allow for persisting next free prize times across game restarts.
+	- Free Prize: Added tool tips and source code documentation updates
+	- General: Support for secure player prefs including migration of unsecured values (enable in GameManager).
+	- GameOver: Added option for automatically updating the player score / coins from the level ones
+	- GameStructure: Added option to enable encrypted preferences and provide password
+	- Integrations: Added window for managing integrations with other assets
+	- Localisation: Sends new LocalisationChanged message when the localisation changes.
+	- Messaging: RunOnMessageAttribute added and RunOnMessage updated to be able to run at various lifecycle stages.
+	- Preferences: Added support for replacement PlayerPrefs assets
+	- Preferences: Added support for encrypted preferences
+
+	Game Framework Core - Fixes
+	- GameStructure: GameManager.IsUnlocked is correctly saved if set through code.
+	- GameStructure: GameItem Buttons now listen for localisation changed messages.
+	- GameStructure GameItem localised values retrieved when requested to avoid caching issues and allow for localisation changes.
+	- Helper: Removed invalid Debug.WriteLine call used in certain builds.
+	- WIndows Phone: Several updates to fix compile errors for Windows Phone
+	
+	Game Framework Extras (Extras Bundle) - Improvements
+	- Various minor tutorial fixes
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Free Prize: Removed use of deprecated ShowScore component.
+	
+	BeautifulTransitions (Extras Bundle): Updated to v3.1 that includes:
+	- Demo: Added attention button to the DisplayItem demo scene
+	- Demo: Shake demo updated with visual controls for modifying the shake settings
+	- DisplayItem: Removed unnecessary DisplayItemSetInitialState component
+	- DisplayItem: Added SetAttention and SetActiveAnimated functions to DisplayItemHelper.cs
+	- General: Added links to documentation and support to the editor menu
+	- Shake: Moved scripts from ShakeCamera to Shake folder and namespace.
+	- Shake: Improved tooltip text for ShakeCamera component
+	- Shake: Renamed Shake method to ShakeCoroutine and added new replacement Shake method that is callable from code.
+	- Shake: Code documentation improved
+	- Transitions: Updated component menu name
+	- Transitions: Screen & Camera wipes now support smoothing.
+
+	Prefs Editor (Extras Bundle): Updated to v1.0.1 that includes:
+	- Support for encrypted player prefs including optional auto encryption of old unencrypted values
 
 v2.4
 
