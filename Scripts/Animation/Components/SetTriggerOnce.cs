@@ -25,13 +25,28 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Animation.Components
 {
     /// <summary>
-    /// Set an animation trigger only one time and optionally after another animation has already been triggered
+    /// Set an animation trigger one time only for the entire lifetime of your game, optionally only after another 
+    /// RunOnceGameObject derived component (including this one) has been run.
     /// </summary>
+    /// 
+    /// You can use this functionality to trigger things that you only want to show one time such as instructions
+    /// or some sort of introduction information. Use the enable after functionality to chain such actions.
+    /// 
+    /// See RunOnceGameObject for more details 
     [AddComponentMenu("Game Framework/Animation/SetTriggerOnce")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/animation/")]
     public class SetTriggerOnce : RunOnceGameObject
     {
+        /// <summary>
+        /// The Animator that should have the trigger set
+        /// </summary>
+        [Tooltip("The Animator that should have the trigger set")]
         public Animator Animator;
+
+        /// <summary>
+        /// The name of the trigger to set
+        /// </summary>
+        [Tooltip("The name of a boolean parameter to set")]
         public string Trigger;
 
         public override void RunOnce()

@@ -20,22 +20,47 @@
 //----------------------------------------------
 
 using UnityEngine;
+using UnityEngine.Assertions;
+
+/// <summary>
+/// Support components for working with animations.
+/// 
+/// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/animations/
+/// </summary>
+namespace FlipWebApps.GameFramework.Scripts.Animation
+{
+    // For doxygen documentation purposes only 
+}
 
 namespace FlipWebApps.GameFramework.Scripts.Animation.Components
 {
     /// <summary>
-    /// Set the specified start values on the animator
+    /// Set a list of start values on an Animator. 
     /// </summary>
+    /// This can be used for dynamically providing configuration to an Animator.
+    /// 
+    /// Must be attached to a gameobject that contains an Animator component.
     [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Game Framework/Animation/SetAnimatorStartValues")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/animation/")]
     public class SetAnimatorStartValues : MonoBehaviour
     {
+        /// <summary>
+        /// A list of integar names to set
+        /// </summary>
+        [Tooltip("A list of integar names to set")]
         public string[] IntValueNames;
+
+        /// <summary>
+        /// A list of integar values to set for each of the names specified
+        /// </summary>
+        [Tooltip("A list of integar values to set for each of the names specified")]
         public int[] IntValueValues;
 
         void Awake()
         {
+            Assert.AreEqual(IntValueNames.Length, IntValueValues.Length, "You must provide the same number of names as values");
+
             Animator animator = GetComponent<Animator>();
             animator.SetInteger(IntValueNames[0], IntValueValues[0]);
         }

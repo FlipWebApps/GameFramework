@@ -25,14 +25,34 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Animation.Components
 {
     /// <summary>
-    /// Set an animation bool only one time and optionally after another animation has already been triggered
+    /// Set an animation bool one time only for the entire lifetime of your game, optionally only after another 
+    /// RunOnceGameObject derived component (including this one) has been run.
     /// </summary>
+    /// 
+    /// You can use this functionality to trigger things that you only want to show one time such as instructions
+    /// or some sort of introduction information. Use the enable after functionality to chain such actions.
+    /// 
+    /// See RunOnceGameObject for more details 
     [AddComponentMenu("Game Framework/Animation/SetBoolOnce")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/animation/")]
     public class SetBoolOnce : RunOnceGameObject
     {
+        /// <summary>
+        /// The Animator that should have the boolean set
+        /// </summary>
+        [Tooltip("The Animator that should have the boolean set")]
         public Animator Animator;
+
+        /// <summary>
+        /// The name of a boolean parameter to set
+        /// </summary>
+        [Tooltip("The name of a boolean parameter to set")]
         public string Name;
+
+        /// <summary>
+        /// The value to set the named parameter to
+        /// </summary>
+        [Tooltip("The value to set the named parameter to")]
         public bool Value;
 
         public override void RunOnce()
