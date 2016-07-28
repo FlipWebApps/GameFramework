@@ -32,11 +32,18 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 #endif
 
+/// <summary>
+/// Support classes and components to help with Unity Ads usage.
+/// 
+/// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
+/// </summary>
 namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds
 {
     /// <summary>
     /// Helper functions for Unity Adverts
     /// </summary>
+    /// 
+    /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
     public class UnityAds
     {
         /// <summary>
@@ -77,6 +84,22 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds
             else
             {
                 DialogManager.Instance.Show(title: "Error", text: LocaliseText.Get("Advertising.UnityAds.UnableToShow"));
+            }
+#else
+            DialogManager.Instance.ShowInfo("This functionality requires that you enable the standard Unity Ads service.\n\nPlease check our website if you need further help.");
+#endif
+        }
+
+        /// <summary>
+        /// Show an advert.
+        /// </summary>
+        public static void ShowAdvert()
+        {
+#if UNITY_ADS
+            //TODO only show advert button if actually ready to avoid errors.
+            if (Advertisement.IsReady())
+            {
+                Advertisement.Show();
             }
 #else
             DialogManager.Instance.ShowInfo("This functionality requires that you enable the standard Unity Ads service.\n\nPlease check our website if you need further help.");
