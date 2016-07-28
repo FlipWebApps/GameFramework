@@ -40,6 +40,7 @@ using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
 using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -216,12 +217,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public float AspectRatioMultiplier { get; private set; }            // Ratio above and beyong 4:3 ratio
         public float PhysicalScreenHeightMultiplier { get; private set; }   // Ratio above and beyong 4:3 ratio
 
+        #region Player related properties 
         /// <summary>
-        /// player related properties 
+        /// The current Player. 
+        /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
         /// </summary>
-        public Player Player { get; private set; }
+        public Player Player
+        {
+            get { return _player; }
+            set
+            {
+                var oldPlayer = Player;
+                _player = value;
+                if (IsInitialised && oldPlayer != null && oldPlayer.Number != Player.Number)
+                    GameManager.SafeQueueMessage(new PlayerChangedMessage(oldPlayer, Player));
+            }
+        }
+        Player _player;
         protected Player[] Players;
-        public Action<Player> PlayerChanged;                                // NOT YET IMPLEMENTED
+        #endregion Player related properties 
 
         /// <summary>
         /// GameItemManagers
