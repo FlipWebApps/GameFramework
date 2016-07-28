@@ -32,7 +32,7 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
     /// 
     /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
     [AddComponentMenu("Game Framework/Advertising/AdMob/ShowAdvert")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/advertising")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/advertising/")]
     public class ShowHideAdvert : MonoBehaviour
     {
         /// <summary>
