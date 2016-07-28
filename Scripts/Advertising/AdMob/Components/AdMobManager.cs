@@ -27,34 +27,88 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
 {
     /// <summary>
     /// Manager class for setting up and accessing AdMob functionality.
-    /// 
-    /// NOTE: This class is beta and subject to changebreaking change without warning.
     /// </summary>
+    /// 
+    /// Add this component to your scene to automatically setup for AdMob functionality. You can then use members on this
+    /// component, or some of the other available components to show and hide adverts.
+    /// 
+    /// In addition to the methods provided by this class, you can also access the main Admob helper class 
+    /// which provides properties and methods for managing the adverts through AdMobManager.Instance.Adverts
+    /// 
+    /// This class is a persistant singleton and is recommended placed onto a gameobject called _GameScope along
+    /// with other such persistant classes.
+    /// 
+    /// NOTE: If you want to use Admob then be sure to enable through the integrations window or define 
+    /// GOOGLE_ADS in the player settings.
+    /// 
+    /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
     [AddComponentMenu("Game Framework/Advertising/AdMob/AdMobManager")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class AdMobManager : SingletonPersistant<GameManager>
+    [HelpURL("http://www.flipwebapps.com/game-framework/advertising/")]
+    public class AdMobManager : SingletonPersistant<AdMobManager>
     {
         [Header("Advertising")]
+        /// <summary>
+        /// UnitID for use when this game is running on Android
+        /// </summary>
+        [Tooltip("UnitID for use when this game is running on Android")]
         public string AdmobUnitIdAndroid = "";
+
+        /// <summary>
+        /// UnitID for use when this game is running on iOS
+        /// </summary>
+        [Tooltip("UnitID for use when this game is running on iOS")]
         public string AdmobUnitIdIos = "";
 
         /// <summary>
-        /// Advertising related properties
+        /// Admob helper class - you may access this directly to call setup and support functions 
         /// </summary>
         public AdMob Adverts;
 
+        /// <summary>
+        /// Called on Awake after the singleton has been setup.
+        /// </summary>
         protected override void GameSetup()
         {
-            Debug.Log("AdMobManager: GameSetup");
-
-            // advertising
 #if GOOGLE_ADS
             if (!GameManager.Instance.IsUnlocked && !string.IsNullOrEmpty(AdmobUnitIdAndroid) && !string.IsNullOrEmpty(AdmobUnitIdIos))
             {
-                Adverts = new AdMob();
+                Adverts = new AdMob(AdmobUnitIdAndroid, AdmobUnitIdIos);
                 Adverts.HideBanner();
                 Adverts.RequestBanner();
             }
+#endif
+        }
+
+        /// <summary>
+        /// Show a banner ad
+        /// </summary>
+        public static void ShowBanner()
+        {
+#if GOOGLE_ADS
+            if (IsActive)
+                Instance.Adverts.ShowBanner();
+#endif
+        }
+
+        /// <summary>
+        /// Hide a banner ad
+        /// </summary>
+        public static void HideBanner()
+        {
+#if GOOGLE_ADS
+            if (IsActive)
+                Instance.Adverts.HideBanner();
+#endif
+        }
+
+        /// <summary>
+        /// Show an interstitial ad
+        /// </summary>
+        public static void ShowInterstitialBanner()
+        {
+#if GOOGLE_ADS
+            if (IsActive)
+                Instance.Adverts.ShowInterstitialBanner();
 #endif
         }
     }

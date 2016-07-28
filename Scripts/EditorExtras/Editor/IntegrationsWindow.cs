@@ -67,7 +67,7 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
             ShowAsset("Pro Pooling", "PRO_POOLING", "https://www.assetstore.unity3d.com/en/#!/content/59286", "Powerful gameobject and prefab pooling. Included as part of the Game Framework - Extras bundle.\n\nAdds effects and transitions to GameFramework", "Asset Store", @"Assets\FlipWebApps\ProPooling", _proPoolingIcon, true);
 
             GUILayout.Label("Third Party", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
-            ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\plugin\Assets\GoogleMobileAds", _adMobIcon, false);
+            ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
 
             GUILayout.Label("Asset developers - contact us to get your asset listed here!");
 

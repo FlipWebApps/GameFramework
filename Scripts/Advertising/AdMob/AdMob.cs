@@ -18,39 +18,76 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
+using FlipWebApps.GameFramework.Scripts.Display.Other;
 using UnityEngine;
 #if GOOGLE_ADS
 using GoogleMobileAds.Api;
 #endif
+/// <summary>
+/// Support classes and components to help with admob usage.
+/// 
+/// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
+/// </summary>
 namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
 {
     /// <summary>
-    /// Helper class for using AdMob.
-    /// If you want to use Admob then be sure to enable through the integrations window or define GOOGLE_ADS in the player settings.
-    /// 
-    /// NOTE: This class is beta and subject to changebreaking change without warning.
+    /// Helper class for using AdMob that provides properties and methods for managing the adverts.
     /// </summary>
+    /// Currently this is limited to showing a smart banner at the bottom of the screen or a full screen 'interstitial' advert.
+    /// 
+    /// NOTE: If you want to use Admob then be sure to enable through the integrations window or define 
+    /// GOOGLE_ADS in the player settings.
+    [System.Serializable]
     public class AdMob
     {
+        /// <summary>
+        /// Whether ads should be tagged for child directed treetment
+        /// </summary>
+        /// See the AdMob documentation for further details
         public bool TagForChildDirectedTreatment = true;
-        public bool IsDesignedForFamilies = true;
+
+        /// <summary>
+        /// A list of keywords to use for targeting adverts
+        /// </summary>
+        /// See the AdMob documentation for further details
+        public bool IsDesignedForFamilies = false;
+
+        /// <summary>
+        /// A list of keywords to use for targeting adverts
+        /// </summary>
+        /// See the AdMob documentation for further details
         public string[] KeyWords = { };
+
+        /// <summary>
+        /// A list of test devices
+        /// </summary>
+        /// See the AdMob documentation for further details
         public string[] TestDevices = { };
+
+        /// <summary>
+        /// A birthday to use for targeting adverts
+        /// </summary>
+        /// See the AdMob documentation for further details
         public System.DateTime Birthday = new System.DateTime(1985, 1, 1);
+
+        /// <summary>
+        /// A background color to use when showing adverts
+        /// </summary>
+        /// See the AdMob documentation for further details
         public Color BackgroundColor = Color.white;
 
 #if GOOGLE_ADS
         readonly BannerView _bannerView;
         readonly InterstitialAd _interstitialAd;
 
-        public AdMob()
+        public AdMob(string admobUnitIdAndroid, string admobUnitIdIos)
         {
 #if UNITY_EDITOR
             string adUnitId = "unused";
 #elif UNITY_ANDROID
-            string adUnitId = AdMobManager.Instance.AdmobUnitIdAndroid;
+            string adUnitId = admobUnitIdAndroid;
 #elif UNITY_IPHONE
-            string adUnitId = AdMobManager.Instance.AdmobUnitIdIos;
+            string adUnitId = admobUnitIdIos;
 #else
             string adUnitId = "unexpected_platform";
 #endif
@@ -68,52 +105,55 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
             //_bannerView.AdLeftApplication += HandleAdLeftApplication;
         }
 
+        /// <summary>
+        /// Request a banner ad targeted according to the class attributes 
+        /// </summary>
         public void RequestBanner()
         {
-            //TODO add suppport for Designed for Families setting https://developers.google.com/admob/android/targeting#designed_for_families_setting
-            //TODO move test devices to class parameters
-            // Request a banner ad, with optional custom ad targeting.
-            AdRequest request = new AdRequest.Builder()
-                //    .AddTestDevice(AdRequest.TestDeviceSimulator)
-                .AddTestDevice("A431B6F2AB563BE62EAC8CBB5ECCD43F")      // Mark S2
-                .AddTestDevice("6e2d8b66674d9ef3225b90cb584e5975")
-                .AddTestDevice("C359AF1E66C7AFFCC94663B0EEF0D544")      // Galaxy Alpha
-                .AddKeyword("game")
-                .SetGender(Gender.Male)         //TODO - give the user some way of setting these (need to mention in privacy policy if so).
-                .SetBirthday(new System.DateTime(1985, 1, 1))
-                .TagForChildDirectedTreatment(TagForChildDirectedTreatment)
-                .AddExtra("color_bg", "9B30FF")
-                .Build();
-            _bannerView.LoadAd(request);
+            var adRequest = SetupNewAdRequest();
+            _bannerView.LoadAd(adRequest);
         }
 
+        /// <summary>
+        /// Request an Interstitial ad targeted according to the class attributes 
+        /// </summary>
         public void RequestInterstitial()
         {
-            // Request a banner ad, with optional custom ad targeting.
-            AdRequest request = new AdRequest.Builder()
-                //    .AddTestDevice(AdRequest.TestDeviceSimulator)
-                .AddTestDevice("A431B6F2AB563BE62EAC8CBB5ECCD43F")      // Mark S2
-                .AddTestDevice("6e2d8b66674d9ef3225b90cb584e5975")
-                .AddTestDevice("C359AF1E66C7AFFCC94663B0EEF0D544")      // Galaxy Alpha
-                .AddKeyword("game")
-                .SetGender(Gender.Male)
-                .SetBirthday(new System.DateTime(1985, 1, 1))
-                .TagForChildDirectedTreatment(TagForChildDirectedTreatment)
-                .AddExtra("color_bg", "9B30FF")
-                .Build();
-            _interstitialAd.LoadAd(request);
+            var adRequest = SetupNewAdRequest();
+            _interstitialAd.LoadAd(adRequest);
         }
 
+        AdRequest SetupNewAdRequest() {
+            var request = new AdRequest.Builder();
+            foreach (var testDevice in TestDevices)
+                request.AddTestDevice(testDevice);
+            foreach (var keyword in KeyWords)
+                request.AddKeyword(keyword);
+            request.TagForChildDirectedTreatment(TagForChildDirectedTreatment);
+            request.AddExtra("color_bg", ColorHelper.HexString((Color)BackgroundColor));
+            request.SetBirthday(Birthday);
+            return request.Build();
+        }
+
+        /// <summary>
+        /// Show a banner ad
+        /// </summary>
         public void ShowBanner()
         {
             _bannerView.Show();
         }
 
+        /// <summary>
+        /// Hide a banner ad
+        /// </summary>
         public void HideBanner()
         {
             _bannerView.Hide();
         }
 
+        /// <summary>
+        /// Show an interstitial ad
+        /// </summary>
         public void ShowInterstitialBanner()
         {
             if (_interstitialAd.IsLoaded())
@@ -122,13 +162,16 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
             }
         }
 
+        ///// <summary>
+        ///// Show an interstitial ad
+        ///// </summary>
         //public void HideInterstitialBanner()
         //{
         //    _interstitialAd.Hide();
         //}
 
         #region Banner callback handlers
-
+        /*
         public void HandleAdLoaded(object sender, EventArgs args)
         {
             Debug.Log("HandleAdLoaded event received.");
@@ -158,7 +201,7 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
         {
             Debug.Log("HandleAdLeftApplication event received");
         }
-
+        */
         #endregion
 #endif
     }

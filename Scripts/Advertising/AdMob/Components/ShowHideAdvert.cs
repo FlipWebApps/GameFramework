@@ -22,33 +22,41 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds.Components
+namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
 {
     /// <summary>
-    /// Component for showing the watch advert for coins dialog on button click. 
-    /// 
-    /// This automatically hooks up the button onClick listener
+    /// Component to automatically show or hide an advert. 
     /// </summary>
     /// 
+    /// The advert will be shown when this components Start method is called.
+    /// 
     /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
-    [RequireComponent(typeof(Button))]
-    [AddComponentMenu("Game Framework/Advertising/Unity/OnButtonClickWatchAdvertForCoins")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/advertising/")]
-    public class OnButtonClickWatchAdvertForCoins : MonoBehaviour
+    [AddComponentMenu("Game Framework/Advertising/AdMob/ShowAdvert")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/advertising")]
+    public class ShowHideAdvert : MonoBehaviour
     {
         /// <summary>
-        /// Number of coins they will win
+        /// Whether to try showing an advert when this component is Started (The scene starts)
         /// </summary>
-        public int Coins;
+        [Tooltip("Whether to try showing an advert when this component is Started (i.e. scene starts)")]
+        public bool ShowOnStart = true;
+
+        /// <summary>
+        /// Whether to try hiding any advert when this component is Destroyed (The scene ends)
+        /// </summary>
+        [Tooltip("Whether to try hiding any advert when this component is Destroyed (i.e the scene ends)")]
+        public bool HideOnDestroy = true;
 
         void Start()
         {
-            gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
+            if (ShowOnStart)
+                AdMobManager.ShowBanner();
         }
 
-        public void OnClick()
+        void OnDestroy()
         {
-            UnityAds.ShowWatchAdvertForCoins(Coins);
+            if (HideOnDestroy)
+                AdMobManager.HideBanner();
         }
     }
 }

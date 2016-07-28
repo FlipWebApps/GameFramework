@@ -54,11 +54,11 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other {
             return clr;
         }
 
-        public static string HexString(Color color,
-                bool includeAlpha = false)
-        {
-            return HexString((Color32)color, includeAlpha);
-        }
+        //public static string HexString(Color color,
+        //        bool includeAlpha = false)
+        //{
+        //    return HexString((Color32)color, includeAlpha);
+        //}
 
         public static string HexString(Color32 color,
                 bool includeAlpha = false)
