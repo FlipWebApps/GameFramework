@@ -26,20 +26,37 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.Audio.Components
 {
     /// <summary>
-    /// Start or stop the global background music when enabled / disabled
+    /// Start or stop the global background music when this component is enabled / disabled
     /// </summary>
+    /// You can use this component to automatically start or stop background music that is configured on
+    /// the GameManager. By using this component on different scenes you can control things such as cross scene 
+    /// audio.
     [AddComponentMenu("Game Framework/Audio/StartStopBackgroundMusic")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/audio/")]
     public class StartStopBackgroundMusic : MonoBehaviour
     {
+        /// <summary>
+        /// The type of action to take
+        /// </summary>
         public enum ModeType { None, Play, Stop };
+
+        /// <summary>
+        /// The type of action to take when this component is enabled
+        /// </summary>
+        [Tooltip("The type of action to take when this component is enabled")]
         public ModeType Enable = ModeType.Play;
+
+        /// <summary>
+        /// The type of action to take when this component is disabled
+        /// </summary>
+        [Tooltip("The type of action to take when this component is disabled")]
         public ModeType Disable = ModeType.None;
 
         void OnEnable()
         {
             Assert.IsTrue(GameManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
                                                 "FlipWebApps.GameFramework.Scripts.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
+
             if (Enable == ModeType.Play && !GameManager.Instance.BackGroundAudioSource.isPlaying)
                 GameManager.Instance.BackGroundAudioSource.Play();
             else if (Enable == ModeType.Stop && GameManager.Instance.BackGroundAudioSource.isPlaying)

@@ -20,24 +20,41 @@
 //----------------------------------------------
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
+using UnityEngine.Assertions;
+
+/// <summary>
+/// Support components for working with audio.
+/// 
+/// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/audio/
+/// </summary>
+namespace FlipWebApps.GameFramework.Scripts.Audio
+{
+    // For doxygen documentation purposes only 
+}
 
 namespace FlipWebApps.GameFramework.Scripts.Audio.Components
 {
     /// <summary>
     /// Copy the global effect volume to the attached Audio Source
-    /// TODO: We should have notification when teh global effect volume changes and update this.
     /// </summary>
+    /// The global effect volume is stored on the GameManager component and can be adjusted through the provided
+    /// in game settings window. This component will copy the users preference and automatically set the attached
+    /// AudioSources volume to be as specified by the global setting.
+    /// 
+    /// Must be attached to a gameobject that contains an AudioSource component.
+    /// 
+    /// TODO: We should have notification when the global effect volume changes and update this.
     [RequireComponent(typeof(AudioSource))]
     [AddComponentMenu("Game Framework/Audio/CopyGlobalEffectVolume")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/audio/")]
     public class CopyGlobalEffectVolume : MonoBehaviour
     {
         void Awake()
         {
-            if (GetComponent<AudioSource>() != null)
-            {
-                GetComponent<AudioSource>().volume = GameManager.Instance.EffectAudioVolume;
-            }
+            Assert.IsTrue(GameManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
+                                                "FlipWebApps.GameFramework.Scripts.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
+
+            GetComponent<AudioSource>().volume = GameManager.Instance.EffectAudioVolume;
         }
     }
 }
