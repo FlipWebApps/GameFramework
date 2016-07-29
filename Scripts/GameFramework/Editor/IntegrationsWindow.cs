@@ -23,7 +23,7 @@ using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
+namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
 
     /// <summary>
     /// Component for allowing various cheat functions to be called such as increasing score, resetting prefs etc..
@@ -41,8 +41,8 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
-            var window = GetWindow(typeof(IntegrationsWindow));
-            window.titleContent.text = "Integrations";
+            //var window = 
+            GetWindow<IntegrationsWindow>("Integrations", true);
 
         }
 

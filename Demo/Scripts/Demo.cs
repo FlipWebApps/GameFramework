@@ -24,6 +24,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.UI;
+using FlipWebApps.GameFramework.Scripts.GameFramework;
 
 namespace FlipWebApps.GameFramework.Demo.Scripts
 {
@@ -105,7 +106,7 @@ namespace FlipWebApps.GameFramework.Demo.Scripts
         public void OnlineTutorials()
         {
             GameManager.Instance.PlayEffect(ClickAudioClip);
-            Application.OpenURL("http://www.flipwebapps.com/game-framework/tutorials/");
+            GameFrameworkHelper.ShowOnlineTutorials();
         }
 
         
@@ -113,13 +114,13 @@ namespace FlipWebApps.GameFramework.Demo.Scripts
         public void ShowAssetStorePage()
         {
             GameManager.Instance.PlayEffect(ClickAudioClip);
-            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/55334");
+            GameFrameworkHelper.ShowAssetStorePage();
         }
 
         public void ShowPaidVersion()
         {
             GameManager.Instance.PlayEffect(ClickAudioClip);
-            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/50893");
+            GameFrameworkHelper.ShowAssetStorePageExtrasBundle();
         }
 
     }

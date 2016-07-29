@@ -24,7 +24,7 @@ using UnityEditor;
 using UnityEngine;
 using DB = UnityEngine.Debug;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
+namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
     /// <summary>
     /// Various helper options for selecting items with in the current scene
     /// </summary>

@@ -19,49 +19,38 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameFramework;
 using UnityEditor;
 using UnityEngine;
-using DB = UnityEngine.Debug;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor {
+namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
     /// <summary>
-    /// Various helper options for models
+    /// Flip Web Apps links and documentation
     /// </summary>
-    public class ModelDetails : MonoBehaviour {
-        /// <summary>
-        /// Return some information about the selected model
-        /// </summary>
-        static void GetModelDetails()
+    public class MenuItems : MonoBehaviour {
+
+        [MenuItem("Window/Game Framework/Homepage", false, 1100)]
+        static void ShowHomepage()
         {
-            var objs = Selection.GetFiltered(typeof(GameObject), SelectionMode.Deep);
-
-            int numTriangles = 0;
-            int numVertices = 0;
-
-            foreach (var obj in objs)
-            {
-                var go = obj as GameObject;
-
-                if (go == null) continue;
-
-                var meshes = go.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-                foreach (var mesh in meshes)
-                {
-                    numVertices += mesh.sharedMesh.vertexCount;
-                    numTriangles += mesh.sharedMesh.triangles.Length / 3;
-                }
-            }
-
-            DB.Log(string.Format("Found {0} vertices and {1} triangles", numVertices, numTriangles));
+            GameFrameworkHelper.ShowHomepage();
         }
 
-        #region Menu items
-        [MenuItem("Window/Game Framework/3D/Model Details")]
-        static void ModelDetails0()
+        [MenuItem("Window/Game Framework/Documentation", false, 1102)]
+        static void ShowDocumentation()
         {
-            GetModelDetails();
+            GameFrameworkHelper.ShowDocumentation();
         }
 
-        #endregion
+        [MenuItem("Window/Game Framework/Support Forum", false, 1103)]
+        static void ShowSupportForum()
+        {
+            GameFrameworkHelper.ShowSupportForum();
+        }
+
+        [MenuItem("Window/Game Framework/Contact", false, 1104)]
+        static void ShowContact()
+        {
+            GameFrameworkHelper.ShowContact();
+        }
     }
 }
