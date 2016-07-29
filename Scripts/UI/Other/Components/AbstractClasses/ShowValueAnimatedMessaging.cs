@@ -104,7 +104,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
             {
                 // add all messages for display unless the latest value is the same as the one pending display or we have the same value as
                 // the previous queued message.
-                if (UpdateMode == UpdateModeType.Immediate || UpdateMode == UpdateModeType.Queued)
+                if ( UpdateMode == UpdateModeType.Queued)
                 {
                     // if there are either no other queued values or this value is different from the last queued value then we add. 
                     if (_valuesPendingDisplay.Count == 0 || latestValue.CompareTo(_lastQueuedItem) != 0)
@@ -115,7 +115,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
                 }
 
                 // only add the latest value
-                else if (UpdateMode == UpdateModeType.Aggregated)
+                else if (UpdateMode == UpdateModeType.Immediate || UpdateMode == UpdateModeType.Aggregated)
                 {
                     _valuesPendingDisplay.Clear();
                     _valuesPendingDisplay.Enqueue(latestValue);
