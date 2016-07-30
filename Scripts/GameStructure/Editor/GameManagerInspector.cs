@@ -21,7 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 using UnityEditor;
 using UnityEngine;
 

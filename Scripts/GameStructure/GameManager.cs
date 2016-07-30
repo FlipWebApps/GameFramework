@@ -39,7 +39,7 @@ using UnityEngine.Serialization;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 
 #if BEAUTIFUL_TRANSITIONS

@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PlayerPrefsIntegration;
+using FlipWebApps.GameFramework.Scripts.Preferences.PlayerPrefsIntegration;
 #if PREFS_EDITOR
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditorIntegration;
+using FlipWebApps.GameFramework.Scripts.Preferences.PrefsEditorIntegration;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences
+namespace FlipWebApps.GameFramework.Scripts.Preferences
 {
     /// <summary>
     /// Abstracts away the underlying preferences classes allowing us to extend and use other assets.

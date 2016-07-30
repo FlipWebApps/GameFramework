@@ -37,7 +37,7 @@ using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 using System;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 {
