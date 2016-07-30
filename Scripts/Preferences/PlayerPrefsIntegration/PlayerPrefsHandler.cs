@@ -24,7 +24,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Preferences.PlayerPrefsIntegration
 {
     /// <summary>
-    /// Implements the IPreferences interface for using the standard Unity PlayerPrefs.
+    /// Implementation of IPreferences interface for the standard Unity PlayerPrefs.
     /// </summary>
     public class PlayerPrefsHandler : IPreferences
     {

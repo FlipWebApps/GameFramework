@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
     /// </summary>
     [RequireComponent(typeof(UnityEngine.UI.Text))]
     [AddComponentMenu("Game Framework/Localisation/LocaliseText")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class LocaliseText : MonoBehaviour
     {
         /// <summary>

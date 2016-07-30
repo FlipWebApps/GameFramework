@@ -33,7 +33,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
     /// This automatically hooks up the button onClick listener
     /// </summary>
     [AddComponentMenu("Game Framework/Localisation/OnButtonClickSetLanguage")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class OnButtonClickSetLanguage : OnButtonClick
     {
         /// <summary>

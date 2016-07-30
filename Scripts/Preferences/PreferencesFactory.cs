@@ -24,11 +24,17 @@ using FlipWebApps.GameFramework.Scripts.Preferences.PlayerPrefsIntegration;
 using FlipWebApps.GameFramework.Scripts.Preferences.PrefsEditorIntegration;
 #endif
 
+/// <summary>
+/// Extentions to PlayerPrefs providing encrypted preferences, new data types and integration with third party assets./// 
+/// </summary>
+/// For further information please see http://www.flipwebapps.com/unity-assets/game-framework/preferences/
 namespace FlipWebApps.GameFramework.Scripts.Preferences
 {
     /// <summary>
-    /// Abstracts away the underlying preferences classes allowing us to extend and use other assets.
+    /// Extends PlayerPrefs to provide encrypted preferences, new data types and integration with third party assets.
     /// </summary>
+    /// By default this will use PlayerPrefs and so encryption support will not be available. You can enable the different
+    /// third party assets through the Game Framework integration window.
     public static class PreferencesFactory
     {
         /// <summary>
@@ -51,7 +57,7 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         static IPreferences _instance;
 
         /// <summary>
-        /// Flag indicating whether the current factory implementation supports secure prefs.
+        /// Flag indicating whether the current implementation supports secure prefs.
         /// </summary>
         public static bool SupportsSecurePrefs
         {
@@ -122,6 +128,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static float GetFloat(string key, float defaultValue = 0.0f, bool? useSecurePrefs = null)
         {
             return Instance.GetFloat(key, defaultValue, useSecurePrefs);
@@ -130,6 +138,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static int GetInt(string key, int defaultValue = 0, bool? useSecurePrefs = null)
         {
             return Instance.GetInt(key, defaultValue, useSecurePrefs);
@@ -138,6 +148,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static string GetString(string key, string defaultValue = "", bool? useSecurePrefs = null)
         {
             return Instance.GetString(key, defaultValue, useSecurePrefs);
@@ -162,6 +174,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static void SetFloat(string key, float value, bool? useSecurePrefs = null)
         {
             Instance.SetFloat(key, value, useSecurePrefs);
@@ -170,6 +184,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static void SetInt(string key, int value, bool? useSecurePrefs = null)
         {
             Instance.SetInt(key, value, useSecurePrefs);
@@ -178,6 +194,8 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
+        /// This method adds the optional useSecurePrefs parameter which will override the global encryption setting
+        /// (assuming that the backend implementation supports this functionality).
         public static void SetString(string key, string value, bool? useSecurePrefs = null)
         {
             Instance.SetString(key, value, useSecurePrefs);

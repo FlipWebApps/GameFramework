@@ -39,7 +39,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
 
         [Tooltip("A text component to update. Not needed if on the same gameobject as this component.")]
         public UnityEngine.UI.Text Text;
-        [Tooltip("Optional localisation key. If not specified then the value is just displayed directly.")]
+        [Tooltip("Optional localisation key. If not specified then the value is just displayed directly.\n\nIn the text, {0} is substituted with the actual value")]
         public string LocalisationKey;
 
         [Header("Optional Animation Settings")]

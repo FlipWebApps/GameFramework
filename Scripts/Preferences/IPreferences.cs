@@ -24,7 +24,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Preferences
 {
     /// <summary>
-    /// Abstracts away the underlying preferences clases allowing us to extend and use other assets.
+    /// Interface that is used for communicating with third party assets.
     /// </summary>
     public  interface IPreferences
     {
