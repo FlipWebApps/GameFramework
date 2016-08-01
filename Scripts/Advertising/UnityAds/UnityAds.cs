@@ -25,7 +25,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 
 #if UNITY_ADS
 using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
