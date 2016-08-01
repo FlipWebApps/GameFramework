@@ -26,7 +26,7 @@ using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
 using UnityEngine.Assertions;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {

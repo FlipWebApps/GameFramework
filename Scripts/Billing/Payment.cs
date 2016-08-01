@@ -29,7 +29,7 @@ using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using System;
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing
 {

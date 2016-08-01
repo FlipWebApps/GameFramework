@@ -30,7 +30,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {

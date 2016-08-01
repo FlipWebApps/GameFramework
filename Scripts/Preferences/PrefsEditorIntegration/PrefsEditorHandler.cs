@@ -23,10 +23,10 @@
 using FlipWebApps.PrefsEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Integrations.Preferences.PrefsEditorIntegration
+namespace FlipWebApps.GameFramework.Scripts.Preferences.PrefsEditorIntegration
 {
     /// <summary>
-    /// Abstracts away the underlying preferences clases allowing us to extend and use other assets.
+    /// Implementation of IPreferences interface for the Prefs Editor asset.
     /// </summary>
     public class PrefsEditorHandler : IPreferences
     {

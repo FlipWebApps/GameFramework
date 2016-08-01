@@ -20,34 +20,26 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 {
     /// <summary>
-    /// Show the settings dialog
-    /// 
-    /// This automatically hooks up the button onClick listener
+    /// Enabled or a disabled a gameobject based upon whether the specified language matches that currently used by Game Framework
     /// </summary>
-    [AddComponentMenu("Game Framework/Localisation/OnButtonClickSetLanguage")]
+    [AddComponentMenu("Game Framework/Localisation/EnableIfLanguage")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class OnButtonClickSetLanguage : OnButtonClick
+    public class EnableIfLanguage : EnableDisableGameObject
     {
         /// <summary>
-        /// The langauge that we want to set
+        /// The langauge to compare the currently set language against
         /// </summary>
         public string Language;
 
-        /// <summary>
-        /// Override that is called when the attached button is clicked.
-        /// Sets the language to that specified by Language.
-        /// </summary>
-        public  override void OnClick()
+        public override bool IsConditionMet()
         {
-            Localisation.LocaliseText.Language = Language;
+            return Localisation.LocaliseText.Language == Language;
         }
     }
 }

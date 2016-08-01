@@ -29,16 +29,21 @@ using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
-using FlipWebApps.GameFramework.Scripts.Integrations.Preferences;
+using FlipWebApps.GameFramework.Scripts.Preferences;
 
+/// <summary>
+/// Support for localisation including retrieval and displaying of text, helper components and notifications.
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/localisation/
 namespace FlipWebApps.GameFramework.Scripts.Localisation
 {
     public static class LocaliseText
     {
 
         /// <summary>
-        /// Deligate if you want notifications when the localistaion had changed.
+        /// Deligate if you want notifications when the localistaion had changed. (Obsolete - see messaging instead)
         /// </summary>
+        [Obsolete("see messaging instead")]
         public delegate void OnLocaliseDelegate();
         public static OnLocaliseDelegate OnLocalise;
 
@@ -251,7 +256,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
         }
 
 
-        public static IEnumerable<IList<string>> FromReader(TextReader csv)
+        static IEnumerable<IList<string>> FromReader(TextReader csv)
         {
             IList<string> result = new List<string>();
 
