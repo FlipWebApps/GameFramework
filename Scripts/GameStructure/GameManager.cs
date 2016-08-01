@@ -324,8 +324,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
             EffectAudioVolume = PreferencesFactory.GetFloat("EffectAudioVolume", EffectAudioVolume, false);
 
-            // display related properties
-            SetDisplayProperties();
+            if(!Camera.main)
+                MyDebug.LogError("You need a main camera in your scene!");
+            else
+	            // display related properties
+	            SetDisplayProperties();
 
             // Localisation setup. If nothing stored then use system Language if it exists. Otherwise we will default to English.
             LocaliseText.AllowedLanguages = SupportedLanguages;
