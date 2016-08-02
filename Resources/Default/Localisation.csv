@@ -2,7 +2,7 @@
 Language.LocalisedName,English,Norsk,Português,Español,Français,简体中文
 Advertising.UnityAds.WatchForCoins.Button,Free Coins,Gratis Penger,Moedas Grátis,monedas gratis,Pièces gratuites,免费金币
 Advertising.UnityAds.WatchForCoins.Finished,You now have {0} extra coins.,Du nå har {0} ekstra mynter.,Você tem {0} moedas extras.,Tienes {0} monedas extra.,Vous avez gagné {0} pièces supplémentaires.,你现在拥有{0}额外金币.
-Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,Vennligst se hele videoen for å få penger.,Por favor assista todo o video para ganhar moedas,"Por favor, ver el vídeo entero para ganar monedas",Regardez la vidéo pour gagner des pièces.,请观看视频来获取金币.
+Advertising.UnityAds.WatchForCoins.Skipped,Please watch the whole video to get coins.,Vennligst se hele videoen for å få penger.,Por favor assista todo o video para ganhar moedas,"Por favor, ver el vídeo entero para ganar monedas",Regardez la vidéo pour gagner des pièces.,你需要观看完整视频才能获取金币.
 Advertising.UnityAds.UnableToShow,"Unable to load adverts!
 Please try again later.","Kunne ikke laste reklame!
 Prøv igjen senere.","Impossível carregar anúncios!
@@ -131,7 +131,7 @@ GameOver.Score,Score,Score,pontuação,puntuacion,Score,分数
 GameOver.ScoreResult,{0},{0},{0},{0},{0},{0}
 GameOver.HighScoreText,High Score,Rekord,Pontuação mais alta,La puntuación más alta,Les meilleurs scores,最高分
 GameOver.NewHighScore,New High Score,Ny Rekord,Nova pontuação mais alta,Nueva puntuación,Nouveau meilleur score,新最高分
-GameOver.TargetCoins,Get {0} more coins to unlock a new level,Få {0} mynter til for å låse opp en ny level,Consiga mais {0} para desbloquear uma nova fase,Consigue {0} para desbloquear una nueva fase,Encore {0} pièces pour débloquer un nouveau niveau,得到{0}更多金币来解锁新的关卡
+GameOver.TargetCoins,Get {0} more coins to unlock a new level,Få {0} mynter til for å låse opp en ny level,Consiga mais {0} para desbloquear uma nova fase,Consigue {0} para desbloquear una nueva fase,Encore {0} pièces pour débloquer un nouveau niveau,观看广告获得额外{0}个金币来解锁新的关卡
 GameOver.TargetCoinsGot,New level available,Ny level tilgjengelig,Nova fase disponível,Nueva fase disponibles,Nouveau niveau disponible,新场景可用
 GameOver.FacebookPost,Facebook,Facebook,Facebook,Facebook,Facebook,Facebook
 GameOver.Rate,Rate,Evaluer,Avalie!,Vota,Notez,评分
