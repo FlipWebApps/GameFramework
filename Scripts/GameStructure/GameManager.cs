@@ -324,6 +324,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
             EffectAudioVolume = PreferencesFactory.GetFloat("EffectAudioVolume", EffectAudioVolume, false);
 
+			Assert.IsNotNull(Camera.main, ""You need a main camera in your scene!"");
             // display related properties
             SetDisplayProperties();
 
