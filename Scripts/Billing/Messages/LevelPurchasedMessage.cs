@@ -28,6 +28,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
     /// </summary>
     public class LevelPurchasedMessage : BaseMessage
     {
+        /// <summary>
+        /// The number of the level that was purchased
+        /// </summary>
         public readonly int LevelNumber;
 
         public LevelPurchasedMessage(int levelNumber)

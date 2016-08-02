@@ -28,6 +28,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
     /// </summary>
     public class WorldPurchasedMessage : BaseMessage
     {
+        /// <summary>
+        /// The number of the world that was purchased
+        /// </summary>
         public readonly int WorldNumber;
 
         public WorldPurchasedMessage(int worldNumber)

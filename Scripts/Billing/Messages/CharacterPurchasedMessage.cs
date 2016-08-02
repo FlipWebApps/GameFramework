@@ -28,6 +28,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
     /// </summary>
     public class CharacterPurchasedMessage : BaseMessage
     {
+        /// <summary>
+        /// The number of the character that was purchased
+        /// </summary>
         public readonly int CharacterNumber;
 
         public CharacterPurchasedMessage(int characterNumber)

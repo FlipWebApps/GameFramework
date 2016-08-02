@@ -30,6 +30,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
     /// </summary>
     public class ItemPurchasedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Product Id that was purchased
+        /// </summary>
         public readonly string ProductID;
 
         public ItemPurchasedMessage(string productID)
