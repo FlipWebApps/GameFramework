@@ -21,12 +21,14 @@
 
 #if UNITY_PURCHASING
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 #endif
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
@@ -41,23 +43,21 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         public new void Awake()
         {
             base.Awake();
-
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.LevelPurchased += UnlockIfNumberMatches;
-#endif
+            GameManager.SafeAddListener<LevelPurchasedMessage>(LevelPurchasedHandler);
         }
 
         protected new void OnDestroy()
         {
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.LevelPurchased -= UnlockIfNumberMatches;
-#endif
-
+            GameManager.SafeRemoveListener<LevelPurchasedMessage>(LevelPurchasedHandler);
             base.OnDestroy();
         }
 
+        bool LevelPurchasedHandler(BaseMessage message)
+        {
+            var levelPurchasedMessage = message as LevelPurchasedMessage;
+            UnlockIfNumberMatches(levelPurchasedMessage.LevelNumber);
+            return true;
+        }
 
         public override void SetupDisplay()
         {

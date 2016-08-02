@@ -27,24 +27,28 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using System;
-using FlipWebApps.GameFramework.Scripts.Billing.Components;
-using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 
+/// <summary>
+/// Extended support and integration of In App Purchasing.
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/billing/
 namespace FlipWebApps.GameFramework.Scripts.Billing
 {
 
     /// <summary>
-    /// Helpoer functions for in app billing. See also the PaymentManager component that you should add to your scene.
+    /// Helper functions for in app billing. See also the PaymentManager component that you should add to your scene.
     /// </summary>
     public class Payment
     {
         /// <summary>
-        /// Process purchase of a given productId. This automatically handles certain types of purchase and notifications
+        /// Process purchase of a given productId.
         /// </summary>
+        /// This automatically handles certain types of purchase and notifications. It is called by PaymentManager but can also be
+        /// called from code if needed.
         public static void ProcessPurchase(string productId)
         {
-            MyDebug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", productId));
+            MyDebug.Log(string.Format("ProcessPurchase: Product: '{0}'", productId));
 
             if (string.Equals(productId, "android.test.purchased", StringComparison.Ordinal))
             {
@@ -63,10 +67,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
 
                 // notify all subscribers of the purchase
                 GameManager.SafeQueueMessage(new UnlockGamePurchasedMessage());
-#if UNITY_PURCHASING
-                if (PaymentManager.IsActive && PaymentManager.Instance.UnlockGamePurchased != null)
-                    PaymentManager.Instance.UnlockGamePurchased();          // deprecated.
-#endif
             }
 
             else if (productId.StartsWith("unlock.world."))
@@ -90,10 +90,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
 
                 // notify all subscribers of the purchase
                 GameManager.SafeQueueMessage(new WorldPurchasedMessage(number));
-#if UNITY_PURCHASING
-                if (PaymentManager.IsActive && PaymentManager.Instance.WorldPurchased != null)
-                    PaymentManager.Instance.WorldPurchased(number);          // deprecated.
-#endif
             }
 
             else if (productId.StartsWith("unlock.level."))
@@ -117,10 +113,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
 
                 // notify all subscribers of the purchase
                 GameManager.SafeQueueMessage(new LevelPurchasedMessage(number));
-#if UNITY_PURCHASING
-                if (PaymentManager.IsActive && PaymentManager.Instance.LevelPurchased != null)
-                    PaymentManager.Instance.LevelPurchased(number);          // deprecated.
-#endif
             }
 
             else if (productId.StartsWith("unlock.character."))
@@ -144,10 +136,6 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
 
                 // notify all subscribers of the purchase
                 GameManager.SafeQueueMessage(new CharacterPurchasedMessage(number));
-#if UNITY_PURCHASING
-                if (PaymentManager.IsActive && PaymentManager.Instance.CharacterPurchased != null)
-                    PaymentManager.Instance.CharacterPurchased(number);          // deprecated.
-#endif
             }
 
             // finally send the generic påurchased message.

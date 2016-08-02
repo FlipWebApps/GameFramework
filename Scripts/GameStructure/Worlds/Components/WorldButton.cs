@@ -28,6 +28,8 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
 {
@@ -41,21 +43,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
         public new void Awake()
         {
             base.Awake();
-
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.WorldPurchased += UnlockIfNumberMatches;
-#endif
+            GameManager.SafeAddListener<WorldPurchasedMessage>(WorldPurchasedHandler);
         }
 
         protected new void OnDestroy()
         {
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.WorldPurchased -= UnlockIfNumberMatches;
-#endif
-
+            GameManager.SafeRemoveListener<WorldPurchasedMessage>(WorldPurchasedHandler);
             base.OnDestroy();
+        }
+
+        bool WorldPurchasedHandler(BaseMessage message)
+        {
+            var worldPurchasedMessage = message as WorldPurchasedMessage;
+            UnlockIfNumberMatches(worldPurchasedMessage.WorldNumber);
+            return true;
         }
 
         protected override GameItemsManager<World, GameItem> GetGameItemsManager()

@@ -21,11 +21,13 @@
 
 #if UNITY_PURCHASING
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 #endif
 using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
@@ -41,21 +43,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
         public new void Awake()
         {
             base.Awake();
-
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.CharacterPurchased += UnlockIfNumberMatches;
-#endif
+            GameManager.SafeAddListener<CharacterPurchasedMessage>(CharacterPurchasedHandler);
         }
 
         protected new void OnDestroy()
         {
-#if UNITY_PURCHASING
-            if (PaymentManager.Instance != null)
-                PaymentManager.Instance.CharacterPurchased -= UnlockIfNumberMatches;
-#endif
-
+            GameManager.SafeRemoveListener<CharacterPurchasedMessage>(CharacterPurchasedHandler);
             base.OnDestroy();
+        }
+
+        bool CharacterPurchasedHandler(BaseMessage message)
+        {
+            var characterPurchasedMessage = message as CharacterPurchasedMessage;
+            UnlockIfNumberMatches(characterPurchasedMessage.CharacterNumber);
+            return true;
         }
 
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()
