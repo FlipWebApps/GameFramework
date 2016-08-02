@@ -20,8 +20,6 @@
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections;
-using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.GameFramework.Components
 {

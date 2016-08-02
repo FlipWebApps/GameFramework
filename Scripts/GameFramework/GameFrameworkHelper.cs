@@ -20,8 +20,6 @@
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections;
-using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.GameFramework
 {
@@ -57,10 +55,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework
 
         public static void ShowAssetStorePage()
         {
-            if (AssetDatabase.IsValidFolder(@"Assets\FlipWebApps\GameFrameworkExtras") || AssetDatabase.IsValidFolder(@"Assets\FlipWebApps\GameFrameworkTutorials"))
+#if UNITY_EDITOR
+            if (UnityEditor.AssetDatabase.IsValidFolder(@"Assets\FlipWebApps\GameFrameworkExtras") || UnityEditor.AssetDatabase.IsValidFolder(@"Assets\FlipWebApps\GameFrameworkTutorials"))
                 ShowAssetStorePageExtrasBundle();
             else
                 ShowAssetStorePageFree();
+#else
+                ShowAssetStorePageFree();
+#endif
         }
 
         public static void ShowAssetStorePageFree()
