@@ -61,6 +61,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         public Color CoinColorCantUnlock = Color.white;
 
         [Header("Default Handling")]
+        [Tooltip("The name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
         public string ClickUnlockedSceneToLoad;
 
         protected Player CurrentPlayer;
