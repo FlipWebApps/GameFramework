@@ -19,7 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
+using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 {
@@ -29,7 +34,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
     [RequireComponent(typeof(UnityEngine.UI.Text))]
     [AddComponentMenu("Game Framework/Localisation/LocaliseText")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class LocaliseText : MonoBehaviour
+    public class LocaliseText : RunOnMessage<LocalisationChangedMessage>
     {
         /// <summary>
         /// Localization key.
@@ -51,7 +56,10 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 
         UnityEngine.UI.Text _textComponent;
 
-        void Awake()
+        /// <summary>
+        /// setup
+        /// </summary>
+        public override void Awake()
         {
             _textComponent = GetComponent<UnityEngine.UI.Text>();
 
@@ -62,13 +70,9 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
             }
 
             OnLocalise();
-            Localisation.LocaliseText.OnLocalise += OnLocalise;
+            base.Awake();
         }
 
-        void OnDestroy()
-        {
-            Localisation.LocaliseText.OnLocalise -= OnLocalise;
-        }
 
         /// <summary>
         /// Update the display with the localise text
@@ -77,6 +81,18 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
         {
             // If we don't have a key then don't change the value
             if (!string.IsNullOrEmpty(Key)) Value = Localisation.LocaliseText.Get(Key);
+        }
+
+
+        /// <summary>
+        /// Called whenever the localisation changes.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public override bool RunMethod(LocalisationChangedMessage message)
+        {
+            OnLocalise();
+            return true;
         }
     }
 }

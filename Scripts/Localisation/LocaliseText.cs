@@ -39,14 +39,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 {
     public static class LocaliseText
     {
-
-        /// <summary>
-        /// Deligate if you want notifications when the localistaion had changed. (Obsolete - see messaging instead)
-        /// </summary>
-        [Obsolete("see messaging instead")]
-        public delegate void OnLocaliseDelegate();
-        public static OnLocaliseDelegate OnLocalise;
-
         /// <summary>
         /// Whether the localisation text is loaded.
         /// </summary>
@@ -115,8 +107,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
                 // notify of change here
                 GameManager.SafeQueueMessage(new LocalisationChangedMessage(_language, oldLanguage));
-                if (OnLocalise != null)
-                    OnLocalise();
             }
         }
         static string _language;                        // selected Language

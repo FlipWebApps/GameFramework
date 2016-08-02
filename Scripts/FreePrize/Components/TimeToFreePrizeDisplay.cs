@@ -23,6 +23,9 @@ using System;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {
@@ -42,12 +45,18 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 
             _text = GetComponent<UnityEngine.UI.Text>();
 
-            Localisation.LocaliseText.OnLocalise += RunMethod;
+            GameManager.SafeAddListener<LocalisationChangedMessage>(LocalisationChangedHandler);
         }
 
         void OnDestroy()
         {
-            Localisation.LocaliseText.OnLocalise -= RunMethod;
+            GameManager.SafeRemoveListener<LocalisationChangedMessage>(LocalisationChangedHandler);
+        }
+
+        bool LocalisationChangedHandler(BaseMessage message)
+        {
+            RunMethod();
+            return true;
         }
 
         public override void RunMethod()
