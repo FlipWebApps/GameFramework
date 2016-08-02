@@ -21,20 +21,12 @@
 #if UNITY_PURCHASING
 
 using System;
-using System.ComponentModel;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Purchasing;
-using FlipWebApps.GameFramework.Scripts.Billing;
-using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 {
@@ -48,19 +40,24 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
     public class PaymentManager : SingletonPersistant<PaymentManager>, IStoreListener
     {
         [Header("Payment Setup")]
-        // setup values
+
+        /// <summary>
+        /// Whether to initialise the payment backend on awake. 
+        /// </summary>
+        /// If you set this to false then be sure to manually call InitializePurchasing
+        [Tooltip("Whether to initialise the payment backend on awake. \n\nIf you set this to false then be sure to manually call InitializePurchasing.")]
         public bool InitOnAwake = true;
+
+        /// <summary>
+        /// A list of the product id's that you use in your game. 
+        /// </summary>
+        /// These can either the build in product id's or your own custom ones. These should be the same as in the backend store.
+        [Tooltip("A list of the product id's that you use in your game. THese can either the build in product id's or your own custom ones.\n\nThese should be the same as in the backend store.")]
         public PaymentProduct[] Products;
 
-        // actions called when some standard products are purchased
-        public Action<int> WorldPurchased;
-        public Action<int> LevelPurchased;
-        public Action<int> CharacterPurchased;
-        public Action UnlockGamePurchased;
-
         // setup references
-        private IStoreController _controller;              // Reference to the Purchasing system.
-        private IExtensionProvider _extensions;            // Reference to store-specific Purchasing subsystems.
+        IStoreController _controller;              // Reference to the Purchasing system.
+        IExtensionProvider _extensions;            // Reference to store-specific Purchasing subsystems.
 
         /// <summary>
         /// Called on startup.
@@ -74,7 +71,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
             }
         }
 
-
+        /// <summary>
+        /// Method to initialise the payment backend
+        /// </summary>
+        /// This is called automatically if you enable InitOnAwake, otherwise you will need to call it yourself
         public void InitializePurchasing()
         {
             // If we have already connected to Purchasing ...
@@ -96,13 +96,21 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
         }
 
 
-        private bool IsInitialized()
+        /// <summary>
+        /// Returns whether the payment system is initialised and ready for use.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsInitialized()
         {
             // Only say we are initialized if both the Purchasing references are set.
             return _controller != null && _extensions != null;
         }
 
 
+        /// <summary>
+        /// Try and purchase the given product id.
+        /// </summary>
+        /// <param name="productId"></param>
         public virtual void BuyProductId(string productId)
         {
             // If the stores throw an unexpected exception, use try..catch to protect my logic here.
@@ -143,7 +151,10 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
         }
 
 
-        // Restore purchases previously made by this customer. Some platforms automatically restore purchases. Apple currently requires explicit purchase restoration for IAP.
+        /// <summary>
+        /// Restore purchases previously made by this customer. 
+        /// </summary>
+        /// Some platforms automatically restore purchases. Apple currently requires explicit purchase restoration for IAP.
         public void RestorePurchases()
         {
             // If Purchasing has been initialised ...
@@ -193,9 +204,9 @@ namespace FlipWebApps.GameFramework.Scripts.Billing.Components
 
         /// <summary>
         /// Called when a purchase completes. This automatically handles certain types of purchase and notifications
-        /// 
-        /// May be called at any time after OnInitialized().
         /// </summary>
+        /// If you need custom processing then you may subclass PaymentManager and override this method.
+        /// This may be called at any time after OnInitialized().
         public virtual PurchaseProcessingResult ProcessPurchase(string productId)
         {
             Payment.ProcessPurchase(productId);

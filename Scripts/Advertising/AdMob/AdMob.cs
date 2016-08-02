@@ -23,6 +23,16 @@ using UnityEngine;
 #if GOOGLE_ADS
 using GoogleMobileAds.Api;
 #endif
+
+/// <summary>
+/// Support and extensions for advertising including AdMob and UnityAds
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/advertising/
+namespace FlipWebApps.GameFramework.Scripts.Advertising
+{
+    // For doxygen documentation purposes only 
+}
+
 /// <summary>
 /// Support classes and components to help with admob usage.
 /// 
