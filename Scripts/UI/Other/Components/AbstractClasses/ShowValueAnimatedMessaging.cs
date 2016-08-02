@@ -26,6 +26,8 @@ using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
+using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
 {
@@ -49,6 +51,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
         public UpdateModeType UpdateMode = UpdateModeType.Aggregated;
 
         string _localisationString;
+        bool _localisationHandlerAdded;
         bool _isAnimationRunning;
 
         Queue<T> _valuesPendingDisplay;
@@ -65,9 +68,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
             if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
             Assert.IsNotNull(Text, "You either have to specify a Text component, or attach the Show Lives component to a gameobject that contains one.");
 
-            // if localisation key specified then get and cache string.
-            if (!string.IsNullOrEmpty(LocalisationKey))
-                _localisationString = LocaliseText.Get(LocalisationKey);
+            GetLocalisationString();
 
             // initialise queue. we set aside capacity 2 as we assume most cases won't exceed this.
             _valuesPendingDisplay = new Queue<T>(2);
@@ -76,7 +77,35 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
             _valuesPendingDisplay.Enqueue(GetValueFromMessage(null));
             UpdateDisplay();
 
+            GameManager.SafeAddListener<LocalisationChangedMessage>(LocalisationChangedHandler);
+            _localisationHandlerAdded = true;
             base.Start();
+        }
+
+        public override void OnDestroy()
+        {
+            if (_localisationHandlerAdded)
+                GameManager.SafeRemoveListener<LocalisationChangedMessage>(LocalisationChangedHandler);
+            base.OnDestroy();
+        }
+
+        /// <summary>
+        /// Called when localisation changes, updates the localisation string and the display
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        bool LocalisationChangedHandler(BaseMessage message)
+        {
+            GetLocalisationString();
+            RefreshDisplayedValue();
+            return true;
+        }
+
+        private void GetLocalisationString()
+        {
+            // if localisation key specified then get and cache string.
+            if (!string.IsNullOrEmpty(LocalisationKey))
+                _localisationString = LocaliseText.Get(LocalisationKey);
         }
 
         /// <summary>
@@ -157,12 +186,21 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
         /// <summary>
         /// Update the display with the next value that is in the queue
         /// </summary>
-        public void UpdateDisplay() 
+        public void UpdateDisplay()
         {
             if (_valuesPendingDisplay.Count <= 0) return;
             // TODO Add a new mode - aggregate early - get new updated value incase changed since triggered.
 
             _currentlyDisplayedValue = _valuesPendingDisplay.Dequeue();
+            RefreshDisplayedValue();
+        }
+
+
+        /// <summary>
+        /// refresh the display with teh currently set _currentlyDisplayedValue
+        /// </summary>
+        private void RefreshDisplayedValue()
+        {
             Text.text = _localisationString == null ? _currentlyDisplayedValue.ToString() : string.Format(_localisationString, _currentlyDisplayedValue);
         }
 
