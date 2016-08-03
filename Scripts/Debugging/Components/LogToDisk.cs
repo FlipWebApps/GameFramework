@@ -30,21 +30,30 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
 {
     /// <summary>
-    /// Used for logging exception information to a file in debug build mode.
+    /// Used for storing logging information to a file in debug build mode.
     /// </summary>
     [AddComponentMenu("Game Framework/Debugging/LogToDisk")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LogToDisk : SingletonPersistant<LogToDisk>
     {
-        //Filename to assign log
+        /// <summary>
+        /// Filename to save to
+        /// </summary>
+        [Tooltip("Filename to save to")]
         public string LogFileName = "log.txt";
+
+        /// <summary>
+        /// Whether this should only be active an debug builds.
+        /// </summary>
+        [Tooltip("Whether this should only be active an debug builds")]
+        public bool DebugBuildsOnly = true;
 
         //Internal reference to stream writer object
         System.IO.StreamWriter _sw;
 
         protected override void GameSetup()
         {
-            if (!Debug.isDebugBuild) return;
+            if (!Debug.isDebugBuild && DebugBuildsOnly) return;
 
             base.GameSetup();
 
@@ -73,7 +82,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         void OnEnable()
         {
 #if !SKIP_CODE
-            if (Debug.isDebugBuild)
+            if (Debug.isDebugBuild || !DebugBuildsOnly)
             {
                 Application.logMessageReceived += HandleLogMessage;
             }
@@ -86,7 +95,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
         void OnDisable()
         {
 #if !SKIP_CODE
-            if (Debug.isDebugBuild)
+            if (Debug.isDebugBuild || !DebugBuildsOnly)
             {
                 Application.logMessageReceived -= HandleLogMessage;
             }

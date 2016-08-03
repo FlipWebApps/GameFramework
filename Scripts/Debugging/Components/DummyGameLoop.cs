@@ -27,22 +27,30 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
 {
     /// <summary>
-    /// This is a simple dummy game loop that will allow you to test the structure and interfaces in your game.
-    /// 
-    /// It gives an on screen meny where you can set whether the game is won or lost.
+    /// A simple dummy game loop that will allow you to test the structure and interfaces in your game.
+    /// </summary>
+    /// This component works with some of the GameStructure functionality and gives an on screen meny 
+    /// where you can set whether the game is won or lost. It requires that you have a LevelManager added 
+    /// to your scene
     /// 
     /// It doesn't make any sense to use this in an actual game!!
-    /// </summary>
     [AddComponentMenu("Game Framework/Debugging/DummyGameLoop")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class DummyGameLoop : MonoBehaviour
     {
+        /// <summary>
+        /// Placement types
+        /// </summary>
         public enum PlacementType { TopRight, TopLeft, BottomRight, BottomLeft}
+
+        /// <summary>
+        /// Where on screen the buttons should be placed.
+        /// </summary>
+        [Tooltip("Where on screen the buttons should be placed.")]
         public PlacementType Placement = PlacementType.BottomRight;
 
         const int ButtonWidth = 75;
         const int ButtonHeight = 25;
-
 
         void OnGUI()
         {

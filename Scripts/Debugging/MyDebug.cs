@@ -19,19 +19,20 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Display.Other;
 using UnityEngine;
 
-//#if UNITY_EDITOR
-//#define DEBUG
-//#endif
-
+/// <summary>
+/// Support tools, scripts and components for debugging your games
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/debugging/
 namespace FlipWebApps.GameFramework.Scripts.Debugging
 {
     /// <summary>
-    /// My debugging functions that supplement those provided by unity.
-    /// Logging done through these is only output if run via the editor or as part of a debug build
+    /// Debugging functions that supplement those provided by unity.
     /// </summary>
+    /// Supports specifying a logging level which controls what level of informaiton is displayed.
+    /// 
+    /// Logging done through these is only output if run via the editor or as part of a debug build
     public class MyDebug
     {
         public enum DebugLevelType { None, Information, Warning, Error }
@@ -48,6 +49,9 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
             DebugLevel = DebugLevelType.None;
         }
 
+        /// <summary>
+        /// Returns whether this is either running in the editor, or is a debug build
+        /// </summary>
         public static bool IsDebugBuildOrEditor
         {
 #if UNITY_EDITOR
@@ -57,7 +61,11 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
 #endif
         }
 
-        // show text to a text component if it exists
+        /// <summary>
+        /// Shows text to a Text componene on the gameobject "DebugText" if it exists
+        /// </summary>
+        /// Can be used for in game debugging where you don't have easy access to other logs.
+        /// <param name="text"></param>
         public static void DebugText(string text)
         {
             if (!IsDebugBuildOrEditor)
@@ -74,6 +82,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
             }
         }
 
+        /// <summary>
+        /// Log a message
+        /// </summary>
+        /// This method is similar to Debug.Log but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Information or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message)
         {
@@ -81,6 +95,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.Log(message);
         }
 
+        /// <summary>
+        /// Format and then log a message
+        /// </summary>
+        /// This method is similar to Debug.Log but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Information or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogF(string format, params object[] args)
         {
@@ -88,6 +108,13 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.Log(string.Format(format, args));
         }
 
+        /// <summary>
+        /// Log a message with context
+        /// </summary>
+        /// This method is similar to Debug.Log but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Information or more.
+        /// <param name="message"></param>
+        /// <param name="context"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message, Object context)
         {
@@ -95,6 +122,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.Log(message, context);
         }
 
+        /// <summary>
+        /// Log an error message
+        /// </summary>
+        /// This method is similar to Debug.LogError but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Error or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message)
         {
@@ -102,6 +135,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogError(message);
         }
 
+        /// <summary>
+        /// Format and then log an error message
+        /// </summary>
+        /// This method is similar to Debug.LogError but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Error or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogErrorF(string format, params object[] args)
         {
@@ -109,6 +148,13 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogError(string.Format(format, args));
         }
 
+        /// <summary>
+        /// Log an error message with context
+        /// </summary>
+        /// This method is similar to Debug.LogError but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Error or more.
+        /// <param name="message"></param>
+        /// <param name="context"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message, Object context)
         {
@@ -116,6 +162,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogError(message, context);
         }
 
+        /// <summary>
+        /// Log a warning message
+        /// </summary>
+        /// This method is similar to Debug.LogWarning but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Warning or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message)
         {
@@ -123,6 +175,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogWarning(message.ToString());
         }
 
+        /// <summary>
+        /// Format and then log a warning message
+        /// </summary>
+        /// This method is similar to Debug.LogWarning but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Warning or more.
+        /// <param name="message"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarningF(string format, params object[] args)
         {
@@ -130,6 +188,13 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogWarning(string.Format(format, args));
         }
 
+        /// <summary>
+        /// Log a warning message with context
+        /// </summary>
+        /// This method is similar to Debug.LogWarning but only outputs in editor mode and if DebugLevel is
+        /// DebugLevelType.Warning or more.
+        /// <param name="message"></param>
+        /// <param name="context"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message, Object context)
         {
@@ -137,12 +202,28 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
                 Debug.LogWarning(message.ToString(), context);
         }
 
+        /// <summary>
+        /// Draw a line into the scene view
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="color"></param>
+        /// <param name="duration"></param>
+        /// <param name="depthTest"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void DrawLine(Vector3 start, Vector3 end, Color color = default(Color), float duration = 0.0f, bool depthTest = true)
         {
             Debug.DrawLine(start, end, color, duration, depthTest);
         }
 
+        /// <summary>
+        /// Draw a line from start to start + dir in the scene view.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="dir"></param>
+        /// <param name="color"></param>
+        /// <param name="duration"></param>
+        /// <param name="depthTest"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void DrawRay(Vector3 start, Vector3 dir, Color color = default(Color), float duration = 0.0f, bool depthTest = true)
         {
@@ -150,51 +231,34 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [System.Obsolete("Deprecated: Use LogWarning instead.")]
         public static void Throw(string message)
         {
             Debug.LogWarning(message);
         }
 
-        public static void DrawCube(Vector3 pos, Color col, Vector3 size, float duration = 0.0f)
+        /// <summary>
+        /// Draws a cube into the scene view
+        /// </summary>
+        /// <param name="position">Centre point</param>
+        /// <param name="color">Color</param>
+        /// <param name="size">Size</param>
+        /// <param name="duration">How long to display for</param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawCube(Vector3 position, Color color, Vector3 size, float duration = 0.0f)
         {
             Vector3 halfScale = size * 0.5f;
 
             Vector3[] points =
             {
-                pos + new Vector3(halfScale.x,      halfScale.y,    halfScale.z),
-                pos + new Vector3(-halfScale.x,     halfScale.y,    halfScale.z),
-                pos + new Vector3(-halfScale.x,     -halfScale.y,   halfScale.z),
-                pos + new Vector3(halfScale.x,      -halfScale.y,   halfScale.z),
-                pos + new Vector3(halfScale.x,      halfScale.y,    -halfScale.z),
-                pos + new Vector3(-halfScale.x,     halfScale.y,    -halfScale.z),
-                pos + new Vector3(-halfScale.x,     -halfScale.y,   -halfScale.z),
-                pos + new Vector3(halfScale.x,      -halfScale.y,   -halfScale.z),
-            };
-
-            Debug.DrawLine(points[0], points[1], col, duration);
-            Debug.DrawLine(points[1], points[2], col, duration);
-            Debug.DrawLine(points[2], points[3], col, duration);
-            Debug.DrawLine(points[3], points[0], col, duration);
-        }
-
-        public static void DrawRect(Rect rect, Color color, float duration = 0.0f)
-        {
-            Vector3 pos = new Vector3(rect.x + rect.width / 2, rect.y + rect.height / 2, 0.0f);
-            Vector3 scale = new Vector3(rect.width, rect.height, 0.0f);
-
-            DrawRect(pos, color, scale, duration);
-        }
-
-        public static void DrawRect(Vector3 pos, Color color, Vector3 size, float duration = 0.0f)
-        {
-            Vector3 halfSize = size * 0.5f;
-
-            Vector3[] points = 
-            {
-                pos + new Vector3(halfSize.x,      halfSize.y,    halfSize.z),
-                pos + new Vector3(-halfSize.x,     halfSize.y,    halfSize.z),
-                pos + new Vector3(-halfSize.x,     -halfSize.y,   halfSize.z),
-                pos + new Vector3(halfSize.x,      -halfSize.y,   halfSize.z),
+                position + new Vector3(halfScale.x,      halfScale.y,    halfScale.z),
+                position + new Vector3(-halfScale.x,     halfScale.y,    halfScale.z),
+                position + new Vector3(-halfScale.x,     -halfScale.y,   halfScale.z),
+                position + new Vector3(halfScale.x,      -halfScale.y,   halfScale.z),
+                position + new Vector3(halfScale.x,      halfScale.y,    -halfScale.z),
+                position + new Vector3(-halfScale.x,     halfScale.y,    -halfScale.z),
+                position + new Vector3(-halfScale.x,     -halfScale.y,   -halfScale.z),
+                position + new Vector3(halfScale.x,      -halfScale.y,   -halfScale.z),
             };
 
             Debug.DrawLine(points[0], points[1], color, duration);
@@ -203,6 +267,48 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
             Debug.DrawLine(points[3], points[0], color, duration);
         }
 
+        /// <summary>
+        /// Draw a 2D rect into the scene view.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="color"></param>
+        /// <param name="duration"></param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawRect(Rect rect, Color color, float duration = 0.0f)
+        {
+            Vector3 pos = new Vector3(rect.x + rect.width / 2, rect.y + rect.height / 2, 0.0f);
+            Vector3 scale = new Vector3(rect.width, rect.height, 0.0f);
+
+            DrawRect(pos, color, scale, duration);
+        }
+
+        /// <summary>
+        /// Draw a 2D rect into the scene view.
+        /// </summary>
+        /// <param name="position">Centre point</param>
+        /// <param name="color">Color</param>
+        /// <param name="size">Size</param>
+        /// <param name="duration">How long to display for</param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        public static void DrawRect(Vector3 position, Color color, Vector3 size, float duration = 0.0f)
+        {
+            Vector3 halfSize = size * 0.5f;
+
+            Vector3[] points = 
+            {
+                position + new Vector3(halfSize.x,      halfSize.y,    halfSize.z),
+                position + new Vector3(-halfSize.x,     halfSize.y,    halfSize.z),
+                position + new Vector3(-halfSize.x,     -halfSize.y,   halfSize.z),
+                position + new Vector3(halfSize.x,      -halfSize.y,   halfSize.z),
+            };
+
+            Debug.DrawLine(points[0], points[1], color, duration);
+            Debug.DrawLine(points[1], points[2], color, duration);
+            Debug.DrawLine(points[2], points[3], color, duration);
+            Debug.DrawLine(points[3], points[0], color, duration);
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void DrawPoint(Vector3 pos, Color color, float size, float duration = 0.0f)
         {
             Vector3[] points = 
@@ -235,7 +341,12 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
             Debug.DrawLine(points[5], points[3], color, duration);
         }
 
-
+        /// <summary>
+        /// Draw a 2D GizmoRect for use with Editor mode
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="color"></param>
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void DrawGizmoRect(Rect rect, Color color)
         {
             Gizmos.color = color;

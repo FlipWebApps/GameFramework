@@ -31,16 +31,34 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LogToScreen : MonoBehaviour
     {
-        static string _myLog;
-        static readonly Queue LogMessagesQueue = new Queue();
-        public string Output = "";
-        public string Stack = "";
-        bool _hidden = true;
+        /// <summary>
+        /// The maximum number of lines to display
+        /// </summary>
+        [Tooltip("The maximum number of lines to display")]
         public int MaxLines = 30;
+
+        /// <summary>
+        /// Whether this should only be active an debug builds or editor mode.
+        /// </summary>
+        [Tooltip("Whether this should only be active an debug builds or editor mode")]
+        public bool DebugBuildsOrEditorOnly = true;
+
+        public string Output { get; set; }
+        public string Stack { get; set; }
+
+        static string _myLog;
+        static readonly Queue _logMessagesQueue = new Queue();
+        bool _hidden = true;
+
+        void Awake()
+        {
+            Output = "";
+            Stack = "";
+        }
 
         void OnEnable()
         {
-            if (MyDebug.IsDebugBuildOrEditor)
+            if (MyDebug.IsDebugBuildOrEditor || !DebugBuildsOrEditorOnly)
             {
                 Application.logMessageReceived += HandleLogMessage;
             }
@@ -48,7 +66,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
 
         void OnDisable()
         {
-            if (MyDebug.IsDebugBuildOrEditor)
+            if (MyDebug.IsDebugBuildOrEditor || !DebugBuildsOrEditorOnly)
             {
                 Application.logMessageReceived -= HandleLogMessage;
             }
@@ -59,20 +77,20 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
             Output = logString;
             Stack = stackTrace;
             string newString = "\n [" + type + "] : " + Output;
-            LogMessagesQueue.Enqueue(newString);
+            _logMessagesQueue.Enqueue(newString);
             if (type == LogType.Exception)
             {
                 newString = "\n" + stackTrace;
-                LogMessagesQueue.Enqueue(newString);
+                _logMessagesQueue.Enqueue(newString);
             }
 
-            while (LogMessagesQueue.Count > MaxLines)
+            while (_logMessagesQueue.Count > MaxLines)
             {
-                LogMessagesQueue.Dequeue();
+                _logMessagesQueue.Dequeue();
             }
 
             _myLog = string.Empty;
-            foreach (string s in LogMessagesQueue)
+            foreach (string s in _logMessagesQueue)
             {
                 _myLog += s;
             }
@@ -86,7 +104,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
                 {
                     if (GUI.Button(new Rect(Screen.width - 100, 10, 80, 20), "Show"))
                     {
-                        Hide(false);
+                        _hidden = false;
                     }
                 }
                 else
@@ -94,15 +112,10 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
                     GUI.TextArea(new Rect(0, 0, (float)Screen.width / 3, Screen.height), _myLog);
                     if (GUI.Button(new Rect(Screen.width - 100, 10, 80, 20), "Hide"))
                     {
-                        Hide(true);
+                        _hidden = true;
                     }
                 }
             }
-        }
-
-        public void Hide(bool shouldHide)
-        {
-            _hidden = shouldHide;
         }
     }
 }
