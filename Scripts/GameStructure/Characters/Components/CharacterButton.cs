@@ -28,6 +28,8 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Messaging;
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
+
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
