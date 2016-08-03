@@ -21,8 +21,8 @@
 
 #if UNITY_PURCHASING
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
-using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 #endif
+using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
