@@ -1,4 +1,4 @@
-Game Framework - Free v2.5
+Game Framework - Free v3.0
 
 Thank you for using Game Framework. 
 
@@ -58,6 +58,48 @@ Chinese Translation - luochuanyuewu
 - - - - - - - - - -
 
 CHANGE LOG
+v3.0
+
+The main focus of this version is code cleanup and removal of obsolete code. It is recommended to backup and then delete 
+the old /FlipWebApps folder before updating. If you have any problems or compile errors due to removed code then see the 
+below release notes or visit our support forum for help.
+
+	Game Framework Core - Improvements
+	- Advertising: Added AdMob support
+	- Advertising: Added AdMob ShowHideAdvert compontent
+	- Advertising: Added UnityAds.ShowAdvert shortcut method
+	- Advertising: Added ShowAdvert component to simply show Unity Adverts
+	- Advertising: Updated comments, tooltips, help links and documentation page
+	- Animation: Updated comments, tooltips, help links and documentation page
+	- Animations: Removed deprecated score specific animations in favor of generic UI animations.
+	- Audio: Updated comments, tooltips, help links and documentation page
+	- Billing: Updated comments, tooltips, help links and documentation page
+	- Billing: Removed deprecated event callbacks in favor of messaging system.
+	- Debugging: Removed deprecated cheat functions component
+	- Debugging: Updated comments, tooltips, help links and documentation page
+	- Display: Removed redundant HexString() method from ColorHelper.
+	- GameStructure: Added PlayerChangedMessage when the selected player is changed
+	- Internal: Move all GameFramework internal classes to new scripts/GameFramework folder.
+	- Localisation: Updated comments, tooltips, help links and documentation page
+	- Localisation: Added EnableIfLanguage component
+	- Localisation: Removed obsolete OnLocalise event in favor of messaging and LocalisationChangedMessage
+	- Prefab: Removed deprecated Score/TotalCoins prefab
+	- Preferences: Corrected namespace from ...Scripts.Integrations.Preferences to ...Scripts.Preferences
+	- Preferences: Updated comments, tooltips, help links and documentation page
+	- UI: Removed previously deprecated FadeLevelManager and ScoreDisplay classes
+	- UI: All ShowValueAnimatedMessaging derived classes (e.g. ShowCoins etc..) now react to localisation changes
+
+	Game Framework Core - Fixes
+	- UI: Fixes for ShowValueAnimated Immediate mode
+	- GameStructure: Assert check in GameManager for valid mainCamera
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Animation: Added animated values sample
+	
+	BeautifulTransitions (Extras Bundle): Updated to v3.2 pre-release that includes:
+	- Transition: Added option to specify the axis on which MoveTarget should work so you can easier move multiple items (see GameObjectTransitionsDemo)
+	- Transition: Deprecated MoveTarget TransitionStep as the functionality is provided by Move (Note: MoveTarget component remains)
+	- Transition: Updated tooltips
 
 v2.5
 
@@ -102,7 +144,7 @@ v2.5
 	- Transitions: Updated component menu name
 	- Transitions: Screen & Camera wipes now support smoothing.
 
-	Prefs Editor (Extras Bundle): Updated to v1.0.1 that includes:
+	Prefs Editor (Extras Bundle): Updated to v2.0 that includes:
 	- Support for encrypted player prefs including optional auto encryption of old unencrypted values
 
 v2.4
