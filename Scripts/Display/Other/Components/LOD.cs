@@ -19,7 +19,9 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 {
-
+    /// <summary>
+    /// Deprecated: Please see LevelOfDetail instead
+    /// </summary>
     [AddComponentMenu("Game Framework/Display/Other/LOD")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LOD : MonoBehaviour
@@ -38,6 +40,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 
         void Start()
         {
+            Debug.LogWarning("This component is deprecated. Please replace with the LevelOfDetail component. This component will be removed in a future version.");
             StartCoroutine(DistanceCheck());
         }
 
