@@ -23,13 +23,15 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement
 {
-
+    /// <summary>
+    /// Provides methods to help with positioning and moving items.
+    /// </summary>
     public class PositionHelper : MonoBehaviour
     {
         public static Plane XzPlane = new Plane(Vector3.up, Vector3.zero);
 
         /// <summary>
-        /// 
+        /// Return the position of a given Vector3 on the X / Z plane where the y position is 0
         /// </summary>
         /// <returns></returns>
         public static Vector3 GetPositionOnXzPlane(Vector3 position)
@@ -37,13 +39,17 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement
             return GetPositionOnPlane(position, XzPlane);
         }
 
+        /// <summary>
+        /// Return the position of a given Vector3 on the X / Z plane for a given y position
+        /// </summary>
+        /// <returns></returns>
         public static Vector3 GetPositionOnXzPlane(Vector3 position, float y)
         {
             return GetPositionOnPlane(position, new Plane(Vector3.up, new Vector3(0, y, 0)));
         }
 
         /// <summary>
-        /// 
+        /// Return the position of a Vector3 on a specified plane
         /// </summary>
         /// <param name="position"></param>
         /// <param name="plane"></param>
@@ -63,12 +69,25 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement
         }
 
 
-
+        /// <summary>
+        /// Rotate a point around a specified pivot by the specified angle
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angles"></param>
+        /// <returns></returns>
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
         {
             return RotatePointAroundPivot(point, pivot, Quaternion.Euler(angles));
         }
 
+        /// <summary>
+        /// Rotate a point around a specified pivot by the specified quaternion
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="quaternion"></param>
+        /// <returns></returns>
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion quaternion)
         {
             Vector3 dir = point - pivot; // get point direction relative to pivot

@@ -19,6 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
@@ -27,17 +29,47 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// Rotate this gameobject at a given rate.
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/FixedRotation")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class FixedRotation : MonoBehaviour
     {
+        /// <summary>
+        /// The coordinate space in which to operate.
+        /// </summary>
+        [Tooltip("The coordinate space in which to operate.")]
         public Space Space;
+
+        /// <summary>
+        /// X Azis rotation speed
+        /// </summary>
+        [Tooltip("X Azis rotation speed")]
         public float XAngle;
+
+        /// <summary>
+        /// Y Azis rotation speed
+        /// </summary>
+        [Tooltip("Y Azis rotation speed")]
         public float YAngle;
+
+        /// <summary>
+        /// Z Azis rotation speed
+        /// </summary>
+        [Tooltip("Z Azis rotation speed")]
         public float ZAngle;
+
+        /// <summary>
+        /// Specify whether to only rotate when a level is actually running, otherwise this gameobject will always rotate
+        /// </summary>
+        [Tooltip("Specify whether to only rotate when a level is actually running, otherwise this gameobject will always rotate")]
+        public bool OnlyWhenLevelRunning = false;
 
         // Update is called once per frame
         void Update()
         {
+#pragma warning disable 618
+            if (OnlyWhenLevelRunning && (!LevelManager.Instance.IsLevelRunning || GameManager.Instance.IsPaused))
+#pragma warning restore 618
+                return;
+
             transform.Rotate(XAngle * Time.deltaTime, YAngle * Time.deltaTime, ZAngle * Time.deltaTime, Space);
         }
     }

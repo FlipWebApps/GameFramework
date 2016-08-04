@@ -27,12 +27,18 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// Center this gameobject within the main camera.
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/CenterInCamera")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class CenterInCamera : MonoBehaviour
     {
+        /// <summary>
+        /// An offset from the camera centre to position this gameobject
+        /// </summary>
+        [Tooltip("An offset from the camera centre to position this gameobject")]
+        public Vector3 Offset = Vector3.zero;
+
         void Update()
         {
-            transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
+            transform.position = new Vector3(Camera.main.transform.position.x + Offset.x, Camera.main.transform.position.y + Offset.y, transform.position.z + Offset.z);
         }
     }
 }

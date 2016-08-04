@@ -21,6 +21,10 @@
 
 using UnityEngine;
 
+/// <summary>
+/// Contains components and libraries to help with positioning and movement of gameobjects and other items
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement
 {
     /// <summary>
@@ -28,23 +32,56 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement
     /// </summary>
     public static class DisplayMetrics
     {
-        const float DefaultDpi = 160.0f;
+        /// <summary>
+        /// A default Dpi that is used as a reference value incase the system is not able to provide this information.
+        /// </summary>
+        public static float DefaultDpi = 160.0f;
 
-        public static float GetDpi()
+        /// <summary>
+        /// Whether the system Dpi is available.
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsSystemDpiAvailable()
         {
-            return Mathf.Approximately(Screen.dpi, 0) ? DefaultDpi : Screen.dpi;
+            return !Mathf.Approximately(Screen.dpi, 0);
         }
 
+        /// <summary>
+        /// Return the current Dpi, falling back to DefaultDpi if the system is not able to provide this information.
+        /// </summary>
+        /// <returns></returns>
+        public static float GetDpi()
+        {
+            return IsSystemDpiAvailable() ? Screen.dpi : DefaultDpi;
+        }
+
+        /// <summary>
+        /// Returns a scale factor of the current DPP against the DefaultDPI
+        /// </summary>
+        /// <returns></returns>
         public static float GetScale()
         {
             return GetDpi() / DefaultDpi;
         }
 
+        /// <summary>
+        /// Get the physical height of the display
+        /// </summary>
+        /// If the system is not able to report the Dpi then this will fall back to the DefaultDpi which may give incorrect results.
+        /// Check IsSystemDpiAvailable() if necessary to verify the returned value.
+        /// <returns></returns>
         public static float GetPhysicalHeight()
         {
             return Screen.height / GetDpi();
         }
 
+
+        /// <summary>
+        /// Get the physical width of the display
+        /// </summary>
+        /// If the system is not able to report the Dpi then this will fall back to the DefaultDpi which may give incorrect results.
+        /// Check IsSystemDpiAvailable() if necessary to verify the returned value.
+        /// <returns></returns>
         public static float GetPhysicalWidth()
         {
             return Screen.width / GetDpi();

@@ -27,9 +27,13 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// Rotate so that the gameobject looks towards the specified transform
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/LookAtTransform")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class LookAtTransform : MonoBehaviour
     {
+        /// <summary>
+        /// A transform that this gameobject will follow.
+        /// </summary>
+        [Tooltip("A transform that this gameobject will follow.")]
         public Transform LookAtTansform;
 
         void LateUpdate()

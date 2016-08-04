@@ -27,11 +27,20 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// Maintain a fixed distance from the specified transform
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/MoveWithTransform")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class MoveWithTransform : MonoBehaviour
     {
-        public Transform Target;            // The position that that camera will be following.
-        public float Smoothing = 5f;        // The Speed with which the camera will be following.
+        /// <summary>
+        /// A transform that this gameobject will follow.
+        /// </summary>
+        [Tooltip("A transform that this gameobject will follow.")]
+        public Transform Target;
+
+        /// <summary>
+        /// The Speed with which to follow the Target.
+        /// </summary>
+        [Tooltip("The Speed with which to follow the Target.")]
+        public float Smoothing = 5f;
 
         Vector3 _offset;                     // The initial offset from the target.
 

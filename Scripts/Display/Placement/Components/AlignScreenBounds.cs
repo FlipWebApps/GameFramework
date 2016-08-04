@@ -24,14 +24,23 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
 {
     /// <summary>
-    /// Aligh this game object with the screen bounds. Useful when catering for dynamic screen sizes.
+    /// Align this game object with the screen bounds. Useful when catering for dynamic screen sizes.
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/AlignScreenBounds")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class AlignScreenBounds : MonoBehaviour
     {
         public enum BorderType { Top, Bottom, Left, Right }
+        /// <summary>
+        /// The border to align with
+        /// </summary>
+        [Tooltip("The border to align with")]
         public BorderType Border;
+
+        /// <summary>
+        /// A value by which to offset the gameobject from the border. 
+        /// </summary>
+        [Tooltip("A value by which to offset the gameobject from the border. ")]
         public float Offset;
 
         void Start()

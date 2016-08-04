@@ -29,18 +29,25 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// Move this gameobject at a given rate.
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Placement/FixedMovement")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class FixedMovement : MonoBehaviour
     {
         /// <summary>
-        /// Scrolling Speed
+        /// Movement speed
         /// </summary>
+        [Tooltip("Movement speed")]
         public Vector3 Speed = new Vector3(0, 0, 1);
+
+        /// <summary>
+        /// Specify whether to only move when a level is actually running, otherwise this gameobject will always move
+        /// </summary>
+        [Tooltip("Specify whether to only move when a level is actually running, otherwise this gameobject will always move")]
+        public bool OnlyWhenLevelRunning = true;
 
         void Update()
         {
 #pragma warning disable 618
-            if (!LevelManager.Instance.IsLevelRunning || GameManager.Instance.IsPaused)
+            if (OnlyWhenLevelRunning && (!LevelManager.Instance.IsLevelRunning || GameManager.Instance.IsPaused))
 #pragma warning restore 618
                 return;
 

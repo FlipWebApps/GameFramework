@@ -23,14 +23,25 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
 {
-
+    /// <summary>
+    /// Automatically destroys gameobjects that collide with this one.
+    /// </summary>
+    /// This uses the physics system so ensure that colliders and rigid bodies are setup correctly.
     [AddComponentMenu("Game Framework/Display/Placement/ObjectDestroyer")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class ObjectDestroyer : MonoBehaviour
     {
         public enum DestroyModeType { DestroyCollidingGameObject, DestroyCollidingParentGameObject }
+        /// <summary>
+        /// Whether to destroy the colliding gameobject or it's parent.
+        /// </summary>
+        [Tooltip("Whether to destroy the colliding gameobject or it's parent.")]
         public DestroyModeType DestroyMode;
 
+        /// <summary>
+        /// The tag of colliding gameobjects to destroy. Leave blank to destroy all colliding gameobjects
+        /// </summary>
+        [Tooltip("The tag of colliding gameobjects to destroy. Leave blank to destroy all colliding gameobjects")]
         public string DestroyTag = "Obstacle";
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -39,7 +50,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
                 return;
 
             // Is this an obsticle?
-            if (collision.gameObject.CompareTag(DestroyTag))
+            if (string.IsNullOrEmpty(DestroyTag) || collision.gameObject.CompareTag(DestroyTag))
             {
                 DestroyCollidingGameObject(collision.gameObject);
             }
@@ -51,9 +62,9 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
                 return;
 
             // Is this an obsticle?
-            if (otherCollider.gameObject.CompareTag(DestroyTag))
+            if (string.IsNullOrEmpty(DestroyTag) || otherCollider.gameObject.CompareTag(DestroyTag))
             {
-                Destroy(otherCollider.gameObject); // Remember to always target the game object, otherwise you will just remove the script
+                DestroyCollidingGameObject(otherCollider.gameObject);
             }
         }
 
