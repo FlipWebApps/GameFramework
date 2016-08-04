@@ -24,23 +24,54 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 {
     /// <summary>
-    /// Description
     /// Creates a background for the camera, which is a simple gradient blend between two colors.
-    /// Usage
-    /// Attach this script to your camera, and change the top and bottom colors in the inspector as desired. When run, the clear flags for your camera is set to Depth Only, allowing a newly created background camera to show through. A plane with the gradient colors is created, which only the background camera can see. This is done with GradientLayer, which is the only layer that the background camera sees, and your camera is set to ignore. The default, 7, is a built-in (non-user-editable) layer that's not used for anything as of Unity 3.1. It can be changed as necessary.
     /// </summary>
+    /// Attach this script to your camera, and change the top and bottom colors in the inspector as desired. When run, 
+    /// the clear flags for your camera is set to Depth Only, allowing a newly created background camera to show through. 
+    /// A plane with the gradient colors is created, which only the background camera can see. This is done with GradientLayer, 
+    /// which is the only layer that the background camera sees, and your camera is set to ignore. The default, 7, is a 
+    /// built-in (non-user-editable) layer that's not used for anything as of Unity 3.1. It can be changed as necessary.
     [RequireComponent(typeof(Camera))]
     [AddComponentMenu("Game Framework/Display/Other/GradientBackground")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class GradientBackground : MonoBehaviour
     {
 
+        /// <summary>
+        /// The color to use at the top of the gradient
+        /// </summary>
+        [Tooltip("The color to use at the top of the gradient")]
         public Color TopColor = Color.blue;
+
+        /// <summary>
+        /// The color to use at the bottom of the gradient
+        /// </summary>
+        [Tooltip("The color to use at the bottom of the gradient")]
         public Color BottomColor = Color.white;
+
+        /// <summary>
+        /// The shader that should be used. Select GradientBackgroundShader here
+        /// </summary>
+        [Tooltip("The shader that should be used. Select GradientBackgroundShader here")]
         public Shader Shader;
+
+        /// <summary>
+        /// The layer on which to generate the gradient
+        /// </summary>
+        [Tooltip("The layer on which to generate the gradient")]
         public int GradientLayer = 7;
+
+        /// <summary>
+        /// The gradient normalised screen top position
+        /// </summary>
+        [Tooltip("The gradient normalised screen top position")]
         [Range(0, 1)]
         public float NormalisedTop = 1;
+
+        /// <summary>
+        /// The gradient normalised screen bottom position
+        /// </summary>
+        [Tooltip("The gradient normalised screen bottom position")]
         [Range(0, 1)]
         public float NormalisedBottom = 0;
 
@@ -50,7 +81,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
             GradientLayer = Mathf.Clamp(GradientLayer, 0, 31);
             if (!attachedCamera)
             {
-                Debug.LogError("Must attach GradientBackground script to the camera");
+                Debug.LogError("You must attach a GradientBackground script to the same gameobject as a Camera");
                 return;
             }
 
@@ -75,10 +106,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
                 triangles = new[] {0, 1, 2, 1, 3, 2}
             };
 
-
-
             var mat = new Material(Shader);
-
             var gradientPlane = new GameObject("Gradient Plane", typeof(MeshFilter), typeof(MeshRenderer));
 
             ((MeshFilter)gradientPlane.GetComponent(typeof(MeshFilter))).mesh = mesh;

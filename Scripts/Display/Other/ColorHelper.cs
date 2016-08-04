@@ -23,11 +23,35 @@ using System;
 using System.Globalization;
 using UnityEngine;
 
+/// <summary>
+/// Display, positioning, movement and particles helper components and libraries
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
+namespace FlipWebApps.GameFramework.Scripts.Display
+{
+    // For doxygen documentation purposes only 
+}
+
+/// <summary>
+/// Various display related components and helper classes
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
 namespace FlipWebApps.GameFramework.Scripts.Display.Other { 
     /// <summary>
-    /// Functions to help with color conversion
+    /// Functions to help with color usage and conversion
     /// </summary>
     public class ColorHelper {
+
+        /// <summary>
+        /// Converts a hex string representation of a color into a Color
+        /// </summary>
+        /// string should be in one of the formats:
+        /// RRGGBB
+        /// RRGGBBAA
+        /// #RRGGBB
+        /// #RRGGBBAA
+        /// <param name="colorString"></param>
+        /// <returns></returns>
         public static Color ParseColorString(string colorString)
         {
             var clr = new Color(0, 0, 0);
@@ -35,7 +59,8 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other {
 
             try
             {
-                var str = colorString.Substring(1, colorString.Length - 1);
+                // of odd length then strip leading char.
+                var str = colorString.Length % 2 == 0 ? colorString : colorString.Substring(1, colorString.Length - 1);
                 clr.r = int.Parse(str.Substring(0, 2),
                     NumberStyles.AllowHexSpecifier) / 255.0f;
                 clr.g = int.Parse(str.Substring(2, 2),
@@ -54,12 +79,13 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other {
             return clr;
         }
 
-        //public static string HexString(Color color,
-        //        bool includeAlpha = false)
-        //{
-        //    return HexString((Color32)color, includeAlpha);
-        //}
 
+        /// <summary>
+        /// Convert a Color into a hex string with optional alpha component.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="includeAlpha"></param>
+        /// <returns></returns>
         public static string HexString(Color32 color,
                 bool includeAlpha = false)
         {
@@ -76,6 +102,14 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other {
             return "#" + red + green + blue;
         }
 
+
+        /// <summary>
+        /// Lerp between two ColorHSV values.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static Color LerpHSV(ColorHSV a, ColorHSV b, float t)
         {
             // Hue interpolation

@@ -26,6 +26,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
     /// <summary>
     /// Align this game object with the screen bounds. Useful when catering for dynamic screen sizes.
     /// </summary>
+    /// NOTE: Only works with Orthographic camera so most suited for 2D games.
     [AddComponentMenu("Game Framework/Display/Placement/AlignScreenBounds")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class AlignScreenBounds : MonoBehaviour

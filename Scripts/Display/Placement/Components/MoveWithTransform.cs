@@ -54,11 +54,11 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
 
         void FixedUpdate ()
         {
-            // Create a postion the camera is aiming for based on the offset from the target.
-            Vector3 targetCamPos = Target.position + _offset;
-
-            // Smoothly interpolate between the camera's current position and it's target position.
-            transform.position = Vector3.Lerp (transform.position, targetCamPos, Smoothing * Time.deltaTime);
+            if (Target != null)
+            {
+                // Smoothly interpolate between the current position and target position.
+                transform.position = Vector3.Lerp(transform.position, Target.position + _offset, Smoothing * Time.deltaTime);
+            }
         }
     }
 }

@@ -38,9 +38,12 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
 
         void LateUpdate()
         {
-            //Billboard sprite
-            Vector3 lookAtDir = new Vector3(LookAtTansform.position.x - transform.position.x, 0, LookAtTansform.position.z - transform.position.z);
-            transform.rotation = Quaternion.LookRotation(lookAtDir.normalized, Vector3.up);
+            if (LookAtTansform != null)
+            {
+                transform.LookAt(LookAtTansform);
+                //Vector3 lookAtDir = new Vector3(LookAtTansform.position.x - transform.position.x, 0, LookAtTansform.position.z - transform.position.z);
+                //transform.rotation = Quaternion.LookRotation(lookAtDir.normalized, Vector3.up);
+            }
         }
     }
 }

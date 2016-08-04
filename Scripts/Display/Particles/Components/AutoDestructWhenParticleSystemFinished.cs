@@ -22,6 +22,10 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Contains components to help with using particles
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
 namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
 {
     /// <summary>
@@ -29,10 +33,19 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
     /// </summary>
     [RequireComponent(typeof(ParticleSystem))]
     [AddComponentMenu("Game Framework/Display/Particles/AutoDestructWhenParticleSystemFinished")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class AutoDestructWhenParticleSystemFinished : MonoBehaviour
     {
+        /// <summary>
+        /// Whether this gameobject should just be deactivated rather than destroyed.
+        /// </summary>
+        [Tooltip("Whether this gameobject should just be deactivated rather than destroyed.")]
         public bool OnlyDeactivate;
+
+        /// <summary>
+        /// A gameobject to destroy / disable. If not specified the current gameobject will be used.
+        /// </summary>
+        [Tooltip("A gameobject to destroy / disable. If not specified the current gameobject will be used.")]
         public GameObject GameObjectToDestruct;
 
         ParticleSystem _particleSystem;

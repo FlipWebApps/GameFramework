@@ -24,39 +24,51 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 {
     /// <summary>
-    /// Set the UV co-ordinates of a cube
+    /// Set the UV co-ordinates of a quad
     /// </summary>
+    /// You can also call the SetUVs method at runtime to apply a new set of UV's.
+    /// 
+    /// This component must be applied to a gameobject that has a MeshFilter attached.
     [RequireComponent(typeof(MeshFilter))]
     [AddComponentMenu("Game Framework/Display/Other/SetQuadUvs")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class SetQuadUvs : MonoBehaviour
     {
+
+        /// <summary>
+        /// The UV values to apply to the Quad
+        /// </summary>
+        [Tooltip("")]
         public Rect Uvs;
 
-        Mesh _theMesh;
-        Vector2[] _theUVs;
+        Mesh _mesh;
+        Vector2[] _Uvs;
 
         void Awake()
         {
-            _theMesh = transform.GetComponent<MeshFilter>().mesh;
-            _theUVs = new Vector2[_theMesh.uv.Length];
-            _theUVs = _theMesh.uv;
+            _mesh = transform.GetComponent<MeshFilter>().mesh;
+            _Uvs = new Vector2[_mesh.uv.Length];
+            _Uvs = _mesh.uv;
 
             SetUVs(Uvs);
         }
 
+        /// <summary>
+        /// Assign the passed UV's to the mesh
+        /// </summary>
+        /// <param name="uvs"></param>
         public void SetUVs(Rect uvs)
         {
             // bottom left, top right, bottom right, top left.
             Uvs = uvs;
 
-            _theUVs[0] = new Vector2(uvs.x, uvs.y);
-            _theUVs[1] = new Vector2(uvs.x + uvs.width, uvs.y + uvs.height);
-            _theUVs[2] = new Vector2(uvs.x + uvs.width, uvs.y);
-            _theUVs[3] = new Vector2(uvs.x, uvs.y + uvs.height);
+            _Uvs[0] = new Vector2(uvs.x, uvs.y);
+            _Uvs[1] = new Vector2(uvs.x + uvs.width, uvs.y + uvs.height);
+            _Uvs[2] = new Vector2(uvs.x + uvs.width, uvs.y);
+            _Uvs[3] = new Vector2(uvs.x, uvs.y + uvs.height);
 
             // assign the mesh its new UVs
-            _theMesh.uv = _theUVs;
+            _mesh.uv = _Uvs;
         }
     }
 }

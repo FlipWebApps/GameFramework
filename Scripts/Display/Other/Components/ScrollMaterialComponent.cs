@@ -28,27 +28,42 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
     /// </summary>
     [RequireComponent(typeof(Renderer))]
     [AddComponentMenu("Game Framework/Display/Other/ScrollMaterialComponent")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class ScrollMaterialComponent : MonoBehaviour
     {
-        public int MaterialIndex;
-        public Vector2 AnimationRate = new Vector2(1.0f, 0.0f);
-        public string TextureName = "_MainTex";
-        public Renderer Renderer;
 
+        /// <summary>
+        /// The index of the material to scroll
+        /// </summary>
+        [Tooltip("The index of the material to scroll")]
+        public int MaterialIndex;
+
+        /// <summary>
+        /// The rate to animate the material
+        /// </summary>
+        [Tooltip("The rate to animate the material")]
+        public Vector2 AnimationRate = new Vector2(1.0f, 0.0f);
+
+        /// <summary>
+        /// The name of the shader texture property (usually _MainTex)
+        /// </summary>
+        [Tooltip("The name of the shader texture property")]
+        public string TextureName = "_MainTex";
+
+        Renderer _renderer;
         Vector2 _uvOffset = Vector2.zero;
 
         void Awake()
         {
-            Renderer = GetComponent<Renderer>();
+            _renderer = GetComponent<Renderer>();
         }
 
         void LateUpdate()
         {
             _uvOffset += AnimationRate * Time.deltaTime;
-            if (Renderer.enabled)
+            if (_renderer.enabled)
             {
-                Renderer.materials[MaterialIndex].SetTextureOffset(TextureName, _uvOffset);
+                _renderer.materials[MaterialIndex].SetTextureOffset(TextureName, _uvOffset);
             }
         }
     }

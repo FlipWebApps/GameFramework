@@ -24,14 +24,23 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
 {
     /// <summary>
-    /// Set the renderers sorting layer
+    /// Set the attached Renderer's sorting layer name and sorting order
     /// </summary>
     [RequireComponent(typeof(Renderer))]
     [AddComponentMenu("Game Framework/Display/Other/SetSortingLayer")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
     public class SetSortingLayer : MonoBehaviour
     {
+        /// <summary>
+        /// The sorting layer name to set
+        /// </summary>
+        [Tooltip("The sorting layer name to set")]
         public string SortingLayerName = "Foreground";
+
+        /// <summary>
+        /// The sorting order to set
+        /// </summary>
+        [Tooltip("The sorting order to set in the renderer")]
         public int SortingOrder;
 
         void Start()
