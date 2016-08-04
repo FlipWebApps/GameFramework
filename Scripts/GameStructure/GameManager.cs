@@ -431,8 +431,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 // Check for a Resolution Change
                 if (!Mathf.Approximately(_resolution.x, Screen.width) || !Mathf.Approximately(_resolution.y, Screen.height))
                 {
+                    var oldResolution = _resolution;
                     _resolution = new Vector2(Screen.width, Screen.height);
                     SetDisplayProperties();
+                    SafeQueueMessage(new ResolutionChangedMessage(oldResolution, _resolution));
                     if (OnResolutionChange != null) OnResolutionChange(_resolution);
                 }
 
@@ -446,8 +448,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                     default:
                         if (_orientation != UnityEngine.Input.deviceOrientation)
                         {
+                            var oldOrientation = _orientation;
                             _orientation = UnityEngine.Input.deviceOrientation;
                             SetDisplayProperties();
+                            SafeQueueMessage(new DeviceOrientationChangedMessage(oldOrientation, _orientation));
                             if (OnOrientationChange != null) OnOrientationChange(_orientation);
                         }
                         break;
