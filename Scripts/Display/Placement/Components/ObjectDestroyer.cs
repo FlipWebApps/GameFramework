@@ -68,6 +68,30 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
             }
         }
 
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision == null)
+                return;
+
+            // Is this an obsticle?
+            if (string.IsNullOrEmpty(DestroyTag) || collision.gameObject.CompareTag(DestroyTag))
+            {
+                DestroyCollidingGameObject(collision.gameObject);
+            }
+        }
+
+        void OnTriggerEnter(Collider otherCollider)
+        {
+            if (otherCollider == null)
+                return;
+
+            // Is this an obsticle?
+            if (string.IsNullOrEmpty(DestroyTag) || otherCollider.gameObject.CompareTag(DestroyTag))
+            {
+                DestroyCollidingGameObject(otherCollider.gameObject);
+            }
+        }
+
         void DestroyCollidingGameObject(GameObject collidingGameObject)
         {
             switch (DestroyMode)
