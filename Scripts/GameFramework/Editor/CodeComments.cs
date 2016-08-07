@@ -19,43 +19,32 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using UnityEngine;
-using System;
+// This file contains additional code documentation comments only for use with Doxygen (or other such tools)
 
+/// <summary>
+/// Helper libraries and components for working within the editor
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/editor-extras/
 namespace FlipWebApps.GameFramework.Scripts.EditorExtras
 {
-    /// <summary>
-    /// Attribute for causing a help box to be displayed and controlling its setup
-    /// </summary>
-    /// See also HelpBoxDecoratorDrawer
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
-    public class HelpBoxAttribute : PropertyAttribute
-    {
-        public enum MessageType
-        {
-            None,
-            Info,
-            Warning,
-            Error,
-        }
-
-        /// <summary>
-        /// The text to show in the help box
-        /// </summary>
-        public string Text;
-
-        /// <summary>
-        /// The MessageType that the help box represents
-        /// </summary>
-        public MessageType Type;
-
-        public HelpBoxAttribute(string text, MessageType type)
-        {
-            Text = text;
-            Type = type;
-        }
-    }   
 }
 
 
+/// <summary>
+/// Display, positioning, movement and particles helper components and libraries
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
+namespace FlipWebApps.GameFramework.Scripts.Display
+{
+    // For doxygen documentation purposes only 
+}
 
+
+/// <summary>
+/// Helper libraries and components for easy setup and usage of Facebook
+/// </summary>
+/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/facebook/
+namespace FlipWebApps.GameFramework.Scripts.Facebook
+{
+    // For doxygen documentation purposes only 
+}

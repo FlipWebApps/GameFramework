@@ -23,14 +23,6 @@ using System;
 using System.Globalization;
 using UnityEngine;
 
-/// <summary>
-/// Display, positioning, movement and particles helper components and libraries
-/// </summary>
-/// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
-namespace FlipWebApps.GameFramework.Scripts.Display
-{
-    // For doxygen documentation purposes only 
-}
 
 /// <summary>
 /// Various display related components and helper classes
