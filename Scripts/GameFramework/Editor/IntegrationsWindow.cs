@@ -34,6 +34,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
         Texture2D _prefsEditorIcon;
         Texture2D _proPoolingIcon;
         Texture2D _adMobIcon;
+        Texture2D _facebookIcon;
         Vector2 _messageLogScrollPosition;
 
         // Add menu item
@@ -42,7 +43,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
         {
             //Show existing window instance. If one doesn't exist, make one.
             //var window = 
-            GetWindow<IntegrationsWindow>("Integrations", true);
+            GetWindow<IntegrationsWindow>(true, "Integrations", true);
 
         }
 
@@ -52,6 +53,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
             _prefsEditorIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PrefsEditor.png", typeof(Texture2D)) as Texture2D;
             _proPoolingIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\ProPooling.png", typeof(Texture2D)) as Texture2D;
             _adMobIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\AdMob.png", typeof(Texture2D)) as Texture2D;
+            _facebookIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\Facebook.png", typeof(Texture2D)) as Texture2D;
         }
 
         void OnGUI()
@@ -68,6 +70,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
 
             GUILayout.Label("Third Party", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
             ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
+            ShowAsset("Facebook", "FACEBOOK_SDK", "https://developers.facebook.com/docs/unity/", "Facebook support for WebGL, Android and iOS.\n\nEnables Facebook support components and functionality in GameFramework", "Download", @"Assets\FacebookSDK", _facebookIcon, false);
 
             GUILayout.Label("Asset developers - contact us to get your asset listed here!");
 
