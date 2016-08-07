@@ -26,7 +26,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
 
     /// <summary>
-    /// Component for allowing various cheat functions to be called such as increasing score, resetting prefs etc..
+    /// Window allowing to enable integrations with various 3rd party assets.
     /// </summary>
     public class IntegrationsWindow : EditorWindow
     {

@@ -82,7 +82,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             DialogGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Dialog", true);
             Assert.IsNotNull(DialogGameObject, "A DialogInstance component must always have a direct child called 'Dialog'");
-            Assert.IsNotNull(GetComponent<Animator>(), "A DialogInstance component must always have an attached Animator");
 
             Content = GameObjectHelper.GetChildNamedGameObject(gameObject, "Content", true);
             if (Content != null)

@@ -30,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework
     {
         public static void ShowHomepage()
         {
-            Application.OpenURL("http://www.flipwebapps.com/");
+            Application.OpenURL("http://www.flipwebapps.com/game-framework/");
         }
 
         public static void ShowOnlineTutorials()
