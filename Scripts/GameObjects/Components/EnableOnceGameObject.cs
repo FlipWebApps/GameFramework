@@ -25,23 +25,41 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
 {
     /// <summary>
-    /// An abstract class to show run something one time only.
-    /// 
-    /// Override and implement the condition as you best see fit.
+    /// An abstract class to run something one time only.
     /// </summary>
+    /// Override and implement the condition as you best see fit.
     public abstract class RunOnceGameObject : RunOnState
     {
+        /// <summary>
+        /// A unique PlayerPrefs key that identifies this instance.
+        /// </summary>
+        [Tooltip("A unique PlayerPrefs key that identifies this instance.")]
         public string Key;
+
+        /// <summary>
+        /// A key for a seperate instance that we should run after.
+        /// </summary>
+        [Tooltip("A key for a seperate instance that we should run after.")]
         public string EnableAfterKey;
 
+        /// <summary>
+        /// If legacy then use old key format. Don't use for new games
+        /// </summary>
+        [Tooltip("If legacy then use old key format. Don't use for new games")]
+        public bool UseLegacyKey;
+
+        /// <summary>
+        /// Calculates whether we need to run once or have already done so. In derived classes override RunOnce instead.
+        /// </summary>
         public override void RunMethod()
         {
-            // show hint panel first time only
-            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt("AnimationTriggerOnce." + EnableAfterKey, 0) == 1)
+            var prefix = UseLegacyKey ? "AnimationTriggerOnce." : "";
+            // Note: The preferences name (AnimationTriggerOnce.) is for legacy reasons.
+            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt(prefix + EnableAfterKey, 0) == 1)
             {
-                if (PreferencesFactory.GetInt("AnimationTriggerOnce." + Key, 0) == 0)
+                if (PreferencesFactory.GetInt(prefix + Key, 0) == 0)
                 {
-                    PreferencesFactory.SetInt("AnimationTriggerOnce." + Key, 1);
+                    PreferencesFactory.SetInt(prefix + Key, 1);
                     PreferencesFactory.Save();
 
                     RunOnce();
@@ -49,6 +67,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             }
         }
 
+        /// <summary>
+        /// Implement this as the method that should be run one time only
+        /// </summary>
         public abstract void RunOnce();
     }
 }

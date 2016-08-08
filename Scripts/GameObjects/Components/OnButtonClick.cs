@@ -25,10 +25,9 @@ using UnityEngine.UI;
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
 {
     /// <summary>
-    /// An abstract class for performing an action on a button click.
-    /// 
-    /// This automatically hooks up the button onClick listener
+    /// An abstract class for performing an action on a button click and automatically hooking up the button onClick listener
     /// </summary>
+    /// TODO: Move to UI / Input.
     [RequireComponent(typeof(Button))]
     public abstract class OnButtonClick : MonoBehaviour
     {
@@ -37,6 +36,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
         }
 
+        /// <summary>
+        /// Implement this to handle the button click event
+        /// </summary>
+        /// <returns></returns>
         public abstract void OnClick();
     }
 }

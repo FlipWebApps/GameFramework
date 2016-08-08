@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Components
     /// </summary>
     public class GameFrameworkHelper : MonoBehaviour
     {
-        public static void ShowAssetStorePage()
+        public void ShowAssetStorePage()
         {
             GameFramework.GameFrameworkHelper.ShowAssetStorePage();
         }

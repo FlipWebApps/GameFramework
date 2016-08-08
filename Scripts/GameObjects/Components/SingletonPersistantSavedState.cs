@@ -29,6 +29,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// <typeparam name="T"></typeparam>
     public abstract class SingletonPersistantSavedState<T> : SingletonSavedState<T> where T : Component
     {
+        /// <summary>
+        /// Extended GameSetup. If you override in your own class be sure to call the base instance.
+        /// </summary>
         protected override void GameSetup()
         {
             DontDestroyOnLoad(gameObject);

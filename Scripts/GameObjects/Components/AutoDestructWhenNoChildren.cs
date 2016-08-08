@@ -27,9 +27,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// Automatically destroys the GameObject when there are no children left.
     /// </summary>
     [AddComponentMenu("Game Framework/GameObjects/AutoDestructWhenNoChildren")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/gameobjects/")]
     public class AutoDestructWhenNoChildren : MonoBehaviour
     {
+        /// <summary>
+        /// Whether to only deactivate rather than destroy this GameObject
+        /// </summary>
+        [Tooltip("Whether to only deactivate rather than destroy this GameObject")]
         public bool OnlyDeactivate;
 
         void Update()

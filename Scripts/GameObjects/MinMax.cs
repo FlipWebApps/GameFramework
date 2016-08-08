@@ -29,7 +29,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
     [Serializable]
     public struct MinMax
     {
+        /// <summary>
+        /// Minimum value (inclusive)
+        /// </summary>
         public int Min;
+        /// <summary>
+        /// Maximum value (inclusive)
+        /// </summary>
         public int Max;
 
         /// <summary>
@@ -72,7 +78,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
     [Serializable]
     public struct MinMaxf
     {
+        /// <summary>
+        /// Minimum value (inclusive)
+        /// </summary>
         public float Min;
+
+        /// <summary>
+        /// Maximum value (inclusive)
+        /// </summary>
         public float Max;
 
         /// <summary>

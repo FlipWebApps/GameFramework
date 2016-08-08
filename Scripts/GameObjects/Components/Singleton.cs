@@ -30,10 +30,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// <typeparam name="T"></typeparam>
     public class Singleton<T> : MonoBehaviour where T : Component
     {
-        // Static singleton property
+        /// <summary>
+        /// Static singleton access property
+        /// </summary>
+        /// Use this for accessing the singleton instance.
         public static T Instance { get; private set; }
+
+        /// <summary>
+        /// The typename that this singleton is for.
+        /// </summary>
         public string TypeName { get; private set; }
 
+        /// <summary>
+        /// Whether this singleton is active and setup.
+        /// </summary>
         public static bool IsActive
         {
             get
@@ -42,6 +52,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             }
         }
 
+        /// <summary>
+        /// Try and setup the singleton
+        /// </summary>
+        /// This will only let one instance of the component exist. 
+        /// If any other instances are attempted created then they will be automatically destroyed.
         void Awake()
         {
             TypeName = typeof(T).FullName;
@@ -62,6 +77,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             GameSetup();
         }
 
+        /// <summary>
+        /// Destroy the singleton
+        /// </summary>
         void OnDestroy()
         {
             MyDebug.Log(TypeName + ": OnDestroy");
@@ -70,10 +88,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
                 GameDestroy();
         }
 
+        /// <summary>
+        /// Called from Awake when the singleton is setup.
+        /// </summary>
         protected virtual void GameSetup()
         {
         }
 
+        /// <summary>
+        /// Called from OnDestroy when the singleton is destroyed
+        /// </summary>
         protected virtual void GameDestroy()
         {
         }

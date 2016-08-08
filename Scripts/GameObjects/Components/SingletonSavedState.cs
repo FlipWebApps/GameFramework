@@ -30,12 +30,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// <typeparam name="T"></typeparam>
     public abstract class SingletonSavedState<T> : Singleton<T> where T : Component
     {
+        /// <summary>
+        /// Extended GameDestroy. If you override in your own class be sure to call the base instance.
+        /// </summary>
         protected override void GameDestroy()
         {
             MyDebug.Log(TypeName + "(PersistantSingletonSavedState): GameDestroy");
             SaveState();
         }
 
+        /// <summary>
+        /// Implement this to save whatever state you need.
+        /// </summary>
+        /// This is typically called from GameDestroy and OnApplicationQuit although can be triggered from your own code if needed.
         public abstract void SaveState();
 
         //Note that iOS applications are usually suspended and do not quit. You should tick "Exit on Suspend" in Player settings for iOS builds to cause the game to quit and not suspend, otherwise you may not see this call. If "Exit on Suspend" is not ticked then you will see calls to OnApplicationPause instead.

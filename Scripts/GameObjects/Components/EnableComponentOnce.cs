@@ -28,22 +28,44 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// Enables a component one time only. This can be useful for e.g. showing an animation the first time accesses a level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameObjects/EnableComponentOnce")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/gameobjects/")]
     public class EnableComponentOnce : MonoBehaviour
     {
+        /// <summary>
+        /// The component to enable once
+        /// </summary>
+        [Tooltip("The component to enable once")]
         public Behaviour Component;
+
+        /// <summary>
+        /// A unique PlayerPrefs key that identifies this instance.
+        /// </summary>
+        [Tooltip("A unique PlayerPrefs key that identifies this instance.")]
         public string Key;
+
+        /// <summary>
+        /// A key for a seperate instance that we should run after.
+        /// </summary>
+        [Tooltip("A key for a seperate instance that we should run after.")]
         public string EnableAfterKey;
+
+        /// <summary>
+        /// If legacy then use old key format. Don't use for new games
+        /// </summary>
+        [Tooltip("If legacy then use old key format. Don't use for new games")]
+        public bool UseLegacyKey;
 
         void Awake()
         {
+            var prefix = UseLegacyKey ? "EnableComponentOnce." : "";
+
             // show hint panel first time only
             var shouldEnable = false;
-            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt("EnableComponentOnce." + EnableAfterKey, 0) == 1)
+            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt(prefix + EnableAfterKey, 0) == 1)
             {
-                if (PreferencesFactory.GetInt("EnableComponentOnce." + Key, 0) == 0)
+                if (PreferencesFactory.GetInt(prefix + Key, 0) == 0)
                 {
-                    PreferencesFactory.SetInt("EnableComponentOnce." + Key, 1);
+                    PreferencesFactory.SetInt(prefix + Key, 1);
                     PreferencesFactory.Save();
 
                     shouldEnable = true;

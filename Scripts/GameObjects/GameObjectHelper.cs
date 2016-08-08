@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
     internal class GameObjectHelper
     {
         /// <summary>
-        /// 
+        /// Get a component of the first child gameobject with the given name.
         /// </summary>
         /// <typeparam name="TComponent"></typeparam>
         /// <param name="thisGameObject"></param>
@@ -45,7 +45,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         }
 
         /// <summary>
-        /// Note uses transform
+        /// Get the first child gameobject with the given name
         /// </summary>
         /// <param name="thisGameObject"></param>
         /// <param name="name"></param>
@@ -58,7 +58,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         }
 
         /// <summary>
-        /// Note uses transform
+        /// Get the first parent gameobject with teh given name
         /// </summary>
         /// <param name="thisGameObject"></param>
         /// <param name="name"></param>
@@ -75,7 +75,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
         }
 
         /// <summary>
-        /// 
+        /// Disable a gameobject for removal by disabling physics and placing out of view.
         /// </summary>
         /// <param name="gameObject"></param>
         public static void DisableGameObjectForRemoval(GameObject gameObject)
@@ -87,12 +87,21 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
             gameObject.transform.position = new Vector3(0, -20); // place out of view
         }
 
-
+        /// <summary>
+        /// Recursively set gameobjects to the specified layer name
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="layerName"></param>
         public static void SetLayerRecursive(GameObject gameObject, string layerName)
         {
             SetLayerRecursive(gameObject, LayerMask.NameToLayer(layerName));
         }
 
+        /// <summary>
+        /// Recursively set gameobjects to the specified layer
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="layer"></param>
         public static void SetLayerRecursive(GameObject gameObject, int layer)
         {
             gameObject.layer = layer;
@@ -102,6 +111,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
             }
         }
 
+        /// <summary>
+        /// Destroy all child gameobjects
+        /// </summary>
+        /// <param name="root"></param>
         public static void DestroyChildren(Transform root)
         {
             int childCount = root.childCount;
@@ -111,6 +124,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects
             }
         }
 
+        /// <summary>
+        /// Safely set a gameobjects active state testing first for whether is has been destroyed.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static bool SafeSetActive(GameObject gameObject, bool value)
         {
             if (gameObject != null)

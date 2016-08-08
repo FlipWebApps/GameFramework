@@ -26,29 +26,45 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
 {
     /// <summary>
     /// An abstract class that runs a method at the specified perion.
-    /// 
-    /// Override and implement the condition as you best see fir
-    /// 
-    /// TODO Add option for coroutine so we don't run every frame.
     /// </summary>
+    /// Override and implement the condition as you best see fit
+    /// TODO: Not best proctice to have a redundant Update method. Consider splitting this component.
     public abstract class RunOnState : MonoBehaviour
     {
         public enum RunType { OnAwake, OnEnable, OnStart, OnUpdate, Periodically = 100 };
+        /// <summary>
+        /// When we want this to run.
+        /// </summary>
+        [Tooltip("When we want this to run.")]
         public RunType Run;
+
+        /// <summary>
+        /// If Run is set to Periodically then how often to check
+        /// </summary>
+        [Tooltip("If Run is set to Periodically then how often to check")]
         public float RunFrequency = 1;
 
+        /// <summary>
+        /// Implementation for running on Awake. If you override this then be sure to call base.Awake()
+        /// </summary>
         public void Awake()
         {
             if (Run == RunType.OnAwake)
                 RunMethod();
         }
 
+        /// <summary>
+        /// Implementation for running on OnEnable. If you override this then be sure to call base.OnEnable()
+        /// </summary>
         public void OnEnable()
         {
             if (Run == RunType.OnEnable)
                 RunMethod();
         }
 
+        /// <summary>
+        /// Implementation for running on Start. If you override this then be sure to call base.Start()
+        /// </summary>
         public void Start()
         {
             if (Run == RunType.OnStart)
@@ -57,6 +73,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
                 StartCoroutine(PeriodicUpdate());
         }
 
+        /// <summary>
+        /// Implementation for running on Update. If you override this then be sure to call base.Update()
+        /// </summary>
         public void Update()
         {
             if (Run == RunType.OnUpdate)
@@ -74,6 +93,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             }
         }
 
+        /// <summary>
+        /// You should implement this method which is called based upon the Run property.
+        /// </summary>
         public abstract void RunMethod();
     }
 }

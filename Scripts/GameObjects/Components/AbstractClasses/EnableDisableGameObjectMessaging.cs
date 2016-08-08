@@ -26,10 +26,9 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
 {
     /// <summary>
-    /// An abstract class to show an enabled or a disabled gameobject based upon the given condition.
-    /// 
-    /// Override and implement the condition as you best see fit.
+    /// An abstract class to enable one of two gameobjects based upon a given condition.
     /// </summary>
+    /// Override and implement the condition as you best see fit.
     public abstract class EnableDisableGameObjectMessaging<T> : RunOnMessage<T> where T : BaseMessage
     {
         public GameObject ConditionMetGameObject;
@@ -51,7 +50,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClass
 
 
         /// <summary>
-        /// Returns whether to show the condition met gameobject (true) or the condition not met one (false)
+        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
         public abstract bool IsConditionMet(T message);
