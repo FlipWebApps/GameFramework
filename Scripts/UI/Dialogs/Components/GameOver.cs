@@ -288,7 +288,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         public void FacebookShare()
         {
 #if FACEBOOK_SDK
-            FacebookManager.Instance.PostAndLoginIfNeeded();
+            FacebookManager.Instance.ShareLink();
 #endif
         }
 
