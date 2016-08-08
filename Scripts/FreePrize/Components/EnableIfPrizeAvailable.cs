@@ -32,10 +32,21 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class EnableIfPrizeAvailable : RunOnState
     {
+        /// <summary>
+        /// Optional Gameobject to show when a prize is available.
+        /// </summary>
         [Tooltip("Optional Gameobject to show when a prize is available.")]
         public GameObject PrizeAvailableGameObject;
+
+        /// <summary>
+        /// Optional Gameobject to show when the countdown is taking place.
+        /// </summary>
         [Tooltip("Optional Gameobject to show when the countdown is taking place.")]
         public GameObject PrizeCountdownGameObject;
+
+        /// <summary>
+        /// Optional Gameobject to show when waiting for a new countdown to start.
+        /// </summary>
         [Tooltip("Optional Gameobject to show when waiting for a new countdown to start.")]
         public GameObject DelayGameObject;
 

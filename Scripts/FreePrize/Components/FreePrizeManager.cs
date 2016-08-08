@@ -30,30 +30,64 @@ using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
 {
+    /// <summary>
+    /// Manager class for handling the Free Prize status and configuration
+    /// </summary>
     [AddComponentMenu("Game Framework/FreePrize/FreePrizeManager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class FreePrizeManager : SingletonPersistantSavedState<FreePrizeManager>
     {
+        /// <summary>
+        /// The delay in seconds before starting the next countdown. 0 = no wait
+        /// </summary>
         [Header("Time")]
         [Tooltip("The delay in seconds before starting the next countdown. 0 = no wait")]
         public MinMax DelayRangeToNextCountdown = new MinMax {Min= 0, Max = 0};       // wait range before starting next countdown. 0 = no wait
+
+        /// <summary>
+        /// The time in seconds before another prize becomes available.
+        /// </summary>
         [Tooltip("The time in seconds before another prize becomes available.")]
         public MinMax TimeRangeToNextPrize = new MinMax { Min = 600, Max = 1800 };    // countdown range to next prize. 10 minutes to 30 minutes
+
+        /// <summary>
+        /// Whether to save times for the next prize becoming available across game restarts.
+        /// </summary>
         [Tooltip("Whether to save times for the next prize becoming available across game restarts.")]
         public bool SaveAcrossRestarts;
 
+
+        /// <summary>
+        /// A minimum and maxximum value for the prize.
+        /// </summary>
         [Header("Prize")]
         [Tooltip("A minimum and maxximum value for the prize.")]
         public MinMax ValueRange = new MinMax { Min = 10, Max = 20 };                // value defaults
 
+
+        /// <summary>
+        /// An optional audio clip to play when the free prize window is closed.
+        /// </summary>
         [Header("Free Prize Dialog")]
         [Tooltip("An optional audio clip to play when the free prize window is closed.")]
         public AudioClip PrizeDialogClosedAudioClip;
+
+        /// <summary>
+        /// An optional prefab to use for displaying custom content in the free prize window.
+        /// </summary>
         [Tooltip("An optional prefab to use for displaying custom content in the free prize window.")]
         public GameObject ContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller to animate the free prize window content.
+        /// </summary>
         [Tooltip("An optional animation controller to animate the free prize window content.")]
         public RuntimeAnimatorController ContentAnimatorController;
-        [Tooltip("DoesnWhether the content shows the dialog buttons. Setting this hides the dialog buttons so that they can be displayed at the appropriate point e.g. after an animation has played.")]
+
+        /// <summary>
+        /// Whether the content shows the dialog buttons. Setting this hides the dialog buttons so that they can be displayed at the appropriate point e.g. after an animation has played.
+        /// </summary>
+        [Tooltip("Whether the content shows the dialog buttons. Setting this hides the dialog buttons so that they can be displayed at the appropriate point e.g. after an animation has played.")]
         public bool ContentShowsButtons;
 
         /// <summary>
