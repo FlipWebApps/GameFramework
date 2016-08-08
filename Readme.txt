@@ -1,4 +1,4 @@
-Game Framework - Free v3.0
+Game Framework - Free v3.1
 
 Thank you for using Game Framework. 
 
@@ -58,6 +58,43 @@ Chinese Translation - luochuanyuewu
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.1
+
+This release contains rewritten Facebook functionality that breaks with the old API. If you used this before then 
+you will likely need to make some changes. Please consult the documentation pages for what has changed. 
+It is recommended to backup and then delete the old /FlipWebApps folder before updating. 
+
+	Game Framework Core - Improvements
+	- Display: Code cleanup, Tooltips and Documentation
+	- Display: Added optional offset to CenterInCamera
+	- Display: Added option to FixedMovement to move always or only when a level is running
+	- Display: Added option to FixedRotation to rotate always or only when a level is running
+	- Display: Added DisplayMetrics.IsSystemDpiAvailable()
+	- Display: ObjectDestroyer trigger collision correctly adheres to the specified destroy mode.
+	- Display: Added new LevelOfDetail component to replace deprecated LOD component
+	- Display: Tooltips, comments and refactoring
+	- Display: ColorHelper.ParseColorString() supports hex string without leading #
+	- Display: ObjectDestroyer supports 3D colliders
+	- Display: GradientBackgroundSplitMiddle component is now implemented and working
+	- EditorExtras: Code comments, tooltips and cleanup.
+	- FreePrize: Comments and Tooltips
+	- Facebook: Major rewrite to improve and simplify usage
+	- Facebook: ConnectButton component replaced by FacebookConnection
+	- Facebook: Old events replaced by messaging system
+	- GameFramework: Added startup help window
+	- Game Framework: Added Facebook to the integrations window
+	- GameObjects: Tooltips, Comments and Documentation
+	- GameStructure: Added new DeviceOrientationChangedMessage and ResolutionChangedMessages
+	- UI: Gameover updated for new Facebook API changes
+
+	Game Framework Core - Fixes
+	- UI: Fix for obsolete Assert in DialoigInstance being triggered in Unity 5.4
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Display: Added Placement sample
+	- Facebook: Added usage sample
+
 v3.0
 
 The main focus of this version is code cleanup and removal of obsolete code. It is recommended to backup and then delete 
