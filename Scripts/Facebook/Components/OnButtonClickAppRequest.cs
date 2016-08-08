@@ -18,7 +18,6 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-#if FACEBOOK_SDK
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,8 +33,11 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components {
     {
         public override void OnClick()
         {
-            FacebookManager.Instance.AppRequest(); 
+#if FACEBOOK_SDK
+            FacebookManager.Instance.AppRequest();
+#else
+            Debug.Log("OnButtonClickAppRequest only works if you enable and setup the Facebook SDK");
+#endif
         }
     }
 }
-#endif
