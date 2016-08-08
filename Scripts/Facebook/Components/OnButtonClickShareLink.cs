@@ -19,25 +19,22 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
-{
+namespace FlipWebApps.GameFramework.Scripts.Facebook.Components {
     /// <summary>
-    /// Enables one of two gameobjects based upon whether the users data is loaded
+    /// Automatically hooks a button on click event to show a Facebook ShareLink dialog
     /// </summary>
-    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
+    [RequireComponent(typeof(Button))]
+    [AddComponentMenu("Game Framework/Facebook/OnButtonClickShareLink")]
     [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
-    public class EnableIfUserDataLoaded : EnableDisableGameObject
+    public class OnButtonClickShareLink : OnButtonClick
     {
-        public override bool IsConditionMet()
+        public override void OnClick()
         {
-#if FACEBOOK_SDK
-            return FacebookManager.Instance.IsLoggedIn && FacebookManager.Instance.IsUserDataLoaded;
-#else
-            return false;
-#endif
+            FacebookManager.Instance.ShareLink(); 
         }
     }
 }

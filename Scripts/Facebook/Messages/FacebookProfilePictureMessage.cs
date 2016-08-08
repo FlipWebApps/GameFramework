@@ -19,25 +19,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
 {
     /// <summary>
-    /// Enables one of two gameobjects based upon whether the users data is loaded
+    /// Generated when Facebook has loaded a profile picture, either for the user or a friend.
     /// </summary>
-    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
-    public class EnableIfUserDataLoaded : EnableDisableGameObject
+    public class FacebookProfilePictureMessage : BaseMessage
     {
-        public override bool IsConditionMet()
+        /// <summary>
+        /// The User Id of user who's profile picture was loaded
+        /// </summary>
+        public readonly string UserId;
+
+        /// <summary>
+        /// A texture containing the users picture.
+        /// </summary>
+        public readonly Texture Texture;
+
+        public FacebookProfilePictureMessage(string userId, Texture texture)
         {
-#if FACEBOOK_SDK
-            return FacebookManager.Instance.IsLoggedIn && FacebookManager.Instance.IsUserDataLoaded;
-#else
-            return false;
-#endif
+            UserId = userId;
+            Texture = texture;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Facebook Profile Picture Message: {0}", UserId);
         }
     }
 }

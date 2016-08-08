@@ -19,25 +19,40 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
 {
     /// <summary>
-    /// Enables one of two gameobjects based upon whether the users data is loaded
+    /// Generated when a Facebook ShareLink has completed (either successfully or with errors)
     /// </summary>
-    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
-    public class EnableIfUserDataLoaded : EnableDisableGameObject
+    public class FacebookShareLinkMessage : BaseMessage
     {
-        public override bool IsConditionMet()
+        public enum ResultType { ERROR, CANCELLED, OK };
+
+        /// <summary>
+        /// The login result
+        /// </summary>
+        public readonly ResultType Result;
+
+        /// <summary>
+        /// The login result
+        /// </summary>
+        public readonly string ResultText;
+
+        public FacebookShareLinkMessage(ResultType result, string resultText)
         {
-#if FACEBOOK_SDK
-            return FacebookManager.Instance.IsLoggedIn && FacebookManager.Instance.IsUserDataLoaded;
-#else
-            return false;
-#endif
+            Result = result;
+            ResultText = resultText;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Facebook Share Link Message: {0} {1}", Result, ResultText);
         }
     }
 }

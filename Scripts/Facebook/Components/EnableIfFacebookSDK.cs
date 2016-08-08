@@ -19,17 +19,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 {
     /// <summary>
-    /// Enabled or a disabled a gameobject based upon whether the facebook SDK is installed
+    /// Enables one of two gameobjects based upon whether the facebook SDK is installed
     /// </summary>
     [AddComponentMenu("Game Framework/Facebook/EnableIfFacebookSDK")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
     public class EnableIfFacebookSDK : EnableDisableGameObject
     {
         public override bool IsConditionMet()

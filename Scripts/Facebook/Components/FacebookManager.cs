@@ -33,6 +33,11 @@ using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
+using FlipWebApps.GameFramework.Scripts.Preferences;
+using FlipWebApps.GameFramework.Scripts.Facebook.Messages;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 {
@@ -40,58 +45,132 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
     /// Functionality to handle logging into facebook and interactions such as posting updates, inviting friends etc.
     /// </summary>
     [AddComponentMenu("Game Framework/Facebook/FacebookManager")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
     public class FacebookManager : SingletonPersistant<FacebookManager>
     {
         public enum FacebookHelperResultType { ERROR, CANCELLED, OK };
+
+        /// <summary>
+        /// Enum for whether permssions are not needed, optional or required.
+        /// </summary>
         public enum PermissionRequestType { NONE, OPTIONAL, REQUIRED };
 
+        #region Inspector properties
+
+        /// <summary>
+        /// Whether to try and obtain the Email permission when connecting
+        /// </summary>
+        [Tooltip("Whether to try and obtain the Email permission when connecting")]
         public PermissionRequestType RequestEmailPermission = PermissionRequestType.NONE;
+
+        /// <summary>
+        /// Whether to try and obtain the UserFriends permission when connecting
+        /// </summary>
+        [Tooltip("Whether to try and obtain the UserFriends permission when connecting")]
         public PermissionRequestType RequestUserFriendsPermission = PermissionRequestType.NONE;
+
+        /// <summary>
+        /// Whether to try and obtain the PulishActions permission when connecting
+        /// </summary>
+        [Tooltip("Whether to try and obtain the PulishActions permission when connecting")]
         public PermissionRequestType RequestPublishActionsPermission = PermissionRequestType.NONE;
 
+        /// <summary>
+        /// Whether to try and load any friends that are using this app / game
+        /// </summary>
+        [Tooltip("Whether to try and load any friends that are using this app / game")]
         public bool LoadFriendsUsingApp = false;
-        public bool PreloadFriendImages = true;
+
+        /// <summary>
+        /// Whether to try and pre load any friends images
+        /// </summary>
+        [Tooltip("Whether to try and pre load any friends images")]
+        [ConditionalHide("LoadFriendsUsingApp", hideInInspector: false)]
+        public bool PreloadFriendImages = false;
+
+        /// <summary>
+        /// Whether to try and obtain the Email permission when connectiong
+        /// </summary>
+        [Tooltip("")]
         public string PostLink;
+
+        /// <summary>
+        /// Whether to try and obtain the Email permission when connectiong
+        /// </summary>
+        [Tooltip("")]
         public string PostPicture;
 
+        #endregion Inspector properties
+
+        #region Properties - State
+
+        /// <summary>
+        /// Whether we are currently trying to connect to Facebook
+        /// </summary>
         public bool IsConnecting { get; private set; }
+
+        /// <summary>
+        /// Whether Facebook is initalised
+        /// </summary>
         public bool IsInitialized { get { return FB.IsInitialized; } }
+
+        /// <summary>
+        /// Whether Facebook is logged in
+        /// </summary>
         public bool IsLoggedIn { get { return FB.IsLoggedIn; } }
+
+        /// <summary>
+        /// Whether we have loaded user data about the user.
+        /// </summary>
         public bool IsUserDataLoaded { get; private set; }
+
+        /// <summary>
+        /// Whether the users picture is loaded.
+        /// </summary>
         public bool IsUserPictureLoaded { get; private set; }
+
+        /// <summary>
+        /// Whether the users friends are loaded.
+        /// </summary>
         public bool IsFriendsLoaded { get; private set; }
+
+        /// <summary>
+        /// Whether the user has invited friends.
+        /// </summary>
+        /// This value is saved and reloaded so persists across game restarts.
         public bool HasInvitedFriends
         {
             get
             {
-                return PlayerPrefs.GetInt("Facebook.HasInvitedFriends", 0) != 0;
+                return PreferencesFactory.GetInt("Facebook.HasInvitedFriends", 0) != 0;
             }
             set
             {
-                PlayerPrefs.SetInt("Facebook.HasInvitedFriends", value ? 1 : 0);
-                PlayerPrefs.Save();
+                PreferencesFactory.SetInt("Facebook.HasInvitedFriends", value ? 1 : 0);
+                PreferencesFactory.Save();
             }
         }
+
+        /// <summary>
+        /// The number of friends invites that the user has sent
+        /// </summary>
+        /// This value is saved and reloaded so persists across game restarts.
         public int NumberOfInvitesSent
         {
             get
             {
-                return PlayerPrefs.GetInt("Facebook.NumberOfInvitesSent", 0);
+                return PreferencesFactory.GetInt("Facebook.NumberOfInvitesSent", 0);
             }
             set
             {
-                PlayerPrefs.SetInt("Facebook.NumberOfInvitesSent", value);
-                PlayerPrefs.Save();
+                PreferencesFactory.SetInt("Facebook.NumberOfInvitesSent", value);
+                PreferencesFactory.Save();
             }
         }
 
-        public List<string> PermissionsGranted { get; set; }
-        public string FirstName { get; set; }
-        public Texture2D ProfilePicture { get; set; }
-        public List<FacebookFriend> Friends = new List<FacebookFriend>();
-        public Dictionary<string, Texture> ProfileImages = new Dictionary<string, Texture>();
-
+        /// <summary>
+        /// Whether to try and automatically connect to facebook on startup
+        /// </summary>
         public bool AutoConnectOnStartup
         {
             get
@@ -105,15 +184,73 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             }
         }
 
-        public Action OnConnectingAction = delegate { };
-        public Action<FacebookHelperResultType> OnInitLoginAndGetUserDataAction = delegate { };
-        public Action<FacebookHelperResultType> OnFriendsUsingAppAction = delegate { };
-        public Action<bool> OnFocusChanged = delegate { };
-        public Action OnUserProfilePictureRequestCompleteAction = delegate { };
-        public Action<string, Texture> OnProfilePictureRequestCompleteAction = delegate { };
-        public Action<FacebookHelperResultType, IShareResult> OnPostingCompleteAction = delegate { };
-        public Action<FacebookHelperResultType, List<string>, IAppRequestResult> OnAppRequestCompleteAction = delegate { };
+        # endregion Properties - State
+        #region Properties - Profile
 
+        /// <summary>
+        /// The users first name
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// The users profile picture
+        /// </summary>
+        public Texture2D ProfilePicture { get; set; }
+
+        /// <summary>
+        /// A list of the users facebook friends
+        /// </summary>
+        public List<FacebookFriend> Friends = new List<FacebookFriend>();
+
+        /// <summary>
+        /// Profile images for the users friends (userid, texture)
+        /// </summary>
+        public Dictionary<string, Texture> ProfileImages = new Dictionary<string, Texture>();
+
+        #endregion Properties Properties - Profile
+        #region Properties - Permissions
+
+        /// <summary>
+        /// A list of the permissions that the user has granted
+        /// </summary>
+        public List<string> PermissionsGranted { get; set; }
+
+        /// <summary>
+        /// Whether the public_profile permission has been granted
+        /// </summary>
+        public bool HasPublicProfilePermission
+        {
+            get { return PermissionsGranted.Contains("public_profile"); }
+        }
+
+        /// <summary>
+        /// Whether the email permission has been granted
+        /// </summary>
+        public bool HasEmailPermission
+        {
+            get
+            { return PermissionsGranted.Contains("email"); }
+        }
+
+        /// <summary>
+        /// Whether the user_friends permission has been granted
+        /// </summary>
+        public bool HasUserFriendsPermission
+        {
+            get { return PermissionsGranted.Contains("user_friends"); }
+        }
+
+        /// <summary>
+        /// Whether the publish_actions permission has been granted
+        /// </summary>
+        public bool HasPublishActionsPermission
+        {
+            get { return PermissionsGranted.Contains("publish_actions"); }
+        }
+
+        # endregion Properties - Permissions
+
+        #region Scores API (deprecated for now)
         //--------------------------------------
         //  Scores API 
         //  https://developers.facebook.com/docs/games/scores
@@ -124,9 +261,13 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 
         //private int lastSubmitedScore = 0;
         //public List<HighScore> scores = new List<HighScore>();
+        #endregion Scores API (deprecated for now)
 
         protected override void GameSetup()
         {
+            Assert.IsTrue(GameManager.IsActive, "Please ensure that you have a GameManager added to your scene and that it is added to 'Main Menu->Edit->Project Settings->Script Execution Order' before 'Default Time'.\n" +
+                                                "FacebookManager does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
+
             base.GameSetup();
 
             IsConnecting = false;
@@ -136,47 +277,62 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             PermissionsGranted = new List<string>();
 
             if (AutoConnectOnStartup)
-                InitLoginAndGetUserData();
+                Login();
         }
 
-        public void InitLoginAndGetUserData()
+        #region Login / Logout
+
+        /// <summary>
+        /// Try and log the user into Facebook and gather their basic user data
+        /// </summary>
+        public void Login()
         {
             if (IsConnecting)
             {
-                Debug.Log("Facebook Helper: Already Connecting. Check IsConnecting Flag before calling");
+                MyDebug.Log("Facebook Helper: Already Connecting. Check IsConnecting Flag before calling");
                 return;
             }
             IsConnecting = true;
-            OnConnectingAction();
+            GameManager.SafeQueueMessage(new FacebookConnectingMessage());
 
             if (!IsInitialized)
             {
                 FB.Init(OnInitComplete, OnHideUnity);
             }
             else {
+                FB.ActivateApp();
                 OnInitComplete();
             }
         }
 
+        /// <summary>
+        /// Log the user out from Facebook
+        /// </summary>
+        /// Also clears the AutoConnectOnStartup flag as if we log out it doesnæt make sense to try and login!
         public void Logout()
         {
             FB.LogOut();
+            AutoConnectOnStartup = false;
         }
 
-        private void OnInitComplete()
+        /// <summary>
+        /// Login step 2. Initialisation complete - get extra permissions if needed.
+        /// </summary>
+        void OnInitComplete()
         {
             Debug.Log("OnInitComplete: Is user logged in? " + FB.IsLoggedIn);
 
-            if (IsLoggedIn && HasPublicProfilePermission() &&
-                (RequestEmailPermission != PermissionRequestType.REQUIRED || HasEmailPermission()) &&
-                (RequestPublishActionsPermission != PermissionRequestType.REQUIRED || HasPublishActionsPermission()) &&
-                (RequestUserFriendsPermission != PermissionRequestType.REQUIRED || HasUserFriendsPermission()))
+            // if necessary get extra permissions before calling login callback
+            if (IsLoggedIn && HasPublicProfilePermission &&
+                (RequestEmailPermission != PermissionRequestType.REQUIRED || HasEmailPermission) &&
+                (RequestPublishActionsPermission != PermissionRequestType.REQUIRED || HasPublishActionsPermission) &&
+                (RequestUserFriendsPermission != PermissionRequestType.REQUIRED || HasUserFriendsPermission))
             {
                 LoginCallback(null);
             }
             else
             {
-                GameManager.Instance.IsUserInteractionEnabled = false;
+                //GameManager.Instance.IsUserInteractionEnabled = false;
                 List<string> permissions = new List<string>();
                 permissions.Add("public_profile");
                 if (RequestEmailPermission != PermissionRequestType.NONE) permissions.Add("email");
@@ -188,24 +344,19 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
         }
 
 
-        private void OnHideUnity(bool isGameShown)
-        {
-            MyDebug.Log("OnHideUnity: " + isGameShown);
-
-            GameManager.Instance.IsUserInteractionEnabled = !isGameShown;
-
-            OnFocusChanged(isGameShown);
-        }
-
-
-        private void LoginCallback(ILoginResult result)
+        /// <summary>
+        /// Login step 3. Logged in - user data.
+        /// </summary>
+        void LoginCallback(ILoginResult result)
         {
             FBLog("LoginCallback", result != null ? result.RawResult : "");
 
-            GameManager.Instance.IsUserInteractionEnabled = true;
+            //GameManager.Instance.IsUserInteractionEnabled = true;
 
             if (IsLoggedIn)
             {
+                FB.ActivateApp();
+
                 // Get current access token's granted permissions
                 foreach (string permission in AccessToken.CurrentAccessToken.Permissions)
                 {
@@ -218,10 +369,14 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             else
             {
                 IsConnecting = false;
-                OnInitLoginAndGetUserDataAction(FacebookHelperResultType.ERROR);
+                GameManager.SafeQueueMessage(new FacebookLoginMessage(FacebookLoginMessage.ResultType.CANCELLED));
             }
         }
 
+
+        /// <summary>
+        /// Login step 4. Get user data, picture and friends if set.
+        /// </summary>
 
         private void LoadUserData()
         {
@@ -233,7 +388,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             else
             {
                 IsConnecting = false;
-                OnInitLoginAndGetUserDataAction(FacebookHelperResultType.OK);
+                GameManager.SafeQueueMessage(new FacebookLoginMessage(FacebookLoginMessage.ResultType.OK));
             }
 
             // load the picture
@@ -243,7 +398,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             }
             else
             {
-                OnUserProfilePictureRequestCompleteAction();
+                GameManager.SafeQueueMessage(new FacebookUserPictureMessage(FacebookUserPictureMessage.ResultType.OK, ProfilePicture));
             }
 
             // load friend data
@@ -253,6 +408,9 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             }
         }
 
+        /// <summary>
+        /// Login step 5a. user data callback
+        /// </summary>
         private void UserDataCallBack(IGraphResult result)
         {
             FBLog("UserDataCallBack", result.RawResult);
@@ -260,7 +418,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
             if (result.Error != null)
             {
                 IsConnecting = false;
-                OnInitLoginAndGetUserDataAction(FacebookHelperResultType.ERROR);
+                GameManager.SafeQueueMessage(new FacebookLoginMessage(FacebookLoginMessage.ResultType.ERROR));
             }
             else
             {
@@ -274,14 +432,17 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 
                 IsUserDataLoaded = true;
                 IsConnecting = false;
-                OnInitLoginAndGetUserDataAction(FacebookHelperResultType.OK);
+                GameManager.SafeQueueMessage(new FacebookLoginMessage(FacebookLoginMessage.ResultType.OK));
             }
         }
 
+        /// <summary>
+        /// Login step 5b. friends list callback
+        /// </summary>
         private void FriendsUsingAppCallBack(IGraphResult result)
         {
             FBLog("FriendsDataCallBack", result.RawResult);
-            FacebookHelperResultType resultType = FacebookHelperResultType.ERROR;
+            var resultType = FacebookFriendsUsingAppMessage.ResultType.ERROR;
 
             if (result != null && result.Error == null)
             {
@@ -302,13 +463,16 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                 }
 
                 IsFriendsLoaded = true;
-                resultType = FacebookHelperResultType.OK;
+                resultType = FacebookFriendsUsingAppMessage.ResultType.OK;
             }
 
-            OnFriendsUsingAppAction(resultType);
+            GameManager.SafeQueueMessage(new FacebookFriendsUsingAppMessage(resultType));
         }
 
 
+        /// <summary>
+        /// Login step 5c. profile picture callback
+        /// </summary>
         void MyPictureCallback(Texture2D texture)
         {
             ProfilePicture = (Texture2D)texture;
@@ -317,99 +481,119 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 
             IsUserPictureLoaded = true;
 
-            OnUserProfilePictureRequestCompleteAction();
-            OnProfilePictureRequestCompleteAction(AccessToken.CurrentAccessToken.UserId, ProfilePicture);
+            GameManager.SafeQueueMessage(new FacebookUserPictureMessage(FacebookUserPictureMessage.ResultType.OK, ProfilePicture));
+            GameManager.SafeQueueMessage(new FacebookProfilePictureMessage(AccessToken.CurrentAccessToken.UserId, ProfilePicture));
         }
 
-        public bool HasPublicProfilePermission()
+        #endregion Login / Logout
+
+        #region OnHideUnity
+
+        void OnHideUnity(bool isGameShown)
         {
-            return PermissionsGranted.Contains("public_profile");
+            //GameManager.Instance.IsUserInteractionEnabled = !isGameShown;
+            GameManager.SafeQueueMessage(new FacebookHideUnityMessage(isGameShown));
         }
 
-        public bool HasEmailPermission()
+        #endregion OnHideUnity
+
+        #region ShareLink
+
+        /// <summary>
+        /// Share a link to Facebook, automatically handling login if necessary.
+        /// </summary>
+        /// Many of the parameters are optional and will be set to default values if not specified (see parameter arguments).
+        /// <param name="contentURL">Content url. If not specified then uses FacebookManager.Instance.PostLink</param>
+        /// <param name="contentTitle">The content title. If not specified then uses localisation key Facebook.Share.Caption</param>
+        /// <param name="contentDescription">The content description. If not specified then uses localisation key Facebook.Share.Description</param>
+        /// <param name="photoURL">Photo url. If not specified then uses FacebookManager.Instance.PostPicture</param>
+        /// <param name="autoLogin">Whether to automatically login to Facebook if not already done so.</param>
+        /// <returns>true if the show process was started, flase if not logged in and not auto logging in either.</returns>
+        public bool ShareLink(Uri contentURL = null, string contentTitle = null,
+                        string contentDescription = null, Uri photoURL = null, bool autoLogin = true)
         {
-            return PermissionsGranted.Contains("email");
-        }
-
-        public bool HasUserFriendsPermission()
-        {
-            return PermissionsGranted.Contains("user_friends");
-        }
-
-        public bool HasPublishActionsPermission()
-        {
-            return PermissionsGranted.Contains("publish_actions");
-        }
-
-        //--------------------------------------
-        //  Posts
-        //------------------------------------
-
-
-
-        public void PostAndLoginIfNeeded()
-        {
-            FacebookPostHandler postHandler = new FacebookPostHandler();
-            FacebookManager.Instance.OnInitLoginAndGetUserDataAction += postHandler.OnInitLoginAndGetUserDataAction;
-            if (!FacebookManager.Instance.IsUserDataLoaded)
+            // if already logged in then just share the link otherwise check for auto login.
+            if (IsLoggedIn)
             {
-                FacebookManager.Instance.InitLoginAndGetUserData();
+                ShareLinkInternal(contentURL, contentTitle, contentDescription, photoURL);
+                return true;
             }
-            else
-            {
-                postHandler.OnInitLoginAndGetUserDataAction(FacebookManager.FacebookHelperResultType.OK);
-            }
-        }
-
-
-        // seperate class so we can safely remove the reference if there are concurrent calls.
-        class FacebookPostHandler
-        {
-            public void OnInitLoginAndGetUserDataAction(FacebookManager.FacebookHelperResultType result)
-            {
-                FacebookManager.Instance.OnInitLoginAndGetUserDataAction -= OnInitLoginAndGetUserDataAction;
-                if (result == FacebookManager.FacebookHelperResultType.OK)
+            else { 
+                // try and auto login if specified, otherwise just return false.
+                if (autoLogin)
                 {
-                    FacebookManager.Instance.ShareLink(
-                        contentURL: new Uri(FacebookManager.Instance.PostLink),
-                        contentTitle: LocaliseText.Format("Facebook.Share.Caption", GameManager.Instance.GameName),
-                        contentDescription: LocaliseText.Format("Facebook.Share.Description", GameManager.Instance.GameName),
-                        photoURL: new Uri(FacebookManager.Instance.PostPicture)
-                        );
+                    FacebookShareLinkHandler postHandler = new FacebookShareLinkHandler() { contentURL = contentURL, contentDescription = contentDescription, contentTitle = contentTitle, photoURL = photoURL };
+                    GameManager.SafeAddListener<FacebookLoginMessage>(postHandler.LoginHandler);
+                    if (!IsUserDataLoaded)
+                        Login();
+                    else
+                        postHandler.LoginHandler(new FacebookLoginMessage(FacebookLoginMessage.ResultType.OK));
+
+                    return true;
+                }
+                else
+                {
+                    MyDebug.LogWarning("Authorise user before calling ShareLink.");
+                    return false;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// This is a seperate class so we can safely handle multiple concurrent calls with different data.
+        /// </summary>
+        class FacebookShareLinkHandler
+        {
+            public Uri contentURL = null;
+            public string contentTitle;
+            public string contentDescription;
+            public Uri photoURL = null;
+
+            public bool LoginHandler(BaseMessage message)
+            {
+                var facebookLoginMessage = message as FacebookLoginMessage;
+                GameManager.SafeRemoveListener<FacebookLoginMessage>(LoginHandler);
+                if (facebookLoginMessage.Result == FacebookLoginMessage.ResultType.OK)
+                {
+                    FacebookManager.Instance.ShareLinkInternal(contentURL, contentTitle, contentDescription, photoURL);
                 }
                 else
                 {
                     DialogManager.Instance.ShowError(textKey: "Facebook.Error.Login.Description");
                 }
+                return true;
             }
         }
 
 
-        public void ShareLink(Uri contentURL, string contentTitle = "",
-                        string contentDescription = "", Uri photoURL = null)
+        /// <summary>
+        /// Do the actual share
+        /// </summary>
+        /// <param name="contentURL"></param>
+        /// <param name="contentTitle"></param>
+        /// <param name="contentDescription"></param>
+        /// <param name="photoURL"></param>
+        void ShareLinkInternal(Uri contentURL, string contentTitle,
+                    string contentDescription, Uri photoURL)
         {
-            if (!IsLoggedIn)
-            {
-                MyDebug.LogWarning("Authorise user before posting, fail event generated");
-
-                IShareResult res = new ShareResult("User isn't authorised");
-                OnPostingCompleteAction(FacebookHelperResultType.ERROR, res);
-                return;
-            }
-
             FB.ShareLink(
-                contentURL: contentURL,
-                contentTitle: contentTitle,
-                contentDescription: contentDescription,
-                photoURL: photoURL,
-                callback: PostCallBack
+                contentURL: contentURL != null ? contentURL : new Uri( FacebookManager.Instance.PostLink),
+                contentTitle: contentTitle != null ? contentTitle : LocaliseText.Format("Facebook.Share.Caption", GameManager.Instance.GameName),
+                contentDescription: contentDescription != null ? contentDescription : LocaliseText.Format("Facebook.Share.Description", GameManager.Instance.GameName),
+                photoURL: photoURL != null ? photoURL : new Uri(FacebookManager.Instance.PostPicture),
+                callback: ShareLinkCallback
                 );
         }
 
 
-        private void PostCallBack(IShareResult result)
+        /// <summary>
+        /// Callback for when sharing is done
+        /// </summary>
+        /// <param name="result"></param>
+        void ShareLinkCallback(IShareResult result)
         {
-            FBLog("PostCallBack", result.RawResult);
+            FBLog("ShareLinkCallback", result.RawResult);
             FacebookHelperResultType resultType = FacebookHelperResultType.ERROR;
 
             if (result != null)
@@ -428,70 +612,114 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                     }
                 }
             }
-            OnPostingCompleteAction(resultType, result);
+            GameManager.SafeQueueMessage(new FacebookShareLinkMessage(FacebookShareLinkMessage.ResultType.OK, result.RawResult));
         }
 
-        //--------------------------------------
-        //  App Requests / Invites
-        //------------------------------------
+        #endregion ShareLink
 
+        #region AppRequest
 
-        public void Share()
+        /// <summary>
+        /// Show an AppRequest dialog, automatically handling login if necessary.
+        /// </summary>
+        /// <param name="message">Message to show. If not specified then uses localisation key Facebook.Invite.Caption with the game name as a parameter</param>
+        /// <param name="to"></param>
+        /// <param name="filters"></param>
+        /// <param name="excludeIds"></param>
+        /// <param name="maxRecipients"></param>
+        /// <param name="data"></param>
+        /// <param name="title">Title to show. If not specified then uses localisation key Facebook.Invite.Description with the game name as a parameter</param>
+        /// <param name="autoLogin">Whether to automatically login to Facebook if not already done so.</param>
+        /// <returns>true if the show process was started, flase if not logged in and not auto logging in either.</returns>
+        public bool AppRequest(string message = null, string[] to = null, List<object> filters = null, string[] excludeIds = null,
+            int? maxRecipients = null, string data = "", string title = "", bool autoLogin = true)
+
         {
-            FacebookShareHandler postHandler = new FacebookShareHandler();
-            FacebookManager.Instance.OnInitLoginAndGetUserDataAction += postHandler.OnInitLoginAndGetUserDataAction;
-            if (!FacebookManager.Instance.IsUserDataLoaded)
+            // if already logged in then just share the link otherwise check for auto login.
+            if (IsLoggedIn)
             {
-                FacebookManager.Instance.InitLoginAndGetUserData();
+                AppRequestInternal(message, to, filters, excludeIds, maxRecipients, data, title);
+                return true;
             }
             else
             {
-                postHandler.OnInitLoginAndGetUserDataAction(FacebookManager.FacebookHelperResultType.OK);
+                // try and auto login if specified, otherwise just return false.
+                if (autoLogin)
+                {
+                    FacebookShareHandler postHandler = new FacebookShareHandler() { Message = message, Title = title };
+                    GameManager.SafeAddListener<FacebookLoginMessage>(postHandler.LoginHandler);
+                    if (!IsUserDataLoaded)
+                        Login();
+                    else
+                        postHandler.LoginHandler(new FacebookLoginMessage(FacebookLoginMessage.ResultType.OK));
+
+                    return true;
+                }
+                else
+                {
+                    MyDebug.LogWarning("Authorise user before calling AppRequest.");
+                    return false;
+                }
             }
         }
 
-        // seperate class so we can safely remove the reference if there are concurrent calls.
+        /// <summary>
+        /// This is a seperate class so we can safely handle multiple concurrent calls with different data.
+        /// </summary>
         class FacebookShareHandler
         {
-            public void OnInitLoginAndGetUserDataAction(FacebookManager.FacebookHelperResultType result)
+            public string Message;
+            public string Title;
+
+            public bool LoginHandler(BaseMessage message)
             {
-                FacebookManager.Instance.OnInitLoginAndGetUserDataAction -= OnInitLoginAndGetUserDataAction;
-                if (result == FacebookManager.FacebookHelperResultType.OK)
+                var facebookLoginMessage = message as FacebookLoginMessage;
+                GameManager.SafeRemoveListener<FacebookLoginMessage>(LoginHandler);
+                if (facebookLoginMessage.Result == FacebookLoginMessage.ResultType.OK)
                 {
-                    FacebookManager.Instance.AppRequest(message: LocaliseText.Format("Facebook.Invite.Caption", GameManager.Instance.GameName), title: LocaliseText.Format("Facebook.Invite.Description", GameManager.Instance.GameName));
+                    FacebookManager.Instance.AppRequestInternal(message: Message, title: Title);
                 }
                 else
                 {
                     DialogManager.Instance.ShowError(textKey: "Facebook.Error.Login.Description");
                 }
+                return true;
             }
         }
 
 
-        public void AppRequest(
-            string message,
-            string[] to = null,
-            List<object> filters = null,
-            string[] excludeIds = null,
-            int? maxRecipients = null,
-            string data = "",
-            string title = "")
+        /// <summary>
+        /// Do the actual app request
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="to"></param>
+        /// <param name="filters"></param>
+        /// <param name="excludeIds"></param>
+        /// <param name="maxRecipients"></param>
+        /// <param name="data"></param>
+        /// <param name="title"></param>
+        void AppRequestInternal(string message = null, string[] to = null, List<object> filters = null, string[] excludeIds = null,
+            int? maxRecipients = null, string data = "", string title = "")
         {
-            if (!IsLoggedIn)
-            {
-                Debug.LogWarning("Auth user before AppRequest, fail event generated");
-                IAppRequestResult res = new AppRequestResult("User isn't authed");
-                OnAppRequestCompleteAction(FacebookHelperResultType.ERROR, null, res);
-                return;
-            }
-
-            FB.AppRequest(message, to, filters, excludeIds, maxRecipients, data, title, AppRequestCallBack);
+            FB.AppRequest(
+                message != null ? message : LocaliseText.Format("Facebook.Invite.Caption", GameManager.Instance.GameName), 
+                to, 
+                filters, 
+                excludeIds, 
+                maxRecipients, 
+                data, 
+                title != null ? title : LocaliseText.Format("Facebook.Invite.Description", GameManager.Instance.GameName), 
+                AppRequestCallBack);
         }
 
-        private void AppRequestCallBack(IAppRequestResult result)
+        /// <summary>
+        /// Callback for when app request is done
+        /// </summary>
+        /// <param name="result"></param>
+        void AppRequestCallBack(IAppRequestResult result)
         {
             FBLog("AppRequestCallBack", result.RawResult);
-            FacebookHelperResultType resultType = FacebookHelperResultType.ERROR;
+            FacebookAppRequestMessage.ResultType resultType = FacebookAppRequestMessage.ResultType.ERROR;
             List<string> InvitedFriends = new List<string>();
 
             if (result != null && result.Error == null)
@@ -499,7 +727,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                 JSONObject jsonObject = JSONObject.Parse(result.RawResult);
                 if (jsonObject.ContainsKey("cancelled"))
                 {
-                    resultType = FacebookHelperResultType.CANCELLED;
+                    resultType = FacebookAppRequestMessage.ResultType.CANCELLED;
                 }
                 else if (jsonObject.ContainsKey("request"))
                 {
@@ -508,7 +736,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                     //        "100002669403922",
                     //        "100000048490273"
                     //    ]}
-                    resultType = FacebookHelperResultType.OK;
+                    resultType = FacebookAppRequestMessage.ResultType.OK;
                     HasInvitedFriends = true;
 
                     JSONValue to = jsonObject.GetArray("to");
@@ -523,9 +751,11 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                     }
                 }
             }
-            OnAppRequestCompleteAction(resultType, InvitedFriends, result);
+            GameManager.SafeQueueMessage(new FacebookAppRequestMessage(resultType, InvitedFriends, result.RawResult));
         }
+        #endregion AppRequest
 
+        #region Scores - Deprecated
         ////--------------------------------------
         ////  Scores API 
         ////  https://developers.facebook.com/docs/games/scores
@@ -630,12 +860,13 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
         //       scores.Add(newScore);
         //       return newScore;
         //}
+        #endregion Scores - Deprecated
 
 
+        #region Helper functions
         /// <summary>
-        /// Gets the picture UR.
+        /// Load the profile picture for the specified userId.
         /// </summary>
-        /// 
         public void LoadProfileImage(string userId)
         {
 
@@ -647,15 +878,23 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                     if (pictureTexture != null && !ProfileImages.ContainsKey(userId))   // check again as by time callback is called it could have been added elsewhere.
                 {
                         ProfileImages.Add(userId, pictureTexture);
-                        OnProfilePictureRequestCompleteAction(userId, pictureTexture);
+                        GameManager.SafeQueueMessage(new FacebookProfilePictureMessage(userId, pictureTexture));
                     }
                 });
             }
         }
 
-        public static string GetPictureURL(string facebookID, int? width = null, int? height = null, string type = null)
+        /// <summary>
+        /// Generate a url for downloading a a users picture of the specified dimensions and type
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetPictureURL(string userId, int? width = null, int? height = null, string type = null)
         {
-            string url = string.Format("/{0}/picture", facebookID);
+            string url = string.Format("/{0}/picture", userId);
             string query = width != null ? "&width=" + width.ToString() : "";
             query += height != null ? "&height=" + height.ToString() : "";
             query += type != null ? "&type=" + type : "";
@@ -716,6 +955,8 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                                                 //else
                                                 //    Debug.Log(method + "\nresult.Error:" + (result.Error == null ? "null" : result.Error) + "\nresult.Text:" + (result.Text == null ? "null" : result.Text));
         }
+        #endregion Helper functions
+
     }
 }
 #endif

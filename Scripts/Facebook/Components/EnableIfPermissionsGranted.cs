@@ -26,20 +26,29 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
 {
     /// <summary>
-    /// Shows an enabled or a disabled gameobject based upon whether the specified facebook permissions are granted
+    /// Enables one of two gameobjects based upon whether the specified facebook permissions are granted
     /// </summary>
     [AddComponentMenu("Game Framework/Facebook/EnableIfPermissionsGranted")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
     public class EnableIfPermissionsGranted : EnableDisableGameObject
     {
+        /// <summary>
+        /// Whether the user_friends permission should have been granted
+        /// </summary>
+        [Tooltip("Whether the user_friends permission should have been granted")]
         public bool PermissionUserFriends;
+
+        /// <summary>
+        /// Whether the publish_actions permission should have been granted
+        /// </summary>
+        [Tooltip("Whether the publish_actions permission should have been granted")]
         public bool PermissionPublishActions;
 
         public override bool IsConditionMet()
         {
 #if FACEBOOK_SDK
-            return !((PermissionUserFriends && !FacebookManager.Instance.HasUserFriendsPermission()) ||
-                            PermissionPublishActions && !FacebookManager.Instance.HasPublishActionsPermission());
+            return !((PermissionUserFriends && !FacebookManager.Instance.HasUserFriendsPermission) ||
+                            PermissionPublishActions && !FacebookManager.Instance.HasPublishActionsPermission);
 #else
             return false;
 #endif

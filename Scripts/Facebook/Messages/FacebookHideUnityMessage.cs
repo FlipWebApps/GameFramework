@@ -19,25 +19,32 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
 {
     /// <summary>
-    /// Enables one of two gameobjects based upon whether the users data is loaded
+    /// Generated when Facebook focus changes has completed
     /// </summary>
-    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
-    public class EnableIfUserDataLoaded : EnableDisableGameObject
+    public class FacebookHideUnityMessage : BaseMessage
     {
-        public override bool IsConditionMet()
+        /// <summary>
+        /// The login result
+        /// </summary>
+        public readonly bool IsUnityShown;
+
+        public FacebookHideUnityMessage(bool isUnityShown)
         {
-#if FACEBOOK_SDK
-            return FacebookManager.Instance.IsLoggedIn && FacebookManager.Instance.IsUserDataLoaded;
-#else
-            return false;
-#endif
+            IsUnityShown = isUnityShown;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Facebook Hide Unity Message: {0}", IsUnityShown);
         }
     }
 }

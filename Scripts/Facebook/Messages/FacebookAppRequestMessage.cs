@@ -19,25 +19,46 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
 {
     /// <summary>
-    /// Enables one of two gameobjects based upon whether the users data is loaded
+    /// Generated when a Facebook App Request has completed (either successfully or with errors)
     /// </summary>
-    [AddComponentMenu("Game Framework/Facebook/EnableIfUserDataLoaded")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/facebook/")]
-    public class EnableIfUserDataLoaded : EnableDisableGameObject
+    public class FacebookAppRequestMessage : BaseMessage
     {
-        public override bool IsConditionMet()
+        public enum ResultType { ERROR, CANCELLED, OK };
+
+        /// <summary>
+        /// The login result
+        /// </summary>
+        public readonly ResultType Result;
+
+        /// <summary>
+        /// A list of all teh friends who were invited
+        /// </summary>
+        public readonly System.Collections.Generic.List<string> InvitedFriends;
+
+        /// <summary>
+        /// The login result
+        /// </summary>
+        public readonly string ResultText;
+
+        public FacebookAppRequestMessage(ResultType result, System.Collections.Generic.List<string> invitedFriends, string resultText)
         {
-#if FACEBOOK_SDK
-            return FacebookManager.Instance.IsLoggedIn && FacebookManager.Instance.IsUserDataLoaded;
-#else
-            return false;
-#endif
+            Result = result;
+            InvitedFriends = invitedFriends;
+            ResultText = resultText;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Facebook App Request Message: {0} {1} {2}", Result, InvitedFriends.Count, ResultText);
         }
     }
 }
