@@ -312,6 +312,8 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
         public void Logout()
         {
             FB.LogOut();
+            IsConnecting = false;
+            IsUserDataLoaded =false;
             AutoConnectOnStartup = false;
         }
 
