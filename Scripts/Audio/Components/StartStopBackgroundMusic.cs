@@ -56,6 +56,7 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
         {
             Assert.IsTrue(GameManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
                                                 "FlipWebApps.GameFramework.Scripts.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
+            Assert.IsNotNull(GameManager.Instance.BackGroundAudioSource, "Please add an AudioSource to the same GameObject as GameManager before using the StartStopBackgroundMusic component.");
 
             if (Enable == ModeType.Play && !GameManager.Instance.BackGroundAudioSource.isPlaying)
                 GameManager.Instance.BackGroundAudioSource.Play();
