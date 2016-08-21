@@ -69,7 +69,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Tooltip("Set the base identifier to allow for multiple games in a single project")]
         public string IdentifierBase;
         [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
-        public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
+        public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.Warning;
 
         // Preferences related
         [Tooltip("Whether secured preferences should be used.")]

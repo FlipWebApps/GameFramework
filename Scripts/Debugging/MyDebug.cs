@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
     /// Logging done through these is only output if run via the editor or as part of a debug build
     public class MyDebug
     {
-        public enum DebugLevelType { None, Information, Warning, Error }
+        public enum DebugLevelType { Information, Warning, Error, None = 99}
 
         /// <summary>
         /// What level of debugging we actually want to show.
@@ -91,7 +91,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message)
         {
-            if (DebugLevel >= DebugLevelType.Information)
+            if (DebugLevel <= DebugLevelType.Information)
                 Debug.Log(message);
         }
 
@@ -104,7 +104,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogF(string format, params object[] args)
         {
-            if (DebugLevel >= DebugLevelType.Information)
+            if (DebugLevel <= DebugLevelType.Information)
                 Debug.Log(string.Format(format, args));
         }
 
@@ -118,7 +118,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void Log(object message, Object context)
         {
-            if (DebugLevel >= DebugLevelType.Information)
+            if (DebugLevel <= DebugLevelType.Information)
                 Debug.Log(message, context);
         }
 
@@ -131,7 +131,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message)
         {
-            if (DebugLevel >= DebugLevelType.Error)
+            if (DebugLevel <= DebugLevelType.Error)
                 Debug.LogError(message);
         }
 
@@ -144,7 +144,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogErrorF(string format, params object[] args)
         {
-            if (DebugLevel >= DebugLevelType.Error)
+            if (DebugLevel <= DebugLevelType.Error)
                 Debug.LogError(string.Format(format, args));
         }
 
@@ -158,7 +158,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogError(object message, Object context)
         {
-            if (DebugLevel >= DebugLevelType.Error)
+            if (DebugLevel <= DebugLevelType.Error)
                 Debug.LogError(message, context);
         }
 
@@ -171,7 +171,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message)
         {
-            if (DebugLevel >= DebugLevelType.Warning)
+            if (DebugLevel <= DebugLevelType.Warning)
                 Debug.LogWarning(message.ToString());
         }
 
@@ -184,7 +184,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarningF(string format, params object[] args)
         {
-            if (DebugLevel >= DebugLevelType.Warning)
+            if (DebugLevel <= DebugLevelType.Warning)
                 Debug.LogWarning(string.Format(format, args));
         }
 
@@ -198,7 +198,7 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarning(object message, Object context)
         {
-            if (DebugLevel >= DebugLevelType.Warning)
+            if (DebugLevel <= DebugLevelType.Warning)
                 Debug.LogWarning(message.ToString(), context);
         }
 
