@@ -95,7 +95,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// The amount of debug logging that should be shown (only applies in editor mode and debug builds.
         /// </summary>
         [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
-        public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
+        public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.Warning;
 
         #endregion General Inspector Values
         #region Preferences related
