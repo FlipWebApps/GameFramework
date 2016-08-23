@@ -55,36 +55,91 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameManager : SingletonPersistantSavedState<GameManager>
     {
-        #region Inspector Values
+        // Inspector Values
+        #region General 
 
-        // General related
+        /// <summary>
+        /// The name of this game
+        /// </summary>
         [Tooltip("The name of this game")]
         public string GameName = "";
+
+        /// <summary>
+        /// If targeting Andriod, a Google Play url for the game
+        /// </summary>
         [Tooltip("If targeting Andriod, a Google Play url for the game")]
         public string PlayWebUrl = "";
+
+        /// <summary>
+        /// If targeting Andriod, a Google Play direct link for the game
+        /// </summary>
         [Tooltip("If targeting Andriod, a Google Play direct link for the game")]
         public string PlayMarketUrl = "";
+
+        /// <summary>
+        /// If targeting iOS, a link to the App Store page game
+        /// </summary>
         [Tooltip("If targeting iOS, a link to the App Store page game")]
         public string iOSWebUrl = "";
+
+        /// <summary>
+        /// Set the base identifier to allow for multiple games in a single project
+        /// </summary>
+        /// This property is used by the LoadResource and GetIdentifierScene methods to determine a unique name based upon the base identifier
+        /// this will not be necessary in most cases, however is used in the extras bundle to allow for multiple games and demos within a 
+        /// single project
         [Tooltip("Set the base identifier to allow for multiple games in a single project")]
         public string IdentifierBase;
+
+        /// <summary>
+        /// The amount of debug logging that should be shown (only applies in editor mode and debug builds.
+        /// </summary>
         [Tooltip("The amount of debug logging that should be shown (only applies in editor mode and debug builds.")]
         public MyDebug.DebugLevelType DebugLevel = MyDebug.DebugLevelType.None;
 
-        // Preferences related
+        #endregion General Inspector Values
+        #region Preferences related
+
+        /// <summary>
+        /// Whether secured preferences should be used.
+        /// </summary>
         [Tooltip("Whether secured preferences should be used.")]
         public bool SecurePreferences;
+
+        /// <summary>
+        /// If using secure prefs then a pass phase to use when securing preferences. 
+        /// </summary>
+        /// This should ideally be a random string of 10 or more characters.
+        /// Note that advanced hackers may be able to find this pass phrase in you executable. For optimum security some sort of online lookup would be needed so no pass phrase is stored locally.
         [Tooltip("A pass phase to use when securing preferences. This should ideally be a random string of 10 or more characters.\n\nNote that advanced hackers may be able to find this pass phrase in you executable. For optimum security some sort of online lookup would be needed so no pass phrase is stored locally.")]
         public string PreferencesPassPhrase;
+
+        /// <summary>
+        /// If using secure prefs then whether to migrate old unsecure values.
+        /// </summary>
+        /// For existing games you should set this to true if you want to keep their current progress.
+        /// For new games set to false for performance as there will be nothing to convert.
         [Tooltip("Whether to migrate old unsecure values.\n\nFor existing games you should set this to true if you want to keep their current progress.\n\nFor new games set to false for performance as there will be nothing to convert.")]
         public bool AutoConvertUnsecurePrefs;
 
-        // Display related
+        #endregion Preferences related
+        #region Display related
+
+        /// <summary>
+        /// Physical size the game is designed against. Can be used later with PhysicalScreenHeightMultiplier for screen scaling
+        /// </summary>
         [Header("Display")]
         [Tooltip("Physical size the game is designed against. Can be used later with PhysicalScreenHeightMultiplier for screen scaling")]
         public float ReferencePhysicalScreenHeightInInches = 4f;
+
+        /// <summary>
+        /// How often to check for orientation and resolution changes
+        /// </summary>
         [Tooltip("How often to check for orientation and resolution changes")]
         public float DisplayChangeCheckDelay = 0.5f;                      // How long to wait until we check orientation & resolution changes.
+
+        #endregion Display related
+        #region Game Structure setup
 
         /// <summary>
         /// Game Structure setup
@@ -92,61 +147,142 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Header("Players")]
         [Tooltip("The default number of lives players will have (optional if not using lives).")]
         public int DefaultLives = 3;
+
+        /// <summary>
+        /// The number of local players to setup
+        /// </summary>
         [Tooltip("The number of local players to setup")]
         public int PlayerCount = 1;
 
+
+        /// <summary>
+        /// Whether to automatically setup wolds using default values.
+        /// </summary>
         [Header("Worlds")]
         [Tooltip("Whether to automatically setup wolds using default values.")]
         public bool AutoCreateWorlds = false;
+
+        /// <summary>
+        /// The number of standard worlds that should be automatically created by the framework.
+        /// </summary>
         [Tooltip("The number of standard worlds that should be automatically created by the framework.")]
         public int NumberOfAutoCreatedWorlds = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
         public bool LoadWorldDatafromResources = false;
+
+        /// <summary>
+        /// How we plan on letting users unlock worlds.
+        /// </summary>
         [Tooltip("How we plan on letting users unlock worlds.")]
         public GameItem.UnlockModeType WorldUnlockMode;
+
+        /// <summary>
+        /// The default number of coins to unlock worlds (can be overriden by json configuration files or code).
+        /// </summary>
         [Tooltip("The default number of coins to unlock worlds (can be overriden by json configuration files or code).")]
         public int CoinsToUnlockWorlds = 10;
+
+        /// <summary>
+        /// What levels numbers are assigned to each world.
+        /// </summary>
+        /// These are used for internal lookup and references for e.g. in-app purchase.
+        /// Enter a range but keep the numbers unique. You might also want to leave room to expand these later. e.g. (1-10), (101,110)
         [Tooltip("What levels numbers are assigned to each world.\nThese are used for internal lookup and references for e.g. in-app purchase.\n\nEnter a range but keep the numbers unique. You might also want to leave room to expand these later. e.g. (1-10), (101,110)")]
         public MinMax[] WorldLevelNumbers;
 
+
+        /// <summary>
+        /// Whether to automatically setup levels using default values.
+        /// </summary>
         [Header("Levels")]
         [Tooltip("Whether to automatically setup levels using default values.\n\nThis option is hidden if automatically creating worlds as we then need per world configuration.")]
         public bool AutoCreateLevels = false;
+
+        /// <summary>
+        /// The number of standard levels that should be automatically created by the framework.
+        /// </summary>
         [Tooltip("The number of standard levels that should be automatically created by the framework.")]
         [FormerlySerializedAs("NumberOfStandardLevels")]
         public int NumberOfAutoCreatedLevels = 10;
+
+        /// <summary>
+        /// Whether to try and load data from a resources file.
+        /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
         public bool LoadLevelDatafromResources = false;
+
+        /// <summary>
+        /// How we plan on letting users unlock levels.
+        /// </summary>
         [Tooltip("How we plan on letting users unlock levels.")]
         public GameItem.UnlockModeType LevelUnlockMode;
+
+        /// <summary>
+        /// The default number of coins to unlock levels (can be overriden by json configuration files or code).
+        /// </summary>
         [Tooltip("The default number of coins to unlock levels (can be overriden by json configuration files or code).")]
         public int CoinsToUnlockLevels = 10;
 
+
+        /// <summary>
+        /// Whether to automatically setup characters using default values.
+        /// </summary>
         [Header("Characters")]
         [Tooltip("Whether to automatically setup characters using default values.")]
         public bool AutoCreateCharacters = false;
+
+        /// <summary>
+        /// The number of standard characters that should be automatically created by the framework.
+        /// </summary>
         [Tooltip("The number of standard characters that should be automatically created by the framework.")]
         public int NumberOfAutoCreatedCharacters = 10;
+
+        /// <summary>
+        /// Whether to try and load data from a resources file.
+        /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
         public bool LoadCharacterDatafromResources = false;
+
+        /// <summary>
+        /// How we plan on letting users unlock characters.
+        /// </summary>
         [Tooltip("How we plan on letting users unlock characters.")]
         public GameItem.UnlockModeType CharacterUnlockMode;
+
+        /// <summary>
+        /// The default number of coins to unlock characters (can be overriden by json configuration files or code).
+        /// </summary>
         [Tooltip("The default number of coins to unlock characters (can be overriden by json configuration files or code).")]
         public int CoinsToUnlockCharacters = 10;
 
+        #endregion Game Structure setup
+        #region Localisation Inspector Values
+        /// <summary>
+        /// A list of localisation languages that we support
+        /// </summary>
         [Tooltip("A list of localisation languages that we support")]
         public string[] SupportedLanguages;
 
-        #endregion Inspector Values
+        #endregion Localisation Inspector Values
+
+        // Various properties
+        #region GamePlay properties
 
         /// <summary>
-        /// Gameplay related properties
+        /// Whether Game Manager is setup and initialised
         /// </summary>
+        /// THis is set to true once the GameSetup function is complete.
+        public bool IsInitialised { get; set; }
 
-        // set once GameSetup function is complete.
-        public bool IsInitialised { get; set; }                             
-
-        // Whether the game is unlocked. Can be used to only enable certain features and can be linked to in app purchase.
+        /// <summary>
+        /// Whether the game is unlocked. 
+        /// </summary>
+        /// Some games support the concept of unlocking the game to remove ads or enabling extra features. This field can be 
+        /// used control this behaviour such as only enabling certain features and can be linked to in app purchase.
         public bool IsUnlocked
         {
             get { return _isUnlocked; }
@@ -168,17 +304,50 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public bool IsPaused { get; set; }
         [Obsolete("Use functions in LevelManager instead?")]
         public bool IsUserInteractionEnabled { get; set; }
-        public bool IsSplashScreenShown { get; set; }
-        public int TimesGamePlayed { get; set; }
-        public int TimesLevelsPlayed { get; set; }
-        public int TimesPlayedForRatingPrompt { get; set; }                 // seperate from the above as if they click remind then this will be reset to 0.
 
         /// <summary>
-        /// Audio related properties
+        /// General purpose property you can use for controlling the state of your game.
         /// </summary>
+        public bool IsSplashScreenShown { get; set; }
+
+        /// <summary>
+        /// The number of times that the game has been played
+        /// </summary>
+        /// AUtomatically updated by GameManager,
+        public int TimesGamePlayed { get; set; }
+
+        /// <summary>
+        /// The total number of times that levels have been played
+        /// </summary>
+        /// AUtomatically updated by LevelManager,
+        public int TimesLevelsPlayed { get; set; }
+
+        /// <summary>
+        /// The number of times that levels have been played for use with a rating prompt
+        /// </summary>
+        /// AUtomatically updated by LevelManager, this is similar to TImesLevelsPlayed but 
+        /// if they click 'remind me later' then this will be reset to 0.
+        public int TimesPlayedForRatingPrompt { get; set; }
+
+        #endregion GamePlay properties
+        #region Audio properties
+
+        /// <summary>
+        /// An AudioSource for playing background music.
+        /// </summary>
+        /// This is automatically set as the first AudioSource on the same game object as GameManager is present
         public AudioSource BackGroundAudioSource { get; set; }
+
+        /// <summary>
+        /// AudioSources for playing sound effects.
+        /// </summary>
+        /// Thse are automatically set as the secend and subsequent AudioSources on the same game object as GameManager is present
         public AudioSource[] EffectAudioSources { get; set; }
 
+        /// <summary>
+        /// The background audio volume
+        /// </summary>
+        /// Automatically adjusts the BackGroundAudioSource if present
         public float BackGroundAudioVolume
         {
             get { return _backGroundAudioVolume; }
@@ -190,6 +359,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
         float _backGroundAudioVolume;
 
+        /// <summary>
+        /// The effect audio volume
+        /// </summary>
+        /// Automatically adjusts all EffectAudioSources if present
         public float EffectAudioVolume {
             get { return _effectAudioVolume; }
             set {
@@ -204,24 +377,54 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
         float _effectAudioVolume;
 
-        /// <summary>
-        /// Display related properties
-        /// </summary>
+        #endregion Audio properties
+        #region Display properties
+
         Vector2 _resolution;                                                 // Current Resolution - for detecting changes only
         DeviceOrientation _orientation;                                      // Current Device Orientation - for detecting changes only
+
+        /// <summary>
+        /// May be deprecated in the future. Listen for OnResolutionChangeMessage instead
+        /// </summary>
         public event Action<Vector2> OnResolutionChange;                    // raised on resolution change (event as only we can invoke this)
+
+        /// <summary>
+        /// May be deprecated in the future. Listen for OnOrientationChangeMessage instead
+        /// </summary>
         public event Action<DeviceOrientation> OnOrientationChange;         // raised on orientation change (event as only we can invoke this)
+
+        /// <summary>
+        /// The world bottom left position as seen from the main camera
+        /// </summary>
         public Vector3 WorldBottomLeftPosition { get; private set; }
+
+        /// <summary>
+        /// The world bottom top right position as seen from the main camera
+        /// </summary>
         public Vector3 WorldTopRightPosition { get; private set; }
+
+        /// <summary>
+        /// The visible world size as seen from the main camera
+        /// </summary>
         public Vector3 WorldSize { get; private set; }
+
+        /// <summary>
+        /// A multiplier for the current aspect ratio based on a 4:3 default
+        /// </summary>
         public float AspectRatioMultiplier { get; private set; }            // Ratio above and beyong 4:3 ratio
+
+        /// <summary>
+        /// A multiplier for the screen height based upon ReferencePhysicalScreenHeightInInches 
+        /// </summary>
         public float PhysicalScreenHeightMultiplier { get; private set; }   // Ratio above and beyong 4:3 ratio
 
-        #region Player related properties 
+        #endregion Display properties
+        #region Player properties 
+
         /// <summary>
         /// The current Player. 
-        /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
         /// </summary>
+        /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
         public Player Player
         {
             get { return _player; }
@@ -235,17 +438,30 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
         Player _player;
         protected Player[] Players;
-        #endregion Player related properties 
+
+        #endregion Player properties 
+        #region GameManager properties
 
         /// <summary>
-        /// GameItemManagers
+        /// GameItemManager containing the current Characters
         /// </summary>
         public GameItemsManager<Character, GameItem> Characters { get; set; }
-        public GameItemsManager<World, GameItem> Worlds { get; set; }
-        public GameItemsManager<Level, GameItem> Levels { get; set; }
 
         /// <summary>
-        /// Messaging
+        /// GameItemManager containing the current Worlds
+        /// </summary>
+        public GameItemsManager<World, GameItem> Worlds { get; set; }
+
+        /// <summary>
+        /// GameItemManager containing the current Levels
+        /// </summary>
+        public GameItemsManager<Level, GameItem> Levels { get; set; }
+
+        #endregion GameManager properties
+        #region Messaging properties 
+
+        /// <summary>
+        /// A reference to the global Messaging system
         /// </summary>
         Messenger _messenger = new Messenger();
         public static Messenger Messenger {
@@ -254,9 +470,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             }
         }
 
+        #endregion Messaging properties 
 
         #region Setup
 
+        /// <summary>
+        /// Main setup routine
+        /// </summary>
         protected override void GameSetup()
         {
             base.GameSetup();
@@ -383,6 +603,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         #region Update Loop
 
+        /// <summary>
+        /// Update loop
+        /// </summary>
         void Update()
         {
             // process messages.
@@ -394,7 +617,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region Display
 
         /// <summary>
-        /// Setup some properties about the current state of the display
+        /// Setup properties about the current state of the display
         /// </summary>
         void SetDisplayProperties()
         {
@@ -463,6 +686,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         #endregion Display
 
+        #region Save State
+        /// <summary>
+        /// Save GameManager state
+        /// </summary>
         public override void SaveState()
         {
             MyDebug.Log("GameManager: SaveState");
@@ -476,8 +703,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
             PreferencesFactory.Save();
         }
+        #endregion Save State
 
         #region Audio
+
+        /// <summary>
+        /// Plays an audio clip using the first available effect audio source
+        /// </summary>
+        /// If no available audio sources are available then a new one will be created.
+        /// <param name="clip"></param>
+        /// <param name="pitchLow"></param>
+        /// <param name="pitchHigh"></param>
         public void PlayEffect(AudioClip clip, float pitchLow = 1, float pitchHigh = 1)
         {
             Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playying effects.");
@@ -526,7 +762,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region BaseIdentifier related
 
         /// <summary>
-        /// Get the identifier that is defined
+        /// Safely get the identifier that is defined (see IdentifierBase for further details)
         /// </summary>
         /// <returns></returns>
         public static string GetIdentifierBase()
@@ -539,6 +775,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             }
         }
 
+        /// <summary>
+        /// Load the specified resource taking into account path priorities.
+        /// </summary>
+        /// When loading a resource it will be first tried loaded from a folder prefixed with IdentifierBase (if set),
+        /// otherwise it will fall back to the named resource, and if that is not found to the named resource from a 
+        /// folder named Default
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="fallback"></param>
+        /// <returns></returns>
         public static T LoadResource<T>(string name, bool fallback = true) where T : UnityEngine.Object
         {
             T resource = null;
@@ -551,6 +797,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             return resource;
         }
 
+        /// <summary>
+        /// Determin a scene name based upon whether IdentifierBase is set.
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
         public static string GetIdentifierScene(string sceneName)
         {
             string newSceneName = string.IsNullOrEmpty(GameManager.GetIdentifierBase())
@@ -564,8 +815,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region Messaging
 
         /// <summary>
-        /// Safe method for adding a listener without needing to test whether a gamemanager is setup.
+        /// Shortcut and safe method for adding a listener without needing to test whether a gamemanager is setup.
         /// </summary>
+        /// As GameManager can be destroyed before other components when you shut down your game, it is important to 
         /// <param name="msg"></param>
         /// <returns></returns>
         public static bool SafeAddListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
@@ -576,7 +828,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
         /// <summary>
-        /// Safe method for removing a listener without needing to test whether a gamemanager is setup.
+        /// Shortcut and safe method for removing a listener without needing to test whether a gamemanager is setup.
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
@@ -588,7 +840,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
         /// <summary>
-        /// Safe method for queueing messages without needing to test whether a gamemanager is setup.
+        /// Shortcut and safe method for queueing messages without needing to test whether a gamemanager is setup.
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
@@ -599,7 +851,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         }
 
         /// <summary>
-        /// Safe method for triggering messages without needing to test whether a gamemanager is setup.
+        /// Shortcut and safe method for triggering messages without needing to test whether a gamemanager is setup.
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
@@ -613,6 +865,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         #region Scene Transitions
 
+        /// <summary>
+        /// Load the specified scene, applying any transitions if the Beautiful Transitions asset is installed.
+        /// </summary>
+        /// <param name="sceneName"></param>
         public static void LoadSceneWithTransitions(string sceneName)
         {
             sceneName = GameManager.GetIdentifierScene(sceneName);
@@ -627,9 +883,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #endregion Scene Transitions
         
         #region Player related code
-        /// 
-        /// Player related - override if you have a custom player class.
-        ///
+
+        /// <summary>
+        /// Create the given player number (note: probably soon to be made obsolete)
+        /// </summary>
+        /// Can be overridden if you have a custom player class.
+        /// <param name="playerNumber"></param>
+        /// <returns></returns>
         protected virtual Player CreatePlayer(int playerNumber)
         {
             MyDebug.Log("GameManager: CreatePlayer");
@@ -639,16 +899,29 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             return player;
         }
 
+        /// <summary>
+        /// Get the current player
+        /// </summary>
+        /// <returns></returns>
         public Player GetPlayer()
         {
             return Player;
         }
 
+        /// <summary>
+        /// Get the specified player
+        /// </summary>
+        /// <param name="playerNumber">player number 0 being the first player</param>
+        /// <returns></returns>
         public Player GetPlayer(int playerNumber)
         {
             return Players[playerNumber];
         }
 
+        /// <summary>
+        /// Set the current player by player number
+        /// </summary>
+        /// <param name="playerNumber"></param>
         public void SetPlayerByNumber(int playerNumber)
         {
             Player = Players[playerNumber];

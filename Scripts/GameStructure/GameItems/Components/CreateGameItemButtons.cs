@@ -31,6 +31,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     /// <typeparam name="TGameItem">The type of the Game Item</typeparam>
     public abstract class CreateGameItemButtons<TGameItemButton, TGameItem> : MonoBehaviour where TGameItemButton: GameItemButton<TGameItem> where TGameItem: GameItem, new()
     {
+        /// <summary>
+        /// A prefab that will be created for all GameItems.
+        /// </summary>
         public GameObject Prefab;
 
         public void Awake()
@@ -45,6 +48,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             }
         }
 
+        /// <summary>
+        /// Implement this in your derived class to return an array of GameItems to create buttons for
+        /// </summary>
+        /// <returns></returns>
         protected abstract GameItem[] GetGameItems();
     }
 }

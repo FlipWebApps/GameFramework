@@ -31,29 +31,51 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
-    /// Game Item class represents most in game items that have features such as a name and description, 
-    /// the ability to unlock, a score or value. 
-    /// 
-    /// This might include players, worlds, levels and characters...
+    /// Base representation for many in game items such as players, worlds, levels and characters...
     /// </summary>
+    /// This provides many of the common features that game items need such as a name and description, 
+    /// localisation support, the ability to unlock, a score or value etc.
     public class GameItem
     {
+        /// <summary>
+        /// Ways in which a GameItem can be unlocked
+        /// </summary>
         public enum UnlockModeType { Custom, Completion, Coins }
 
+        /// <summary>
+        /// A unique identifier for this type of GameItem (override in your derived classes)
+        /// </summary>
+        /// You should override this in your derived classes to return a string identifier that is unique to your type of
+        /// GameItem e.g. "Level", "World".
         public virtual string IdentifierBase { get; protected set; }
+
+        /// <summary>
+        /// A unique shortened version of IdentifierBase to save memory.
+        /// </summary>
+        /// You should override this in your derived classes to return a string identifier that is a unique shortened version
+        /// of IdentifierBase e.g. "L", "W".
         public virtual string IdentifierBasePrefs { get; protected set; }
+
+        /// <summary>
+        /// Returns whether this GameItem is setup and initialised.
+        /// </summary>
         public bool IsInitialised { get; private set; }
 
+        /// <summary>
+        /// A reference to the current Player
+        /// </summary>
+        /// Many game items will hold unique values depending upon the player e.g. high score. This field is used to identify 
+        /// the current player that the GameItem represents.
         public Player Player;
         //public GameItem Parent;
 
         /// <summary>
-        /// A number that represents this game item
+        /// A number that represents this game item that is unique for this class of GameItem
         /// </summary>
         public int Number { get; protected set; }
 
         /// <summary>
-        /// The name of this gameitem. Through teh constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// The name of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
         /// </summary>
         public string Name {
             get
@@ -68,7 +90,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         string _name;
 
         /// <summary>
-        /// A description of this gameitem. Through teh constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// A description of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
         /// </summary>
         public string Description
         {
@@ -84,8 +106,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         string _description;
 
         /// <summary>
-        /// A sprite that is associated with this gameitem. Loaded from resources on first access.
+        /// A sprite that is associated with this gameitem. 
         /// </summary>
+        /// The sprite is loaded from resources on first access.
         public Sprite Sprite {
             // delayed load from resources.
             get
@@ -103,21 +126,38 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         bool _spriteTriedLoading;
 
         /// <summary>
-        /// Whether the current item is purchased. Saved at the root level for all players.
+        /// Whether the current item has been is purchased. Saved at the root level for all players.
         /// </summary>
         public bool IsBought { get; set; }
 
+        /// <summary>
+        /// A value that is needed to unlock this item.
+        /// </summary>
+        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
+        /// -1 means that you can not unlock this item in this way.
         public int ValueToUnlock { get; set; }
-        public int HighScoreLocalPlayers { get; set; }              // global high score for all local players
-        public int HighScoreLocalPlayersPlayerNumber { get; set; }  // number of the player that has overall high score
-        public int OldHighScoreLocalPlayers { get; set; }           // high score before this turn
+
+        /// <summary>
+        /// A global high score for this GameItem for all local players
+        /// </summary>
+        public int HighScoreLocalPlayers { get; set; }
+
+        /// <summary>
+        /// The number of the player that has the overall high score for this GameItem
+        /// </summary>
+        public int HighScoreLocalPlayersPlayerNumber { get; set; }
+
+        /// <summary>
+        /// Local player high score for this GameItem before this turn
+        /// </summary>
+        public int OldHighScoreLocalPlayers { get; set; }
 
         #region User Specific Settings
 
         /// <summary>
         /// The number of coins that are currently assigned to the current GameItem. 
-        /// CoinsChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
         /// </summary>
+        /// CoinsChangedMessage or some other GameItem specific varient is usually sent whenever this value changes outside of initialisation.
         public int Coins
         {
             get { return _coins; }
@@ -134,8 +174,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         /// <summary>
         /// The score associated with the current GameItem. 
-        /// ScoreChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
         /// </summary>
+        /// ScoreChangedMessage or some other GameItem specific varient is usually sent whenever this value changes outside of initialisation.
         public int Score
         {
             get { return _score; }
@@ -152,7 +192,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         /// <summary>
         /// The high score associated with the current GameItem. 
-        /// HighScoreChangedMessage or some other varient is usually sent whenever this value changes outside of initialisation.
+        /// HighScoreChangedMessage or some other GameItem specific varient is usually sent whenever this value changes outside of initialisation.
         /// </summary>
         public int HighScore
         {
@@ -173,22 +213,30 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public int OldHighScore { get; set; }
 
         /// <summary>
-        /// Whether the current item is unlocked. Saved per player.
+        /// Whether the current item is unlocked. 
         /// </summary>
-        public bool IsUnlocked { get; set; } 
+        /// Saved per player.
+        public bool IsUnlocked { get; set; }
 
         /// <summary>
-        /// Whether the unlocked animation has been shown. Used if a level is unlocked when not being displayed
-        /// so that we can still show a unlock animation to the user (e.g. when completing a level unlocks the next level)
-        /// Saved per player.
+        /// Whether an unlocked animation has been shown. 
         /// </summary>
+        /// Used if a GameItem is unlocked when not being displayed so that we can still show a unlock animation to the user 
+        /// (e.g. when completing a level unlocks the next level, we want to show an animation when they go back to the
+        /// level select screen).
+        /// 
+        /// Saved per player.
         public bool IsUnlockedAnimationShown { get; set; }
 
         #endregion User Specific Settings
 
         /// <summary>
-        /// Stored json data from disk. Consider creating a subclass to save this instead.
+        /// Stored json data from disk. 
         /// </summary>
+        /// You can provide a json configuration file that contains both standard and custom values for setting up 
+        /// this game item and also holding other configuration.
+        /// 
+        /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
         public JSONObject JsonConfigurationData { get; set; }
 
         bool _isPlayer;
@@ -204,15 +252,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="number"></param>
         /// <param name="name"></param>
-        /// <param name="localiseName"></param>
+        /// <param name="localiseName">Whether name represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="description"></param>
-        /// <param name="localiseDescription"></param>
+        /// <param name="localiseDescription">Whether description represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="sprite"></param>
         /// <param name="valueToUnlock"></param>
         /// <param name="player"></param>
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
-        /// <param name="loadFromResources"></param>
+        /// <param name="loadFromResources">Whether a resources file is present with additional information</param>
         public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
@@ -254,10 +302,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
+        /// </summary>
         /// This is called after ParseLevelFileData (if loading from resources) so you can use values setup by that method. 
         /// 
         /// If overriding from a base class be sure to call base.CustomInitialisation()
-        /// </summary>
         public virtual void CustomInitialisation()
         {
         }
@@ -269,6 +317,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Load simple meta data associated with this game item.
         /// </summary>
+        /// The file loaded must be placed in the resources folder under [IdentifierBase]\[IdentifierBase]_[Number].json
         public void LoadLevelData()
         {
             if (JsonConfigurationData == null)
@@ -279,10 +328,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Parse the loaded level file data. 
+        /// Parse the loaded json file data and extract certain default values
+        /// </summary>
+        /// Json entries 'name', 'description' and 'valuetounlock' will be used to automatically set the corresponding GameItem
+        /// properties. You can also override this method to parse and extract your own custom values.
         /// 
         /// If overriding from a base class be sure to call base.ParseLevelFileData()
-        /// </summary>
         /// <param name="jsonObject"></param>
         public virtual void ParseLevelFileData(JSONObject jsonObject)
         {
@@ -298,6 +349,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Load larger data that takes up more space or needs additional parsing
         /// </summary>
+        /// You may not want to load and hold game data for all GameItemss, especially if it takes up a lot of memory. You can
+        /// use this method to selectively load such data.
         public void LoadGameData()
         {
             if (JsonConfigurationData == null)
@@ -309,9 +362,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         /// <summary>
         /// Parse the loaded game data. 
-        /// 
-        /// If overriding from a base class be sure to call base.ParseGameData()
         /// </summary>
+        /// If overriding from a base class be sure to call base.ParseGameData()
         /// <param name="jsonObject"></param>
         public virtual void ParseGameData(JSONObject jsonObject)
         {
@@ -335,10 +387,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         #endregion Load JSON Data
 
         /// <summary>
-        /// This is seperate so that we can save the bought status (e.g. from in app purchase) without affecting any of the other 
-        /// settings. This way we can setup a gameitem and save this Value from IAP code without worrying about it being used 
-        /// elsewhere.
+        /// Mark an item as bought and save.
         /// </summary>
+        /// This is seperate from IsBought so that we can save the bought status (e.g. from in app purchase) without affecting any of the other 
+        /// settings. This way we can temporarily setup a gameitem and save this Value from IAP code without worrying about it being used 
+        /// elsewhere.
         public void MarkAsBought()
         {
             IsBought = true;
@@ -349,10 +402,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         /// <summary>
         /// Update PlayerPrefs with setting or preferences for this item.
+        /// </summary>
         /// Note: This does not call PlayerPrefs.Save()
         /// 
         /// If overriding from a base class be sure to call base.ParseGameData()
-        /// </summary>
         public virtual void UpdatePlayerPrefs()
         {
             SetSetting("IsU", IsUnlocked ? 1 : 0);
@@ -369,11 +422,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #region Score Related
 
+        /// <summary>
+        /// Add a point onto this GameItems Score.
+        /// </summary>
         public void AddPoint()
         {
             AddPoints(1);
         }
 
+        /// <summary>
+        /// Add the specified number of points onto this GameItems Score.
+        /// </summary>
         public void AddPoints(int points, int playerNumber = 0)
         {
             Score += points;
@@ -388,10 +447,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             }
         }
 
+        /// <summary>
+        /// Subtract a point from this GameItems Score.
+        /// </summary>
+
         public void RemovePoint()
         {
             RemovePoints(1);
         }
+
+        /// <summary>
+        /// Subtract the specified number of point from this GameItems Score.
+        /// </summary>
 
         public void RemovePoints(int points)
         {
@@ -399,11 +466,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             Score = Mathf.Max(tempScore, 0);
         }
 
+        /// <summary>
+        /// Send a ScoreChangedMessage when the score changes.
+        /// </summary>
+        /// <param name="newScore"></param>
+        /// <param name="oldScore"></param>
+        /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendScoreChangedMessage(int newScore, int oldScore)
         {
             GameManager.Messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
         }
 
+        /// <summary>
+        /// Send a HidhScoreChangedMessage when the high score changes.
+        /// </summary>
+        /// <param name="newScore"></param>
+        /// <param name="oldScore"></param>
+        /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
             GameManager.Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
@@ -411,26 +490,48 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         #endregion
 
         #region Coins Related
+        /// <summary>
+        /// Add a coin onto this GameItems coin count.
+        /// </summary>
+
         public void AddCoin()
         {
             AddCoins(1);
         }
 
+        /// <summary>
+        /// Add the specified number of coins onto this GameItems coin count.
+        /// </summary>
         public void AddCoins(int coins)
         {
             Coins += coins;
         }
 
+
+        /// <summary>
+        /// Subtract a coin from this GameItems coin count.
+        /// </summary>
         public void RemoveCoin()
         {
             RemoveCoins(1);
         }
 
+
+        /// <summary>
+        /// Subtract the specified number of coins from this GameItems coin count.
+        /// </summary>
         public void RemoveCoins(int coins)
         {
             var tempCoins = Coins - coins; // batch updates to avoid sending multiple messages.
             Coins = Mathf.Max(tempCoins, 0);
         }
+
+        /// <summary>
+        /// Send a CoinsChangedMessage when the coin coint changes.
+        /// </summary>
+        /// <param name="newCoins"></param>
+        /// <param name="oldCoins"></param>
+        /// You may want to override this in your derived classes to send custom messages.
 
         public virtual void SendCoinsChangedMessage(int newCoins, int oldCoins)
         {
@@ -440,6 +541,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         #endregion
 
         #region For setting gameitem instance specific settings
+        /// <summary>
+        /// Set a string preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public void SetSetting(string key, string value, string defaultValue = null)
         {
             if (_isPlayer)
@@ -460,6 +567,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 Player.SetSetting(FullKey(key), value, defaultValue);
         }
 
+        /// <summary>
+        /// Set a bool preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public void SetSetting(string key, bool value, bool defaultValue = false)
         {
             if (_isPlayer)
@@ -480,6 +593,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 Player.SetSetting(FullKey(key), value, defaultValue);
         }
 
+        /// <summary>
+        /// Set an int preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public void SetSetting(string key, int value, int defaultValue = 0)
         {
             if (_isPlayer) {
@@ -500,6 +619,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Set a float preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public void SetSettingFloat(string key, float value, float defaultValue = 0)
         {
             if (_isPlayer)
@@ -521,6 +646,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Get a string preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public string GetSettingString(string key, string defaultValue)
         {
             if (_isPlayer)
@@ -532,6 +663,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Get an int preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public int GetSettingInt(string key, int defaultValue)
         {
             if (_isPlayer)
@@ -543,6 +680,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Get a bool preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public bool GetSettingBool(string key, bool defaultValue)
         {
             if (_isPlayer)
@@ -554,6 +697,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
 
+        /// <summary>
+        /// Get a float preferences setting that is unique to this GameItem instance
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="defaultValue"></param>
         public float GetSettingFloat(string key, float defaultValue)
         {
             if (_isPlayer)
@@ -564,6 +713,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 return Player.GetSettingFloat(FullKey(key), defaultValue);
         }
 
+        /// <summary>
+        /// Return the full preferences key that will be used for this GameItem
+        /// </summary>
+        /// The full key is derived from: IdentifierBasePrefs + Number + "." + key
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string FullKey(string key)
         {
             return IdentifierBasePrefs + Number + "." + key;
