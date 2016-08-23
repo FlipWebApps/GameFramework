@@ -30,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// <summary>
     /// Unlock GameItem button for Characters 
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Characters/EnableComponentOnce")]
+    [AddComponentMenu("Game Framework/GameStructure/Characters/UnlockCharacterButton")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
