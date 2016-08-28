@@ -160,7 +160,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                 // check for gameover conditions.
                 if (GameOverWhenLivesIsZero && GameManager.Instance.Player.Lives == 0)
                     GameOver(false, ShowGameOverDialogDelay);
-                if (GameOverWhenHealthIsZero && Mathf.Approximately(GameManager.Instance.Player.Health, 0))
+                if (GameOverWhenHealthIsZero && (Mathf.Approximately(GameManager.Instance.Player.Health, 0) || GameManager.Instance.Player.Health < 0))
                     GameOver(false, ShowGameOverDialogDelay);
 
             }
