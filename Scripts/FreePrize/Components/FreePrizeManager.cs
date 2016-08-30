@@ -101,6 +101,11 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         public DateTime NextFreePrizeAvailable { get; set; }
 
         /// <summary>
+        /// True when teh Free Prize Dialog is shown otherwise false
+        /// </summary>
+        public bool IsShowingFreePrizeDialog { get; set; }
+
+        /// <summary>
         /// The current prize amount.
         /// </summary>
         public int CurrentPrizeAmount {get; set; }
@@ -202,10 +207,20 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         /// </summary>
         public void ShowFreePrizeDialog()
         {
-            var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController);
+            // only allow the free prize dialog to be shown once.
+            if (!IsShowingFreePrizeDialog) return;
+
+            IsShowingFreePrizeDialog = true;
+            var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null,
+                runtimeAnimatorController: ContentAnimatorController);
             string text = LocaliseText.Format("FreePrize.Text1", CurrentPrizeAmount);
 
-            dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), text: text, text2Key: "FreePrize.Text2", doneCallback: ShowFreePrizeDone, dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
+            dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), text: text, text2Key: "FreePrize.Text2",
+                doneCallback: ShowFreePrizeDone,
+                dialogButtons:
+                    ContentShowsButtons
+                        ? DialogInstance.DialogButtonsType.Custom
+                        : DialogInstance.DialogButtonsType.Ok);
         }
 
         /// <summary>
@@ -220,6 +235,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             GameManager.Instance.Player.UpdatePlayerPrefs();
 
             StartNewCountdown();
+            IsShowingFreePrizeDialog = false;
         }
 
         [Serializable]
