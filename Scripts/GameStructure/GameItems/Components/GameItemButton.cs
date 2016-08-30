@@ -49,62 +49,70 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     {
         public enum SelectionModeType { ClickThrough, Select }
 
-        [Header("Unique Identifier")]
+        /// <summary>
+        /// Identifier that represents the GameItem this button corresponds to.
+        /// </summary>
+        [Header("General")]
+        [Tooltip("Identifier that represents the GameItem this button corresponds to.")]
         public int Number;
 
-        [Header("Selection Mode")]
+        /// <summary>
+        /// This items selection mode
+        /// </summary>
+        /// How this is handled depends a bit on the exact implementation, however typically ClickThrough = go to next scene, Select = select item and remain
+        [Tooltip("This items selection mode.")]
         public SelectionModeType SelectionMode;
 
+        /// <summary>
+        /// A color to use when this item is available for unlock
+        /// </summary>
         [Header("Unlocking")]
-        public float CoinColorCheckInterval = 1f;
+        [Tooltip("A color to use when this item is available for unlock")]
         public Color CoinColorCanUnlock = Color.green;
+
+        /// <summary>
+        /// A color to use when this item is not available for unlock
+        /// </summary>
+        [Tooltip("A color to use when this item is not available for unlock")]
         public Color CoinColorCantUnlock = Color.white;
 
+        /// <summary>
+        /// The name of the scene that should be loaded when this button is clicked.
+        /// </summary>
+        /// You can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.
         [Header("Default Handling")]
         [Tooltip("The name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
         public string ClickUnlockedSceneToLoad;
 
-        protected Player CurrentPlayer;
-
+        /// <summary>
+        /// The current item that this button corresponds to.
+        /// </summary>
         public T CurrentItem { get; set; }
 
-        public Image DisplayImage { get; set; }
+        protected Player CurrentPlayer;
+
+        protected Image DisplayImage { get; set; }
         protected Image HighlightImage;
         protected Text ValueToUnlockAmount;
         protected GameObject LockGameObject;
         protected GameObject HighScoreGameObject;
         protected GameObject ValueToUnlockGameObject;
-        protected GameObject StarsWonGameObject;
-        protected GameObject Star1WonGameObject;
-        protected GameObject Star1NotWonGameObject;
-        protected GameObject Star2WonGameObject;
-        protected GameObject Star2NotWonGameObject;
-        protected GameObject Star3WonGameObject;
-        protected GameObject Star3NotWonGameObject;
-        protected GameObject Star4WonGameObject;
-        protected GameObject Star4NotWonGameObject;
 
         protected bool LoadSpriteFromResources;
 
+        /// <summary>
+        /// Setup and get various references for later use
+        /// </summary>
         public void Awake()
         {
             CurrentPlayer = GameManager.Instance.Player;
 
             HighlightImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Highlight", true);
             DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
-            ValueToUnlockAmount = GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(gameObject, "ValueToUnlockAmount", true);
             LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
             HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
             ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
-            StarsWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "StarsWon", true);
-            Star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star1Won", true);
-            Star1NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star1NotWon", true);
-            Star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star2Won", true);
-            Star2NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star2NotWon", true);
-            Star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star3Won", true);
-            Star3NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star3NotWon", true);
-            Star4WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star4Won", true);
-            Star4NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star4NotWon", true);
+            ValueToUnlockAmount = GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(ValueToUnlockGameObject, "ValueToUnlockAmount", true);
 
             Button b = gameObject.GetComponent<Button>();
             b.onClick.AddListener(OnClick);
@@ -138,6 +146,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             GetGameItemsManager().Unlocked -= UnlockIfGameItemMatches;
         }
 
+        /// <summary>
+        /// Setup the display based upon configuration and availability of child gameobjects
+        /// </summary>
+        /// You may override this in a child class, however in most cases you will need to call this base instance also.
         public virtual void SetupDisplay()
         {
             var isUnlockedAndAnimationShown = CurrentItem.IsUnlocked && CurrentItem.IsUnlockedAnimationShown;
@@ -159,7 +171,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             if (ValueToUnlockGameObject != null)
             {
                 ValueToUnlockGameObject.SetActive(!isUnlockedAndAnimationShown && CurrentItem.ValueToUnlock != -1);
-                UIHelper.SetTextOnChildGameObject(ValueToUnlockGameObject, "ValueToUnlockAmount", "x" + CurrentItem.ValueToUnlock.ToString(), true);
+                if (ValueToUnlockAmount != null)
+                    ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
             if (SelectionMode == SelectionModeType.Select && HighlightImage != null)
@@ -168,6 +181,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             }
         }
 
+        /// <summary>
+        /// Return a GameItemsMaanger that holds the GameItem that we are displaying.
+        /// </summary>
+        /// <returns></returns>
         protected abstract GameItemsManager<T, GameItem> GetGameItemsManager();
 
         void SelectedChanged(T oldItem, T item)
@@ -190,6 +207,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         }
 
 
+        /// <summary>
+        /// Called when an unlocked button is clicked
+        /// </summary>
+        /// The default implementation sets the GameItemManager's selected item and then if specified loads the scene specified by ClickUnlockedSceneToLoad.
+        /// You may override this in a derived class.
         public virtual void ClickUnlocked()
         {
             GetGameItemsManager().Selected = CurrentItem;
@@ -202,6 +224,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         }
 
 
+        /// <summary>
+        /// Called when a locked button is clicked
+        /// </summary>
+        /// The default implementation initiates IAP if enabled or shows a dialog otherwise.
+        /// You may override this in a derived class.
         public virtual void ClickLocked()
         {
 #if UNITY_PURCHASING
@@ -216,7 +243,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 #endif
         }
 
-        
+
+        /// <summary>
+        /// Callback from the purchase dialog. Default implementation submits the IAP request if IAP is enabled.
+        /// </summary>
+        /// <param name="dialogInstance"></param>
         public void BuyDialogCallback(DialogInstance dialogInstance)
         {
             if (dialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
@@ -241,6 +272,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
                 Unlock();
         }
 
+        /// <summary>
+        /// Called when the GameItem that this button represents is unlocked.
+        /// </summary>
+        /// The default behaviour will set the Unlock trigger on any attached Animator so you can animation the unlocking.
+        /// You may override this method to provide your own custom handling.
         public virtual void Unlock()
         {
             CurrentItem.IsUnlocked = true;
@@ -258,9 +294,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
         /// <summary>
         /// This method is triggered when a the players coins are changed and updates the coin to unlock color.
-        /// 
-        /// Override to provide your own custom handling.
         /// </summary>
+        /// Override to provide your own custom handling.
         /// <param name="message"></param>
         /// <returns></returns>
         protected virtual bool OnPlayerCoinsChanged(BaseMessage message)

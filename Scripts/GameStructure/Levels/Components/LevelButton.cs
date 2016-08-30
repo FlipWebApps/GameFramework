@@ -40,8 +40,28 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class LevelButton : GameItemButton<Level>
     {
+        protected GameObject StarsWonGameObject;
+        protected GameObject Star1WonGameObject;
+        protected GameObject Star1NotWonGameObject;
+        protected GameObject Star2WonGameObject;
+        protected GameObject Star2NotWonGameObject;
+        protected GameObject Star3WonGameObject;
+        protected GameObject Star3NotWonGameObject;
+        protected GameObject Star4WonGameObject;
+        protected GameObject Star4NotWonGameObject;
+
         public new void Awake()
         {
+            StarsWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "StarsWon", true);
+            Star1WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star1Won", true);
+            Star1NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star1NotWon", true);
+            Star2WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star2Won", true);
+            Star2NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star2NotWon", true);
+            Star3WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star3Won", true);
+            Star3NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star3NotWon", true);
+            Star4WonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star4Won", true);
+            Star4NotWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Star4NotWon", true);
+
             base.Awake();
             GameManager.SafeAddListener<LevelPurchasedMessage>(LevelPurchasedHandler);
         }
