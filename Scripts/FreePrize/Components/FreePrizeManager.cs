@@ -208,7 +208,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         public void ShowFreePrizeDialog()
         {
             // only allow the free prize dialog to be shown once.
-            if (!IsShowingFreePrizeDialog) return;
+            if (IsShowingFreePrizeDialog) return;
 
             IsShowingFreePrizeDialog = true;
             var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null,
