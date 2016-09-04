@@ -281,8 +281,11 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             int minimumCoins = GameManager.Instance.Levels.ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
             if (minimumCoins == 0)
                 UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoinsGot", minimumCoins), true);
+            else if (minimumCoins > 0)
+                UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins",
+                    LocaliseText.Format(LocalisationBase + ".TargetCoins", minimumCoins), true);
             else
-                UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins", LocaliseText.Format(LocalisationBase + ".TargetCoins", minimumCoins), true);
+                GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "TargetCoins", true).SetActive(false);
         }
 
         public void FacebookShare()

@@ -235,13 +235,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         /// <summary>
         /// Returns the minimum value needed to unlock the item with the lowest ValueToUnlock.
         /// </summary>
-        /// <param name="currentValue"></param>
         /// <returns></returns>
-        public int MinimumValueToUnlock(int currentValue)
+        public int MinimumValueToUnlock()
         {
             // Ssetup how many Coins to win to push them to get more.
-            int minimumCoins = -1;
-            foreach (T gameItem in Items)
+            var minimumCoins = -1;
+            foreach (var gameItem in Items)
             {
                 if (!gameItem.IsUnlocked && (minimumCoins == -1 || gameItem.ValueToUnlock < minimumCoins))
                 {
@@ -258,7 +257,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         /// <returns></returns>
         public int ExtraValueNeededToUnlock(int currentValue)
         {
-            int minimumCoins = MinimumValueToUnlock(currentValue);
+            var minimumCoins = MinimumValueToUnlock();
             if (minimumCoins == -1) return -1;
             minimumCoins -= currentValue; // deduct the Coins we already have.
             if (minimumCoins < 0) minimumCoins = 0;
