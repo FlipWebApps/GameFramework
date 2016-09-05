@@ -36,6 +36,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
 
         /// <summary>
+        /// A custom name that you can assign to the player. 
+        /// CustomNameChangedMessage is sent whenever this value changes outside of initialisation.
+        /// </summary>
+        /// This can be used for a user specified name that is automatically saved between sessions. 
+        /// This differs from Name which is a standard label that is typically fetched from the localisation file.
+        public string CustomName {
+            get { return _customName; }
+            set
+            {
+                var oldValue = CustomName;
+                _customName = value;
+                if (IsInitialised && oldValue != CustomName)
+                    GameManager.SafeQueueMessage(new CustomNameChangedMessage(CustomName, oldValue));
+            }
+        }
+        string _customName;
+
+
+        /// <summary>
         /// The number of lives that the current player as. 
         /// LivesChangedMessage is sent whenever this value changes outside of initialisation.
         /// </summary>
@@ -105,7 +124,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         {
             Reset();
 
-            Name = GetSettingString("Name", Name);
+            Name = GetSettingString("CustomName", CustomName);
 
             Score = GetSettingInt("TotalScore", Score);
             Coins = GetSettingInt("TotalCoins", Coins);
@@ -149,7 +168,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         /// </summary>
         public override void UpdatePlayerPrefs()
         {
-            SetSetting("Name", Name);
+            SetSetting("CustomName", CustomName);
 
             SetSetting("TotalScore", Score);
             SetSetting("TotalCoins", Coins);

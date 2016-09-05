@@ -1,4 +1,4 @@
-Game Framework - Free v3.1
+Game Framework - Free v3.1.1
 
 Thank you for using Game Framework. 
 
@@ -54,10 +54,37 @@ ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 Portuguese and Spanish Translations - Bryan Jonson
 French Translation -  Fabrice Pilet
 Chinese Translation - luochuanyuewu
+German Translation - Lutz Becker
 		
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.1.1
+
+	Game Framework Core - Improvements
+	- Audio: Assert check for valid BackGroundAudioSource
+	- Debug: Default debug level is Warning.
+	- FreePrize: Added IsShowingFreePrizeDialog property and check when showing dialog so a free prize can't be claimed multiple times.
+	- GameStructure: Code cleanup and comments
+	- GameStructure: Star handling moved from GameItemButton to LevelButton to reflect underlying objects
+	- GameStructure: WorldButton prefabs removed starts display as only valid for levels
+	- GameStructure: New CustomNameChangedMessage for when a players custom name changes
+	- Localisation: Added German translation courtesy of Lutz Becker
+	
+	Game Framework Core - Fixes
+	- Debug: Fix for incorrectly displayed debug level setting.
+	- Facebook: logout button status won't change to login button when user clicked logout.
+	- GameStructure: Corrected component menu name for UnlockCharacterButton
+	- GameStructure: LevelManager correctly ends the game if health gets to less than zero
+	- GameStructure: Player CustomName property added saved to prefs for a customisable name instead of Name which was causing localisation errors.
+	- Dialogs: Game Over dialog no longer shows coins to unlock when all levels are unlocked.
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Localisation: Added German language demo option
+	
+	Game Framework Tutorials (Extras Bundle) - Fixes
+	- Localisation: Fix for localisation.csv sample file possibly stopping a user defined file loading.
 
 v3.1
 
