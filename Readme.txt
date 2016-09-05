@@ -86,6 +86,9 @@ v3.1.1
 	Game Framework Tutorials (Extras Bundle) - Fixes
 	- Localisation: Fix for localisation.csv sample file possibly stopping a user defined file loading.
 
+	Prefs Editor (Extras Bundle) - Updated to 2.0.1
+	- Fix: Additional conversion check when trying to load values caused by 3rd party values that are base64 encoded.
+
 v3.1
 
 This release contains rewritten Facebook functionality that breaks with the old API. If you used this before then 
