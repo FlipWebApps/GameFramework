@@ -18,7 +18,6 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-using System;
 using FlipWebApps.GameFramework.Scripts.Audio.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
@@ -45,11 +44,10 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
     /// AudioSources volume to be as specified by the global setting.
     /// 
     /// Must be attached to a gameobject that contains an AudioSource component.
-    /// 
     [RequireComponent(typeof(AudioSource))]
-    [AddComponentMenu("Game Framework/Audio/CopyGlobalEffectVolume")]
+    [AddComponentMenu("Game Framework/Audio/CopyBackgroundVolume")]
     [HelpURL("http://www.flipwebapps.com/game-framework/audio/")]
-    public class CopyGlobalEffectVolume : RunOnMessage<EffectVolumeChangedMessage>
+    public class CopyBackgroundVolume : RunOnMessage<BackgroundVolumeChangedMessage>
     {
         /// <summary>
         /// A multiplier to apply to the global volume. 1 = use the global volume directly.
@@ -65,7 +63,7 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
             Assert.IsTrue(GameManager.IsActive, "Please ensure that you have added a 'GameFramework | GameStructure | GameManager' component to your scene");
 
             _audioSource = GetComponent<AudioSource>();
-            RunMethod(new EffectVolumeChangedMessage(0, GameManager.Instance.EffectAudioVolume));
+            RunMethod(new BackgroundVolumeChangedMessage(0, GameManager.Instance.BackGroundAudioVolume));
 
             base.OnEnable();
         }
@@ -76,10 +74,11 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public override bool RunMethod(EffectVolumeChangedMessage message)
+        public override bool RunMethod(BackgroundVolumeChangedMessage message)
         {
             _audioSource.volume = message.NewVolume * Multiplier;
             return true;
         }
+
     }
 }

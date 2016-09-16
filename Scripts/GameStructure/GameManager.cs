@@ -41,6 +41,7 @@ using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
+using FlipWebApps.GameFramework.Scripts.Audio.Messages;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -353,8 +354,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             get { return _backGroundAudioVolume; }
             set
             {
+                var oldValue = _backGroundAudioVolume;
                 _backGroundAudioVolume = value;
                 if (BackGroundAudioSource != null) BackGroundAudioSource.volume = value;
+                // notify others if not initial setup and value has changed
+                if (IsInitialised && oldValue != _backGroundAudioVolume)
+                    GameManager.Messenger.QueueMessage(new BackgroundVolumeChangedMessage(oldValue, _backGroundAudioVolume));
             }
         }
         float _backGroundAudioVolume;
@@ -366,12 +371,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public float EffectAudioVolume {
             get { return _effectAudioVolume; }
             set {
+                var oldValue = _effectAudioVolume;
                 _effectAudioVolume = value;
                 if (EffectAudioSources != null)
                 {
                     foreach (var audioSource in EffectAudioSources)
                         audioSource.volume = value;
                 }
+                // notify others if not initial setup and value has changed
+                if (IsInitialised && oldValue != _effectAudioVolume)
+                    GameManager.Messenger.QueueMessage(new EffectVolumeChangedMessage(oldValue, _effectAudioVolume));
 
             }
         }
