@@ -73,7 +73,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 ValueToUnlock = gameItemExtension.ValueToUnlock;
         }
 
-
+		/// <summary>
+        /// Return GameItemExtension object, caasted to type <T>
+        /// </summary>
         public T GetExtension<T>() where T : class
         {
             Assert.IsNotNull(gameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
