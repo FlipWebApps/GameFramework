@@ -21,6 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
 {
@@ -122,9 +123,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// Parse the loaded level file data for level specific values. If overriding from a base class be sure to call base.ParseLevelFileData()
         /// </summary>
         /// <param name="jsonObject"></param>
-        public override void ParseLevelFileData(Helper.JSONObject jsonObject)
+        public override void ParseData(Helper.JSONObject jsonObject)
         {
-            base.ParseLevelFileData(jsonObject);
+            base.ParseData(jsonObject);
 
             if (jsonObject.ContainsKey("startotalcount"))
                 StarTotalCount = (float)jsonObject.GetNumber("startotalcount");
@@ -136,6 +137,34 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 Star3Target = (float)jsonObject.GetNumber("star3target");
             if (jsonObject.ContainsKey("star4target"))
                 Star4Target = (float)jsonObject.GetNumber("star4target");
+        }
+
+
+        /// <summary>
+        /// Parse the loaded GameItemExtension object and extract certain default values
+        /// </summary>
+        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
+        /// properties. You can also override this method to parse and extract your own custom values.
+        /// 
+        /// If overriding from a base class be sure to call base.ParseData()
+        /// <param name="gameItemExtension"></param>
+        public override void ParseData(GameItemExtension gameItemExtension)
+        {
+            base.ParseData(gameItemExtension);
+
+            var levelExtension = gameItemExtension as LevelExtension;
+            Assert.IsNotNull(levelExtension, string.Format("Unable to cast gameItemExtension to LevelExtension for level {0}. Check you have created an extension of the correct type.", Number));
+
+            if (levelExtension.OverrideStarTotalCount)
+                StarTotalCount = levelExtension.StarTotalCount;
+            if (levelExtension.OverrideStar1Target)
+                Star1Target = levelExtension.Star1Target;
+            if (levelExtension.OverrideStar2Target)
+                Star2Target = levelExtension.Star2Target;
+            if (levelExtension.OverrideStar3Target)
+                Star3Target = levelExtension.Star3Target;
+            if (levelExtension.OverrideStar4Target)
+                Star4Target = levelExtension.Star4Target;
         }
 
 
