@@ -596,7 +596,7 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
         void ShareLinkCallback(IShareResult result)
         {
             FBLog("ShareLinkCallback", result.RawResult);
-            FacebookHelperResultType resultType = FacebookHelperResultType.ERROR;
+            FacebookShareLinkMessage.ResultType resultType = FacebookShareLinkMessage.ResultType.ERROR;
 
             if (result != null)
             {
@@ -606,15 +606,15 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                     object obj = 0;
                     if (responseObject.TryGetValue("cancelled", out obj))
                     {
-                        resultType = FacebookHelperResultType.CANCELLED;
+                        resultType = FacebookShareLinkMessage.ResultType.CANCELLED;
                     }
                     else if (responseObject.TryGetValue("id", out obj))
                     {
-                        resultType = FacebookHelperResultType.OK;
+                        resultType = FacebookShareLinkMessage.ResultType.OK; 
                     }
                 }
             }
-            GameManager.SafeQueueMessage(new FacebookShareLinkMessage(FacebookShareLinkMessage.ResultType.OK, result.RawResult));
+            GameManager.SafeQueueMessage(new FacebookShareLinkMessage(resultType, result.RawResult));
         }
 
         #endregion ShareLink
