@@ -37,52 +37,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// localisation support, the ability to unlock, a score or value etc.
     public class GameItem
     {
-        //TODO Hanging here to be closer to top, move it where you need
-        /// <summary>
-        /// Stored GameItemExtension data. 
-        /// </summary>
-        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
-        public GameItemExtension gameItemExtensionData { get; set; }
-
-        #region Load ScriptableObject Data
-        /// <summary>
-        /// Load the GameItemExtension that corresponds to this item.
-        /// </summary>
-        GameItemExtension LoadGameItemExtension()
-        {
-            GameItemExtension giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (giExtension == null) return null;
-            return giExtension;
-        }
-
-        /// <summary>
-        /// Parse the loaded GameItemExtension object and extract certain default values
-        /// </summary>
-        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
-        /// If overriding from a base class be sure to call base.ParseLevelFileData()
-        /// <param name="gameItemExtension"></param>
-        public virtual void ParseLevelFileData(GameItemExtension gameItemExtension)
-        {
-            if (gameItemExtension.Name != null)
-                Name = gameItemExtension.Name;
-            if (gameItemExtension.Description != null)
-                Description = gameItemExtension.Description;
-            if (gameItemExtension.ValueToUnlock != null)
-                ValueToUnlock = gameItemExtension.ValueToUnlock;
-        }
-
-		/// <summary>
-        /// Return GameItemExtension object, caasted to type <T>
-        /// </summary>
-        public T GetExtension<T>() where T : class
-        {
-            Assert.IsNotNull(gameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
-            return gameItemExtensionData as T;
-        }
-        #endregion
-
         /// <summary>
         /// Ways in which a GameItem can be unlocked
         /// </summary>
@@ -285,6 +239,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
         public JSONObject JsonConfigurationData { get; set; }
 
+        /// <summary>
+        /// Stored GameItemExtension data. 
+        /// </summary>
+        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
+        public GameItemExtension GameItemExtensionData { get; set; }
+
+
         bool _isPlayer;
         bool _localiseName;
         bool _localiseDescription;
@@ -337,7 +298,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
             if (loadFromResources)
-                LoadLevelData();
+                LoadData();
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
@@ -358,26 +319,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #endregion Initialisation
 
-        #region Load JSON Data
+        #region Load Data
         /// <summary>
         /// Load simple meta data associated with this game item.
         /// </summary>
-        /// The file loaded must be placed in the resources folder under [IdentifierBase]\[IdentifierBase]_[Number].json
-        public void LoadLevelData()
+        /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
+        /// or as a GameItemExtension derived ScriptableObject also from the resources folder under [IdentifierBase]\[IdentifierBase]_[Number]
+        public void LoadData()
         {
             if (JsonConfigurationData == null)
                 JsonConfigurationData = LoadJSONDataFile();
-            //Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (gameItemExtensionData == null)
-                gameItemExtensionData = LoadGameItemExtension();
-            //Assert.IsNotNull(gameItemExtensionData, "Unable to load scriptable object data. CHeck the Game Item Extension exists for : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            Assert.IsFalse(JsonConfigurationData == null && gameItemExtensionData == null, "When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            Assert.IsFalse(JsonConfigurationData != null && gameItemExtensionData != null, "When loading game item from resources, only JSON or GameItemExtension should be present, but not both. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            if (GameItemExtensionData == null)
+                GameItemExtensionData = LoadGameItemExtension();
+
+            Assert.IsFalse(JsonConfigurationData == null && GameItemExtensionData == null, "When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
 
             if (JsonConfigurationData!=null)
-                ParseLevelFileData(JsonConfigurationData);
-            else if (gameItemExtensionData != null)
-                ParseLevelFileData(gameItemExtensionData);
+                ParseData(JsonConfigurationData);
+            else if (GameItemExtensionData != null)
+                ParseData(GameItemExtensionData);
         }
 
 
@@ -389,7 +349,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// 
         /// If overriding from a base class be sure to call base.ParseLevelFileData()
         /// <param name="jsonObject"></param>
-        public virtual void ParseLevelFileData(JSONObject jsonObject)
+        public virtual void ParseData(JSONObject jsonObject)
         {
             if (jsonObject.ContainsKey("name"))
                 Name = jsonObject.GetString("name");
@@ -397,6 +357,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 Description = jsonObject.GetString("description");
             if (jsonObject.ContainsKey("valuetounlock"))
                 ValueToUnlock = (int)jsonObject.GetNumber("valuetounlock");
+        }
+
+
+        /// <summary>
+        /// Parse the loaded GameItemExtension object and extract certain default values
+        /// </summary>
+        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
+        /// properties. You can also override this method to parse and extract your own custom values.
+        /// 
+        /// If overriding from a base class be sure to call base.ParseData()
+        /// <param name="gameItemExtension"></param>
+        public virtual void ParseData(GameItemExtension gameItemExtension)
+        {
+            if (!string.IsNullOrEmpty(gameItemExtension.Name))
+                Name = gameItemExtension.Name;
+            if (!string.IsNullOrEmpty(gameItemExtension.Description))
+                Description = gameItemExtension.Description;
+            if (gameItemExtension.OverrideValueToUnlock)
+                ValueToUnlock = gameItemExtension.ValueToUnlock;
         }
 
 
@@ -438,7 +417,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return jsonObject;
         }
 
-        #endregion Load JSON Data
+
+        /// <summary>
+        /// Load the GameItemExtension that corresponds to this item.
+        /// </summary>
+        GameItemExtension LoadGameItemExtension()
+        {
+            GameItemExtension giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            if (giExtension == null) return null;
+            return giExtension;
+        }
+
+
+        /// <summary>
+        /// Return GameItemExtension object, caasted to type <T>
+        /// </summary>
+        public T GetExtension<T>() where T : class
+        {
+            Assert.IsNotNull(GameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
+            return GameItemExtensionData as T;
+        }
+        #endregion Load Data
 
         /// <summary>
         /// Mark an item as bought and save.
