@@ -73,6 +73,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// </summary>
         public float Star4Target { get; set; }
 
+        /// <summary>
+        /// A field that you can optionally use for recording the progress. Typically this should be in the range 0..1
+        /// </summary>
+        public float Progress { get; set; }
+
+        /// <summary>
+        /// A field that you can optionally use for recording the highest progress obtained. Typically this should be in the range 0..1
+        /// </summary>
+        public float ProgressBest { get; set; }
+
+        /// <summary>
+        /// A field that you can optionally use for recording the best time that the player has achieved.
+        /// </summary>
+        public float TimeBest { get; set; }
+
+        /// <summary>
+        /// A field that you can set from json, extensions or code that represents a target time. 
+        /// </summary>
+        /// You can also use StarxTarget if you want individual times for winning different stars.
+        public float TimeTarget { get; set; }
+
 
         /// <summary>
         /// Constructor
@@ -91,6 +112,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         public override void CustomInitialisation()
         {
             StarsWon = GetSettingInt("SW", 0);
+            TimeBest = GetSettingFloat("TimeBest", 0);
+            ProgressBest = GetSettingFloat("ProgressBest", 0);
         }
 
         /// <summary>
@@ -137,6 +160,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 Star3Target = (float)jsonObject.GetNumber("star3target");
             if (jsonObject.ContainsKey("star4target"))
                 Star4Target = (float)jsonObject.GetNumber("star4target");
+            if (jsonObject.ContainsKey("timetarget"))
+                TimeTarget = (float)jsonObject.GetNumber("timetarget");
         }
 
 
@@ -165,6 +190,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 Star3Target = levelExtension.Star3Target;
             if (levelExtension.OverrideStar4Target)
                 Star4Target = levelExtension.Star4Target;
+            if (levelExtension.OverrideTimeTarget)
+                TimeTarget = levelExtension.TimeTarget;
         }
 
 
@@ -178,6 +205,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         {
             base.UpdatePlayerPrefs();
             SetSetting("SW", StarsWon);
+            SetSettingFloat("TimeBest", TimeBest);
+            SetSettingFloat("ProgressBest", ProgressBest);
         }
 
 
