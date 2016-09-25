@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
     /// A subclass of GameItemExtension for overriding and customising Characters
     /// </summary>
     /// You can also subclass from this to add your own custom data and functionality.
-    [CreateAssetMenu(fileName = "Character_x", menuName= "GameFramework/Character Extension")]
+    [CreateAssetMenu(fileName = "Character_x", menuName= "Game Framework/Character Extension")]
     public class CharacterExtension : GameItemExtension
     {
         ///// <summary>

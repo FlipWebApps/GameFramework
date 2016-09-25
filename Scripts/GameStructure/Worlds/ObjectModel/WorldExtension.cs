@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
     /// A subclass of GameItemExtension for overriding and customising Worlds
     /// </summary>
     /// You can also subclass from this to add your own custom data and functionality.
-    [CreateAssetMenu(fileName = "World_x", menuName= "GameFramework/World Extension")]
+    [CreateAssetMenu(fileName = "World_x", menuName= "Game Framework/World Extension")]
     public class WorldExtension : GameItemExtension
     {
         ///// <summary>

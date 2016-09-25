@@ -26,7 +26,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// <summary>
     /// Allows for adding your own custom data and functionality to a GameItem
     /// </summary>
-    [CreateAssetMenu(fileName = "type_x", menuName="GameFramework/GameItem Extension")]
+    [CreateAssetMenu(fileName = "type_x", menuName="Game Framework/GameItem Extension")]
     public class GameItemExtension : ScriptableObject
     {
         /// <summary>

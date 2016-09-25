@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
     /// A subclass of GameItemExtension for overriding and customising Levels
     /// </summary>
     /// You can also subclass from this to add your own custom data and functionality.
-    [CreateAssetMenu(fileName = "Level_x", menuName="GameFramework/Level Extension")]
+    [CreateAssetMenu(fileName = "Level_x", menuName="Game Framework/Level Extension")]
     public class LevelExtension : GameItemExtension
     {
         /// <summary>

@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
     /// A subclass of GameItemExtension for overriding and customising Players
     /// </summary>
     /// You can also subclass from this to add your own custom data and functionality.
-    [CreateAssetMenu(fileName = "Player_x", menuName="GameFramework/Player Extension")]
+    [CreateAssetMenu(fileName = "Player_x", menuName="Game Framework/Player Extension")]
     public class PlayerExtension : GameItemExtension
     {
         ///// <summary>

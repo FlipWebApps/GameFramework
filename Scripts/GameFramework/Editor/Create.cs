@@ -32,7 +32,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
 
     public class Create : MonoBehaviour {
 
-        [MenuItem("Assets/Create/Localisation File", false, -8002)]
+        [MenuItem("Assets/Create/Game Framework/Localisation File", false, -8002)]
         static void CreateLocalisationFile()
         {
             var selected = Selection.activeObject;
