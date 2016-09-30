@@ -1,4 +1,4 @@
-Game Framework - Free v3.1.1
+Game Framework - Free v3.2
 
 Thank you for using Game Framework. 
 
@@ -55,10 +55,36 @@ Portuguese and Spanish Translations - Bryan Jonson
 French Translation -  Fabrice Pilet
 Chinese Translation - luochuanyuewu
 German Translation - Lutz Becker
+GameItemExtensions - Aneroin
 		
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.2
+
+	Game Framework Core - Improvements
+	- Audio: Added notification messages for when global background / effect volume changes
+	- Audio: Added CopyBackgroundVolume component
+	- Audio: CopyGlobalEffectVolume component now has volume multiplier and reacts to volume changes.
+	- Facebook: Fix to return correct error code if ShareLink fails.
+	- Game Framework: Editor 'Create' items grouped under a submenu.
+	- GameStructure: Improved code comments
+	- GameStructure: GameItemExtensions and editors for Character, Level, Player and World
+	- GameStructure: Additon of Level Progress, ProgressBest, TimeTarget (automatically settable through extensions) and TimeBest
+	
+	Game Framework Core - Fixes
+	- GameStructure: Fixed namespace for ShowCharacterInfo
+	- GameStructure: Rename of GameItem ParseLevelFileData to ParseData (as it is not necessarily for a level)
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- GameStructure: Update for renamed GameItem ParseData method
+	
+	BeautifulTransitions (Extras Bundle): Updated to v3.2 that includes (see seperate readme for more):
+	- Transition: Deprecated MoveTarget TransitionStep as the functionality is provided by Move (Note: MoveTarget component remains)
+	- Transition: Added option to specify the axis on which MoveTarget should work so you can easier move multiple items (see GameObjectTransitionsDemo)
+	- Transition: Moved initial transition setup to before transition call to avoid possible execution order issues when using the API
+	- Transitions: Added RepeatWhenEnabled option for auto running transitions multiple times.	
 
 v3.1.1
 
