@@ -44,6 +44,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         [Header("Auto Game Over Conditions")]
         public bool GameOverWhenLivesIsZero;
         public bool GameOverWhenHealthIsZero;
+        public bool GameOverWhenTargetTimeReached;
 
         public DateTime StartTime { get; set; }
         public int StartStarsWon { get; set; }
@@ -158,11 +159,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                 SecondsRunning += Time.deltaTime;
 
                 // check for gameover conditions.
-                if (GameOverWhenLivesIsZero && GameManager.Instance.Player.Lives == 0)
+                if ((GameOverWhenLivesIsZero && GameManager.Instance.Player.Lives == 0) ||
+                    (GameOverWhenHealthIsZero && (Mathf.Approximately(GameManager.Instance.Player.Health, 0) || GameManager.Instance.Player.Health < 0)) ||
+                    (GameOverWhenTargetTimeReached && SecondsRunning >= Level.TimeTarget))
                     GameOver(false, ShowGameOverDialogDelay);
-                if (GameOverWhenHealthIsZero && (Mathf.Approximately(GameManager.Instance.Player.Health, 0) || GameManager.Instance.Player.Health < 0))
-                    GameOver(false, ShowGameOverDialogDelay);
-
             }
 
         }
