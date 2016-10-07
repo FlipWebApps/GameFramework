@@ -1,9 +1,9 @@
-Game Framework - Free v3.2
+Game Framework - Free v3.3
 
 Thank you for using Game Framework. 
 
 This package features the main core of Game Framework. There is also an extras bundle in addition to 
-this framework also contains a lot of useful additional content to get you up and running including:
+this framework that contains a lot of useful additional content to get you up and running including:
 
 	- 3 UI themes (Cartoon, Space, RPG)
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
@@ -60,6 +60,8 @@ GameItemExtensions - Aneroin
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.3
 
 v3.2
 

@@ -1,0 +1,452 @@
+fileFormatVersion: 2
+guid: 77c83b93ed606b240aa391d011175ada
+timeCreated: 1474226541
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: BoundButtonMediumBlue
+    21300002: BoundButtonMediumYellow
+    21300004: ButtonImagesMediumArrow
+    21300006: ButtonImagesMediumCancel
+    21300008: ButtonImagesMediumFacebook
+    21300010: ButtonImagesMediumHome
+    21300012: ButtonImagesMediumLike
+    21300014: ButtonImagesMediumOk
+    21300016: ButtonImagesMediumPlay
+    21300018: ButtonImagesMediumReload
+    21300020: ButtonImagesMediumSettings
+    21300022: IconCoinLarge
+    21300024: IconCoinSmall
+    21300026: IconLock
+    21300028: NestedPanel
+    21300030: NestedPanelHighlighted
+    21300032: Panel
+    21300034: SquareButtonLargeBlue
+    21300036: SquareButtonLargeGrey
+    21300038: StarActiveBig
+    21300040: StarActiveSmall
+    21300042: StarInactiveBig
+    21300044: StarInactiveSmall
+    21300046: RoundButtonMedimBlue
+    21300048: RoundButtonMediumYellow
+    21300050: RoundButtonMediumBlue
+    21300052: ButtonSquareLargeGreen
+    21300054: ButtonSquareLargeOrange
+    21300056: RoundButtonMediumGreen
+    21300058: RoundButtonMediumRed
+    21300060: TitleBar
+    21300062: UIScrollBar
+    21300064: SquareButtonLargeGreen
+    21300066: SquareButtonLargeOrange
+    21300068: RoundButtonMediumOrange
+    21300070: SquareButtonLargeYellow
+    21300072: IconLockBig
+    21300074: IconEnergyBig
+    21300076: IconEnergySmall
+    21300078: Frame
+    21300080: WhiteGradientRectangle
+    21300082: WhiteRectangle
+    21300084: Square0
+    21300086: Square15
+    21300088: Circle
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: ButtonImagesMediumArrow
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 102
+        width: 51
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5, y: 17}
+        - {x: -25.5, y: 8}
+        - {x: -25.5, y: -4}
+        - {x: -20.5, y: -12}
+        - {x: -14.5, y: -17}
+        - {x: 9.5, y: -17}
+        - {x: 25.5, y: -9}
+        - {x: 25.5, y: 9}
+        - {x: 4.5, y: 17}
+    - name: ButtonImagesMediumCancel
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 38
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -19, y: 19}
+        - {x: -19, y: -16}
+        - {x: -16, y: -19}
+        - {x: 19, y: -19}
+        - {x: 19, y: 19}
+    - name: ButtonImagesMediumFacebook
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 74
+        width: 25
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: ButtonImagesMediumHome
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 140
+        width: 49
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -6.5, y: 19}
+        - {x: -24.5, y: 4}
+        - {x: -24.5, y: -5}
+        - {x: -23.5, y: -5}
+        - {x: -17.5, y: -18}
+        - {x: -16.5, y: -19}
+        - {x: 18.5, y: -19}
+        - {x: 24.5, y: -6}
+        - {x: 24.5, y: 2}
+        - {x: 5.5, y: 19}
+    - name: ButtonImagesMediumLike
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 11
+        width: 46
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11, y: 22.5}
+        - {x: -23, y: 15.5}
+        - {x: -23, y: -22.5}
+        - {x: 23, y: -22.5}
+        - {x: 23, y: 12.5}
+        - {x: 17, y: 22.5}
+    - name: ButtonImagesMediumOk
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 64
+        width: 43
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 1.5, y: 17}
+        - {x: -21.5, y: 6}
+        - {x: -21.5, y: -6}
+        - {x: -11.5, y: -17}
+        - {x: 3.5, y: -17}
+        - {x: 21.5, y: 5}
+        - {x: 21.5, y: 17}
+    - name: ButtonImagesMediumPlay
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 28
+        width: 31
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: ButtonImagesMediumReload
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 9
+        width: 54
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 27, y: -20.5}
+        - {x: 27, y: 9.5}
+        - {x: 21, y: 23.5}
+        - {x: -19, y: 23.5}
+        - {x: -27, y: 15.5}
+        - {x: -27, y: -15.5}
+        - {x: -18, y: -23.5}
+        - {x: 1, y: -23.5}
+        - {x: 0, y: -12.5}
+        - {x: 2, y: -23.5}
+        - {x: 17, y: -23.5}
+    - name: ButtonImagesMediumSettings
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 80
+        width: 40
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 17, y: 19.5}
+        - {x: -9, y: 19.5}
+        - {x: -20, y: 14.5}
+        - {x: -20, y: -18.5}
+        - {x: -16, y: -19.5}
+        - {x: 17, y: -19.5}
+        - {x: 20, y: -14.5}
+        - {x: 20, y: 17.5}
+    - name: Circle
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 32
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 28, y: 50}
+        - {x: -30, y: 50}
+        - {x: -50, y: 31}
+        - {x: -50, y: -40}
+        - {x: -31, y: -50}
+        - {x: 39, y: -50}
+        - {x: 50, y: -33}
+        - {x: 50, y: 25}
+        - {x: 32, y: 49}
+    - name: IconCoinLarge
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 182
+        width: 66
+        height: 67
+      alignment: 9
+      pivot: {x: 0.50757575, y: 0.49253732}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 34}
+        - {x: -33.5, y: 30}
+        - {x: -33.5, y: -18}
+        - {x: -19.5, y: -33}
+        - {x: 27.5, y: -33}
+        - {x: 32.5, y: -21}
+        - {x: 32.5, y: 31}
+        - {x: 29.5, y: 34}
+    - name: IconCoinSmall
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 26
+        width: 34
+        height: 34
+      alignment: 9
+      pivot: {x: 0.5147059, y: 0.4852941}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 10.5, y: 17.5}
+        - {x: -12.5, y: 17.5}
+        - {x: -17.5, y: 13.5}
+        - {x: -17.5, y: -13.5}
+        - {x: -16.5, y: -16.5}
+        - {x: 16.5, y: -16.5}
+        - {x: 16.5, y: 11.5}
+    - name: IconLock
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 123
+        width: 44
+        height: 55
+      alignment: 9
+      pivot: {x: 0.47727272, y: 0.4909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 28}
+        - {x: -21, y: 24}
+        - {x: -21, y: -22}
+        - {x: -20, y: -27}
+        - {x: 17, y: -27}
+        - {x: 23, y: -21}
+        - {x: 23, y: 12}
+        - {x: 9, y: 28}
+    - name: IconLockBig
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 136
+        width: 91
+        height: 113
+      alignment: 9
+      pivot: {x: 0.50549453, y: 0.49115044}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -46.000004, y: -42.5}
+        - {x: -34.000004, y: -55.5}
+        - {x: 44.999996, y: -55.5}
+        - {x: 44.999996, y: 29.5}
+        - {x: 34.999996, y: 57.5}
+        - {x: -42.000004, y: 57.5}
+        - {x: -46.000004, y: 53.5}
+    - name: Square0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 253
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      outline:
+      - - {x: -128, y: 128}
+        - {x: -128, y: -128}
+        - {x: 128, y: -128}
+        - {x: 128, y: 128}
+      - - {x: -123, y: 123}
+        - {x: 123, y: 123}
+        - {x: 123, y: -123}
+        - {x: -123, y: -123}
+    - name: StarActiveBig
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 60
+        width: 94
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 47, y: 20}
+        - {x: 21, y: 46}
+        - {x: -20, y: 46}
+        - {x: -47, y: 32}
+        - {x: -47, y: -25}
+        - {x: -37, y: -46}
+        - {x: 42, y: -46}
+        - {x: 47, y: -15}
+    - name: StarActiveSmall
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 3
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: StarInactiveBig
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 156
+        width: 96
+        height: 93
+      alignment: 9
+      pivot: {x: 0.5052083, y: 0.49462366}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 47}
+        - {x: -48.5, y: 25}
+        - {x: -48.5, y: -16}
+        - {x: -40.5, y: -46}
+        - {x: 37.5, y: -46}
+        - {x: 47.5, y: -10}
+        - {x: 47.5, y: 24}
+        - {x: 8.5, y: 47}
+    - name: StarInactiveSmall
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 6
+        width: 29
+        height: 28
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.48214287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: WhiteGradientRectangle
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 12
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: WhiteRectangle
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 12
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

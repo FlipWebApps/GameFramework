@@ -20,13 +20,13 @@
 //----------------------------------------------
 
 using System.Collections;
+using FlipWebApps.GameFramework.Scripts.GameFramework;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.UI;
-using FlipWebApps.GameFramework.Scripts.GameFramework;
 
-namespace FlipWebApps.GameFramework.Demo.Scripts
+namespace FlipWebApps.GameFramework._Demo.Scripts
 {
     public class Demo : MonoBehaviour
     {
