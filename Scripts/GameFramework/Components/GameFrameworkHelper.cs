@@ -32,5 +32,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Components
         {
             GameFramework.GameFrameworkHelper.ShowAssetStorePage();
         }
+
+        public void ShowOnlineTutorials()
+        {
+            GameFramework.GameFrameworkHelper.ShowOnlineTutorials();
+        }
+
+        public void ShowDocumentation()
+        {
+            GameFramework.GameFrameworkHelper.ShowDocumentation();
+        }
+
+        public void ShowAssetStorePageExtrasBundle()
+        {
+            GameFramework.GameFrameworkHelper.ShowAssetStorePageExtrasBundle();
+        }
     }
 }

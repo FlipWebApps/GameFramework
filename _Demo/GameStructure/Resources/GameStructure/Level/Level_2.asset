@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872bb3e71903b4d408868ba30d5c2461, type: 3}
+  m_Name: Level_2
+  m_EditorClassIdentifier: 
+  _name: 
+  _description: 
+  _overrideValueToUnlock: 0
+  _valueToUnlock: 0
+  _overrideStarTotalCount: 0
+  _starTotalCount: 3
+  _overrideStar1Target: 1
+  _star1Target: 20
+  _overrideStar2Target: 1
+  _star2Target: 30
+  _overrideStar3Target: 1
+  _star3Target: 40
+  _overrideStar4Target: 0
+  _star4Target: 0
+  _overrideTimeTarget: 1
+  _TimeTarget: 20

@@ -1,0 +1,19 @@
+﻿KEY,English,Norwegian
+L1.Name,Level 1,Bane 1
+L1.Desc,-,-
+L2.Name,Level 2,Bane 2
+L2.Desc,-,-
+L3.Name,Level 3,Bane 3
+L3.Desc,-,-
+L4.Name,Level 4,Bane 4
+L4.Desc,-,-
+GameFramework.Demo.Title,Welcome, 
+GameFramework.Demo.Text1,Thank you for downloading Game Framework., 
+GameFramework.Demo.Text2,'This demo explains how to get started and some of the features in the framework.
+
+Please support us by rating this asset on the Unity asset store.', 
+GameFramework.Demo.TapToStart,Tap To Start,Trykk for å starte
+GameFramework.Demo.OnlineTutorials,Online Tutorials,Nett Kurs
+GameFramework.Demo.Documentation,Documentation,Dokumentasjon
+GameFramework.Demo.Rate,Rate Now!,Evaluer oss!
+GameFramework.Demo.Settings.AutoPlaySpeed,Playback Speed,Hastighet

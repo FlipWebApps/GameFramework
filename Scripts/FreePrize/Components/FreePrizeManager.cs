@@ -121,6 +121,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
             {
                 NextCountdownStart = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
                 NextFreePrizeAvailable = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
+                SetCurrentPrizeAmount();
             }
             else
             {
@@ -156,13 +157,21 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         /// </summary>
         public void StartNewCountdown()
         {
-            CurrentPrizeAmount = UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
+            SetCurrentPrizeAmount();
 
             NextCountdownStart = DateTime.UtcNow.AddSeconds(UnityEngine.Random.Range(DelayRangeToNextCountdown.Min, DelayRangeToNextCountdown.Max + 1));
 
             NextFreePrizeAvailable = NextCountdownStart.AddSeconds(UnityEngine.Random.Range(TimeRangeToNextPrize.Min, TimeRangeToNextPrize.Max + 1));
 
             SaveState();
+        }
+
+        /// <summary>
+        /// Set the current prize amount
+        /// </summary>
+        void SetCurrentPrizeAmount()
+        {
+            CurrentPrizeAmount = UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
         }
 
         /// <summary>
