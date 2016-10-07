@@ -39,8 +39,9 @@ QUICK START
 	1. If you have an older version installed:
 		1.1. Make a backup of your project.
 		1.2. Delete the old /FlipWebApps folder to cater for possible conflicts.
-		1.3. Import the new version.
-		1.4. Try out the Demo scene for getting started information.
+	2. Import the new version.
+	3. Try out the demos in the FlipWebApps/GameFramework/_Demo folder. See the seperate readme files in the
+	   sub-folders for setup.
 
 For full setup instructions visit: http://www.flipwebapps.com/game-framework/setup/		
 		
