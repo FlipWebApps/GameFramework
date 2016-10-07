@@ -19,9 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
+using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
@@ -31,7 +34,20 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
     {
         public enum CounterModeType { Up, Down }
         public CounterModeType CounterMode;
+
+        /// <summary>
+        /// Whether the current counter limit (a value to count up to / down from) should be taken from the currently selected level's Time Target. If false you can specify a custom value.
+        /// </summary>
+        [Tooltip("Whether the current counter limit should be taken from the currently selected level. If false you can specify a custom value.")]
+        public bool LimitFromLevelTimeTarget;
+
+        /// <summary>
+        /// A limit to count up to / down from.
+        /// </summary>
+        [Tooltip("A limit to count up to / down from.")]
+        [ConditionalHide("LimitFromLevelTimeTarget", Inverse = true)]
         public int Limit;
+
         public UnityEngine.UI.Text Text;
         public string LocalisationKey;
 
@@ -49,6 +65,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
         {
             if (!string.IsNullOrEmpty(LocalisationKey))
                 _localisationString = LocaliseText.Get(LocalisationKey);
+
+            if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
+            Assert.IsNotNull(Text, "Time Remaining must either be on the same gameobject as a UI Text control or have a Text component specified in it's settings.");
+
+            if (LimitFromLevelTimeTarget)
+                Limit = (int)GameManager.Instance.Levels.Selected.TimeTarget;
 
             UpdateDisplay();
         }
