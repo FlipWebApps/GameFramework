@@ -52,6 +52,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
             base.OnDestroy();
         }
 
+
+        /// <summary>
+        /// Handler for Character purchase messages
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         bool CharacterPurchasedHandler(BaseMessage message)
         {
             var characterPurchasedMessage = message as CharacterPurchasedMessage;
@@ -59,6 +65,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
             return true;
         }
 
+
+        /// <summary>
+        /// Returns the GameItemsMaager that holds Characters
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Characters;

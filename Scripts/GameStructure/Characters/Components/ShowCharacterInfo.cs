@@ -19,16 +19,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Show information about the currently selected character
+    /// Show information about the currently selected character in a UI Text component
     /// </summary>
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/ShowCharacterInfo")]

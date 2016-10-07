@@ -33,6 +33,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class CreateCharacterButtons : CreateGameItemButtons<CharacterButton, Character>
     {
+        /// <summary>
+        /// Returns a list of all current Character GameItems
+        /// </summary>
+        /// <returns></returns>
         protected override GameItem[] GetGameItems()
         {
             return GameManager.Instance.Characters.Items;

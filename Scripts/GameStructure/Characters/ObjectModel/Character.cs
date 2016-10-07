@@ -20,8 +20,6 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
 {
@@ -30,15 +28,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
     /// </summary>
     public class Character : GameItem
     {
+        /// <summary>
+        /// Override for this GameItem type
+        /// </summary>
         public override string IdentifierBase { get { return "Character"; } }
+
+        /// <summary>
+        /// Override for this GameItem type
+        /// </summary>
         public override string IdentifierBasePrefs { get { return "C"; } }
 
         public Character() { }
-
-        // do we still need for easy setup? [Obsolete("Use parameterless constructor and Initialise() method instead.")]
-        //public Character(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, bool loadFromResources = false) //GameItem parent = null, 
-        //    : base(number, name, localiseName, description, localiseDescription, sprite, valueToUnlock, player, "Character", "C", loadFromResources)
-        //{
-        //}
     }
 }

@@ -34,6 +34,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
+        /// <summary>
+        /// Returns the GameItemsMaager that holds Characters
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Characters;
