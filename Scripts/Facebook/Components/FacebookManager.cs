@@ -338,10 +338,20 @@ namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
                 List<string> permissions = new List<string>();
                 permissions.Add("public_profile");
                 if (RequestEmailPermission != PermissionRequestType.NONE) permissions.Add("email");
-                if (RequestPublishActionsPermission != PermissionRequestType.NONE) permissions.Add("publish_actions");
                 if (RequestUserFriendsPermission != PermissionRequestType.NONE) permissions.Add("user_friends");
+                if (RequestPublishActionsPermission != PermissionRequestType.NONE) permissions.Add("publish_actions");
 
-                FB.LogInWithReadPermissions(permissions, LoginCallback);
+                // do different login depending upon whether we need read permissions or publish permissions.
+                if (RequestPublishActionsPermission != PermissionRequestType.NONE)
+                {
+                    permissions.Add("publish_actions");
+                    FB.LogInWithPublishPermissions(permissions, LoginCallback);
+                }
+                else
+                {
+                    FB.LogInWithReadPermissions(permissions, LoginCallback);
+                }
+
             }
         }
 
