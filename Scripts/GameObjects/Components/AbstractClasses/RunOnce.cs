@@ -19,16 +19,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.Debugging;
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class to run something one time only.
     /// </summary>
     /// Override and implement the condition as you best see fit.
-    public abstract class RunOnceGameObject : RunOnState
+    public abstract class RunOnce : RunOnState
     {
         /// <summary>
         /// A unique PlayerPrefs key that identifies this instance.
@@ -43,33 +45,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         public string EnableAfterKey;
 
         /// <summary>
-        /// If legacy then use old key format. Don't use for new games
-        /// </summary>
-        [Tooltip("If legacy then use old key format. Don't use for new games")]
-        public bool UseLegacyKey;
-
-        /// <summary>
         /// Calculates whether we need to run once or have already done so. In derived classes override RunOnce instead.
         /// </summary>
         public override void RunMethod()
         {
-            var prefix = UseLegacyKey ? "AnimationTriggerOnce." : "";
-            // Note: The preferences name (AnimationTriggerOnce.) is for legacy reasons.
-            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt(prefix + EnableAfterKey, 0) == 1)
-            {
-                if (PreferencesFactory.GetInt(prefix + Key, 0) == 0)
-                {
-                    PreferencesFactory.SetInt(prefix + Key, 1);
-                    PreferencesFactory.Save();
-
-                    RunOnce();
-                }
-            }
+            if (PreferencesFactory.CheckAndSetFlag(Key, EnableAfterKey))
+                RunOnceMethod();
         }
+
 
         /// <summary>
         /// Implement this as the method that should be run one time only
         /// </summary>
-        public abstract void RunOnce();
+        public abstract void RunOnceMethod();
     }
 }

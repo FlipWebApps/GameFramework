@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
@@ -29,7 +29,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
     /// </summary>
     [AddComponentMenu("Game Framework/GameObjects/EnableComponentOnce")]
     [HelpURL("http://www.flipwebapps.com/game-framework/gameobjects/")]
-    public class EnableComponentOnce : MonoBehaviour
+    public class EnableComponentOnce : RunOnce
     {
         /// <summary>
         /// The component to enable once
@@ -37,42 +37,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         [Tooltip("The component to enable once")]
         public Behaviour Component;
 
-        /// <summary>
-        /// A unique PlayerPrefs key that identifies this instance.
-        /// </summary>
-        [Tooltip("A unique PlayerPrefs key that identifies this instance.")]
-        public string Key;
 
         /// <summary>
-        /// A key for a seperate instance that we should run after.
+        /// Default to not enabled
         /// </summary>
-        [Tooltip("A key for a seperate instance that we should run after.")]
-        public string EnableAfterKey;
-
-        /// <summary>
-        /// If legacy then use old key format. Don't use for new games
-        /// </summary>
-        [Tooltip("If legacy then use old key format. Don't use for new games")]
-        public bool UseLegacyKey;
-
-        void Awake()
+        public override void Awake()
         {
-            var prefix = UseLegacyKey ? "EnableComponentOnce." : "";
+            Component.enabled = false;
+            base.Awake();
+        }
 
-            // show hint panel first time only
-            var shouldEnable = false;
-            if (string.IsNullOrEmpty(EnableAfterKey) || PreferencesFactory.GetInt(prefix + EnableAfterKey, 0) == 1)
-            {
-                if (PreferencesFactory.GetInt(prefix + Key, 0) == 0)
-                {
-                    PreferencesFactory.SetInt(prefix + Key, 1);
-                    PreferencesFactory.Save();
 
-                    shouldEnable = true;
-                }
-            }
-
-            Component.enabled = shouldEnable;
+        /// <summary>
+        /// The method that should be run one time only
+        /// </summary>
+        public override void RunOnceMethod()
+        {
+            Component.enabled = true;
         }
     }
 }

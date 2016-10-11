@@ -22,7 +22,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class that runs a method at the specified perion.
@@ -47,7 +47,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         /// <summary>
         /// Implementation for running on Awake. If you override this then be sure to call base.Awake()
         /// </summary>
-        public void Awake()
+        public virtual void Awake()
         {
             if (Run == RunType.OnAwake)
                 RunMethod();
@@ -56,7 +56,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         /// <summary>
         /// Implementation for running on OnEnable. If you override this then be sure to call base.OnEnable()
         /// </summary>
-        public void OnEnable()
+        public virtual void OnEnable()
         {
             if (Run == RunType.OnEnable)
                 RunMethod();
@@ -65,7 +65,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         /// <summary>
         /// Implementation for running on Start. If you override this then be sure to call base.Start()
         /// </summary>
-        public void Start()
+        public virtual void Start()
         {
             if (Run == RunType.OnStart)
                 RunMethod();
@@ -76,7 +76,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         /// <summary>
         /// Implementation for running on Update. If you override this then be sure to call base.Update()
         /// </summary>
-        public void Update()
+        public virtual void Update()
         {
             if (Run == RunType.OnUpdate)
                 RunMethod();

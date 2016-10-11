@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Animation.Components
@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
     /// See RunOnceGameObject for more details 
     [AddComponentMenu("Game Framework/Animation/SetTriggerOnce")]
     [HelpURL("http://www.flipwebapps.com/game-framework/animation/")]
-    public class SetTriggerOnce : RunOnceGameObject
+    public class SetTriggerOnce : RunOnce
     {
         /// <summary>
         /// The Animator that should have the trigger set
@@ -49,7 +49,7 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
         [Tooltip("The name of a boolean parameter to set")]
         public string Trigger;
 
-        public override void RunOnce()
+        public override void RunOnceMethod()
         {
             Animator.SetTrigger(Trigger);
         }

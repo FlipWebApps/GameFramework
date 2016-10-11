@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Animation.Components
@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
     /// See RunOnceGameObject for more details 
     [AddComponentMenu("Game Framework/Animation/SetBoolOnce")]
     [HelpURL("http://www.flipwebapps.com/game-framework/animation/")]
-    public class SetBoolOnce : RunOnceGameObject
+    public class SetBoolOnce : RunOnce
     {
         /// <summary>
         /// The Animator that should have the boolean set
@@ -55,7 +55,7 @@ namespace FlipWebApps.GameFramework.Scripts.Animation.Components
         [Tooltip("The value to set the named parameter to")]
         public bool Value;
 
-        public override void RunOnce()
+        public override void RunOnceMethod()
         {
             Animator.SetBool(Name, Value);
         }

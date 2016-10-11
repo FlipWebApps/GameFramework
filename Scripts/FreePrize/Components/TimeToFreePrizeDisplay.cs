@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Messaging;
