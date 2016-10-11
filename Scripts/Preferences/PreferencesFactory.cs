@@ -200,6 +200,66 @@ namespace FlipWebApps.GameFramework.Scripts.Preferences
         {
             Instance.SetString(key, value, useSecurePrefs);
         }
+
+        #region Flags
+        /// <summary>
+        /// Check for the presence of a given flag with teh given key and set if not set.
+        /// </summary>
+        /// You can also optionally specify a key that should already be set before this method will set the flag and return true.
+        /// <param name="key"></param>
+        /// <param name="setAfterKey"></param>
+        /// <returns></returns>
+        public static bool CheckAndSetFlag(string key, string setAfterKey = null)
+        {
+            if (string.IsNullOrEmpty(setAfterKey) || IsFlagSet(setAfterKey))
+            {
+                if (!IsFlagSet(key))
+                {
+                    SetFlag(key);
+                    Save();
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Returns whether a flag with the given key is set
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool IsFlagSet(string key)
+        {
+            return GetInt(key, 0) == 1;
+        }
+
+
+        /// <summary>
+        /// Sets a flag with the given key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static void SetFlag(string key)
+        {
+            SetInt(key, 1);
+        }
+
+
+        /// <summary>
+        /// Clear a given flag with the given key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static void ClearFlag(string key)
+        {
+            DeleteKey(key);
+        }
+
+
+        #endregion Flags
+
     }
 }
 
