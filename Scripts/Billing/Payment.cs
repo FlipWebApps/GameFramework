@@ -28,6 +28,11 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
 using System;
 using FlipWebApps.GameFramework.Scripts.Preferences;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
+using FlipWebApps.GameFramework.Scripts.Messaging;
+using UnityEngine.Assertions;
 
 /// <summary>
 /// Extended support and integration of In App Purchasing.
@@ -70,76 +75,57 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
             }
 
             else if (productId.StartsWith("unlock.world."))
-            {
-                int number = int.Parse(productId.Substring("unlock.world.".Length));
-                World world = null;
-
-                // first try and get from game manager
-                if (GameManager.IsActive && GameManager.Instance.Worlds != null)
-                    world = GameManager.Instance.Worlds.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (world == null)
-                {
-                    world = new World();
-                    world.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                world.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new WorldPurchasedMessage(number));
-            }
+                PurchaseGameItem<World>(productId, "unlock.world.", () => GameManager.Instance.Worlds, number => new WorldPurchasedMessage(number));
 
             else if (productId.StartsWith("unlock.level."))
-            {
-                int number = int.Parse(productId.Substring("unlock.level.".Length));
-                Level level = null;
-
-                // first try and get from game manager
-                if (GameManager.IsActive && GameManager.Instance.Levels != null)
-                    level = GameManager.Instance.Levels.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (level == null)
-                {
-                    level = new Level();
-                    level.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                level.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new LevelPurchasedMessage(number));
-            }
+                PurchaseGameItem<Level>(productId, "unlock.level.", () => GameManager.Instance.Levels, number => new LevelPurchasedMessage(number));
 
             else if (productId.StartsWith("unlock.character."))
-            {
-                int number = int.Parse(productId.Substring("unlock.character.".Length));
-                Character character = null;
+                PurchaseGameItem<Character>(productId, "unlock.character.", () => GameManager.Instance.Characters, number => new CharacterPurchasedMessage(number));
 
-                // first try and get from game manager
-                if (GameManager.IsActive && GameManager.Instance.Characters != null)
-                    character = GameManager.Instance.Characters.GetItem(number);
-
-                // if not found on game manager then create a new copy to ensure this purchase is recorded
-                if (character == null)
-                {
-                    character = new Character();
-                    character.Initialise(number);
-                }
-
-                // mark the item as bought and unlocked
-                character.MarkAsBought();
-
-                // notify all subscribers of the purchase
-                GameManager.SafeQueueMessage(new CharacterPurchasedMessage(number));
-            }
+            else if (productId.StartsWith("unlock.genericgameitem."))
+                PurchaseGameItem<GenericGameItem>(productId, "unlock.genericgameitem.", () => GameManager.Instance.GenericGameItems, number => new GenericGameItemPurchasedMessage(number));
 
             // finally send the generic påurchased message.
             GameManager.SafeQueueMessage(new ItemPurchasedMessage(productId));
+        }
+
+
+        /// <summary>
+        /// Handle purchasing of a GameItem
+        /// </summary>
+        /// <typeparam name="T_GameItem"></typeparam>
+        /// <param name="productId"></param>
+        /// <param name="key"></param>
+        /// <param name="getGameManager"></param>
+        /// <param name="createMessage"></param>
+        static void PurchaseGameItem<T_GameItem>(
+            string productId,
+            string key,
+            Func<GameItemsManager<T_GameItem, GameItem>> getGameItemsManager,
+            Func<int, BaseMessage> createMessage) where T_GameItem : GameItem, new()
+        {
+            Assert.IsTrue(productId.StartsWith(key), "Invalid product id found");
+
+            int number = int.Parse(productId.Substring(key.Length));
+            T_GameItem multiPurposeGameItem = null;
+
+            // first try and get from game manager
+            if (GameManager.IsActive && getGameItemsManager() != null)
+                multiPurposeGameItem = getGameItemsManager().GetItem(number);
+
+            // if not found on game manager then create a new copy to ensure this purchase is recorded
+            if (multiPurposeGameItem == null)
+            {
+                multiPurposeGameItem = new T_GameItem();
+                multiPurposeGameItem.Initialise(number);
+            }
+
+            // mark the item as bought and unlocked
+            multiPurposeGameItem.MarkAsBought();
+
+            // notify all subscribers of the purchase
+            GameManager.SafeQueueMessage(createMessage(number));
         }
     }
 }

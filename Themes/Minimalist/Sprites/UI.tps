@@ -209,8 +209,8 @@
             <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Mobile Game GUI - Cartoon/images/IconLockBig.png</filename>
             <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Mobile Game GUI - Cartoon/images/WhiteGradientRectangle.png</filename>
             <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Mobile Game GUI - Cartoon/images/WhiteRectangle.png</filename>
-            <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Minimal/images/Square0.png</filename>
-            <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Minimal/images/Circle.png</filename>
+            <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Minimal/images/Circle100.png</filename>
+            <filename>H:/OneDrive/Documents/Mark/Unity/Graphics/Minimal/images/Frame64-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
