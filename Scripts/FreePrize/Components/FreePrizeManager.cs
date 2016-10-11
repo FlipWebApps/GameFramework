@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
     /// </summary>
     [AddComponentMenu("Game Framework/FreePrize/FreePrizeManager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class FreePrizeManager : SingletonPersistantSavedState<FreePrizeManager>
+    public class FreePrizeManager : SingletonPersistant<FreePrizeManager>
     {
         /// <summary>
         /// The delay in seconds before starting the next countdown. 0 = no wait

@@ -54,7 +54,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/GameManager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class GameManager : SingletonPersistantSavedState<GameManager>
+    public class GameManager : SingletonPersistant<GameManager>
     {
         // Inspector Values
         #region General 
