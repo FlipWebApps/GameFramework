@@ -4,28 +4,28 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # http://www.codeandweb.com/texturepacker/unity
 #
-# Sprite sheet: UI.png (512 x 512)
-# $TexturePacker:SmartUpdate:56afc21bb426569493adf59df0503507:355a4bf9e9e5560ac9ffe05b53a45c19:64d56465927d50bb5400e4c66dc46a97$
+# Sprite sheet: UI.png (256 x 512)
+# $TexturePacker:SmartUpdate:969e22253cdd7976319df7222e9997db:4c7d7d37936463f88c831c758752be6e:64d56465927d50bb5400e4c66dc46a97$
 #
 
-ButtonImagesMediumArrow;278;102;51;34;0.5;0.5
-ButtonImagesMediumCancel;250;38;38;38;0.5;0.5
-ButtonImagesMediumFacebook;205;74;25;45;0.5;0.5
-ButtonImagesMediumHome;253;140;49;38;0.5;0.5
-ButtonImagesMediumLike;165;11;46;45;0.5;0.5
-ButtonImagesMediumOk;292;64;43;34;0.5;0.5
-ButtonImagesMediumPlay;215;28;31;42;0.5;0.5
-ButtonImagesMediumReload;107;9;54;47;0.5;0.5
-ButtonImagesMediumSettings;234;80;40;39;0.5;0.5
-Circle;3;32;100;100;0.5;0.5
-IconCoinLarge;198;182;66;67;0.5075757575757576;0.4925373134328358
-IconCoinSmall;292;26;34;34;0.5147058823529411;0.4852941176470589
-IconLock;205;123;44;55;0.4772727272727273;0.49090909090909096
-IconLockBig;3;136;91;113;0.5054945054945055;0.4911504424778761
-Square0;3;253;256;256;0.5;0.5
-StarActiveBig;107;60;94;92;0.5;0.5
-StarActiveSmall;3;3;25;25;0.5;0.5
-StarInactiveBig;98;156;96;93;0.5052083333333334;0.4946236559139785
-StarInactiveSmall;250;6;29;28;0.5172413793103449;0.4821428571428571
-WhiteGradientRectangle;32;12;16;16;0.5;0.5
-WhiteRectangle;52;12;16;16;0.5;0.5
+ButtonImagesMediumArrow;196;202;51;34;0.5;0.5
+ButtonImagesMediumCancel;205;282;38;38;0.5;0.5
+ButtonImagesMediumFacebook;167;193;25;45;0.5;0.5
+ButtonImagesMediumHome;203;240;49;38;0.5;0.5
+ButtonImagesMediumLike;207;464;46;45;0.5;0.5
+ButtonImagesMediumOk;205;367;43;34;0.5;0.5
+ButtonImagesMediumPlay;168;274;31;42;0.5;0.5
+ButtonImagesMediumReload;71;198;54;47;0.5;0.5
+ButtonImagesMediumSettings;205;324;40;39;0.5;0.5
+Circle100;3;409;100;100;0.5;0.5
+Frame64-2;3;224;64;64;0.5;0.5
+IconCoinLarge;98;249;66;67;0.5075757575757576;0.4925373134328358
+IconCoinSmall;129;211;34;34;0.5147058823529411;0.4852941176470589
+IconLock;207;405;44;55;0.4772727272727273;0.49090909090909096
+IconLockBig;3;292;91;113;0.5054945054945055;0.4911504424778761
+StarActiveBig;107;320;94;92;0.5;0.5
+StarActiveSmall;129;182;25;25;0.5;0.5
+StarInactiveBig;107;416;96;93;0.5052083333333334;0.4946236559139785
+StarInactiveSmall;168;242;29;28;0.5172413793103449;0.4821428571428571
+WhiteGradientRectangle;71;272;16;16;0.5;0.5
+WhiteRectangle;71;252;16;16;0.5;0.5

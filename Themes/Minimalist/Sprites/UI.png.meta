@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 77c83b93ed606b240aa391d011175ada
-timeCreated: 1474226541
+timeCreated: 1476174920
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -46,9 +46,14 @@ TextureImporter:
     21300078: Frame
     21300080: WhiteGradientRectangle
     21300082: WhiteRectangle
-    21300084: Square0
+    21300084: Square256x256
     21300086: Square15
     21300088: Circle
+    21300090: Square256x256
+    21300092: Square0
+    21300094: Circle100
+    21300096: Frame256-1
+    21300098: Frame64-2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -98,8 +103,8 @@ TextureImporter:
     - name: ButtonImagesMediumArrow
       rect:
         serializedVersion: 2
-        x: 278
-        y: 102
+        x: 349
+        y: 475
         width: 51
         height: 34
       alignment: 0
@@ -118,8 +123,8 @@ TextureImporter:
     - name: ButtonImagesMediumCancel
       rect:
         serializedVersion: 2
-        x: 250
-        y: 38
+        x: 307
+        y: 30
         width: 38
         height: 38
       alignment: 0
@@ -135,7 +140,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 205
-        y: 74
+        y: 65
         width: 25
         height: 45
       alignment: 0
@@ -145,8 +150,8 @@ TextureImporter:
     - name: ButtonImagesMediumHome
       rect:
         serializedVersion: 2
-        x: 253
-        y: 140
+        x: 269
+        y: 72
         width: 49
         height: 38
       alignment: 0
@@ -183,8 +188,8 @@ TextureImporter:
     - name: ButtonImagesMediumOk
       rect:
         serializedVersion: 2
-        x: 292
-        y: 64
+        x: 273
+        y: 475
         width: 43
         height: 34
       alignment: 0
@@ -201,8 +206,8 @@ TextureImporter:
     - name: ButtonImagesMediumPlay
       rect:
         serializedVersion: 2
-        x: 215
-        y: 28
+        x: 234
+        y: 68
         width: 31
         height: 42
       alignment: 0
@@ -234,8 +239,8 @@ TextureImporter:
     - name: ButtonImagesMediumSettings
       rect:
         serializedVersion: 2
-        x: 234
-        y: 80
+        x: 263
+        y: 25
         width: 40
         height: 39
       alignment: 0
@@ -250,7 +255,7 @@ TextureImporter:
         - {x: 17, y: -19.5}
         - {x: 20, y: -14.5}
         - {x: 20, y: 17.5}
-    - name: Circle
+    - name: Circle100
       rect:
         serializedVersion: 2
         x: 3
@@ -270,6 +275,44 @@ TextureImporter:
         - {x: 50, y: -33}
         - {x: 50, y: 25}
         - {x: 32, y: 49}
+    - name: Frame256-1
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 253
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      outline:
+      - - {x: -128, y: 128}
+        - {x: -128, y: -128}
+        - {x: 128, y: -128}
+        - {x: 128, y: 128}
+      - - {x: -123, y: 123}
+        - {x: 123, y: 123}
+        - {x: 123, y: -123}
+        - {x: -123, y: -123}
+    - name: Frame64-2
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 114
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      outline:
+      - - {x: -32, y: 32}
+        - {x: -32, y: -32}
+        - {x: 32, y: -32}
+        - {x: 32, y: 32}
+      - - {x: -27, y: 27}
+        - {x: 27, y: 27}
+        - {x: 27, y: -27}
+        - {x: -27, y: -27}
     - name: IconCoinLarge
       rect:
         serializedVersion: 2
@@ -292,8 +335,8 @@ TextureImporter:
     - name: IconCoinSmall
       rect:
         serializedVersion: 2
-        x: 292
-        y: 26
+        x: 404
+        y: 475
         width: 34
         height: 34
       alignment: 9
@@ -310,8 +353,8 @@ TextureImporter:
     - name: IconLock
       rect:
         serializedVersion: 2
-        x: 205
-        y: 123
+        x: 215
+        y: 6
         width: 44
         height: 55
       alignment: 9
@@ -344,25 +387,6 @@ TextureImporter:
         - {x: 34.999996, y: 57.5}
         - {x: -42.000004, y: 57.5}
         - {x: -46.000004, y: 53.5}
-    - name: Square0
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 253
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 2, y: 2, z: 2, w: 2}
-      outline:
-      - - {x: -128, y: 128}
-        - {x: -128, y: -128}
-        - {x: 128, y: -128}
-        - {x: 128, y: 128}
-      - - {x: -123, y: 123}
-        - {x: 123, y: 123}
-        - {x: 123, y: -123}
-        - {x: -123, y: -123}
     - name: StarActiveBig
       rect:
         serializedVersion: 2
@@ -415,8 +439,8 @@ TextureImporter:
     - name: StarInactiveSmall
       rect:
         serializedVersion: 2
-        x: 250
-        y: 6
+        x: 442
+        y: 481
         width: 29
         height: 28
       alignment: 9
