@@ -972,22 +972,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22455084, guid: 2303dd9f767236b46839b7914a695bfe,
     type: 2}
   m_PrefabInternal: {fileID: 1304237536}
---- !u!1 &1304237538 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 141992, guid: 2303dd9f767236b46839b7914a695bfe, type: 2}
-  m_PrefabInternal: {fileID: 1304237536}
---- !u!114 &1304237539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1304237538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1f0e352a20a4648a4f283491758637, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Key: GameFramework.Demo.OnlineTutorials
 --- !u!1 &1480707035
 GameObject:
   m_ObjectHideFlags: 0
