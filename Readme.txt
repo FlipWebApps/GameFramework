@@ -9,7 +9,7 @@ this framework that contains a lot of useful additional content to get you up an
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
 	- The full Pro Pooling asset for advanced gameobject pooling
 	- The full Prefs Editor asset for managing your player prefs.
-	- Full 2D runner framework and game sample.
+	- Full 2D runner framework and game sample (work in progress).
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
 	- Additional samples
@@ -64,6 +64,19 @@ CHANGE LOG
 
 v3.3
 
+	Game Framework Core - Improvements
+	- Demo: New demo of usage
+	- Themes: New minimalist theme
+	- GameStructure: LevelManager allows for automatic losing when Target Time is reached
+	- GameStructure: Improved code comments
+	- UI: TimeRemaining supports count up / down from level TargetTime
+	- UI: Warn if Text component is not specified or available as a sibling component
+	
+	Game Framework Core - Fixes
+	- Facebook: Fix for crash when using Publish Actions Permission
+	- Free Prize: Fix for value being 0 on the first run when using SaveAcrossRestarts
+	- GameStructure: Fixed namespace for ShowCharacterInfo
+	
 v3.2
 
 	Game Framework Core - Improvements

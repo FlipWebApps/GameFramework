@@ -92,7 +92,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: Prefab
       value: 
-      objectReference: {fileID: 174138, guid: 93ff3e2aac1698848813fb76861cf832, type: 2}
+      objectReference: {fileID: 174138, guid: 4785fe5f706cb7347a690fb088d244ab, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 158822}

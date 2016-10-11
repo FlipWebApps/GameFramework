@@ -103,8 +103,8 @@ TextureImporter:
     - name: ButtonImagesMediumArrow
       rect:
         serializedVersion: 2
-        x: 349
-        y: 475
+        x: 196
+        y: 202
         width: 51
         height: 34
       alignment: 0
@@ -123,8 +123,8 @@ TextureImporter:
     - name: ButtonImagesMediumCancel
       rect:
         serializedVersion: 2
-        x: 307
-        y: 30
+        x: 205
+        y: 282
         width: 38
         height: 38
       alignment: 0
@@ -139,8 +139,8 @@ TextureImporter:
     - name: ButtonImagesMediumFacebook
       rect:
         serializedVersion: 2
-        x: 205
-        y: 65
+        x: 167
+        y: 193
         width: 25
         height: 45
       alignment: 0
@@ -150,8 +150,8 @@ TextureImporter:
     - name: ButtonImagesMediumHome
       rect:
         serializedVersion: 2
-        x: 269
-        y: 72
+        x: 203
+        y: 240
         width: 49
         height: 38
       alignment: 0
@@ -171,8 +171,8 @@ TextureImporter:
     - name: ButtonImagesMediumLike
       rect:
         serializedVersion: 2
-        x: 165
-        y: 11
+        x: 207
+        y: 464
         width: 46
         height: 45
       alignment: 0
@@ -188,8 +188,8 @@ TextureImporter:
     - name: ButtonImagesMediumOk
       rect:
         serializedVersion: 2
-        x: 273
-        y: 475
+        x: 205
+        y: 367
         width: 43
         height: 34
       alignment: 0
@@ -206,8 +206,8 @@ TextureImporter:
     - name: ButtonImagesMediumPlay
       rect:
         serializedVersion: 2
-        x: 234
-        y: 68
+        x: 168
+        y: 274
         width: 31
         height: 42
       alignment: 0
@@ -217,8 +217,8 @@ TextureImporter:
     - name: ButtonImagesMediumReload
       rect:
         serializedVersion: 2
-        x: 107
-        y: 9
+        x: 71
+        y: 198
         width: 54
         height: 47
       alignment: 0
@@ -239,8 +239,8 @@ TextureImporter:
     - name: ButtonImagesMediumSettings
       rect:
         serializedVersion: 2
-        x: 263
-        y: 25
+        x: 205
+        y: 324
         width: 40
         height: 39
       alignment: 0
@@ -259,7 +259,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3
-        y: 32
+        y: 409
         width: 100
         height: 100
       alignment: 0
@@ -275,30 +275,11 @@ TextureImporter:
         - {x: 50, y: -33}
         - {x: 50, y: 25}
         - {x: 32, y: 49}
-    - name: Frame256-1
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 253
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 2, y: 2, z: 2, w: 2}
-      outline:
-      - - {x: -128, y: 128}
-        - {x: -128, y: -128}
-        - {x: 128, y: -128}
-        - {x: 128, y: 128}
-      - - {x: -123, y: 123}
-        - {x: 123, y: 123}
-        - {x: 123, y: -123}
-        - {x: -123, y: -123}
     - name: Frame64-2
       rect:
         serializedVersion: 2
-        x: 205
-        y: 114
+        x: 3
+        y: 224
         width: 64
         height: 64
       alignment: 0
@@ -316,8 +297,8 @@ TextureImporter:
     - name: IconCoinLarge
       rect:
         serializedVersion: 2
-        x: 198
-        y: 182
+        x: 98
+        y: 249
         width: 66
         height: 67
       alignment: 9
@@ -335,8 +316,8 @@ TextureImporter:
     - name: IconCoinSmall
       rect:
         serializedVersion: 2
-        x: 404
-        y: 475
+        x: 129
+        y: 211
         width: 34
         height: 34
       alignment: 9
@@ -353,8 +334,8 @@ TextureImporter:
     - name: IconLock
       rect:
         serializedVersion: 2
-        x: 215
-        y: 6
+        x: 207
+        y: 405
         width: 44
         height: 55
       alignment: 9
@@ -373,7 +354,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3
-        y: 136
+        y: 292
         width: 91
         height: 113
       alignment: 9
@@ -391,7 +372,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 107
-        y: 60
+        y: 320
         width: 94
         height: 92
       alignment: 0
@@ -409,8 +390,8 @@ TextureImporter:
     - name: StarActiveSmall
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
+        x: 129
+        y: 182
         width: 25
         height: 25
       alignment: 0
@@ -420,8 +401,8 @@ TextureImporter:
     - name: StarInactiveBig
       rect:
         serializedVersion: 2
-        x: 98
-        y: 156
+        x: 107
+        y: 416
         width: 96
         height: 93
       alignment: 9
@@ -439,8 +420,8 @@ TextureImporter:
     - name: StarInactiveSmall
       rect:
         serializedVersion: 2
-        x: 442
-        y: 481
+        x: 168
+        y: 242
         width: 29
         height: 28
       alignment: 9
@@ -450,8 +431,8 @@ TextureImporter:
     - name: WhiteGradientRectangle
       rect:
         serializedVersion: 2
-        x: 32
-        y: 12
+        x: 71
+        y: 272
         width: 16
         height: 16
       alignment: 0
@@ -461,8 +442,8 @@ TextureImporter:
     - name: WhiteRectangle
       rect:
         serializedVersion: 2
-        x: 52
-        y: 12
+        x: 71
+        y: 252
         width: 16
         height: 16
       alignment: 0

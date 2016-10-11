@@ -1182,9 +1182,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0,
-      type: 3}
-    m_PressedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -1377,9 +1376,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300070, guid: 4cffb6a0abac9094b875dba359520ef0,
-      type: 3}
-    m_PressedSprite: {fileID: 21300070, guid: 4cffb6a0abac9094b875dba359520ef0, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -1553,7 +1551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2352941, g: 0.2352941, b: 0.316, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1654,9 +1652,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0,
-      type: 3}
-    m_PressedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2065,9 +2062,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0,
-      type: 3}
-    m_PressedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2334,9 +2330,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0,
-      type: 3}
-    m_PressedSprite: {fileID: 21300048, guid: 4cffb6a0abac9094b875dba359520ef0, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3064,8 +3059,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -39.21808}
-  m_SizeDelta: {x: 960, y: 78.43616}
+  m_AnchoredPosition: {x: 500, y: -39.451557}
+  m_SizeDelta: {x: 960, y: 78.903114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22419326
 RectTransform:
@@ -3081,8 +3076,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -117.654236}
-  m_SizeDelta: {x: 960, y: 78.43616}
+  m_AnchoredPosition: {x: 500, y: -118.354675}
+  m_SizeDelta: {x: 960, y: 78.903114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22422602
 RectTransform:
@@ -3107,8 +3102,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -458.3925}
-  m_SizeDelta: {x: 1000, y: 876.785}
+  m_AnchoredPosition: {x: 500, y: -458.50253}
+  m_SizeDelta: {x: 1000, y: 877.00507}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22424346
 RectTransform:
@@ -3124,8 +3119,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -196.0904}
-  m_SizeDelta: {x: 960, y: 78.43616}
+  m_AnchoredPosition: {x: 500, y: -197.25778}
+  m_SizeDelta: {x: 960, y: 78.903114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22425304
 RectTransform:
@@ -3158,8 +3153,8 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -274.52655}
-  m_SizeDelta: {x: 960, y: 78.43616}
+  m_AnchoredPosition: {x: 500, y: -276.16092}
+  m_SizeDelta: {x: 960, y: 78.903114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22428938
 RectTransform:
@@ -3175,8 +3170,8 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -352.9627}
-  m_SizeDelta: {x: 960, y: 78.43616}
+  m_AnchoredPosition: {x: 500, y: -355.06403}
+  m_SizeDelta: {x: 960, y: 78.903114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22429668
 RectTransform:
@@ -3322,7 +3317,7 @@ RectTransform:
   m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -617.1808}
+  m_AnchoredPosition: {x: 500, y: -619.51556}
   m_SizeDelta: {x: 960, y: 210}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22449092
@@ -3531,8 +3526,8 @@ RectTransform:
   m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -739.4829}
-  m_SizeDelta: {x: 960, y: 34.604187}
+  m_AnchoredPosition: {x: 500, y: -740.7603}
+  m_SizeDelta: {x: 960, y: 32.489517}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22464022
 RectTransform:
@@ -3604,7 +3599,7 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -392.1808}
+  m_AnchoredPosition: {x: 500, y: -394.51556}
   m_SizeDelta: {x: 960, y: 120}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &22473080
@@ -3659,7 +3654,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.9}
   m_AnchorMax: {x: 0.5, y: 0.9}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 976.785}
+  m_SizeDelta: {x: 1000, y: 977.00507}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &22479342
 RectTransform:
@@ -3729,7 +3724,7 @@ RectTransform:
   m_RootOrder: 8
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -816.785}
+  m_AnchoredPosition: {x: 500, y: -817.00507}
   m_SizeDelta: {x: 960, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22499042

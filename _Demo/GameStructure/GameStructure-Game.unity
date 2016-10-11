@@ -442,9 +442,9 @@ MonoBehaviour:
   m_Text: 'Here you would have your game logic.
 
 
-    To end the game you can use the win / lose buttons, wait for the time to run out
-    or use the ''Cheat Functions Window'' to decrease the players health / lives to
-    end the game.
+    To end the game in this demo you can use the win / lose buttons, wait for the
+    time to run out or use the ''Cheat Functions Window'' to decrease the players
+    health / lives to end the game.
 
 
     Try also playing with the level coins in the ''Cheat Functions Window'' to see
@@ -1147,7 +1147,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300022, guid: c80753cdbea2e3545afdc29f1fb62be5, type: 3}
+  m_Sprite: {fileID: 21300022, guid: 77c83b93ed606b240aa391d011175ada, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1240,9 +1240,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300068, guid: c80753cdbea2e3545afdc29f1fb62be5,
-      type: 3}
-    m_PressedSprite: {fileID: 21300068, guid: c80753cdbea2e3545afdc29f1fb62be5, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -1450,7 +1449,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300010, guid: c80753cdbea2e3545afdc29f1fb62be5, type: 3}
+  m_Sprite: {fileID: 21300010, guid: 77c83b93ed606b240aa391d011175ada, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
