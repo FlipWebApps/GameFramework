@@ -22,7 +22,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class for performing an action on a button click and automatically hooking up the button onClick listener
