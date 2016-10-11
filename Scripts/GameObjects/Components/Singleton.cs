@@ -41,6 +41,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         /// </summary>
         public string TypeName { get; private set; }
 
+
         /// <summary>
         /// Whether this singleton is active and setup.
         /// </summary>
@@ -51,6 +52,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
                 return Instance != null;
             }
         }
+
 
         /// <summary>
         /// Try and setup the singleton
@@ -77,6 +79,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             GameSetup();
         }
 
+
         /// <summary>
         /// Destroy the singleton
         /// </summary>
@@ -85,8 +88,37 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
             MyDebug.Log(TypeName + ": OnDestroy");
 
             if (Instance == this)
+            {
+                SaveState();
                 GameDestroy();
+            }
         }
+
+
+        /// <summary>
+        /// Save any state when the application quits.
+        /// </summary>
+        /// Note that iOS applications are usually suspended and do not quit. You should tick "Exit on Suspend" in Player settings 
+        /// for iOS builds to cause the game to quit and not suspend, otherwise you may not see this call. If "Exit on Suspend" is 
+        /// not ticked then you will see calls to OnApplicationPause instead.
+        protected virtual void OnApplicationQuit()
+        {
+            MyDebug.Log(TypeName + ": OnApplicationQuit");
+
+            SaveState();
+        }
+
+
+        /// <summary>
+        /// Save any state when the application pauses.
+        /// </summary>
+        protected virtual void OnApplicationPause(bool pauseStatus)
+        {
+            MyDebug.Log(TypeName + ": OnApplicationPause");
+
+            SaveState();
+        }
+
 
         /// <summary>
         /// Called from Awake when the singleton is setup.
@@ -95,11 +127,30 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
         {
         }
 
+
+        /// <summary>
+        /// Override this to save whatever state you need.
+        /// </summary>
+        /// This is typically called from OnDestroy and OnApplicationQuit although can be triggered from your own code if needed.
+        public virtual void SaveState()
+        {
+
+        }
+
+        
         /// <summary>
         /// Called from OnDestroy when the singleton is destroyed
         /// </summary>
         protected virtual void GameDestroy()
         {
         }
+
+
+        //protected virtual void Reset()
+        //{
+        //    MyDebug.Log(TypeName + "(PersistantSingletonSavedState): Reset");
+
+        //    SaveState();
+        //}
     }
 }
