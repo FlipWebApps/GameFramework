@@ -579,7 +579,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             {
                 Worlds = new GameItemsManager<World, GameItem>();
                 if (WorldUnlockMode == GameItem.UnlockModeType.Coins)
-                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, CoinsToUnlockLevels, LoadWorldDatafromResources);
+                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, CoinsToUnlockWorlds, LoadWorldDatafromResources);
                 else
                     Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, loadFromResources: LoadWorldDatafromResources);
             }
