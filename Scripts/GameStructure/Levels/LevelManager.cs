@@ -92,6 +92,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
             {
                 Level.Coins = 0;
                 Level.Score = 0;
+                StartStarsWon = Level.StarsWon;
             }
         }
 
