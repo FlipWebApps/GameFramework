@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System.Runtime.InteropServices;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using UnityEngine.Assertions;
@@ -36,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// <summary>
         /// The total number of stars that can be gotten. Automatically loaded from JSON configuration if present.
         /// </summary>
-        public float StarTotalCount { get; set; }
+        public int StarTotalCount { get; set; }
 
         /// <summary>
         /// The number of stars that have been won for this level. Represented as a bitmask.
@@ -128,6 +129,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
 
 
         /// <summary>
+        /// The total number of stars that have been won for this level (max is StarsWonCount). 
+        /// </summary>
+        public int StarsWonTotalCount()
+        {
+            var starsWon = 0;
+            for (var i = 1; i < StarTotalCount + 1; i++)
+            {
+                if (IsStarWon(i))
+                    starsWon++;
+            }
+            return starsWon;
+        }
+
+        /// <summary>
         /// Set whether a specified star has been won.
         /// </summary>
         /// <param name="starNumber"></param>
@@ -151,7 +166,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
             base.ParseData(jsonObject);
 
             if (jsonObject.ContainsKey("startotalcount"))
-                StarTotalCount = (float)jsonObject.GetNumber("startotalcount");
+                StarTotalCount = (int)jsonObject.GetNumber("startotalcount");
             if (jsonObject.ContainsKey("star1target"))
                 Star1Target = (float)jsonObject.GetNumber("star1target");
             if (jsonObject.ContainsKey("star2target"))

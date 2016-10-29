@@ -34,17 +34,42 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
     public class LevelManager : Singleton<LevelManager>
     {
         /// <summary>
-        /// Whether LevelStarted should be called on Start()
+        /// Whether LevelStarted should be called automatically when the scene loads
         /// </summary>
+        [Tooltip("Whether LevelStarted should be called automatically when the scene loads")]
         public bool AutoStart;
 
+        /// <summary>
+        /// A delay from when a game over condition is detected before showing the game over dialog
+        /// </summary>
         [Header("Auto Game Over")]
+        [Tooltip("A delay from when a game over condition is detected before showing the game over dialog")]
         public float ShowGameOverDialogDelay;
 
+        /// <summary>
+        /// Whether the user should automatically lose when they have no lives left
+        /// </summary>
         [Header("Auto Game Over Conditions")]
+        [Tooltip("Whether the user should automatically lose when they have no lives left")]
         public bool GameOverWhenLivesIsZero;
+
+        /// <summary>
+        /// Whether the user should automatically lose when their health reaches zero
+        /// </summary>
+        [Tooltip("Whether the user should automatically lose when their health reaches zero")]
         public bool GameOverWhenHealthIsZero;
+
+        /// <summary>
+        /// Whether the user should automatically lose when the levels specified target time is reached
+        /// </summary>
+        [Tooltip("Whether the user should automatically lose when the levels specified target time is reached")]
         public bool GameOverWhenTargetTimeReached;
+
+        /// <summary>
+        /// Whether the user should automatically win the game once all stars have been gotten
+        /// </summary>
+        [Tooltip("Whether the user should automatically win the game once all stars have been gotten")]
+        public bool GameWonWhenAllStarsGot;
 
         public DateTime StartTime { get; set; }
         public int StartStarsWon { get; set; }
@@ -126,6 +151,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         /// Trigger that the game is over and show the game over dialog.
         /// </summary>
         /// <param name="isWon"></param>
+        /// <param name="showDialogDelay"></param>
         public void GameOver(bool isWon, float showDialogDelay = 0)
         {
             if (!Instance.IsLevelRunning) return;
@@ -164,6 +190,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                     (GameOverWhenHealthIsZero && (Mathf.Approximately(GameManager.Instance.Player.Health, 0) || GameManager.Instance.Player.Health < 0)) ||
                     (GameOverWhenTargetTimeReached && SecondsRunning >= Level.TimeTarget))
                     GameOver(false, ShowGameOverDialogDelay);
+
+                // check for gameover (win) conditions.
+                if (GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonTotalCount())
+                    GameOver(true, ShowGameOverDialogDelay);
             }
 
         }
