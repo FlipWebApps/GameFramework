@@ -22,6 +22,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.Display.Placement;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
@@ -466,11 +467,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// GameItemManager containing the current Levels
         /// </summary>
         public GameItemsManager<Level, GameItem> Levels { get; set; }
-
-        /// <summary>
-        /// GameItemManager containing the current GenericGameItems
-        /// </summary>
-        public GameItemsManager<GenericGameItem, GameItem> GenericGameItems { get; set; }
 
         #endregion GameManager properties
         #region Messaging properties 

@@ -31,6 +31,7 @@ using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Components;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using UnityEngine.Assertions;
 
@@ -84,7 +85,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
                 PurchaseGameItem<Character>(productId, "unlock.character.", () => GameManager.Instance.Characters, number => new CharacterPurchasedMessage(number));
 
             else if (productId.StartsWith("unlock.genericgameitem."))
-                PurchaseGameItem<GenericGameItem>(productId, "unlock.genericgameitem.", () => GameManager.Instance.GenericGameItems, number => new GenericGameItemPurchasedMessage(number));
+                PurchaseGameItem<GenericGameItem>(productId, "unlock.genericgameitem.", () => GenericGameItemManager.Instance.GenericGameItems, number => new GenericGameItemPurchasedMessage(number));
 
             // finally send the generic påurchased message.
             GameManager.SafeQueueMessage(new ItemPurchasedMessage(productId));

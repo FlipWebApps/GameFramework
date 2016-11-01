@@ -39,9 +39,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
 
         void Awake()
         {
-            Assert.IsNotNull(GameManager.Instance.GenericGameItems, "GenericGameItems are not setup when referenced from ShowGenericGameItemInfo");
+            Assert.IsNotNull(GenericGameItemManager.Instance.GenericGameItems, "GenericGameItems are not setup when referenced from ShowGenericGameItemInfo");
 
-            var GenericGameItem = GameManager.Instance.GenericGameItems.Selected;
+            var GenericGameItem = GenericGameItemManager.Instance.GenericGameItems.Selected;
             if (GenericGameItem != null)
             {
                 var _textComponent = GetComponent<Text>();
