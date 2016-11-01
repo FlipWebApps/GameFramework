@@ -444,7 +444,7 @@ MonoBehaviour:
 
     To end the game in this demo you can use the win / lose buttons, wait for the
     time to run out or use the ''Cheat Functions Window'' to decrease the players
-    health / lives to end the game.
+    health / lives or win all stars to end the game.
 
 
     Try also playing with the level coins in the ''Cheat Functions Window'' to see
@@ -953,6 +953,7 @@ MonoBehaviour:
   GameOverWhenLivesIsZero: 1
   GameOverWhenHealthIsZero: 0
   GameOverWhenTargetTimeReached: 1
+  GameWonWhenAllStarsGot: 1
 --- !u!114 &1120687463
 MonoBehaviour:
   m_ObjectHideFlags: 0
