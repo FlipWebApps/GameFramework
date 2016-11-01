@@ -35,6 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
         Texture2D _proPoolingIcon;
         Texture2D _adMobIcon;
         Texture2D _facebookIcon;
+        Texture2D _playMakerIcon;
         Vector2 _messageLogScrollPosition;
 
         // Add menu item
@@ -54,6 +55,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
             _proPoolingIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\ProPooling.png", typeof(Texture2D)) as Texture2D;
             _adMobIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\AdMob.png", typeof(Texture2D)) as Texture2D;
             _facebookIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\Facebook.png", typeof(Texture2D)) as Texture2D;
+            _playMakerIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PlayMaker.png", typeof(Texture2D)) as Texture2D;
         }
 
         void OnGUI()
@@ -69,8 +71,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
             ShowAsset("Pro Pooling", "PRO_POOLING", "https://www.assetstore.unity3d.com/en/#!/content/59286", "Powerful gameobject and prefab pooling. Included as part of the Game Framework - Extras bundle.\n\nAdds Gameobject pooling and performance improvements", "Asset Store", @"Assets\FlipWebApps\ProPooling", _proPoolingIcon, true);
 
             GUILayout.Label("Third Party", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
-            ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
             ShowAsset("Facebook", "FACEBOOK_SDK", "https://developers.facebook.com/docs/unity/", "Facebook support for WebGL, Android and iOS.\n\nEnables Facebook support components and functionality in GameFramework", "Download", @"Assets\FacebookSDK", _facebookIcon, false);
+            ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
+            ShowAsset("PlayMaker", "PLAYMAKER", "https://www.assetstore.unity3d.com/en/#!/content/368", "PlayMaker actions to combine the power of Game Framework and PlayMaker.\n\nThis integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.\n\nNOTE: Game Framework PlayMaker Extensions is an early alpha - please get in contact so we can extend it with the functionality that you need!", "Asset Store (Play Maker)", @"Assets\PlayMaker", _playMakerIcon, true);
 
             GUILayout.Label("Asset developers - contact us to get your asset listed here!");
 
@@ -100,7 +103,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
             {
                 GUILayout.Label(" | ");
                 if (EditorHelper.LinkButton("Extras Bundle", true))
-                    Application.OpenURL(url);
+                    GameFrameworkHelper.ShowAssetStorePageExtrasBundle();
             }
             GUILayout.EndHorizontal();
 
