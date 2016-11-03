@@ -1,4 +1,4 @@
-Game Framework - Free v3.3
+Game Framework - Free v3.3.1
 
 Thank you for using Game Framework. 
 
@@ -9,6 +9,7 @@ this framework that contains a lot of useful additional content to get you up an
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
 	- The full Pro Pooling asset for advanced gameobject pooling
 	- The full Prefs Editor asset for managing your player prefs.
+	- Alpha version of the upcoming Game Framework PlayMaker Extensions asset
 	- Full 2D runner framework and game sample (work in progress).
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
@@ -61,6 +62,25 @@ GameItemExtensions - Aneroin
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.3.1
+
+	Game Framework Core - Improvements
+	- Demo: GameStructure demo updated to allow winning when all stars collected
+	- GameStructure: Initialise StartStarsWon on setup so it is available immediately.
+	- GameStructure: Added Level StarsWonTotalCount() method
+	- GameStructure: Added tooltips
+	- GameStructure: Levelmanager GameWonWhenAllStarsGot option added
+	- GameStructure: Addition of GenericGameItemManager and inspector for auto setup of GenericGameItems
+	- GameStructure: When using Worlds any Levels are preloaded (lazy loading to come soon), cached and available through the World.Level property
+	- GameStructure: World LevelStarCountTotal property added for getting a total count of all level stars obtained.
+	- Integrations: Addition of PlayMaker integration
+	
+	Game Framework Core - Fixes
+	- GameStructure: GameManager incorrectly used CoinsToUnlockLevels rather than CoinsToUnlockWorlds for autocreated worlds
+	- GameStructure: StarsTotalCount changed from float to int
+	
+	Game Framework PlayMaker Extensions (Extras Bundle) - New Asset Added
 
 v3.3
 
