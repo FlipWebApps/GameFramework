@@ -570,29 +570,39 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             }
             SetPlayerByNumber(0);
 
-            // setup worlds if auto setup
+            // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
             {
+                var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
                 Worlds = new GameItemsManager<World, GameItem>();
-                if (WorldUnlockMode == GameItem.UnlockModeType.Coins)
-                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, CoinsToUnlockWorlds, LoadWorldDatafromResources);
-                else
-                    Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, loadFromResources: LoadWorldDatafromResources);
-            }
+                Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
-            // setup levels if auto setup
-            if (AutoCreateLevels)
+                // if we have worlds then autocreate levels for each world.
+                if (AutoCreateLevels)
+                {
+                    for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
+                    {
+                        var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
+                        Worlds.Items[i].Levels = new GameItemsManager<Level, GameItem>();
+                        Worlds.Items[i].Levels.LoadDefaultItems(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
+                    }
+
+                    // and assign the selected set of levels
+                    Levels = Worlds.Selected.Levels;
+                }
+            }
+            else
             {
-                int startLevel = AutoCreateWorlds ? WorldLevelNumbers[Worlds.Selected.Number - 1].Min : 1;
-                int endLevel = AutoCreateWorlds ? WorldLevelNumbers[Worlds.Selected.Number - 1].Max : NumberOfAutoCreatedLevels;
-                Levels = new GameItemsManager<Level, GameItem>();
-                if (LevelUnlockMode == GameItem.UnlockModeType.Coins)
-                    Levels.LoadDefaultItems(startLevel, endLevel, CoinsToUnlockLevels, LoadLevelDatafromResources);
-                else
-                    Levels.LoadDefaultItems(startLevel, endLevel, loadFromResources: LoadLevelDatafromResources);
+                // otherwise not automatically setting up worlds so if auto setup of levels then create at root level.
+                if (AutoCreateLevels)
+                {
+                    var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
+                    Levels = new GameItemsManager<Level, GameItem>();
+                    Levels.LoadDefaultItems(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
+                }
             }
 
-            // setup levels if auto setup
+            // handle auto setup of characters
             if (AutoCreateCharacters)
             {
                 Characters = new GameItemsManager<Character, GameItem>();

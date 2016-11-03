@@ -19,9 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
 {
@@ -30,12 +31,36 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
     /// </summary>
     public class World : GameItem
     {
+        /// <summary>
+        /// Levels for this world
+        /// </summary>
+        public GameItemsManager<Level, GameItem> Levels { get; set; }
+
         public int SelectedLevel;
 
         public override string IdentifierBase { get { return "World"; } }
         public override string IdentifierBasePrefs { get { return "W"; } }
 
-        public World() { }
+        /// <summary>
+        /// Return the total star count for all levels contained within this world.
+        /// </summary>
+        public int LevelStarCountTotal
+        {
+            get
+            {
+                Assert.IsNotNull(Levels,
+                    string.Format(
+                        "Error trying to get the level totla star count when no levels are set for world {0}", Number));
+
+                var totalStarCount = 0;
+                foreach (var level in Levels.Items)
+                {
+                    totalStarCount += level.StarsWonTotalCount();
+                }
+
+                return totalStarCount;
+            }
+        }
 
         /// <summary>
         /// Update PlayerPrefs with setting or preferences for this item.
