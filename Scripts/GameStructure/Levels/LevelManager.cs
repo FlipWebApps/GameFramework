@@ -192,7 +192,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                     GameOver(false, ShowGameOverDialogDelay);
 
                 // check for gameover (win) conditions.
-                if (GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonTotalCount())
+                if (GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonTotalCount() && StartStarsWon != Level.StarsWonTotalCount())
                     GameOver(true, ShowGameOverDialogDelay);
             }
 
