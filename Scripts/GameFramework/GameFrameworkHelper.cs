@@ -67,12 +67,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameFramework
 
         public static void ShowAssetStorePageFree()
         {
-            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/55334");
+            Application.OpenURL("https://www.assetstore.unity3d.com/#!/content/55334?aid=1011lGnE");
         }
 
         public static void ShowAssetStorePageExtrasBundle()
         {
-            Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/50893");
+            Application.OpenURL("https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE");
         }
     }
 }
