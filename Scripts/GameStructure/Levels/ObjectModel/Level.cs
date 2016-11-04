@@ -95,6 +95,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// You can also use StarxTarget if you want individual times for winning different stars.
         public float TimeTarget { get; set; }
 
+        /// <summary>
+        /// The total number of stars that have been won for this level (max is StarTotalCount). 
+        /// </summary>
+        public int StarsWonCount
+        {
+            get
+            {
+                var starsWon = 0;
+                for (var i = 1; i < StarTotalCount + 1; i++)
+                {
+                    if (IsStarWon(i))
+                        starsWon++;
+                }
+                return starsWon;
+            }
+        }
+
 
         /// <summary>
         /// Constructor
@@ -127,20 +144,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
             return (StarsWon & (1 << (starNumber - 1))) != 0;
         }
 
-
-        /// <summary>
-        /// The total number of stars that have been won for this level (max is StarsWonCount). 
-        /// </summary>
-        public int StarsWonTotalCount()
-        {
-            var starsWon = 0;
-            for (var i = 1; i < StarTotalCount + 1; i++)
-            {
-                if (IsStarWon(i))
-                    starsWon++;
-            }
-            return starsWon;
-        }
 
         /// <summary>
         /// Set whether a specified star has been won.

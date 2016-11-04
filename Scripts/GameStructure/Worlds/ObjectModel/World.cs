@@ -55,7 +55,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
                 var totalStarCount = 0;
                 foreach (var level in Levels.Items)
                 {
-                    totalStarCount += level.StarsWonTotalCount();
+                    totalStarCount += level.StarsWonCount;
                 }
 
                 return totalStarCount;
