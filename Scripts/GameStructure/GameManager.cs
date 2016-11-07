@@ -22,7 +22,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.Display.Placement;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
@@ -46,7 +45,7 @@ using FlipWebApps.GameFramework.Scripts.Audio.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
 
 #if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
 #endif
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure
