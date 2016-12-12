@@ -43,7 +43,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 
             // decrease lives and reset health if they still have lives left.
             GameManager.Instance.Player.Lives--;
-            if (GameManager.Instance.Player.Lives >= 0)
+            if (GameManager.Instance.Player.Lives > 0)
                 GameManager.Instance.Player.Health = 1;
             return true;
         }
