@@ -18,11 +18,11 @@ MonoBehaviour:
   _overrideStarTotalCount: 0
   _starTotalCount: 3
   _overrideStar1Target: 1
-  _star1Target: 10
+  _star1Target: 5
   _overrideStar2Target: 1
-  _star2Target: 20
+  _star2Target: 8
   _overrideStar3Target: 1
-  _star3Target: 30
+  _star3Target: 10
   _overrideStar4Target: 0
   _star4Target: 0
   _overrideTimeTarget: 1
