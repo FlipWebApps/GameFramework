@@ -736,7 +736,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <param name="pitchHigh"></param>
         public void PlayEffect(AudioClip clip, float pitchLow = 1, float pitchHigh = 1)
         {
-            Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playying effects.");
+            Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playing effects.");
             Assert.AreNotEqual(0, EffectAudioSources.Length, "Ensure that you have added AudioSources if you are playying effects.");
 
             var newPitch = UnityEngine.Random.Range(pitchLow, pitchHigh);
