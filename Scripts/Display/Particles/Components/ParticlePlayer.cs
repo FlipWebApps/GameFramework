@@ -34,7 +34,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
 
         public void CreateParticleSystem()
         {
-            ParticleSystem newParticleSystem = Instantiate(
+            var newParticleSystem = Instantiate(
                 ParticleSystem,
                 transform.position,
                 Quaternion.identity
@@ -43,10 +43,17 @@ namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
             // Make sure it will be destroyed
             if (newParticleSystem != null)
             {
+#if UNITY_5_5_OR_NEWER
+                Destroy(
+                    newParticleSystem.gameObject,
+                    newParticleSystem.main.startLifetime.constant
+                    );
+#else
                 Destroy(
                     newParticleSystem.gameObject,
                     newParticleSystem.startLifetime
                     );
+#endif
             }
         }
     }

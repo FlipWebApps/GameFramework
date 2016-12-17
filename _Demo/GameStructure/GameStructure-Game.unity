@@ -946,7 +946,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -960,10 +960,10 @@ MonoBehaviour:
   m_Text: 'Here you would have your game logic.
 
 
-    To end the game in this demo you can use the win / lose buttons, wait for the
-    time to run out or use the ''Cheat Functions Window'' to decrease the players
-    health / lives or win all stars to end the game. Use the arrow keys to move the
-    ''Player Sphere''
+    You can end the game in this demo in several ways. Use the win / lose buttons,
+    wait for the time to run out, use the ''Cheat Functions Window'' to decrease the
+    players health / lives or win all stars to end the game. Use the arrow keys to
+    move the ''Player Sphere''
 
 
     Try also playing with the level coins in the ''Cheat Functions Window'' to see
