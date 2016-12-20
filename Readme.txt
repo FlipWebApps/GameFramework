@@ -1,4 +1,4 @@
-Game Framework - Free v3.3.1
+Game Framework - Free v3.4
 
 Thank you for using Game Framework. 
 
@@ -62,6 +62,33 @@ GameItemExtensions - Aneroin
 - - - - - - - - - -
 
 CHANGE LOG
+
+v3.4
+
+	Game Framework Core - Improvements
+	- Demo: Updated game scene to use new Colliders classes for coins and health.
+	- GameStructure: Added new Colliders classes for Coins, Points, Health and Generic usage.
+	- GameStructure: Removed beta Collectables classes (see replacement Colliders classes)
+
+	Game Framework Core - Fixes
+	- Display: Removed ParticlePlayer warning in Unity 5.5+
+	- GameStructure: Changed Level StarsWonCount from method to property
+	- GameStructure: Fix for health being reset when no lives are left
+	- GameStructure: Fix for immediate level completion when re-entering a level with 'auto win when all stars got'
+
+	BeautifulTransitions (Extras Bundle): Updated to v4.1 that includes amongst others (see seperate readme for more):
+	- Demo: Added Camera Cross Fade / Wipe demo
+	- Demo: SceneSwap demo now demonstrates use of cross scene transitions
+	- Demo: GameObjectTransitionsDemo demo now demonstrates use of sprite fading
+	- Transitions: Added Camera Cross Fade / Wipe
+	- Transitions: Cross scene transitions added for scene wipes and fades
+	- Transitions: Fade now works with Sprites.
+	- Transitions: All components have updated namespaces and are move under FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components.xxx
+	- Transitions: All abstract classes and components have updated namespaces and are move under FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components.xxx.AbstractClasses
+	- Transitions: TransitionHelper added TakeScreenshot and LoadScene methods.
+	- Transitions: TransitionStep Completed method renamed TransitionCompleted
+	- Transitions: TransitionStep TransitionInternal method renamed TransitionLoop
+	- Transitions: TransitionStep SetProgress call moved from Start to TransitionLoop for better control
 
 v3.3.1
 
