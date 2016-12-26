@@ -71,6 +71,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         [Tooltip("Whether the user should automatically win the game once all stars have been gotten")]
         public bool GameWonWhenAllStarsGot;
 
+        /// <summary>
+        /// Whether the user should automatically win the game once the levels target score is reached
+        /// </summary>
+        [Tooltip("Whether the user should automatically win the game once the levels target score is reached")]
+        public bool GameWonWhenTragetScoreReached;
+
         public DateTime StartTime { get; set; }
         public int StartStarsWon { get; set; }
 
@@ -192,7 +198,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                     GameOver(false, ShowGameOverDialogDelay);
 
                 // check for gameover (win) conditions.
-                if (GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon)
+                if ((GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon) ||
+                    GameWonWhenTragetScoreReached && Level.Score >= Level.ScoreTarget)
                     GameOver(true, ShowGameOverDialogDelay);
             }
 

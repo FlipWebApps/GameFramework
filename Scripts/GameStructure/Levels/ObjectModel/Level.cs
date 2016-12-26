@@ -92,8 +92,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// <summary>
         /// A field that you can set from json, extensions or code that represents a target time. 
         /// </summary>
+        /// Automatically loaded from JSON configuration if present.
         /// You can also use StarxTarget if you want individual times for winning different stars.
         public float TimeTarget { get; set; }
+
+        /// <summary>
+        /// A field that you can set from json, extensions or code that represents a target score. 
+        /// </summary>
+        /// Automatically loaded from JSON configuration if present.
+        /// You can also use StarxTarget if you want individual scores for winning different stars.
+        public int ScoreTarget { get; set; }
 
         /// <summary>
         /// The total number of stars that have been won for this level (max is StarTotalCount). 
@@ -180,6 +188,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 Star4Target = (float)jsonObject.GetNumber("star4target");
             if (jsonObject.ContainsKey("timetarget"))
                 TimeTarget = (float)jsonObject.GetNumber("timetarget");
+            if (jsonObject.ContainsKey("scoretarget"))
+                ScoreTarget = (int)jsonObject.GetNumber("scoretarget");
         }
 
 
@@ -210,6 +220,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 Star4Target = levelExtension.Star4Target;
             if (levelExtension.OverrideTimeTarget)
                 TimeTarget = levelExtension.TimeTarget;
+            if (levelExtension.OverrideScoreTarget)
+                ScoreTarget = levelExtension.ScoreTarget;
         }
 
 

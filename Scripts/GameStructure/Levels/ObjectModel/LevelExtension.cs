@@ -264,6 +264,45 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         [Tooltip("The time target for completing the level.")]
         [SerializeField]
         float _TimeTarget;
+
+
+        /// <summary>
+        /// Whether to override the score target.
+        /// </summary>
+        /// See Level for more information.
+        public bool OverrideScoreTarget
+        {
+            get
+            {
+                return _overrideScoreTarget;
+            }
+            set
+            {
+                _overrideScoreTarget = value;
+            }
+        }
+        [Tooltip("Whether to override the score target.")]
+        [SerializeField]
+        bool _overrideScoreTarget;
+
+
+        /// <summary>
+        /// The score target for completing the level
+        /// </summary>
+        public int ScoreTarget
+        {
+            get
+            {
+                return _scoreTarget;
+            }
+            set
+            {
+                _scoreTarget = value;
+            }
+        }
+        [Tooltip("The score target for completing the level.")]
+        [SerializeField]
+        int _scoreTarget;
     }
 
 }

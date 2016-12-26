@@ -41,6 +41,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         SerializedProperty _star4TargetProperty;
         SerializedProperty _overrideTimeTargetProperty;
         SerializedProperty _TimeTargetProperty;
+        SerializedProperty _overrideScoreTargetProperty;
+        SerializedProperty _scoreTargetProperty;
 
         protected override void OnEnable()
         {
@@ -59,6 +61,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             _star4TargetProperty = serializedObject.FindProperty("_star4Target");
             _overrideTimeTargetProperty = serializedObject.FindProperty("_overrideTimeTarget");
             _TimeTargetProperty = serializedObject.FindProperty("_TimeTarget");
+            _overrideScoreTargetProperty = serializedObject.FindProperty("_overrideScoreTarget");
+            _scoreTargetProperty = serializedObject.FindProperty("_scoreTarget");
         }
 
 
@@ -96,6 +100,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             EditorGUILayout.EndToggleGroup();
             _levelExtension.OverrideTimeTarget = EditorGUILayout.BeginToggleGroup(new GUIContent(_overrideTimeTargetProperty.displayName, _overrideTimeTargetProperty.tooltip), _levelExtension.OverrideTimeTarget);
             EditorGUILayout.PropertyField(_TimeTargetProperty);
+            EditorGUILayout.EndToggleGroup();
+            _levelExtension.OverrideScoreTarget = EditorGUILayout.BeginToggleGroup(new GUIContent(_overrideScoreTargetProperty.displayName, _overrideScoreTargetProperty.tooltip), _levelExtension.OverrideScoreTarget);
+            EditorGUILayout.PropertyField(_scoreTargetProperty);
             EditorGUILayout.EndToggleGroup();
             EditorGUI.indentLevel -= 1;
         }
