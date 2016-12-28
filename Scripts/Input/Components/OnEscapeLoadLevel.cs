@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Input.Components
@@ -29,9 +28,13 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
     /// Loads the specified scene when the escape key or android back button is pressed
     /// </summary>
     [AddComponentMenu("Game Framework/Input/OnEscapeLoadLevel")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
     public class OnEscapeLoadLevel : MonoBehaviour
     {
+        /// <summary>
+        /// Name of the Scene to load
+        /// </summary>
+        [Tooltip("Name of the Scene to load")]
         public string SceneName;
 
         void Update()

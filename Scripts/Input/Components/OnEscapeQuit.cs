@@ -27,7 +27,7 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
     /// Quit the application when the escape key or android back button is pressed
     /// </summary>
     [AddComponentMenu("Game Framework/Input/OnEscapeQuit")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
     public class OnEscapeQuit : MonoBehaviour
     {
         void Update()

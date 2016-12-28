@@ -22,20 +22,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
 
-namespace FlipWebApps.GameFramework.Scripts.Input.Components
+namespace FlipWebApps.GameFramework.Scripts.Input.Components.AbstractClasses
 {
     /// <summary>
-    /// Abstract class that calls a method when a mouse button is pressed or the screen is tapped anywhere on teh screen
-    /// 
-    /// By setting a list of UI game objects you can set areas that wonwill block the change.
+    /// Abstract class that calls a method when a mouse button is pressed or the screen is tapped anywhere on the screen
     /// </summary>
+    /// By setting a list of UI game objects or UI gameobjects you can set areas that will block the input.
     public abstract class OnMouseClickOrTap : MonoBehaviour
     {
+        /// <summary>
+        /// A list of gameobjects or UI gameobjects that will block input to this component.
+        /// </summary>
+        [Tooltip("A list of gameobjects or UI gameobjects that will block input to this component.")]
         public List<GameObject> BlockingGameObjects;
 
         void Update()
@@ -60,10 +61,13 @@ namespace FlipWebApps.GameFramework.Scripts.Input.Components
                 }
             }
 
-            // if we got here then run teh custom method
+            // if we got here then run the custom method
             RunMethod();
         }
 
+        /// <summary>
+        /// Run method that you should implement in your own derived classes that will be called when a valid click is detected
+        /// </summary>
         public abstract void RunMethod();
     }
 }

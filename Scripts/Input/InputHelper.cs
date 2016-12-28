@@ -29,16 +29,22 @@ namespace FlipWebApps.GameFramework.Scripts.Input
     /// </summary>
     public class InputHelper
     {
-        public static Vector3 GetMousePositionOnXzPlane()
-        {
-            return PositionHelper.GetPositionOnXzPlane(UnityEngine.Input.mousePosition);
-        }
-
-        public static Vector3 GetMousePositionOnXzPlane(float y)
+        /// <summary>
+        /// Get the current mouse position restricted to the XZ plane.
+        /// </summary>
+        /// <param name="y">Optional y elevation for the XY plane</param>
+        /// <returns></returns>
+        public static Vector3 GetMousePositionOnXzPlane(float y = 0)
         {
             return PositionHelper.GetPositionOnXzPlane(UnityEngine.Input.mousePosition, y);
         }
 
+
+        /// <summary>
+        /// Get the current mouse position restricted to the specified plane.
+        /// </summary>
+        /// <param name="plane">Plane to restrict the mouse position to</param>
+        /// <returns></returns>
         public static Vector3 GetMousePositionOnPlane(Plane plane)
         {
             return PositionHelper.GetPositionOnPlane(UnityEngine.Input.mousePosition, plane);

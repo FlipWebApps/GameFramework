@@ -20,19 +20,22 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.Input.Components.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Input.Components
 {
     /// <summary>
-    /// Loads the given level when a mouse button is pressed or the screen is tapped anywhere on teh screen
-    /// 
-    /// By setting a list of UI game objects you can set areas that wonwill block the change.
+    /// Loads the given level when a mouse button is pressed or the screen is tapped
     /// </summary>
     [AddComponentMenu("Game Framework/Input/OnMouseClickOrTapLoadLevel")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
     public class OnMouseClickOrTapLoadLevel : OnMouseClickOrTap
     {
+        /// <summary>
+        /// Name of the Scene to load
+        /// </summary>
+        [Tooltip("Name of the Scene to load")]
         public string SceneName;
 
         public override void RunMethod() {
