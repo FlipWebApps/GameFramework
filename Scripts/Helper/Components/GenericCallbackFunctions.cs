@@ -21,18 +21,22 @@
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.Helper.Components
 {
     /// <summary>
-    /// A collection of generic callback functions that can be used from animators or otherwise.
-    /// 
-    /// You can specify a reference to have these operate on a gameobject other than the one where this is currently attached.
+    /// A collection of generic callback functions that can be used from UI input,  animators or otherwise that didn't really fit anywhere else!
     /// </summary>
+    /// You can specify a reference to have these operate on a gameobject other than the one where this is currently attached.
     [AddComponentMenu("Game Framework/Helper/GenericCallbackFunctions")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/game-framework/helper/")]
     public class GenericCallbackFunctions : MonoBehaviour
     {
+        /// <summary>
+        /// On optional gameobject to target. If not specified then methods will target the current gameobject
+        /// </summary>
+        [Tooltip("On optional gameobject to target. If not specified then methods will target the current gameobject")]
         public GameObject GameObject;
 
         public void Awake()
@@ -41,30 +45,51 @@ namespace FlipWebApps.GameFramework.Scripts.Helper.Components
                 GameObject = gameObject;
         }
 
+
+        /// <summary>
+        /// Destroy the target gameobject
+        /// </summary>
         public void DestroyGameObject()
         {
             Destroy(GameObject);
         }
 
+
+        /// <summary>
+        /// Destroy the parent of the target gameobject
+        /// </summary>
         public void DestroyParentGameObject()
         {
             Destroy(GameObject.transform.parent.gameObject);
         }
 
+
+        /// <summary>
+        /// Disable the target gameobject
+        /// </summary>
         public void DisableGameObject()
         {
             GameObject.SetActive(false);
         }
 
+
+        /// <summary>
+        /// Enable the target gameobject
+        /// </summary>
         public void EnableGameObject()
         {
             GameObject.SetActive(true);
         }
 
+
+        /// <summary>
+        /// Start teh current level
+        /// </summary>
         public void LevelStarted()
         {
+            Assert.IsTrue(LevelManager.IsActive, "LevelManager not found. Ensuer that it is added to the current scene.");
+
             LevelManager.Instance.LevelStarted();
         }
-
     }
 }
