@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using UnityEngine;
@@ -27,12 +26,16 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Social.Components
 {
     /// <summary>
-    /// Shows an enabled or a disabled gameobject based upon the number of levels played
+    /// Shows one of two gameobjects based upon the number of levels played
     /// </summary>
     [AddComponentMenu("Game Framework/Social/EnableBasedUponNumberOfLevelsPlayed")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/social/")]
     public class EnableBasedUponNumberOfLevelsPlayed : EnableDisableGameObject
     {
+        /// <summary>
+        /// A value that indicates the number of levels that must be played before ConditionMetGameObject is shown instead of ConditionNotMetGameObject
+        /// </summary>
+        [Tooltip("A value that indicates the number of levels that must be played before ConditionMetGameObject is shown instead of ConditionNotMetGameObject")]
         public int NumberOfLevels;
 
         public override bool IsConditionMet()

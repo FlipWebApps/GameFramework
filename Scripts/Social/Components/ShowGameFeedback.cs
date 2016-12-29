@@ -24,10 +24,10 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.Social.Components
 {
     /// <summary>
-    /// Functions for showing the game feedback dialog
+    /// Callback functions for showing the game feedback dialog
     /// </summary>
     [AddComponentMenu("Game Framework/Social/ShowGameFeedback")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/social/")]
     public class ShowGameFeedback : MonoBehaviour
     {
         /// <summary>
@@ -36,7 +36,7 @@ namespace FlipWebApps.GameFramework.Scripts.Social.Components
         /// </summary>
         public void GameFeedbackUnsureIfTheyLike()
         {
-            GameFeedback gameFeedback = new GameFeedback();
+            var gameFeedback = new GameFeedback();
             gameFeedback.GameFeedbackUnsureIfTheyLike();
         }
 
@@ -46,7 +46,7 @@ namespace FlipWebApps.GameFramework.Scripts.Social.Components
         /// </summary>
         public void GameFeedbackAssumeTheyLike()
         {
-            GameFeedback gameFeedback = new GameFeedback();
+            var gameFeedback = new GameFeedback();
             gameFeedback.GameFeedbackAssumeTheyLike();
         }
     }

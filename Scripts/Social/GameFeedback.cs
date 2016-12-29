@@ -23,62 +23,68 @@ using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure;
 using FlipWebApps.GameFramework.Scripts.Localisation;
 using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Social
 {
     /// <summary>
-    /// Allows for getting game feedback from the user
-    /// 
-    /// TODO remove the need for native libs.
+    /// Functionality for getting game feedback from the user.
     /// </summary>
+    /// You can configure any displayed text through the localisation file.
     public class GameFeedback
     {
-        public bool HasRated;
-        public bool HasAskedToRate;
-        public bool HasAskedToRate2;
+        /// <summary>
+        /// Indicates whether the user has rated the game.
+        /// </summary>
+        public bool HasRated {
+            get { return _hasRated; }
+            set
+            {
+                _hasRated = value;
+                PreferencesFactory.SetInt("HasRated", _hasRated ? 1 : 0);
+                PreferencesFactory.Save();
+            }
+        }
+        bool _hasRated;
+
+        /// <summary>
+        /// Indicates whether we have asked the user to rate the game.
+        /// </summary>
+        public bool HasAskedToRate
+        {
+            get { return _hasAskedToRate; }
+            set
+            {
+                _hasAskedToRate = value;
+                PreferencesFactory.SetInt("HasAskedToRate", _hasAskedToRate ? 1 : 0);
+                PreferencesFactory.Save();
+            }
+        }
+        bool _hasAskedToRate;
+
 
         public GameFeedback()
         {
-            HasRated = PreferencesFactory.GetInt("HasRated", 0) == 1;
-            HasAskedToRate = PreferencesFactory.GetInt("HasAskedToRate", 0) == 1;
-            HasAskedToRate2 = PreferencesFactory.GetInt("HasAskedToRate2", 0) == 1;
+            HasRated = PreferencesFactory.GetInt("HasRated") == 1;
+            HasAskedToRate = PreferencesFactory.GetInt("HasAskedToRate") == 1;
         }
 
-        public void SetHasRated(bool hasRated)
-        {
-            HasRated = hasRated;
-            PreferencesFactory.SetInt("HasRated", HasRated ? 1 : 0);
-            PreferencesFactory.Save();
-        }
 
-        public void SetHasAskedToRate(bool hasAskedToRate)
-        {
-            HasAskedToRate = hasAskedToRate;
-            PreferencesFactory.SetInt("HasAskedToRate", HasAskedToRate ? 1 : 0);
-            PreferencesFactory.Save();
-        }
-
-        public void SetHasAskedToRate2(bool hasAskedToRate2)
-        {
-            HasAskedToRate2 = hasAskedToRate2;
-            PreferencesFactory.SetInt("HasAskedToRate2", HasAskedToRate2 ? 1 : 0);
-            PreferencesFactory.Save();
-        }
-
+        /// <summary>
+        /// Reset all rated flags.
+        /// </summary>
         public void Reset()
         {
-            SetHasRated(false);
-            SetHasAskedToRate(false);
-            SetHasAskedToRate2(false);
+            HasRated = false;
+            HasAskedToRate = false;
         }
+
 
         /// <summary>
         /// Should be called as a direct result of the user clicking on a rate button when you are uncertain if they 
-        /// like the game. Gives a yes/no dialog to check they like. Yes takes them to the rate page, no takes 
-        /// them to a feedback dialog.
+        /// like the game.  e.g. a static rate button
         /// </summary>
+        /// Gives a yes/no dialog to check they like. Yes takes them to the rate page, no takes them to a feedback dialog.
         public void GameFeedbackUnsureIfTheyLike()
         {
             DialogManager.Instance.Show("GameFeedbackDialog",
@@ -86,6 +92,9 @@ namespace FlipWebApps.GameFramework.Scripts.Social
                 text2: LocaliseText.Format("GameFeedback.AssumeLike", GameManager.Instance.GameName),
                 doneCallback: LikeCallback,
                 dialogButtons: DialogInstance.DialogButtonsType.YesNo);
+
+            HasAskedToRate = true;
+
             //#if UNITY_EDITOR
             //            Application.OpenURL(GameManager.Instance.PlayWebUrl);
             //#elif UNITY_ANDROID
@@ -100,19 +109,19 @@ namespace FlipWebApps.GameFramework.Scripts.Social
 
 
         /// <summary>
-        /// Should be called when invoked as a direct result of their actions (e.g. click rate button) and 
-        /// if we assume they like the game.
-        /// This displays a popup with just a message and ok button before taking them to the rate page.
+        /// Should be called when invoked as a direct result of their actions and  if you assume the user likes 
+        /// the game. e.g. a rate button shown only after a certain number of plays. 
         /// </summary>
+        /// This displays a popup with just a message and ok button before taking them to the rate page.
         public void GameFeedbackAssumeTheyLike()
         {
             DialogManager.Instance.Show(titleKey: "GameFeedback.RateTitle",
                 text2: LocaliseText.Format("GameFeedback.AssumeLike", GameManager.Instance.GameName),
                 doneCallback: RateCallback);
-            //#if UNITY_EDITOR
 
-            //            Application.OpenURL(GameManager.Instance.PlayWebUrl);
-            //#elif UNITY_ANDROID
+            HasAskedToRate = true;
+
+            //#if UNITY_ANDROID
             //		AndroidMessage msg = AndroidMessage.Create(DialogTitle, String.Format(LocaliseText.Get("GameFeedback.AssumeLikeAndroid"), GameManager.Instance.GameName));
             //        msg.ActionComplete += OnAndroidRateMessageClose;
             //#elif UNITY_IPHONE
@@ -124,9 +133,10 @@ namespace FlipWebApps.GameFramework.Scripts.Social
 
 
         /// <summary>
-        /// Should be called if we assume they like the game and when not invoked as a direct result of their 
-        /// actions (e.g. use after 20 plays). Gives rate, later and remind options.
+        /// Should be called if you assume the user likes the game and when not invoked as a direct result of their 
+        /// actions. e.g. shown automatically after a set number of plays. 
         /// </summary>
+        /// Gives rate, later and remind options.
         public void GameFeedbackAssumeTheyLikeOptional()
         {
             // open the text based upon the platform
@@ -147,16 +157,18 @@ namespace FlipWebApps.GameFramework.Scripts.Social
                 doneCallback: RateCallback,
                 dialogButtons: DialogInstance.DialogButtonsType.Custom);
 
-//#if UNITY_EDITOR
-//            Application.OpenURL(GameManager.Instance.PlayWebUrl);
-//#elif UNITY_ANDROID
-//		AndroidRateUsPopUp rate = AndroidRateUsPopUp.Create(DialogTitle, String.Format(LocaliseText.Get("GameFeedback.AssumeLikeOptionalAndroid"), GameManager.Instance.GameName), GameManager.Instance.PlayMarketUrl);
-//        rate.ActionComplete += OnAndroidRatePopUpClose;
-//#elif UNITY_IPHONE
-//		IOSRateUsPopUp rate = IOSRateUsPopUp.Create(DialogTitle, String.Format(LocaliseText.Get("GameFeedback.AssumeLikeOptionaliOS"), GameManager.Instance.GameName));
-//        rate.OnComplete += OnIOSRatePopUpClose;
-//#else
-//#endif
+            HasAskedToRate = true;
+
+            //#if UNITY_EDITOR
+            //            Application.OpenURL(GameManager.Instance.PlayWebUrl);
+            //#elif UNITY_ANDROID
+            //		AndroidRateUsPopUp rate = AndroidRateUsPopUp.Create(DialogTitle, String.Format(LocaliseText.Get("GameFeedback.AssumeLikeOptionalAndroid"), GameManager.Instance.GameName), GameManager.Instance.PlayMarketUrl);
+            //        rate.ActionComplete += OnAndroidRatePopUpClose;
+            //#elif UNITY_IPHONE
+            //		IOSRateUsPopUp rate = IOSRateUsPopUp.Create(DialogTitle, String.Format(LocaliseText.Get("GameFeedback.AssumeLikeOptionaliOS"), GameManager.Instance.GameName));
+            //        rate.OnComplete += OnIOSRatePopUpClose;
+            //#else
+            //#endif
         }
 
 
@@ -204,7 +216,7 @@ namespace FlipWebApps.GameFramework.Scripts.Social
         /// <summary>
         /// Open the rating page for the current platform
         /// </summary>
-        void OpenRatingPage()
+        public void OpenRatingPage()
         {
             // open the rate url based upon the platform
             switch (Application.platform)
@@ -220,7 +232,7 @@ namespace FlipWebApps.GameFramework.Scripts.Social
                     return;
             }
 
-            SetHasRated(true);
+            HasRated = true;
         }
 
         #region Android Rating - not used
