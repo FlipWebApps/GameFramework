@@ -36,7 +36,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// Character Details Button
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Characters/CharacterButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class CharacterButton : GameItemButton<Character>
     {
 
@@ -67,7 +67,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
 
 
         /// <summary>
-        /// Returns the GameItemsMaager that holds Characters
+        /// Returns the GameItemsManager that holds Characters
         /// </summary>
         /// <returns></returns>
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()

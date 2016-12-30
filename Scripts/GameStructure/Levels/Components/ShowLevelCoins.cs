@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Show the number of coins that have been collected for the level has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelCoins")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class ShowLevelCoins : ShowValueAnimatedMessaging<int, LevelCoinsChangedMessage>
     {
         Level _level;

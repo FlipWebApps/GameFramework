@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
     /// World Details Button
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class WorldButton : GameItemButton<World>
     {
         public new void Awake()
@@ -52,6 +52,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
             base.OnDestroy();
         }
 
+        /// <summary>
+        /// Handler for World purchase messages
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         bool WorldPurchasedHandler(BaseMessage message)
         {
             var worldPurchasedMessage = message as WorldPurchasedMessage;
@@ -59,12 +64,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
             return true;
         }
 
+        /// <summary>
+        /// Returns the GameItemsManager that holds Worlds
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<World, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Worlds;
         }
 
 
+        /// <summary>
+        /// Override for ClickUnlocked that sets the active Levels from the world
+        /// </summary>
         public override void ClickUnlocked()
         {
             GameManager.Instance.Levels = CurrentItem.Levels;

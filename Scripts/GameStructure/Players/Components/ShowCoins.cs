@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Show the number of coins that a player has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowCoins")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class ShowCoins : ShowValueAnimatedMessaging<int, PlayerCoinsChangedMessage>
     {
         Player _player;

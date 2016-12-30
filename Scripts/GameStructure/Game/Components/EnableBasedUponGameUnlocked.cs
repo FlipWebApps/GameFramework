@@ -27,10 +27,10 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Components
 {
     /// <summary>
-    /// Shows an enabled or a disabled gameobject based upon whether the game is unlocked.
+    /// Shows one of two gameobjects based upon whether the game is unlocked.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Game/EnableBasedUponGameUnlocked")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
     public class EnableBasedUponGameUnlocked : EnableDisableGameObjectMessaging<GameUnlockedMessage>
     {
         /// <summary>

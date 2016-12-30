@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class PlayerScoreChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Player that this update relates to
+        /// </summary>
         public readonly Player Player;
+
+        /// <summary>
+        /// The Players new score
+        /// </summary>
         public readonly int NewScore;
+
+        /// <summary>
+        /// The Players new score
+        /// </summary>
         public readonly int OldScore;
 
         public PlayerScoreChangedMessage(Player player, int newScore, int oldScore)

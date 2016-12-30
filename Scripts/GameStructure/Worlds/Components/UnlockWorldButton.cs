@@ -27,10 +27,17 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
 {
+    /// <summary>
+    /// Unlock GameItem button for Worlds 
+    /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Worlds/UnlockWorldButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class UnlockWorldButton : UnlockGameItemButton<World>
     {
+        /// <summary>
+        /// Returns the GameItemsMaager that holds Characters
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<World, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Worlds;

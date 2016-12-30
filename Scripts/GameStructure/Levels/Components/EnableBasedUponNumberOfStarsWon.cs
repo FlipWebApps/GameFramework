@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
 using UnityEngine;
@@ -31,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Shows an enabled or a disabled gameobject based upon the number of stars the player has for the current level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/EnableBasedUponNumberOfStarsWon")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class EnableBasedUponNumberOfStarsWon : EnableDisableGameObjectMessaging<StarsWonMessage>
     {
         /// <summary>

@@ -28,7 +28,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class HealthChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Players new health
+        /// </summary>
         public readonly float NewHealth;
+
+        /// <summary>
+        /// The Players old health
+        /// </summary>
         public readonly float OldHealth;
 
         public HealthChangedMessage(float newHealth, float oldHealth)

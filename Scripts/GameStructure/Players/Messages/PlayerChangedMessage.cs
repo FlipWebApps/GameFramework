@@ -29,7 +29,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class PlayerChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The newly selected Player
+        /// </summary>
         public readonly Player NewPlayer;
+
+        /// <summary>
+        /// The previously selected Player
+        /// </summary>
         public readonly Player OldPlayer;
 
         public PlayerChangedMessage(Player newPlayer, Player oldPlayer)

@@ -31,7 +31,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
     /// </summary>
     public class Level : GameItem
     {
+        /// <summary>
+        /// A unique identifier for this type of GameItem
+        /// </summary>
         public override string IdentifierBase { get { return "Level"; }}
+
+        /// <summary>
+        /// A unique shortened version of IdentifierBase to save memory.
+        /// </summary>
         public override string IdentifierBasePrefs { get { return "L"; } }
 
         /// <summary>
@@ -53,6 +60,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
             }
         }
         int _starsWon;
+
+        /// <summary>
+        /// The total number of stars that have been won for this level (max is StarTotalCount). 
+        /// </summary>
+        public int StarsWonCount
+        {
+            get
+            {
+                var starsWon = 0;
+                for (var i = 1; i < StarTotalCount + 1; i++)
+                {
+                    if (IsStarWon(i))
+                        starsWon++;
+                }
+                return starsWon;
+            }
+        }
 
         /// <summary>
         /// A value that can be used for holding a target the the first star. Automatically loaded from JSON configuration if present.
@@ -103,22 +127,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// You can also use StarxTarget if you want individual scores for winning different stars.
         public int ScoreTarget { get; set; }
 
-        /// <summary>
-        /// The total number of stars that have been won for this level (max is StarTotalCount). 
-        /// </summary>
-        public int StarsWonCount
-        {
-            get
-            {
-                var starsWon = 0;
-                for (var i = 1; i < StarTotalCount + 1; i++)
-                {
-                    if (IsStarWon(i))
-                        starsWon++;
-                }
-                return starsWon;
-            }
-        }
 
 
         /// <summary>
@@ -151,7 +159,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         {
             return (StarsWon & (1 << (starNumber - 1))) != 0;
         }
-
 
         /// <summary>
         /// Set whether a specified star has been won.

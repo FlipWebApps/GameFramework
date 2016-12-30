@@ -29,12 +29,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
     public class Character : GameItem
     {
         /// <summary>
-        /// Override for this GameItem type
+        /// A unique identifier for this type of GameItem
         /// </summary>
         public override string IdentifierBase { get { return "Character"; } }
 
         /// <summary>
-        /// Override for this GameItem type
+        /// A unique shortened version of IdentifierBase to save memory.
         /// </summary>
         public override string IdentifierBasePrefs { get { return "C"; } }
 

@@ -29,8 +29,10 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
 {
     /// <summary>
-    /// Manages the concept of a running level
+    /// Manages the concept of a running level and holds state and other information relating to this
     /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/LevelManager")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class LevelManager : Singleton<LevelManager>
     {
         /// <summary>
@@ -75,21 +77,44 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         /// Whether the user should automatically win the game once the levels target score is reached
         /// </summary>
         [Tooltip("Whether the user should automatically win the game once the levels target score is reached")]
-        public bool GameWonWhenTragetScoreReached;
+        public bool GameWonWhenTargetScoreReached;
 
+        /// <summary>
+        /// Time when the level was started.
+        /// </summary>
         public DateTime StartTime { get; set; }
+
+        /// <summary>
+        /// The number of stars that were already won when the level was started.
+        /// </summary>
         public int StartStarsWon { get; set; }
 
+        /// <summary>
+        /// The number of seconds that the level has been running for
+        /// </summary>
         public float SecondsRunning { get; set; }
 
+        /// <summary>
+        /// Whether the level has started
+        /// </summary>
         public bool IsLevelStarted { get; set; }
+
+        /// <summary>
+        /// Whether the level is finished.
+        /// </summary>
         public bool IsLevelFinished { get; set; }
 
+        /// <summary>
+        /// Whether the level is running (i.e. started but not finished)
+        /// </summary>
         public bool IsLevelRunning
         {
             get { return IsLevelStarted && !IsLevelFinished; }
         }
 
+        /// <summary>
+        /// Shortcut to the current level set in GameManager.
+        /// </summary>
         public Level Level
         {
             get { return GameManager.Instance.Levels != null ? GameManager.Instance.Levels.Selected : null; }
@@ -104,6 +129,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         }
 
 
+        /// <summary>
+        /// Start the level automatically is set to do so.
+        /// </summary>
         void Start()
         {
             if (AutoStart)
@@ -199,7 +227,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
 
                 // check for gameover (win) conditions.
                 if ((GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon) ||
-                    GameWonWhenTragetScoreReached && Level.Score >= Level.ScoreTarget)
+                    GameWonWhenTargetScoreReached && Level.Score >= Level.ScoreTarget)
                     GameOver(true, ShowGameOverDialogDelay);
             }
 

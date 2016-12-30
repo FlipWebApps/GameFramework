@@ -30,12 +30,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// A handler for setting the number of stars won by the amount of coins the player collects.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/OnLifeLostEnableGameobject")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class OnLifeLostEnableGameobject : RunOnMessage<LivesChangedMessage>
     {
+        /// <summary>
+        /// The target gameobject that should be enabled.
+        /// </summary>
         [Tooltip("The target gameobject that should be enabled.")]
         public GameObject Target;
 
+        /// <summary>
+        /// The number of seconds after which to disable the gameobject again. 0 = never disable.
+        /// </summary>
         [Tooltip("The number of seconds after which to disable the gameobject again. 0 = never disable.")]
         public float DisableDelay;
 

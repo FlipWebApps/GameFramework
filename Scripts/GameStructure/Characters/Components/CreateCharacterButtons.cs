@@ -30,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// Creates instances of all Character Game Items
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Characters/CreateCharacterButtons")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class CreateCharacterButtons : CreateGameItemButtons<CharacterButton, Character>
     {
         /// <summary>

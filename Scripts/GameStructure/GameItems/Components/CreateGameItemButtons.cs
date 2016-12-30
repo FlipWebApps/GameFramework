@@ -34,19 +34,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// <summary>
         /// A prefab that will be created for all GameItems.
         /// </summary>
+        [Tooltip("A prefab that will be created for all GameItems.")]
         public GameObject Prefab;
 
+
+        /// <summary>
+        /// Create and add all buttons
+        /// </summary>
         public void Awake()
         {
-            foreach (GameItem gameItem in GetGameItems())
+            foreach (var gameItem in GetGameItems())
             {
-                TGameItemButton button = Prefab.GetComponent<TGameItemButton>();
+                var button = Prefab.GetComponent<TGameItemButton>();
                 button.Number = gameItem.Number;
 
-                GameObject newObject = Instantiate(Prefab);
+                var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);
             }
         }
+
 
         /// <summary>
         /// Implement this in your derived class to return an array of GameItems to create buttons for

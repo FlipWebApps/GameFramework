@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
     /// </summary>
     public class LevelScoreChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Level that this update relates to
+        /// </summary>
         public readonly Level Level;
+
+        /// <summary>
+        /// The levels new score
+        /// </summary>
         public readonly int NewScore;
+
+        /// <summary>
+        /// The levels old score
+        /// </summary>
         public readonly int OldScore;
 
         public LevelScoreChangedMessage(Level level, int newScore, int oldScore)

@@ -31,10 +31,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// </summary>
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/ShowCharacterInfo")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class ShowCharacterInfo : MonoBehaviour
     {
-        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]
+        /// <summary>
+        /// A localisation key or text string to use to dissplay. You can include the values:{0} - Number, {1} - Name, {2} - Description
+        /// </summary>
+        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
         public string Key;
 
         void Awake()
@@ -44,9 +47,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
             var character = GameManager.Instance.Characters.Selected;
             if (character != null)
             {
-                var _textComponent = GetComponent<Text>();
+                var textComponent = GetComponent<Text>();
                 var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                _textComponent.text = string.Format(text, character.Number, character.Name, character.Description);
+                textComponent.text = string.Format(text, character.Number, character.Name, character.Description);
             }
         }
     }

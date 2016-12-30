@@ -43,12 +43,30 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
     [RequireComponent(typeof(Button))]
     public abstract class UnlockGameItemButton<T> : MonoBehaviour where T : GameItem, new()
     {
+        /// <summary>
+        /// A maximum number of failed unlock attmepts before we make sure to unlock something
+        /// </summary>
         [Header("Settings")]
-        public int MaxFailedUnlocks = 999;      // number of failed unlock attmepts before we actually unlock something for them
+        [Tooltip("A maximum number of failed unlock attmepts before we make sure to unlock something")]
+        public int MaxFailedUnlocks = 999;
 
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
         [Header("Display")]
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
         public GameObject ContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
         public RuntimeAnimatorController ContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
         public bool ContentShowsButtons;
 
         Button _button;
@@ -60,6 +78,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         T _gameItemToUnlock;
         bool _alreadyUnlocked;
 
+
+        /// <summary>
+        /// Setup
+        /// </summary>
         void Awake()
         {
             _button = GetComponent<Button>();
@@ -71,17 +93,30 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             _failedUnlockAttempts = GameManager.Instance.Player.GetSettingInt(_localisationBase + ".FailedUnlockAttempts", 0);
         }
 
+
+        /// <summary>
+        /// Continually check whether changes mean we can now unlock a new item.
+        /// </summary>
         void Update()
         {
-            int minimumCoinsToOpenLevel = GetGameItemsManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
-            bool canUnlock = minimumCoinsToOpenLevel != -1 && minimumCoinsToOpenLevel == 0;
+            var minimumCoinsToOpenLevel = GetGameItemsManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
+            var canUnlock = minimumCoinsToOpenLevel != -1 && minimumCoinsToOpenLevel == 0;
             _button.interactable = canUnlock;
             if (_animation != null)
                 _animation.enabled = canUnlock;
         }
 
+
+        /// <summary>
+        /// Implement this method to return a GameItemsManager that contains the GameItems that this button works upon.
+        /// </summary>
+        /// <returns></returns>
         protected abstract GameItemsManager<T, GameItem> GetGameItemsManager();
 
+
+        /// <summary>
+        /// Added as a listener to the attached button and is called to trigger the unlock process and show the unlock dialog 
+        /// </summary>
         public void Unlock()
         {
             var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController, contentSiblingIndex: 1);
@@ -121,18 +156,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
                 GameManager.Instance.Player.SetSetting(_localisationBase + ".FailedUnlockAttempts", _failedUnlockAttempts);
                 GameManager.Instance.Player.UpdatePlayerPrefs();
 
-                //UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text", text, true);
-                //UIHelper.SetTextOnChildGameObject(dialogInstance.Content, "ulph_Text2", text2, true);
-                //UIHelper.SetSpriteOnChildGameObject(dialogInstance.Content, "ulph_Image", _gameItemToUnlock.Sprite, true);// SceneManager.Instance.ChoosePantsButtons[LevelToUnlock.Number-1].DisplayImage.sprite, true);
-
                 dialogInstance.Show(titleKey: _localisationBase + ".Unlock.Title",
                     textKey: textKey,
                     text2Key: text2Key,
                     sprite: _gameItemToUnlock.Sprite,
                     doneCallback: UnlockedCallback,
                     dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
-
-                //StartCoroutine(UnlockCoRoutine(dialogInstance));
             }
             else
             {
@@ -142,6 +171,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         }
 
 
+        /// <summary>
+        /// Callback when the dialog completes
+        /// </summary>
+        /// <param name="dialogInstance"></param>
         void UnlockedCallback(DialogInstance dialogInstance)
         {
             if (!_alreadyUnlocked)

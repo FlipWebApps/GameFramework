@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Show the current level score that a player has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelScore")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class ShowLevelScore : ShowValueAnimatedMessaging<int, LevelScoreChangedMessage>
     {
         Level _level;

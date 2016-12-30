@@ -27,10 +27,17 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 {
+    /// <summary>
+    /// Unlock GameItem button for Levels 
+    /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/UnlockLevelButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class UnlockLevelButton : UnlockGameItemButton<Level>
     {
+        /// <summary>
+        /// Returns the GameItemsManager that holds Levels
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Levels;

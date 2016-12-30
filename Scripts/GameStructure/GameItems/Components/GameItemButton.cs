@@ -42,7 +42,7 @@ using FlipWebApps.GameFramework.Scripts.Preferences;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 {
     /// <summary>
-    /// Base Game Item button that displays information about the linked Game Item
+    /// Abstract Game Item button class that displays information about the linked Game Item
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class GameItemButton<T> : MonoBehaviour where T : GameItem, new()
@@ -315,7 +315,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        private bool OnLocalisationChanged(BaseMessage message)
+        bool OnLocalisationChanged(BaseMessage message)
         {
             SetupDisplay();
             return true;

@@ -20,9 +20,6 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -32,7 +29,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Creates instances of a life icon
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/CreateLivesIcons")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class CreateLivesIcons : MonoBehaviour
     {
         /// <summary>

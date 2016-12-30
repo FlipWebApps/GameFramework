@@ -30,10 +30,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// </summary>
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowPlayerInfo")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class ShowPlayerInfo : MonoBehaviour
     {
-        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{0} - Name\n{0} - Description")]
+        /// <summary>
+        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// </summary>
+        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
         public string Key;
 
         void Awake()

@@ -30,9 +30,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
     /// Creates instances of all World GameItems
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Worlds/CreateWorldButtons")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class CreateWorldButtons : CreateGameItemButtons<WorldButton, World>
     {
+        /// <summary>
+        /// Returns a list of all current Character GameItems
+        /// </summary>
+        /// <returns></returns>
         protected override GameItem[] GetGameItems()
         {
             return GameManager.Instance.Worlds.Items;

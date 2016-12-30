@@ -27,10 +27,10 @@ using UnityEngine.Assertions;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
     /// <summary>
-    /// Shows an enabled or a disabled gameobject based upon the number of lives the player has.
+    /// Shows one of two gameobjects based upon the number of lives the player has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/EnableBasedUponNumberOfLives")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class EnableBasedUponNumberOfLives : EnableDisableGameObjectMessaging<LivesChangedMessage>
     {
         /// <summary>

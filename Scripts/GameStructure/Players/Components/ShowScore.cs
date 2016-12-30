@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Show the score that a player has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowScore")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class ShowScore : ShowValueAnimatedMessaging<int, PlayerScoreChangedMessage>
     {
         Player _player;

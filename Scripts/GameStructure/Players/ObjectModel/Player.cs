@@ -31,7 +31,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
     public class Player : GameItem
     {
+        /// <summary>
+        /// A unique identifier for this type of GameItem
+        /// </summary>
         public override string IdentifierBase { get { return "Player"; } }
+
+        /// <summary>
+        /// A unique shortened version of IdentifierBase to save memory.
+        /// </summary>
         public override string IdentifierBasePrefs { get { return "P"; } }
 
 
@@ -55,7 +62,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
 
         /// <summary>
-        /// The number of lives that the current player as. 
+        /// The number of lives that the current player has. 
         /// LivesChangedMessage is sent whenever this value changes outside of initialisation.
         /// </summary>
         public int Lives
@@ -92,7 +99,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
 
         /// <summary>
         /// Whether the current player has won the whole game.
-        /// 
         /// GameWonMessage is sent whenever this value is set to true outside of initialisation.
         /// </summary>
         public bool IsGameWon

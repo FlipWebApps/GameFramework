@@ -30,21 +30,39 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// A handler for setting the number of stars won by the amount of coins the player collects.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/StarsWonHandlerCoins")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class StarsWonHandlerCoins : RunOnMessage<LevelCoinsChangedMessage>
     {
+        /// <summary>
+        /// Whether any targets should come from level configuration as set by json or API calls.
+        /// </summary>
         [Tooltip("Whether any targets should come from level configuration as set by json or API calls.")]
         public bool TargetsFromLevelConfig;
 
+        /// <summary>
+        /// The number of coins the player must get to achieve 1 star.
+        /// </summary>
         [Tooltip("The number of coins the player must get to achieve 1 star.")]
         [ConditionalHide("TargetsFromLevelConfig", true, true)]
         public int Target1Star = 10;
+
+        /// <summary>
+        /// The number of coins the player must get to achieve 2 stars.
+        /// </summary>
         [Tooltip("The number of coins the player must get to achieve 2 stars.")]
         [ConditionalHide("TargetsFromLevelConfig", true, true)]
         public int Target2Stars = 20;
+
+        /// <summary>
+        /// The number of coins the player must get to achieve 3 stars.
+        /// </summary>
         [Tooltip("The number of coins the player must get to achieve 3 stars.")]
         [ConditionalHide("TargetsFromLevelConfig", true, true)]
         public int Target3Stars = 30;
+
+        /// <summary>
+        /// The number of coins the player must get to achieve 4 stars.
+        /// </summary>
         [Tooltip("The number of coins the player must get to achieve 4 stars.")]
         [ConditionalHide("TargetsFromLevelConfig", true, true)]
         public int Target4Stars = 40;

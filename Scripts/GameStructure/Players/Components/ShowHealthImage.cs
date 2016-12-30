@@ -33,11 +33,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// </summary>
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowHealthImage")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class ShowHealthImage : RunOnMessage<HealthChangedMessage>
     {
+        /// <summary>
+        /// A tint to apply to the attached image when the user has full health.
+        /// </summary>
         [Tooltip("A tint to apply to the attached image when the user has full health.")]
         public Color HealthTintFull = Color.white;
+
+        /// <summary>
+        /// A tint to apply to the attached image when the user has no health left.
+        /// </summary>
         [Tooltip("A tint to apply to the attached image when the user has no health left.")]
         public Color HealthTintEmpty = Color.white;
 

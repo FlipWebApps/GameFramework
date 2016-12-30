@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Show the high score that the level has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelHighScore")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class ShowLevelHighScore : ShowValueAnimatedMessaging<int, LevelHighScoreChangedMessage>
     {
         Level _level;

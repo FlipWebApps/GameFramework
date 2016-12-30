@@ -29,7 +29,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Decreases the number of lives that the player has when their health reaches zero.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/DecreaseLivesWhenHealthIsZero")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class DecreaseLivesWhenHealthIsZero : RunOnMessage<HealthChangedMessage>
     {
         /// <summary>

@@ -28,7 +28,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class LivesChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Players new number of lives
+        /// </summary>
         public readonly int NewLives;
+
+        /// <summary>
+        /// The Players old number of lives
+        /// </summary>
         public readonly int OldLives;
 
         public LivesChangedMessage(int newLives, int oldLives)

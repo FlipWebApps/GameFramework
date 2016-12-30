@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
     /// </summary>
     public class LevelHighScoreChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Level that this update relates to
+        /// </summary>
         public readonly Level Level;
+
+        /// <summary>
+        /// The levels new high score
+        /// </summary>
         public readonly int NewHighScore;
+
+        /// <summary>
+        /// The levels old high score
+        /// </summary>
         public readonly int OldHighScore;
 
         public LevelHighScoreChangedMessage(Level level, int newHighScore, int oldHighScore)

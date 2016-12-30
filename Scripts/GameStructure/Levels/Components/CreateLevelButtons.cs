@@ -30,9 +30,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Creates instances of all Level GameItems
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
     {
+        /// <summary>
+        /// Returns a list of all current Character GameItems
+        /// </summary>
+        /// <returns></returns>
         protected override GameItem[] GetGameItems()
         {
             return GameManager.Instance.Levels.Items;

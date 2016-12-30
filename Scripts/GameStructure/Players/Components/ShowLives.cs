@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
     /// Show the number of lives that a player has.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowLives")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class ShowLives : ShowValueAnimatedMessaging<int, LivesChangedMessage>
     {
         Player _player;

@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class PlayerHighScoreChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Player that this update relates to
+        /// </summary>
         public readonly Player Player;
+
+        /// <summary>
+        /// The Players new high score
+        /// </summary>
         public readonly int NewHighScore;
+
+        /// <summary>
+        /// The Players new high score
+        /// </summary>
         public readonly int OldHighScore;
 
         public PlayerHighScoreChangedMessage(Player player, int newHighScore, int oldHighScore)

@@ -31,11 +31,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// Unlock GameItem button for Characters 
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Characters/UnlockCharacterButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
         /// <summary>
-        /// Returns the GameItemsMaager that holds Characters
+        /// Returns the GameItemsManager that holds Characters
         /// </summary>
         /// <returns></returns>
         protected override GameItemsManager<Character, GameItem> GetGameItemsManager()

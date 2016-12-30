@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class PlayerCoinsChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Player that this update relates to
+        /// </summary>
         public readonly Player Player;
+
+        /// <summary>
+        /// The Players new coin total
+        /// </summary>
         public readonly int NewCoins;
+
+        /// <summary>
+        /// The Players old coin total
+        /// </summary>
         public readonly int OldCoins;
 
         public PlayerCoinsChangedMessage(Player player, int newCoins, int oldCoins)

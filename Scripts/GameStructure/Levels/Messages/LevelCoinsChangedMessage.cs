@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
     /// </summary>
     public class LevelCoinsChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Level that this update relates to
+        /// </summary>
         public readonly Level Level;
+
+        /// <summary>
+        /// The levels new coin total
+        /// </summary>
         public readonly int NewCoins;
+
+        /// <summary>
+        /// The levels old coin total
+        /// </summary>
         public readonly int OldCoins;
 
         public LevelCoinsChangedMessage(Level level, int newCoins, int oldCoins)

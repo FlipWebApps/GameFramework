@@ -36,9 +36,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
         /// </summary>
         public GameItemsManager<Level, GameItem> Levels { get; set; }
 
-        public int SelectedLevel;
+        //public int SelectedLevel;
 
+        /// <summary>
+        /// A unique identifier for this type of GameItem
+        /// </summary>
         public override string IdentifierBase { get { return "World"; } }
+
+        /// <summary>
+        /// A unique shortened version of IdentifierBase to save memory.
+        /// </summary>
         public override string IdentifierBasePrefs { get { return "W"; } }
 
         /// <summary>

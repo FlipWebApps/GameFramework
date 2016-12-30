@@ -28,7 +28,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
     /// </summary>
     public class CustomNameChangedMessage : BaseMessage
     {
+        /// <summary>
+        /// The Players new name
+        /// </summary>
         public readonly string NewName;
+
+        /// <summary>
+        /// The Players old name
+        /// </summary>
         public readonly string OldName;
 
         public CustomNameChangedMessage(string newName, string oldName)

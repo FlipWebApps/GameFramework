@@ -29,8 +29,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
     /// </summary>
     public class StarsWonMessage : BaseMessage
     {
+        /// <summary>
+        /// The Level that this update relates to
+        /// </summary>
         public readonly Level Level;
+
+        /// <summary>
+        /// The old bitmask of stars won
+        /// </summary>
         public readonly int NewStarsWon;
+
+        /// <summary>
+        /// The new bitmask of stars won
+        /// </summary>
         public readonly int OldStarsWon;
 
         public StarsWonMessage(Level level, int newStarsWon, int oldStarsWon)

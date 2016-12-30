@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// Level Details Button
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/LevelButton")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class LevelButton : GameItemButton<Level>
     {
         protected GameObject StarsWonGameObject;
@@ -72,6 +72,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
             base.OnDestroy();
         }
 
+
+        /// <summary>
+        /// Handler for Level purchase messages
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         bool LevelPurchasedHandler(BaseMessage message)
         {
             var levelPurchasedMessage = message as LevelPurchasedMessage;
@@ -79,6 +85,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
             return true;
         }
 
+
+        /// <summary>
+        /// Additional display setup functionality
+        /// </summary>
         public override void SetupDisplay()
         {
             base.SetupDisplay();
@@ -95,6 +105,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         }
 
 
+        /// <summary>
+        /// Returns the GameItemsManager that holds Levels
+        /// </summary>
+        /// <returns></returns>
         protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
         {
             return GameManager.Instance.Levels;
