@@ -19,27 +19,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components {
     /// <summary>
     /// Quit the game when clicked
-    /// 
-    /// This automatically hooks up the button onClick listener
     /// </summary>
+    /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickExit")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class OnButtonClickExit : MonoBehaviour
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
+    public class OnButtonClickExit : OnButtonClick
     {
-
-        void Start()
-        {
-            gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
-        }
-
-        void OnClick()
+        /// <summary>
+        /// Exit when the button is clicked.
+        /// </summary>
+        public override void OnClick()
         {
             Application.Quit(); 
 

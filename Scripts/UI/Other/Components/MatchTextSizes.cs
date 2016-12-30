@@ -26,6 +26,7 @@ using UnityEngine.UI;
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components {
     /// <summary>
     /// Size all the Text components so that they are the same.
+    /// NOTE: MAY NOT WORK!
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Other/MatchTextSizes")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

@@ -23,6 +23,9 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
+    /// <summary>
+    /// NOTE: MAY NOT WORK!
+    /// </summary>
     [AddComponentMenu("Game Framework/UI/Other/GridlayoutSizeWidthToFill")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GridlayoutSizeWidthToFill : MonoBehaviour

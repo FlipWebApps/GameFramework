@@ -19,24 +19,45 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
+    /// <summary>
+    /// Syncronises UI Image colors agains changing button states
+    /// </summary>
     [AddComponentMenu("Game Framework/UI/Buttons/SyncStateImageColors")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class SyncStateImageColors : SyncState
     {
+        /// <summary>
+        /// A color to set any images to when the button is disabled.
+        /// </summary>
+        [Tooltip("A color to set any images to when the button is disabled.")]
         public Color DisabledColor;
+
+        /// <summary>
+        /// A color to set any images to when the button is highlighted.
+        /// </summary>
+        [Tooltip("A color to set any images to when the button is highlighted.")]
         public Color HighlightedColor;
+
+        /// <summary>
+        /// A color to set any images to when the button is pressed.
+        /// </summary>
+        [Tooltip("A color to set any images to when the button is pressed.")]
         public Color PressedColor;
 
-        Color _normalColor;
-
+        /// <summary>
+        /// An array of UI Image components to synchronise with the button.
+        /// </summary>
+        [Tooltip("An array of images to synchronise with the button.")]
         public Image[] Images;
+
+        Color _normalColor;
 
         new void Awake()
         {
@@ -47,6 +68,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
             base.Awake();
         }
 
+        /// <summary>
+        /// Handle state changes and update image colours accordingly
+        /// </summary>
         public override void StateChanged()
         {
             Color imageColor;

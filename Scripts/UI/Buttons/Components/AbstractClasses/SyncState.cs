@@ -20,19 +20,38 @@
 //----------------------------------------------
 
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
+namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses
 {
+    /// <summary>
+    /// Abstract base class that when added to a gameobject with a UI Button will monitor for state changes and
+    /// call the implementing classes StateChanged method so it can update the display.
+    /// </summary>
     [RequireComponent(typeof(Button))]
     public abstract class SyncState : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, IPointerDownHandler, IPointerUpHandler
     {
         Button _button;
+
+        /// <summary>
+        /// Indicates if the button is interactable
+        /// </summary>
         protected bool IsInteractable;
+
+        /// <summary>
+        /// Indicates if the pointer is over the button
+        /// </summary>
         protected bool IsPointerOver;
+
+        /// <summary>
+        /// Indicates if the pointer is pressed
+        /// </summary>
         protected bool IsPointerDown;
+
+        /// <summary>
+        /// Indicates if the button is selected
+        /// </summary>
         protected bool IsSelected;
 
         public void Awake()
@@ -43,7 +62,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
             StateChanged();
         }
 
-        public void Update()
+        /// <summary>
+        /// Check for changes to the buttons interactable state.
+        /// </summary>
+        void Update()
         {
             if (_button.interactable == IsInteractable) return;
 
@@ -87,6 +109,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
             StateChanged();
         }
 
+        /// <summary>
+        /// Implement this in derived classes to be notified when the button state changes so you can 
+        /// react accordingly.
+        /// </summary>
         public abstract void StateChanged();
     }
 }

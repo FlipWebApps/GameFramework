@@ -5,29 +5,53 @@ using UnityEngine.UI;
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
     /// <summary>
-    /// code changed from Unity3D gradient effect for Unity3D 5.2
-    /// REF : http://pastebin.com/dJabCfWn
+    /// Provides a gradient effect for UI elements
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Other/GradientText")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class GradientText : BaseMeshEffect
     {
-        [SerializeField] Color32 _topColor = Color.white;
-        [SerializeField] Color32 _bottomColor = Color.black;
+        /// <summary>
+        /// The color to use for the top of the text gradient.
+        /// </summary>
+        public Color32 TopColor {
+            get { return _topColor; }
+            set { _topColor = value; }
+        }
+        [Tooltip("The color to use for the top of the text color gradient.")]
+        [SerializeField]
+        Color32 _topColor = Color.white;
 
+        /// <summary>
+        /// The color to use for the bottom of the text gradient.
+        /// </summary>
+        public Color32 BottomColor
+        {
+            get { return _bottomColor; }
+            set { _bottomColor = value; }
+        }
+        [Tooltip("The color to use for the bottom of the text color gradient.")]
+        [SerializeField]
+        Color32 _bottomColor = Color.black;
+
+
+        /// <summary>
+        /// Modify the mesh colors to give a gradient affect.
+        /// </summary>
+        /// <param name="mesh"></param>
         public override void ModifyMesh(Mesh mesh)
         {
             if (!IsActive()) { return; }
             if (mesh == null || mesh.vertexCount <= 0) return;
 
-            int count = mesh.vertexCount;
+            var vertexCount = mesh.vertexCount;
 
-            float bottomY = mesh.vertices[0].y;
-            float topY = mesh.vertices[0].y;
-
-            for (int i = 1; i < count; i++)
+            // get bottom / top y positions.
+            var bottomY = mesh.vertices[0].y;
+            var topY = mesh.vertices[0].y;
+            for (var i = 1; i < vertexCount; i++)
             {
-                float y = mesh.vertices[i].y;
+                var y = mesh.vertices[i].y;
                 if (y > topY)
                 {
                     topY = y;
@@ -38,14 +62,15 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
                 }
             }
 
-            float uiElementHeight = topY - bottomY;
+            // height
+            var height = topY - bottomY;
 
-            List<Color32> newClr = new List<Color32>();
-            for (int i = 0; i < count; i++)
+            var colours = new List<Color32>();
+            for (var i = 0; i < vertexCount; i++)
             {
-                newClr.Add(Color32.Lerp(_bottomColor, _topColor, (mesh.vertices[i].y - bottomY) / uiElementHeight));
+                colours.Add(Color32.Lerp(_bottomColor, _topColor, (mesh.vertices[i].y - bottomY) / height));
             }
-            mesh.SetColors(newClr);
+            mesh.SetColors(colours);
         }
 
         public override void ModifyMesh(VertexHelper vh)

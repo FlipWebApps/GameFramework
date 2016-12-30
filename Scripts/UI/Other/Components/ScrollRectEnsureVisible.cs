@@ -4,13 +4,24 @@ using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
+    /// <summary>
+    /// Provides support for scrolling a scrollrect to ensure that a specified item is displayed.
+    /// </summary>
     [RequireComponent(typeof(ScrollRect))]
     [AddComponentMenu("Game Framework/UI/Other/ScrollRectEnsureVisible")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class ScrollRectEnsureVisible : MonoBehaviour
     {
-        public float Time = 0.1f;
-        public bool Immediate;
+        /// <summary>
+        /// How long to use to scroll any item into view (requires Beautiful Transitions). 0 indicates to display the item immediately.
+        /// </summary>
+        [Tooltip("How long to use to scroll any item into view (requires Beautiful Transitions). 0 indicates to display the item immediately.")]
+        public float Time;
+
+        /// <summary>
+        /// Viewport
+        /// </summary>
+        [Tooltip("Viewport")]
         public RectTransform Viewport;
 
         ScrollRect _scrollRect;
@@ -24,6 +35,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
             _content = _scrollRect.content;
         }
 
+        /// <summary>
+        /// Scroll the RectTransform so that it is centered on the specified target
+        /// </summary>
+        /// <param name="target"></param>
         public void CenterOnItem(RectTransform target)
         {
             // Start and target positions
@@ -57,43 +72,54 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
                 Debug.Log("Clamped normalized position: " + newNormalizedPosition);
             }
 
-            ScrollToPosition(newNormalizedPosition, Immediate);
+            ScrollToPosition(newNormalizedPosition, Time);
         }
 
+
+        /// <summary>
+        /// Get the associated scroll rect's normalised position
+        /// </summary>
+        /// <returns></returns>
         public Vector2 GetScrollPosition()
         {
             return _scrollRect.normalizedPosition;
         }
 
-        public void ScrollToPosition(Vector2 newNormalizedPosition, bool immediate = true)
+
+        /// <summary>
+        /// Scroll to the specified normalised position.
+        /// </summary>
+        /// <param name="newNormalizedPosition"></param>
+        /// <param name="time"></param>
+        public void ScrollToPosition(Vector2 newNormalizedPosition, float time = 0.0f)
         {
-            if (immediate)
+            if (Mathf.Approximately(time, 0.0f))
             {
                 _scrollRect.normalizedPosition = newNormalizedPosition;
             }
             else
             {
-#if ITWEEN
-                iTween.ValueTo(_scrollRect.gameObject, iTween.Hash(
-                    "from", _scrollRect.normalizedPosition,
-                    "to", newNormalizedPosition,
-                    "time", Time,
-                    "easetype", "easeInOutBack",
-                    "onupdate", "TweenOnUpdateCallBack"
-                    ));
-#else
+//#if //BEAUTIFUL_TRANSITIONS
+                //ValueTo(_scrollRect.gameObject, 
+                //    "from", _scrollRect.normalizedPosition,
+                //    "to", newNormalizedPosition,
+                //    "time", time,
+                //    "easetype", "easeInOutBack",
+                //    "onupdate", "TweenOnUpdateCallBack"
+                //    ));
+//#else
                 _scrollRect.normalizedPosition = newNormalizedPosition;
-#endif
+//#endif
             }
         }
 
 
-        public void TweenOnUpdateCallBack(Vector2 pos)
-        {
-            _scrollRect.normalizedPosition = pos;
-        }
+        //public void TweenOnUpdateCallBack(Vector2 pos)
+        //{
+        //    _scrollRect.normalizedPosition = pos;
+        //}
 
-        Vector3 GetWidgetWorldPoint(RectTransform target)
+        static Vector3 GetWidgetWorldPoint(RectTransform target)
         {
             // factor in pivot position + item size
             var pivotOffset = new Vector3((0.5f - target.pivot.x) * target.rect.size.x, (0.5f - target.pivot.y) * target.rect.size.y, 0f);
@@ -101,7 +127,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
             return target.parent.TransformPoint(localPosition);
         }
 
-        Vector3 GetWorldPointInWidget(RectTransform target, Vector3 worldPoint)
+        static Vector3 GetWorldPointInWidget(RectTransform target, Vector3 worldPoint)
         {
             return target.InverseTransformPoint(worldPoint);
         }

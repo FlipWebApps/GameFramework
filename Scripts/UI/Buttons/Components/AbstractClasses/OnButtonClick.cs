@@ -27,7 +27,6 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasse
     /// <summary>
     /// An abstract class for performing an action on a button click and automatically hooking up the button onClick listener
     /// </summary>
-    /// TODO: Move to UI / Input.
     [RequireComponent(typeof(Button))]
     public abstract class OnButtonClick : MonoBehaviour
     {

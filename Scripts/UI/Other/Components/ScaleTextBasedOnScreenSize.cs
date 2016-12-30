@@ -27,6 +27,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
 {
     /// <summary>
     /// NOTE: Is this of any use?
+    /// NOTE: MAY NOT WORK!
     /// </summary>
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/UI/Other/ScaleTextBasedOnScreenSize")]

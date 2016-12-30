@@ -19,40 +19,100 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
+    /// <summary>
+    /// Syncronises UI text, shadows and outline colors agains changing button states
+    /// </summary>
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Buttons/SyncStateTextColors")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class SyncStateTextColors : SyncState
     {
+        /// <summary>
+        /// A color to set any texts to when the button is disabled.
+        /// </summary>
         [Header("Text Color")]
+        [Tooltip("A color to set any texts to when the button is disabled.")]
         public Color DisabledTextColor;
+
+        /// <summary>
+        /// A color to set any texts to when the button is highlighted.
+        /// </summary>
+        [Tooltip("A color to set any texts to when the button is disabled.")]
         public Color HighlightedTextColor;
+
+        /// <summary>
+        /// A color to set any texts to when the button is pressed.
+        /// </summary>
+        [Tooltip("A color to set any texts to when the button is disabled.")]
         public Color PressedTextColor;
 
+        /// <summary>
+        /// A color to set any shadows to when the button is disabled.
+        /// </summary>
         [Header("Shadow Color")]
+        [Tooltip("A color to set any shadows to when the button is disabled.")]
         public Color DisabledShadowColor;
+
+        /// <summary>
+        /// A color to set any shadows to when the button is highlighted.
+        /// </summary>
+        [Tooltip("A color to set any shadows to when the button is disabled.")]
         public Color HighlightedShadowColor;
+
+        /// <summary>
+        /// A color to set any shadows to when the button is pressed.
+        /// </summary>
+        [Tooltip("A color to set any shadows to when the button is disabled.")]
         public Color PressedShadowColor;
 
+        /// <summary>
+        /// A color to set any outlines to when the button is disabled.
+        /// </summary>
         [Header("Outline Color")]
+        [Tooltip("A color to set any outlines to when the button is disabled.")]
         public Color DisabledOutlineColor;
+
+        /// <summary>
+        /// A color to set any outlines to when the button is highlighted.
+        /// </summary>
+        [Tooltip("A color to set any outlines to when the button is highlighted.")]
         public Color HighlightedOutlineColor;
+
+        /// <summary>
+        /// A color to set any outlines to when the button is pressed.
+        /// </summary>
+        [Tooltip("A color to set any outlines to when the button is pressed.")]
         public Color PressedOutlineColor;
+
+
+        /// <summary>
+        /// An array of UI Text components to synchronise with the button.
+        /// </summary>
+        [Tooltip("An array of UI Text components to synchronise with the button.")]
+        Text[] _texts;
+
+        /// <summary>
+        /// An array of UI Shadow components to synchronise with the button.
+        /// </summary>
+        [Tooltip("An array of UI Shadow components to synchronise with the button.")]
+        Shadow[] _shadows;
+
+        /// <summary>
+        /// An array of UI Outline components to synchronise with the button.
+        /// </summary>
+        [Tooltip("An array of UI Outline components to synchronise with the button.")]
+        Outline[] _outlines;
 
         Color _normalTextColor;
         Color _normalShadowColor;
         Color _normalOutlineColor;
-
-        Text[] _texts;
-        Shadow[] _shadows;
-        Outline[] _outlines;
 
         new void Awake()
         {
@@ -71,6 +131,10 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
             base.Awake();
         }
 
+
+        /// <summary>
+        /// Handle state changes and update text, shadows and outline colours accordingly
+        /// </summary>
         public override void StateChanged()
         {
             // determin colour based upon state.

@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,24 +27,35 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
     /// <summary>
     /// When a button is clicked then load the specificed Url
-    /// 
-    /// This automatically hooks up the button onClick listener
     /// </summary>
+    /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickLoadUrl")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class OnButtonClickLoadUrl : MonoBehaviour
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
+    public class OnButtonClickLoadUrl : OnButtonClick
     {
+        /// <summary>
+        /// Url to load if running on Android
+        /// </summary>
+        [Tooltip("Url to load if running on Android")]
         public string AndroidUrl;
+
+        /// <summary>
+        /// Url to load if running on all other platforms
+        /// </summary>
+        [Tooltip("Url to load if running on all other platforms")]
         public string DesktopUrl;
+
+        /// <summary>
+        /// Url to load if running on iOS
+        /// </summary>
+        [Tooltip("Url to load if running on iOS")]
         public string IOsUrl;
 
-        void Start()
-        {
-            gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
-        }
-
-        void OnClick()
+        /// <summary>
+        /// Load the target url when the button is clicked.
+        /// </summary>
+        public override void OnClick()
         {
 #if UNITY_ANDROID
             Application.OpenURL(AndroidUrl);

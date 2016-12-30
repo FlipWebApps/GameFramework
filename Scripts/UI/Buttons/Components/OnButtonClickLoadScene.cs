@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure;
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,22 +29,23 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
 {
     /// <summary>
     /// Load the specified scene when the button is clicked.
-    /// 
-    /// This automatically hooks up the button onClick listener
     /// </summary>
+    /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Buttons/OnButtonClickLoadScene")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class OnButtonClickLoadScene : MonoBehaviour
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
+    public class OnButtonClickLoadScene : OnButtonClick
     {
+        /// <summary>
+        /// The name of the scene to load when the button is clicked.
+        /// </summary>
+        [Tooltip("The name of the scene to load when the button is clicked.")]
         public string SceneName;
 
-        void Start()
-        {
-            gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
-        }
-
-        void OnClick()
+        /// <summary>
+        /// Load the target scene (with any transitions) when the button is clicked.
+        /// </summary>
+        public override void OnClick()
         {
             GameManager.LoadSceneWithTransitions(SceneName);
         }
