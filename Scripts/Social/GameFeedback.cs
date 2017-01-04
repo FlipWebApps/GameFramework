@@ -149,6 +149,9 @@ namespace FlipWebApps.GameFramework.Scripts.Social
                 case RuntimePlatform.IPhonePlayer:
                     text2Key = "GameFeedback.AssumeLikeOptionaliOS";
                     break;
+                default:
+                    text2Key = "GameFeedback.AssumeLikeOptionalAndroid";
+                    break;
             }
 
             DialogManager.Instance.Show("GameFeedbackDialog",
