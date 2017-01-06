@@ -25,17 +25,27 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
     /// <summary>
-    /// Loads the given level when a mouse button is pressed or the screen is tapped anywhere on teh screen
-    /// 
-    /// By setting a list of UI game objects you can set areas that wonwill block the change.
+    /// Loads the given level when a mouse button is pressed or the screen is tapped anywhere on the screen
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/OnMouseClickOrTapSwapDialogInstance")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class OnMouseClickOrTapSwapDialogInstance : OnMouseClickOrTap
     {
+        /// <summary>
+        /// Dialog instance that we want to swap from (the shown dislog instance)
+        /// </summary>
+        [Tooltip("Dialog instance that we want to swap from (the shown dislog instance)")]
         public DialogInstance Source;
+
+        /// <summary>
+        /// Dialog instance that we want to swap to
+        /// </summary>
+        [Tooltip("Dialog instance that we want to swap to")]
         public DialogInstance Target;
 
+        /// <summary>
+        /// Causes the dialog to swap as a result of a click or tap
+        /// </summary>
         public override void RunMethod() {
             if (Source.IsShown)
             {

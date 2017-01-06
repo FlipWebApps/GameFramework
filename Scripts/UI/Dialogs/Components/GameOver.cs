@@ -52,7 +52,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// </summary>
     [RequireComponent(typeof(DialogInstance))]
     [AddComponentMenu("Game Framework/UI/Dialogs/GameOver")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class GameOver : Singleton<GameOver>
     {
         public enum CopyType
@@ -80,15 +80,27 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         [Header("Tuning")]
         public float PeriodicUpdateDelay = 1f;
 
+        /// <summary>
+        /// The DialogInstance associated with the game over dialog.
+        /// </summary>
         protected DialogInstance DialogInstance;
 
+
+        /// <summary>
+        /// Called when this instance is created for one time initialisation.
+        /// </summary>
+        /// Override this in your own base class if you want to customise the game over window. Be sure to call this base instance first.
         protected override void GameSetup()
         {
             DialogInstance = GetComponent<DialogInstance>();
-
-            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details).");
+            Assert.IsNotNull(DialogInstance.Target, "Ensure that you have set the script execution order of dialog instance in project settings (see help for details).");
         }
 
+
+        /// <summary>
+        /// Shows the game over dialog.
+        /// </summary>
+        /// Override this in your own base class if you want to customise the game over window. Be sure to call this base instance when done.
         public virtual void Show(bool isWon)
         {
             Assert.IsTrue(LevelManager.IsActive, "Ensure that you have a LevelManager component attached to your scene.");
@@ -168,7 +180,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
 
             // set time
-            TimeSpan difference = DateTime.Now - LevelManager.Instance.StartTime;
+            var difference = DateTime.Now - LevelManager.Instance.StartTime;
             var timeGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Time", true);
             GameObjectHelper.SafeSetActive(timeGameObject, ShowTime);
             if (ShowTime)
@@ -212,7 +224,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             //TODO bug - as we increase TimesPlayedForRatingPrompt on both game start (GameManager) and level finish we can miss this comparison.
             if (GameManager.Instance.TimesPlayedForRatingPrompt == TimesPlayedBeforeRatingPrompt)
             {
-                GameFeedback gameFeedback = new GameFeedback();
+                var gameFeedback = new GameFeedback();
                 gameFeedback.GameFeedbackAssumeTheyLikeOptional();
             }
 
@@ -233,6 +245,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                 StartCoroutine(PeriodicUpdate());
         }
 
+
         void StarWon(int starsWon, int newStarsWon, GameObject starGameObject, int bitMask)
         {
             // default state
@@ -248,6 +261,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
         }
 
+
         public virtual IEnumerator PeriodicUpdate()
         {
             while (true)
@@ -261,9 +275,8 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
         /// <summary>
         /// If LevelManager is in use then we return the difference between stars that were recorded at the start and those that are recorded now.
-        /// 
-        /// You may also override this function if you wish to provide your own handling such as allocating stars only on completion.
         /// </summary>
+        /// You may also override this function if you wish to provide your own handling such as allocating stars only on completion.
         /// <returns></returns>
         public virtual int GetNewStarsWon()
         {
@@ -276,9 +289,12 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         }
 
 
+        /// <summary>
+        /// Update the display for needed coins to unlock a new level if that option is in use.
+        /// </summary>
         public void UpdateNeededCoins()
         {
-            int minimumCoins = GameManager.Instance.Levels.ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
+            var minimumCoins = GameManager.Instance.Levels.ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
             var targetCoinsGameobject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "TargetCoins", true);
             if (targetCoinsGameobject != null)
             {
@@ -293,6 +309,11 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
         }
 
+
+
+        /// <summary>
+        /// Callback for sharing to Facebook
+        /// </summary>
         public void FacebookShare()
         {
 #if FACEBOOK_SDK
@@ -300,11 +321,19 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 #endif
         }
 
+
+        /// <summary>
+        /// Callback for continuing to the scene specified in ContinueScene
+        /// </summary>
         public void Continue()
         {
             GameManager.LoadSceneWithTransitions(ContinueScene);
         }
 
+
+        /// <summary>
+        /// Callback for retrying the current level - reloads the current scene
+        /// </summary>
         public void Retry()
         {
             var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ? SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;

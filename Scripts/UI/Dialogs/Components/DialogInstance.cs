@@ -19,6 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+
+using System;
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
 #endif
@@ -34,25 +36,18 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
     /// <summary>
     /// Represents an instance of a dialog. Allows for animation and managing feedback state.
-    /// 
+    /// </summary>
     /// Dialog Instance should always be on the root of a dialog and be accompanied by an Animator. It should have a child gameobject called Dialog.
     /// Check teh existing prefabs for an example of how this should be setup.
-    /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/DialogInstance")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class DialogInstance : MonoBehaviour
     {
-        public bool ShowOnStart;
+        #region enums
 
-        public System.Action<DialogInstance> DoneCallback;
-        bool _destroyOnClose;
-
-        public GameObject DialogGameObject { get; set; }
-        public GameObject Content { get; set; }
-        public Animator ContentAnimator { get; set; }
-        public GameObject CustomContentItem { get; set; }
-        public bool IsShown { get; set; }
-
+        /// <summary>
+        /// Results that can be returned from the dialog.
+        /// </summary>
         public enum DialogResultType
         {
             Ok,
@@ -62,9 +57,9 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             Custom
         }
 
-        public DialogResultType DialogResult { get; set; }
-        public int DialogResultCustom { get; set; }
-
+        /// <summary>
+        /// The dialog buttons that should be shown
+        /// </summary>
         public enum DialogButtonsType
         {
             Custom,
@@ -74,21 +69,125 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             YesNo
         }
 
-        public DialogButtonsType DialogButtons { get; set; }
+        #endregion enums
 
+        #region editor fields
+
+        /// <summary>
+        /// Whether to show the dialog on start
+        /// </summary>
+        [Tooltip("Whether to show the dialog on start")]
+        public bool ShowOnStart;
+
+        /// <summary>
+        /// The target / gameobject root for the dialog. If not specified then will use a child gameobject assuming there is only a single child gameobject.
+        /// </summary>
+        /// See Level for more information.
+        public GameObject Target
+        {
+            get
+            {
+                return _target;
+            }
+            set
+            {
+                _target = value;
+            }
+        }
+        [Tooltip("The target / gameobject root for the dialog. If not specified then will use a child gameobject assuming there is only a single child gameobject.")]
+        [SerializeField]
+        GameObject _target;
+
+        /// <summary>
+        /// An optional gameobject underwhich the dialog content is located. Used for inserting custom content. If not specified then will use a child gameobject named 'Content' if found.
+        /// </summary>
+        /// See Level for more information.
+        public GameObject Content
+        {
+            get
+            {
+                return _content;
+            }
+            set
+            {
+                _content = value;
+            }
+        }
+        [Tooltip("An optional gameobject underwhich the dialog content is located. Used for inserting custom content. If not specified then will use a child gameobject named 'Content' if found.")]
+        [Header("Advanced")]
+        [SerializeField]
+        GameObject _content;
+
+        #endregion editor fields
+
+
+        [Obsolete("Use Target instead.")]
+        public GameObject DialogGameObject
+        {
+            get { return Target; }
+            set { Target = value; }
+        }
+
+        /// <summary>
+        /// An animator used for animating the content
+        /// </summary>
+        public Animator ContentAnimator { get; set; }
+
+        /// <summary>
+        /// Instanciated instance of any passed custom content prefab
+        /// </summary>
+        public GameObject CustomContentItem { get; set; }
+
+        /// <summary>
+        /// Whether the dialog is currently shown
+        /// </summary>
+        public bool IsShown { get; set; }
+
+
+        /// <summary>
+        /// A callback that will be triggered when the dialog completes
+        /// </summary>
+        public Action<DialogInstance> DoneCallback;
+
+        /// <summary>
+        /// The dialog result
+        /// </summary>
+        public DialogResultType DialogResult { get; set; }
+
+        /// <summary>
+        /// A custom result value for your own use.
+        /// </summary>
+        public int DialogResultCustom { get; set; }
+
+
+        DialogButtonsType _dialogButtons;
         DialogInstance _swapToDialogInstance;
+        bool _destroyOnClose;
+
 
         void Awake()
         {
-            DialogGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Dialog", true);
-            Assert.IsNotNull(DialogGameObject, "A DialogInstance component must always have a direct child called 'Dialog'");
+            // if target is not specified then use a child gameobject
+            if (Target == null)
+                Target = gameObject.transform.childCount == 1 ? 
+                    gameObject.transform.GetChild(0).gameObject : 
+                    GameObjectHelper.GetChildNamedGameObject(gameObject, "Dialog", true);
+            Assert.IsNotNull(Target, "If there are multiple children gameobjects to DialogInstance then you must specify Target.");
+            Assert.AreNotEqual(gameObject, Target, "The DialogInstance Target should not be the same as the gameobject to which DialogInstance is added. Usually Target will be the immediate child of the gameobject with DialogInstance.");
 
-            Content = GameObjectHelper.GetChildNamedGameObject(gameObject, "Content", true);
+            // set content from child Content gameobject if not specified.
+            if (Content == null)
+                Content = GameObjectHelper.GetChildNamedGameObject(Target, "Content", true);
             if (Content != null)
                 ContentAnimator = Content.GetComponent<Animator>();
-            IsShown = DialogGameObject.activeSelf;
+
+            IsShown = Target.activeSelf;
         }
 
+
+        /// <summary>
+        /// Show immediately if show on start is specified.
+        /// </summary>
         void Start()
         {
             if (ShowOnStart)
@@ -97,6 +196,20 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
         }
 
+
+        /// <summary>
+        /// Show the dialog instance substituting in passed values and running any transitions.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="titleKey"></param>
+        /// <param name="text"></param>
+        /// <param name="textKey"></param>
+        /// <param name="text2"></param>
+        /// <param name="text2Key"></param>
+        /// <param name="sprite"></param>
+        /// <param name="doneCallback"></param>
+        /// <param name="destroyOnClose"></param>
+        /// <param name="dialogButtons"></param>
         public void Show(string title = null, string titleKey = null, string text = null, string textKey = null,
             string text2 = null, string text2Key = null, Sprite sprite = null,
             System.Action<DialogInstance> doneCallback = null, bool destroyOnClose = true,
@@ -104,7 +217,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
             GameObject childGameObject;
 
-            DialogButtons = dialogButtons;
+            _dialogButtons = dialogButtons;
             DoneCallback = doneCallback;
             _destroyOnClose = destroyOnClose;
 
@@ -151,7 +264,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                     childGameObject.SetActive(false);
             }
 
-            switch (DialogButtons)
+            switch (_dialogButtons)
             {
                 case DialogButtonsType.Ok:
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
@@ -171,7 +284,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 
             // show / transition in and when done call coroutine
             float transitionTime = 0;
-            DialogGameObject.SetActive(true);
+            Target.SetActive(true);
 #if BEAUTIFUL_TRANSITIONS
             //if (TransitionHelper.ContainsTransition(gameObject))
             //{
@@ -185,42 +298,72 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
         {
         }
 
+
+        /// <summary>
+        /// Complete the current dialog and swap to the specified one, running any transitions (requires Beautiful Transitions)
+        /// </summary>
+        /// <param name="dialogInstance"></param>
         public void SwapTo(DialogInstance dialogInstance)
         {
             _swapToDialogInstance = dialogInstance;
             Done();
         }
 
+
+        /// <summary>
+        /// Complete the dialog with DialogResult.Ok
+        /// </summary>
         public void DoneOk()
         {
             DialogResult = DialogResultType.Ok;
             Done();
         }
 
+
+        /// <summary>
+        /// Complete the dialog with DialogResult.Cancel
+        /// </summary>
         public void DoneCancel()
         {
             DialogResult = DialogResultType.Cancel;
             Done();
         }
 
+
+        /// <summary>
+        /// Complete the dialog with DialogResult.Yes
+        /// </summary>
         public void DoneYes()
         {
             DialogResult = DialogResultType.Yes;
             Done();
         }
 
+
+        /// <summary>
+        /// Complete the dialog with DialogResult.No
+        /// </summary>
         public void DoneNo()
         {
             DialogResult = DialogResultType.No;
             Done();
         }
 
+
+        /// <summary>
+        /// Complete the dialog with DialogResult.Custom and then specified custom return code.
+        /// </summary>
         public void DoneCustom(int customReturnCode)
         {
             DialogResult = DialogResultType.Custom;
             DialogResultCustom = customReturnCode;
             Done();
         }
+
+
+        /// <summary>
+        /// Complete the dialog
+        /// </summary>
 
         public void Done()
         {
@@ -235,12 +378,16 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, DoneFinished));
         }
 
+
+        /// <summary>
+        /// Callback when the dialog is ready to close
+        /// </summary>
         public void DoneFinished()
         {
             if (DoneCallback != null)
                 DoneCallback(this);
 
-            DialogGameObject.SetActive(false);
+            Target.SetActive(false);
 
             if (_destroyOnClose)
                 Destroy(gameObject);

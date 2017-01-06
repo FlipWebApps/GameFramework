@@ -37,36 +37,48 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// <summary>
     /// Base class for a settings dialog that contains built in support for settings audio and effect volumes and restoring 
     /// in app purchases.
-    /// 
-    /// You can override this class to add additional functionality.
     /// </summary>
+    /// You can override this class to add additional functionality.
     [RequireComponent(typeof(DialogInstance))]
     [AddComponentMenu("Game Framework/UI/Dialogs/Settings")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class Settings : Singleton<Settings>
     {
-        GameObject _canvas;
-        UnityEngine.UI.Slider _musicVolume, _sfxVolume;
-        UnityEngine.UI.Dropdown _language;
-
+        /// <summary>
+        /// The DialogInstance associated with the settings dialog.
+        /// </summary>
         protected DialogInstance DialogInstance;
+
+        Slider _musicVolume, _sfxVolume;
+        Dropdown _language;
         float _oldBackGroundAudioVolume;
 
+
+        /// <summary>
+        /// Called when this instance is created for one time initialisation.
+        /// </summary>
+        /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance first.
         protected override void GameSetup()
         {
             DialogInstance = GetComponent<DialogInstance>();
+            Assert.IsNotNull(DialogInstance.Target, "Ensure that you have set the script execution order of dialog instance in project settings (see help for details.");
 
-            Assert.IsNotNull(DialogInstance.DialogGameObject, "Ensure that you have set the script execution order of dialog instance in settings (see help for details.");
-
-            _musicVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "MusicSlider", true);
-            _sfxVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Slider>(DialogInstance.DialogGameObject, "SfxSlider", true);
-            _language = GameObjectHelper.GetChildComponentOnNamedGameObject<UnityEngine.UI.Dropdown>(DialogInstance.DialogGameObject, "LanguageDropdown", true);
+            _musicVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<Slider>(DialogInstance.Target, "MusicSlider", true);
+            _sfxVolume = GameObjectHelper.GetChildComponentOnNamedGameObject<Slider>(DialogInstance.Target, "SfxSlider", true);
+            _language = GameObjectHelper.GetChildComponentOnNamedGameObject<Dropdown>(DialogInstance.Target, "LanguageDropdown", true);
         }
 
+
+        /// <summary>
+        /// Shows the settings dialog.
+        /// </summary>
+        /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance when done.
         public virtual void Show()
         {
-            // set values
+            // save any values in case of cancel
             _oldBackGroundAudioVolume = GameManager.Instance.BackGroundAudioVolume;
+
+            // set values in UI
             _musicVolume.value = GameManager.Instance.BackGroundAudioVolume;
             _sfxVolume.value = GameManager.Instance.EffectAudioVolume;
             _language.options = (from item in LocaliseText.AllowedLanguages select new Dropdown.OptionData(LocaliseText.Get("Language.LocalisedName", item))).ToList();
@@ -74,9 +86,16 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
                 if (LocaliseText.AllowedLanguages[i] == LocaliseText.Language)
                     _language.value = i;
 
+            // show the dialog
             DialogInstance.Show(doneCallback: DoneCallback, destroyOnClose: false);
         }
 
+
+        /// <summary>
+        /// Called when the dialog completes so you can save values or do other adjustments.
+        /// </summary>
+        /// Check DialogInstance.DialogResult to find out the action that caused the dialog to complete.
+        /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance when done.
         public virtual void DoneCallback(DialogInstance dialogInstance)
         {
             if (DialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
@@ -91,16 +110,28 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             }
         }
 
+
+        /// <summary>
+        /// Callback for when the music volume is changed to preview the difference immediately.
+        /// </summary>
         public void MusicVolumeChanged()
         {
             GameManager.Instance.BackGroundAudioVolume = _musicVolume.value;
         }
 
+
+        /// <summary>
+        /// Callback for when the language is changed to preview the difference immediately.
+        /// </summary>
         public void LanguageChanged(int index)
         {
             LocaliseText.Language = LocaliseText.AllowedLanguages[index];
         }
 
+
+        /// <summary>
+        /// Callback for restoring purchases.
+        /// </summary>
         public void RestorePurchases()
         {
 #if UNITY_PURCHASING

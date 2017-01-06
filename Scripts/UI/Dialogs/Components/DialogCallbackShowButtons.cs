@@ -27,17 +27,19 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
     /// <summary>
     /// Call back that will show the specified dialog buttons. 
-    /// 
+    /// </summary>
     /// This might typically be triggered from an animation to only show buttons dialog after an animation is
     /// shown. This can be used to stop the user clicking and exiting a dialog before we have shown what we
     /// want to show.
-    /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/DialogCallbackShowButtons")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class DialogCallbackShowButtons : MonoBehaviour
     {
         public DialogInstance.DialogButtonsType Buttons = DialogInstance.DialogButtonsType.Ok;
 
+        /// <summary>
+        /// Method that you should invoke to display the dialog buttons.
+        /// </summary>
         void ShowDialogButtons()
         {
             Assert.AreEqual(DialogInstance.DialogButtonsType.Ok, Buttons, "Currently only Ok button is supported.");

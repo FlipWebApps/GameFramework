@@ -28,19 +28,49 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
     /// Shows the given dialog a single time
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/ShowDialogOnce")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class ShowDialogOnce : MonoBehaviour
     {
+        /// <summary>
+        /// A unique key that identifies this dialog used for checking if it has been previously displayed.
+        /// </summary>
+        [Tooltip("A unique key that identifies this dialog used for checking if it has been previously displayed.")]
         public string DialogKey;
+
+        /// <summary>
+        /// The name of a prefab to display. If not specified then the GeneralMessage prefab will be used.
+        /// </summary>
+        [Tooltip("The name of a prefab to display. If not specified then the GeneralMessage prefab will be used.")]
         public string PrefabName;
+
+        /// <summary>
+        /// An optional localisation key for the dialog title
+        /// </summary>
+        [Tooltip("Localisation key for the dialog title")]
         public string TitleKey;
+
+        /// <summary>
+        /// An optional localisation key for the dialog text
+        /// </summary>
+        [Tooltip("Localisation key for the dialog text")]
         public string TextKey;
+
+        /// <summary>
+        /// An optional localisation key for the dialog text 2
+        /// </summary>
+        [Tooltip("Localisation key for the dialog text 2")]
         public string Text2Key;
+
+        /// <summary>
+        /// An optional sprite to display
+        /// </summary>
+        [Tooltip("An optional sprite to display")]
         public Sprite Sprite;
 
         void Start()
         {
             Assert.IsTrue(DialogManager.IsActive, "To use the ShowDialogOnce component, you must have a DialogManager added to your scene.");
+            Assert.IsFalse(string.IsNullOrEmpty(DialogKey), "You must specify the Dialogkey");
 
             DialogManager.Instance.ShowOnce(DialogKey, PrefabName, titleKey: TitleKey, textKey: TextKey, text2Key: Text2Key,
                 sprite: Sprite);

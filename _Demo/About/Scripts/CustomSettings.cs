@@ -37,7 +37,7 @@ namespace FlipWebApps.GameFramework._Demo.Scripts
         /// </summary>
         public override void Show()
         {
-            _playBackSpeedSlider = GameObjectHelper.GetChildComponentOnNamedGameObject<Slider>(DialogInstance.DialogGameObject, "PlaybackSpeedSlider", true);
+            _playBackSpeedSlider = GameObjectHelper.GetChildComponentOnNamedGameObject<Slider>(DialogInstance.Target, "PlaybackSpeedSlider", true);
             _playBackSpeedSlider.value = 35 - Demo.PlaybackSpeed;
 
             base.Show();

@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -27,23 +28,28 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
     /// <summary>
     /// Show the settings dialog
-    /// 
-    /// This automatically hooks up the button onClick listener
     /// </summary>
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Dialogs/OnButtonClickSwapDialogInstance")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class OnButtonClickSwapDialogInstance : MonoBehaviour
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
+    public class OnButtonClickSwapDialogInstance : OnButtonClick
     {
+        /// <summary>
+        /// Dialog instance that we want to swap from (the shown dislog instance)
+        /// </summary>
+        [Tooltip("Dialog instance that we want to swap from (the shown dislog instance)")]
         public DialogInstance Source;
+
+        /// <summary>
+        /// Dialog instance that we want to swap to
+        /// </summary>
+        [Tooltip("Dialog instance that we want to swap to")]
         public DialogInstance Target;
 
-        void Start()
-        {
-            gameObject.GetComponent<Button>().onClick.AddListener(OnClick);
-        }
-
-        void OnClick()
+        /// <summary>
+        /// Causes the dialog to swap when the button is clicked.
+        /// </summary>
+        public override void OnClick()
         {
             if (Source.IsShown)
             {

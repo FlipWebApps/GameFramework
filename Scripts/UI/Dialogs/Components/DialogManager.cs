@@ -30,23 +30,54 @@ using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
 {
+    /// <summary>
+    /// Provides dialog creation, display and management functionality.
+    /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/DialogManager")]
-    [HelpURL("http://www.flipwebapps.com/game-framework/")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class DialogManager : Singleton<DialogManager>
     {
-        public int Count;
+        #region editor fields
+
+        /// <summary>
+        /// An optional UI camera that should be substituted into created dialogs
+        /// </summary>
+        [Tooltip("An optional UI camera that should be substituted into created dialogs")]
         public Camera UiCamera;
 
         /// <summary>
         /// Use the dialog overrides for setting what prefabs should be used. We do this rather than loading from resources so that we don't
         /// unclude unnecessary assets.
         /// </summary>
+        [Tooltip("for setting what prefabs should be used for the different dialogs.")]
         public DialogPrefabOverride[] DialogPrefabOverrides =
         {
             new DialogPrefabOverride { Path = "GeneralMessage"},
             new DialogPrefabOverride { Path = "GameFeedbackDialog"}
         };
 
+        #endregion editor fields
+
+        /// <summary>
+        /// A counter of the number of dialogs that DialogManager is currently displaying
+        /// </summary>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// Show a dialog one time only using the specified dialog as a key for identifying this instance.
+        /// </summary>
+        /// <param name="dialogKey"></param>
+        /// <param name="prefab"></param>
+        /// <param name="title"></param>
+        /// <param name="titleKey"></param>
+        /// <param name="text"></param>
+        /// <param name="textKey"></param>
+        /// <param name="text2"></param>
+        /// <param name="text2Key"></param>
+        /// <param name="sprite"></param>
+        /// <param name="doneCallback"></param>
+        /// <param name="dialogButtons"></param>
+        /// <returns></returns>
         public DialogInstance ShowOnce(string dialogKey, string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
             // show hint panel first time only
@@ -60,53 +91,94 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             return null;
         }
 
+        /// <summary>
+        /// Show a general error dialog with passed content
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="textKey"></param>
+        /// <param name="text2"></param>
+        /// <param name="text2Key"></param>
+        /// <param name="sprite"></param>
+        /// <param name="doneCallback"></param>
+        /// <returns></returns>
         public DialogInstance ShowError(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null)
         {
             return Show(null, null, "GeneralMessage.Error.Title", text, textKey, text2, text2Key, sprite, doneCallback);
         }
 
+        /// <summary>
+        /// Show a general info dialog with passed content
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="textKey"></param>
+        /// <param name="text2"></param>
+        /// <param name="text2Key"></param>
+        /// <param name="sprite"></param>
+        /// <param name="doneCallback"></param>
+        /// <returns></returns>
         public DialogInstance ShowInfo(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null)
         {
             return Show(null, null, "GeneralMessage.Info.Title", text, textKey, text2, text2Key, sprite, doneCallback);
         }
 
-        public DialogInstance Show(string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
-        {
-            DialogInstance generalMessage = Create(prefab);
-            generalMessage.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons);
-            return generalMessage;
-        }
-
-
         /// <summary>
-        /// Create an instance of the given dialog prefab
+        /// Show a dialog with passed content, defaulting to the general message dialog if no prefabName is passed.
         /// </summary>
-        /// <param name="dialogPrefab"></param>
+        /// <param name="prefabName"></param>
+        /// <param name="title"></param>
+        /// <param name="titleKey"></param>
+        /// <param name="text"></param>
+        /// <param name="textKey"></param>
+        /// <param name="text2"></param>
+        /// <param name="text2Key"></param>
+        /// <param name="sprite"></param>
+        /// <param name="doneCallback"></param>
+        /// <param name="dialogButtons"></param>
         /// <returns></returns>
-        public DialogInstance Create(GameObject dialogPrefab = null)
+        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
-            if (dialogPrefab == null) dialogPrefab = GetPrefab("GeneralMessage");
-
-            var dialogPrefabInstance = Instantiate(dialogPrefab);
-            dialogPrefabInstance.transform.SetParent(transform);
-            dialogPrefabInstance.transform.localPosition = Vector3.zero;
-
-            var canvas = dialogPrefabInstance.GetComponentInChildren<Canvas>(true);
-            if (canvas != null)
-                canvas.worldCamera = UiCamera;
-
-            return dialogPrefabInstance.GetComponent<DialogInstance>();
+            var dialogInstance = Create(prefabName);
+            dialogInstance.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons);
+            return dialogInstance;
         }
 
 
         /// <summary>
-        /// Create an instance of the specified named prefab, or use the default GeneralMessage prefab if nothing is specified.
+        /// Create an instance of the specified named prefab, or use the default GeneralMessage prefab if not found.
         /// </summary>
         /// <param name="prefabName"></param>
         /// <returns></returns>
         public DialogInstance Create(string prefabName)
         {
-            return Create(GetPrefab(prefabName));
+            return string.IsNullOrEmpty(prefabName) ?
+                Create() :
+                Create(LoadPrefab(prefabName));
+        }
+
+
+        /// <summary>
+        /// Create an instance of the given dialog prefab, or use the default GeneralMessage prefab if nothing is specified.
+        /// </summary>
+        /// <param name="dialogPrefab"></param>
+        /// <returns></returns>
+        public DialogInstance Create(GameObject dialogPrefab = null)
+        {
+            if (dialogPrefab == null) dialogPrefab = LoadPrefab("GeneralMessage");
+
+            // create prefab instance
+            var dialogPrefabInstance = Instantiate(dialogPrefab);
+            dialogPrefabInstance.transform.SetParent(transform);
+            dialogPrefabInstance.transform.localPosition = Vector3.zero;
+
+            // set camera
+            if (UiCamera != null)
+            {
+                var canvas = dialogPrefabInstance.GetComponentInChildren<Canvas>(true);
+                if (canvas != null)
+                    canvas.worldCamera = UiCamera;
+            }
+
+            return dialogPrefabInstance.GetComponent<DialogInstance>();
         }
 
 
@@ -128,7 +200,7 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             // if no content prefab then get from name if specified.
             if (contentPrefab == null && contentPrefabName != null)
             {
-                contentPrefab = GetPrefab("Content/" + contentPrefabName);
+                contentPrefab = LoadPrefab("Content/" + contentPrefabName);
                 Assert.IsNotNull(contentPrefab, "Unable to find named content prefab 'Content/" + contentPrefabName + "'");
             }
 
@@ -152,7 +224,13 @@ namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
             return dialogInstance;
         }
 
-        GameObject GetPrefab(string prefab)
+
+        /// <summary>
+        /// Load the prefab for the given prefab name
+        /// </summary>
+        /// <param name="prefab"></param>
+        /// <returns></returns>
+        GameObject LoadPrefab(string prefab)
         {
             foreach (var dialogOverride in DialogPrefabOverrides.Where(dialogOverride => dialogOverride.Path == prefab && dialogOverride.Prefab != null))
                 return dialogOverride.Prefab;
