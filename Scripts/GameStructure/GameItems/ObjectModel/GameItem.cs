@@ -25,6 +25,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
+using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -35,12 +36,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// </summary>
     /// This provides many of the common features that game items need such as a name and description, 
     /// localisation support, the ability to unlock, a score or value etc.
-    public class GameItem
+    public class GameItem : ScriptableObject
     {
         /// <summary>
         /// Ways in which a GameItem can be unlocked
         /// </summary>
         public enum UnlockModeType { Custom, Completion, Coins }
+
+        #region Editor Parameters
+
+        public LocalisableText LocalisableName;
+        public LocalisableText LocalisableDescription;
+
+
+        /// <summary>
+        /// A value that is needed to unlock this item.
+        /// </summary>
+        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
+        /// -1 means that you can not unlock this item in this way.
+        public int ValueToUnlock;
+
+        #endregion Editor Parameters
 
         /// <summary>
         /// A unique identifier for this type of GameItem (override in your derived classes)
@@ -57,6 +73,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public virtual string IdentifierBasePrefs { get; protected set; }
 
         /// <summary>
+        /// A number that represents this game item that is unique for this class of GameItem
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
         /// Returns whether this GameItem is setup and initialised.
         /// </summary>
         public bool IsInitialised { get; private set; }
@@ -66,13 +87,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// Many game items will hold unique values depending upon the player e.g. high score. This field is used to identify 
         /// the current player that the GameItem represents.
-        public Player Player;
+        public Player Player { get; private set; }
         //public GameItem Parent;
 
-        /// <summary>
-        /// A number that represents this game item that is unique for this class of GameItem
-        /// </summary>
-        public int Number { get; protected set; }
 
         /// <summary>
         /// The name of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
@@ -80,14 +97,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public string Name {
             get
             {
-                return _localiseName? LocaliseText.Get(FullKey(_name ?? "Name")) : _name;
-            }
-            set
-            {
-                _name = value;
+                return LocalisableName.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Name")) : LocalisableName.GetValue();
             }
         }
-        string _name;
 
         /// <summary>
         /// A description of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
@@ -96,14 +108,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             get
             {
-                return _localiseDescription ? LocaliseText.Get(FullKey(_description ?? "Desc")) : _description;
-            }
-            set
-            {
-                _description = value;
+                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Desc")) : LocalisableDescription.GetValue();
             }
         }
-        string _description;
 
         /// <summary>
         /// A sprite that is associated with this gameitem. 
@@ -129,13 +136,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Whether the current item has been is purchased. Saved at the root level for all players.
         /// </summary>
         public bool IsBought { get; set; }
-
-        /// <summary>
-        /// A value that is needed to unlock this item.
-        /// </summary>
-        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
-        /// -1 means that you can not unlock this item in this way.
-        public int ValueToUnlock { get; set; }
 
         /// <summary>
         /// A global high score for this GameItem for all local players
@@ -247,11 +247,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
 
         bool _isPlayer;
-        bool _localiseName;
-        bool _localiseDescription;
 
         #region Initialisation
 
+        /// <summary>
+        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        /// </summary>
+        /// <param name="number"></param>
+        public void Initialise(int number)
+        {
+            Initialise(number, LocalisableText.CreateNonLocalised(), LocalisableText.CreateNonLocalised());
+        }
 
         /// <summary>
         /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
@@ -259,16 +266,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="number"></param>
         /// <param name="name"></param>
-        /// <param name="localiseName">Whether name represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="description"></param>
-        /// <param name="localiseDescription">Whether description represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="sprite"></param>
         /// <param name="valueToUnlock"></param>
         /// <param name="player"></param>
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
         /// <param name="loadFromResources">Whether a resources file is present with additional information</param>
-        public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        public void Initialise(int number, LocalisableText name, LocalisableText description, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "") //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
@@ -278,27 +283,52 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
             Player = player ?? (_isPlayer ? null : GameManager.Instance.Player);
             //Parent = parent;
-            _localiseName = localiseName;
-            Name = name;
-            _localiseDescription = localiseDescription;
-            Description = description;
+            LocalisableName = name;
+            LocalisableDescription = description;
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than pre player.
-            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than pre player.
+            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
+            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
             OldHighScoreLocalPlayers = HighScoreLocalPlayers;
 
             Coins = 0;
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than pre player.
+            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
-            if (loadFromResources)
-                LoadData();
+            // allow for any custom game item specific initialisation
+            CustomInitialisation();
+
+            IsInitialised = true;
+        }
+
+
+        /// <summary>
+        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        /// </summary>
+        public void InitialiseResources()
+        {
+            _isPlayer = IdentifierBase == "Player";
+
+            // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
+            Player = GameManager.Instance.Player;
+
+            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
+            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
+            OldHighScoreLocalPlayers = HighScoreLocalPlayers;
+
+            Coins = 0;
+            Score = 0;
+            HighScore = GetSettingInt("HS", 0);
+            OldHighScore = HighScore;
+            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
+            IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
+            IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
@@ -317,9 +347,23 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
         }
 
+
+        /// <summary>
+        /// Load a gameitem of the specified type and number from resources
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="number"></param>
+        public static T LoadGameItemFromResources<T>(string typeName, int number) where T: GameItem
+        {
+            var gameItem = GameManager.LoadResource<T>(typeName + "\\" + typeName + "_" + number);
+            gameItem.Number = number;
+            return gameItem;
+        }
+
         #endregion Initialisation
 
         #region Load Data
+
         /// <summary>
         /// Load simple meta data associated with this game item.
         /// </summary>
@@ -328,16 +372,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public void LoadData()
         {
             if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJSONDataFile();
-            if (GameItemExtensionData == null)
-                GameItemExtensionData = LoadGameItemExtension();
-
-            Assert.IsFalse(JsonConfigurationData == null && GameItemExtensionData == null, "When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-
+                JsonConfigurationData = LoadJsonDataFile();
+            Assert.IsFalse(JsonConfigurationData == null && GameItemExtensionData == null, "When loading game item from resources, corresponding JSON should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
             if (JsonConfigurationData!=null)
                 ParseData(JsonConfigurationData);
-            else if (GameItemExtensionData != null)
-                ParseData(GameItemExtensionData);
         }
 
 
@@ -352,30 +390,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public virtual void ParseData(JSONObject jsonObject)
         {
             if (jsonObject.ContainsKey("name"))
-                Name = jsonObject.GetString("name");
+                LocalisableName = LocalisableText.CreateNonLocalised(jsonObject.GetString("name"));
             if (jsonObject.ContainsKey("description"))
-                Description = jsonObject.GetString("description");
+                LocalisableDescription = LocalisableText.CreateNonLocalised(jsonObject.GetString("description"));
             if (jsonObject.ContainsKey("valuetounlock"))
                 ValueToUnlock = (int)jsonObject.GetNumber("valuetounlock");
-        }
-
-
-        /// <summary>
-        /// Parse the loaded GameItemExtension object and extract certain default values
-        /// </summary>
-        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
-        /// If overriding from a base class be sure to call base.ParseData()
-        /// <param name="gameItemExtension"></param>
-        public virtual void ParseData(GameItemExtension gameItemExtension)
-        {
-            if (!string.IsNullOrEmpty(gameItemExtension.Name))
-                Name = gameItemExtension.Name;
-            if (!string.IsNullOrEmpty(gameItemExtension.Description))
-                Description = gameItemExtension.Description;
-            if (gameItemExtension.OverrideValueToUnlock)
-                ValueToUnlock = gameItemExtension.ValueToUnlock;
         }
 
 
@@ -387,7 +406,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public void LoadGameData()
         {
             if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJSONDataFile();
+                JsonConfigurationData = LoadJsonDataFile();
             Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
             ParseGameData(JsonConfigurationData);
         }
@@ -407,36 +426,15 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Load the json file that corresponds to this item.
         /// </summary>
         /// <param name="jsonObject"></param>
-        JSONObject LoadJSONDataFile()
+        JSONObject LoadJsonDataFile()
         {
-            TextAsset jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            var jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
             if (jsonTextAsset == null) return null;
-
-            MyDebug.Log(jsonTextAsset.text);
-            JSONObject jsonObject = JSONObject.Parse(jsonTextAsset.text);
+            //MyDebug.Log(jsonTextAsset.text);
+            var jsonObject = JSONObject.Parse(jsonTextAsset.text);
             return jsonObject;
         }
 
-
-        /// <summary>
-        /// Load the GameItemExtension that corresponds to this item.
-        /// </summary>
-        GameItemExtension LoadGameItemExtension()
-        {
-            GameItemExtension giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (giExtension == null) return null;
-            return giExtension;
-        }
-
-
-        /// <summary>
-        /// Return GameItemExtension object, caasted to type <T>
-        /// </summary>
-        public T GetExtension<T>() where T : class
-        {
-            Assert.IsNotNull(GameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
-            return GameItemExtensionData as T;
-        }
         #endregion Load Data
 
         /// <summary>

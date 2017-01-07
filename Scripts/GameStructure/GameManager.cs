@@ -42,7 +42,6 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using FlipWebApps.GameFramework.Scripts.Audio.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
@@ -430,9 +429,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
         #endregion Display properties
 
-        #region Player properties 
-
-        #endregion Player properties 
         #region Game Structure Properties
 
         /// <summary>

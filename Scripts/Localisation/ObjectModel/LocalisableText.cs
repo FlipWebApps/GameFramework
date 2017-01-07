@@ -31,7 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
     public class LocalisableText {
 
         /// <summary>
-        /// Indicates whether this is a localised string and if so whether Data is a localisation key or an actual value.
+        /// Indicates whether this is a localisation key or an actual value.
         /// </summary>
         /// See GameItem for more information.
         public bool IsLocalised
@@ -45,7 +45,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
                 _isLocalised = value;
             }
         }
-        [Tooltip("Indicates whether this is a localised string and if so whether Value is a localisation key or an actual value.")]
+        [Tooltip("Indicates whether this is a localisation key or an actual value.")]
         [SerializeField]
         bool _isLocalised;
 
@@ -87,7 +87,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static LocalisableText CreateNonLocalised(string text)
+        public static LocalisableText CreateNonLocalised(string text = null)
         {
             return new LocalisableText(false, text);
         }
@@ -98,7 +98,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static LocalisableText CreateLocalised(string text)
+        public static LocalisableText CreateLocalised(string text = null)
         {
             return new LocalisableText(true, text);
         }
@@ -119,6 +119,12 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         public string FormatValue(params object[] parameters)
         {
             return IsLocalised ? LocaliseText.Format(Data, parameters) : string.Format(Data, parameters);
+        }
+
+
+        public bool IsLocalisedWithNoKey()
+        {
+            return IsLocalised && string.IsNullOrEmpty(Data);
         }
     }
 }

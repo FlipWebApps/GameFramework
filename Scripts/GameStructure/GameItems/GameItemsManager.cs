@@ -26,6 +26,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
@@ -35,7 +36,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TParent"></typeparam>
-    public class GameItemsManager<T, TParent> where T: GameItem, new() where TParent: GameItem
+    public class GameItemsManager<T, TParent> where T: GameItem where TParent: GameItem
     {
         /// <summary>
         /// The unlock mode that will be used
@@ -136,7 +137,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         }
         
         /// <summary>
-        /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup.
+        /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup. If loadFromResources
+        /// is specified then this will try and load the GameItem from the resources folder
         /// </summary>
         public void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
         { 
@@ -145,14 +147,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
 
             for (var i = 0; i < count; i++)
             {
-                Items[i] = new T();
-                Items[i].Initialise(startNumber + i, valueToUnlock: valueToUnlock, loadFromResources : loadFromResources);
+                if (loadFromResources)
+                {
+                    Items[i] = GameItem.LoadGameItemFromResources<T>(TypeName, startNumber + i);
+                    Assert.IsNotNull(Items[i], "Unable to load " + TypeName + " GameItem from resources folder " + TypeName + "\\" + TypeName + "_" + (startNumber + i) + ". Either create a new item in this folder (right click the folder | Create | Game Framework) or disable the load from resources option in GameManager.");
+                    Items[i].InitialiseResources();
+                }
+                else
+                {
+                    Items[i] = ScriptableObject.CreateInstance<T>();
+                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
+                }
             }
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.Load()");
 
             SetupSelectedItem();
             SetupUnlockedItems();
         }
+
 
         /// <summary>
         /// Set the selected item from prefs if found, if not then the first item.
