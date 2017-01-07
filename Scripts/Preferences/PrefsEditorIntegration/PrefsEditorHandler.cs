@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 #if PREFS_EDITOR
-using FlipWebApps.PrefsEditor;
+using PrefsEditor;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Preferences.PrefsEditorIntegration
