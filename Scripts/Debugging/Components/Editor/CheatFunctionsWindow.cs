@@ -416,9 +416,9 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
                 if (GameManager.IsActive)
                 {
                     if (amount > 0)
-                        GameManager.Instance.Player.AddPoints(amount);
+                        GameManager.Instance.GetPlayer().AddPoints(amount);
                     else
-                        GameManager.Instance.Player.RemovePoints(-amount);
+                        GameManager.Instance.GetPlayer().RemovePoints(-amount);
                 }
                 else
                 {
@@ -438,9 +438,9 @@ namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
                 if (GameManager.IsActive)
                 {
                     if (amount > 0)
-                        GameManager.Instance.Player.AddCoins(amount);
+                        GameManager.Instance.GetPlayer().AddCoins(amount);
                     else
-                        GameManager.Instance.Player.RemoveCoins(-amount);
+                        GameManager.Instance.GetPlayer().RemoveCoins(-amount);
                 }
                 else
                 {

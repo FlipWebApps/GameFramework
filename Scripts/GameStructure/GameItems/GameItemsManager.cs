@@ -25,8 +25,6 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Preferences;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
 {
@@ -75,7 +73,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         public Action<T, T> SelectedChanged;
 
         readonly string _baseKey;
-        readonly bool _holdsPlayers;
 
         /// <summary>
         /// The currently selected item
@@ -90,10 +87,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
                 _selected = value;
                 if (SelectedChanged != null)
                     SelectedChanged(oldItem, Selected);
-                if (_holdsPlayers)
-                    PreferencesFactory.SetInt("Selected" + TypeName, Selected.Number);
-                else
-                    GameManager.Instance.Player.SetSetting(_baseKey + "Selected" + TypeName, Selected.Number);
+                GameManager.Instance.Player.SetSetting(_baseKey + "Selected" + TypeName, Selected.Number);
             }
         }
         T _selected;
@@ -107,10 +101,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
 
             // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this e.g. worlds->levels
             _baseKey = parent == null ? "" : Parent.FullKey("");
-
-            // determine if holding players - if so we need to handle setting selected at global level.
-            _holdsPlayers = TypeNameFull == typeof (Player).FullName;
-
         }
 
         /// <summary>
@@ -139,7 +129,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         /// </summary>
         public void LoadDefaultItems(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
         { 
-            var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
+            int count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
 
             for (var i = 0; i < count; i++)
@@ -158,11 +148,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         /// </summary>
         void SetupSelectedItem()
         {
-            // get the previously selected item or default to the first - for player type we need to get setting at global level.
-            var selectedNumber = _holdsPlayers ? 
-                PreferencesFactory.GetInt("Selected" + TypeName, -1) : 
-                GameManager.Instance.Player.GetSettingInt(_baseKey + "Selected" + TypeName, -1);
-
+            // get the last selected item or default to the first
+            int selectedNumber = GameManager.Instance.Player.GetSettingInt(_baseKey + "Selected" + TypeName, -1);
             foreach (T item in Items)
             {
                 if (item.Number == selectedNumber)
@@ -191,8 +178,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
                 }
             }
         }
-
-        #region Get / Set Items
 
         /// <summary>
         /// Get the item with the specified number
@@ -236,30 +221,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             return GetNextItem(item.Number);
         }
 
-
-        /// <summary>
-        /// Set the selected item to be the one with the specified number
-        /// </summary>
-        /// <param name="number"></param>
-        public void SetSelected(int number)
-        {
-            Selected = GetItem(number);
-        }
-
-
-        /// <summary>
-        /// Set the selected item to the specified item
-        /// </summary>
-        /// <param name="item"></param>
-        public void SetSelected(T item)
-        {
-            Selected = item;
-        }
-
-        #endregion get / set items
-
-        #region Unlocking
-
         /// <summary>
         /// Return a list of unlockable items whose value to unlock is less than the specified value
         /// </summary>
@@ -302,8 +263,5 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             if (minimumCoins < 0) minimumCoins = 0;
             return minimumCoins;
         }
-
-        #endregion Unlocking
-
     }
 }

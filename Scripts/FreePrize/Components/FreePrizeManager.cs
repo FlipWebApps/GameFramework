@@ -238,7 +238,7 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         /// <param name="dialogInstance"></param>
         public virtual void ShowFreePrizeDone(DialogInstance dialogInstance)
         {
-            GameManager.Instance.Player.Coins += CurrentPrizeAmount;
+            GameManager.Instance.GetPlayer().Coins += CurrentPrizeAmount;
             if (PrizeDialogClosedAudioClip != null)
                 GameManager.Instance.PlayEffect(PrizeDialogClosedAudioClip);
             GameManager.Instance.Player.UpdatePlayerPrefs();

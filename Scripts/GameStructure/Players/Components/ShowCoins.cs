@@ -43,7 +43,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
         {
             Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowCoins.");
 
-            _player = GameManager.Instance.Player;
+            _player = GameManager.Instance.GetPlayer();
             base.Start();
         }
 
