@@ -573,14 +573,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             // setup players.
             Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
             Players = new GameItemsManager<Player, GameItem>();
-            Players.LoadDefaultItems(0, PlayerCount);
+            Players.Load(0, PlayerCount);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
             {
                 var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
                 Worlds = new GameItemsManager<World, GameItem>();
-                Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
+                Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
                 // if we have worlds then autocreate levels for each world.
                 if (AutoCreateLevels)
@@ -589,7 +589,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                     {
                         var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
                         Worlds.Items[i].Levels = new GameItemsManager<Level, GameItem>();
-                        Worlds.Items[i].Levels.LoadDefaultItems(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
+                        Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
                     }
 
                     // and assign the selected set of levels
@@ -603,7 +603,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 {
                     var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
                     Levels = new GameItemsManager<Level, GameItem>();
-                    Levels.LoadDefaultItems(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
+                    Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
                 }
             }
 
@@ -612,9 +612,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             {
                 Characters = new GameItemsManager<Character, GameItem>();
                 if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
-                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
+                    Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
                 else
-                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
+                    Characters.Load(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
             }
 
             // coroutine to check for display changes (don't need to do this every frame)

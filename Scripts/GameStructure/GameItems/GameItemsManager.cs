@@ -114,30 +114,31 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         }
 
         /// <summary>
-        /// Load method that will call the LoadItems() method before standard selection and unlock setup.
+        /// A custom load method that you can use with sub classes. This will call the LoadCustomItems() method before 
+        /// standard selection and unlock setup.
         /// </summary>
-        public void Load()
+        public void LoadCustom()
         {
-            LoadItems();
-            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.Load()");
+            LoadCustomItems();
+            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.LoadCustomItems()");
 
             SetupSelectedItem();
             SetupUnlockedItems();
         }
 
         /// <summary>
-        /// A method that you can override to manually setup the Items collection.
+        /// A custom load method that you can use with sub classes to manually setup the Items collection.
         /// </summary>
-        /// If you want detault selection and unlock setting up then call Load() instead of this directly.
-        protected virtual void LoadItems()
+        /// If you want detault selection and unlock setting up then call LoadCustom() instead of this directly.
+        protected virtual void LoadCustomItems()
         {
 
         }
-
+        
         /// <summary>
         /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup.
         /// </summary>
-        public void LoadDefaultItems(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
+        public void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
         { 
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];

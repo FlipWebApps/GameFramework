@@ -90,7 +90,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
 
             var coinsToUnlock = UnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlock : -1;
             GenericGameItems = new GameItemsManager<GenericGameItem, GameItem>();
-            GenericGameItems.LoadDefaultItems(1, NumberOfItems, coinsToUnlock, LoadFromResources);
+            GenericGameItems.Load(1, NumberOfItems, coinsToUnlock, LoadFromResources);
         }
 
         #endregion Setup
