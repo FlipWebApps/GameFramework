@@ -429,28 +429,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public float PhysicalScreenHeightMultiplier { get; private set; }   // Ratio above and beyong 4:3 ratio
 
         #endregion Display properties
+
         #region Player properties 
 
-        /// <summary>
-        /// The current Player. 
-        /// </summary>
-        /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
-        public Player Player
-        {
-            get { return _player; }
-            set
-            {
-                var oldPlayer = Player;
-                _player = value;
-                if (IsInitialised && oldPlayer != null && oldPlayer.Number != Player.Number)
-                    GameManager.SafeQueueMessage(new PlayerChangedMessage(oldPlayer, Player));
-            }
-        }
-        Player _player;
-        protected Player[] Players;
-
         #endregion Player properties 
-        #region GameManager properties
+        #region Game Structure Properties
 
         /// <summary>
         /// GameItemManager containing the current Characters
@@ -467,7 +450,33 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// </summary>
         public GameItemsManager<Level, GameItem> Levels { get; set; }
 
-        #endregion GameManager properties
+        /// <summary>
+        /// GameItemManager containing the current Players
+        /// </summary>
+        public GameItemsManager<Player, GameItem> Players { get; set; }
+
+        /// <summary>
+        /// The current Player. 
+        /// </summary>
+        /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
+        public Player Player
+        {
+            get
+            {
+                Assert.IsNotNull(Players, "Players are not setup. Check that in the script execution order GameManager is setup first.");
+                return Players.Selected;
+            }
+            set
+            {
+                var oldPlayer = Player;
+                Players.SetSelected(value);
+                if (IsInitialised && oldPlayer != null && oldPlayer.Number != Player.Number)
+                    GameManager.SafeQueueMessage(new PlayerChangedMessage(oldPlayer, Player));
+            }
+        }
+
+        #endregion Game Structure Properties
+
         #region Messaging properties 
 
         /// <summary>
@@ -562,12 +571,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             LocaliseText.AllowedLanguages = SupportedLanguages;
 
             // setup players.
-            Players = new Player[Instance.PlayerCount];
-            for (var i = 0; i < Instance.PlayerCount; i++)
-            {
-                Players[i] = CreatePlayer(i);
-            }
-            SetPlayerByNumber(0);
+            Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
+            Players = new GameItemsManager<Player, GameItem>();
+            Players.LoadDefaultItems(0, PlayerCount);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
@@ -768,7 +774,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             //}
 
             // otherwise we create and add a new one
-            MyDebug.LogWarningF("Not enough free effect AudioSources for playing {0}, ({1}). Adding a new one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
+            MyDebug.LogF("Not enough free effect AudioSources for playing {0}, ({1}). Adding a new one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
             var newAudioSource = gameObject.AddComponent<AudioSource>();
             newAudioSource.playOnAwake = false;
             newAudioSource.volume = EffectAudioVolume;
@@ -905,46 +911,34 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region Player related code
 
         /// <summary>
-        /// Create the given player number (note: probably soon to be made obsolete)
-        /// </summary>
-        /// Can be overridden if you have a custom player class.
-        /// <param name="playerNumber"></param>
-        /// <returns></returns>
-        protected virtual Player CreatePlayer(int playerNumber)
-        {
-            MyDebug.Log("GameManager: CreatePlayer");
-
-            var player = new Player();
-            player.Initialise(playerNumber, localiseDescription: false);
-            return player;
-        }
-
-        /// <summary>
-        /// Get the current player
+        /// Get the current player - Obsolete
         /// </summary>
         /// <returns></returns>
+        [Obsolete("GetPlayer() is deprecated - use Player")]
         public Player GetPlayer()
         {
             return Player;
         }
 
         /// <summary>
-        /// Get the specified player
+        /// Get the specified player - Obsolete
         /// </summary>
         /// <param name="playerNumber">player number 0 being the first player</param>
         /// <returns></returns>
+        [Obsolete("GetPlayer(number) is deprecated - use Players.GetItem(number)")]
         public Player GetPlayer(int playerNumber)
         {
-            return Players[playerNumber];
+            return Players.GetItem(playerNumber);
         }
 
         /// <summary>
-        /// Set the current player by player number
+        /// Set the current player by player number - Obsolete
         /// </summary>
         /// <param name="playerNumber"></param>
+        [Obsolete("SetPlayerByNumber(number) is deprecated - use Players.SetSelected(playerNumber);")]
         public void SetPlayerByNumber(int playerNumber)
         {
-            Player = Players[playerNumber];
+            Players.SetSelected(playerNumber);
         }
         #endregion Player Related
     }
