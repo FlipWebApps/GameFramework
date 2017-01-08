@@ -23,6 +23,7 @@ using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
@@ -35,6 +36,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         bool _showAdvanced;
         bool _showPrefs;
         bool _showPlayerAdvanced;
+
+        ReorderableList _supportedLanguagesList;
 
         SerializedProperty _gameNameProperty;
         SerializedProperty _playWebUrlProperty;
@@ -115,6 +118,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             _loadCharacterDatafromResources = serializedObject.FindProperty("LoadCharacterDatafromResources");
             _characterUnlockModeProperty = serializedObject.FindProperty("CharacterUnlockMode");
             _coinsToUnlockCharactersProperty = serializedObject.FindProperty("CoinsToUnlockCharacters");
+
+            _supportedLanguagesList = new ReorderableList(serializedObject, _supportedLanguagesProperty, true, true, true, true);
+            _supportedLanguagesList.drawHeaderCallback = (Rect rect) => {
+                EditorGUI.LabelField(rect, "Supported Languages");
+            };
+            _supportedLanguagesList.drawElementCallback =
+                (Rect rect, int index, bool isActive, bool isFocused) => {
+                    var element = _supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
+                    rect.y += 2;
+                    EditorGUI.PropertyField(
+                        new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
+                        element, GUIContent.none);
+                };
         }
 
         public override void OnInspectorGUI()
@@ -275,7 +291,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             EditorGUILayout.LabelField("Localisation", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("Box");
             EditorGUI.indentLevel += 1;
-            EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton, addButtonText: "Add Language", addButtonToolTip: "Add Language");
+            //EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton, addButtonText: "Add Language", addButtonToolTip: "Add Language");
+            _supportedLanguagesList.DoLayoutList();
             EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }
