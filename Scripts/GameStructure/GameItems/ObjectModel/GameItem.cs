@@ -76,7 +76,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         [SerializeField]
         LocalisableText _localisableDescription;
 
-
         /// <summary>
         /// A value that is needed to unlock this item.
         /// </summary>
@@ -95,7 +94,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
         [Tooltip("An override for the default value needed to unlock this item.")]
         [SerializeField]
-        int _valueToUnlock;
+        int _valueToUnlock = -1;
 
         #endregion Editor Parameters
 

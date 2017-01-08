@@ -51,7 +51,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
         [Tooltip("An override for the default star total count.")]
         [SerializeField]
-        int _starTotalCount;
+        int _starTotalCount = 3;
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting 1 star or -1 if no target")]
         [SerializeField]
-        float _star1Target;
+        float _star1Target = 10;
 
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the second star or -1 if no target")]
         [SerializeField]
-        float _star2Target;
+        float _star2Target = 10;
 
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the third star or -1 if no target")]
         [SerializeField]
-        float _star3Target;
+        float _star3Target = 10;
 
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the fourth star or -1 if no target")]
         [SerializeField]
-        float _star4Target;
+        float _star4Target = 10;
 
 
         /// <summary>
@@ -228,17 +228,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// </summary>
         public float TimeBest { get; set; }
 
-
-
-
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Level()
-        {
-            StarTotalCount = 3;
-        }
 
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
