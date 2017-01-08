@@ -20,12 +20,14 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel
 {
     /// <summary>
     /// Character Game Item
     /// </summary>
+    [CreateAssetMenu(fileName = "Character_x", menuName = "Game Framework/Character")]
     public class Character : GameItem
     {
         /// <summary>

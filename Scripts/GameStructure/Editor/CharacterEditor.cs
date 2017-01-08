@@ -24,28 +24,15 @@ using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 {
-    [CustomEditor(typeof(CharacterExtension))]
-    public class CharacterExtensionInspector : GameItemExtensionInspector
+    [CustomEditor(typeof(Character))]
+    public class CharacterEditor : GameItemEditor
     {
-        //CharacterExtension _gameItemExtension;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            //_characterExtension = (CharacterExtension)target;
-            // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
-        }
-
-
         protected override void DrawGUI()
         {
-            EditorGUILayout.LabelField("Character Extension", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("Use these settings to provide additional customisation for Characters.\n\nFor automatic loading instances should be in the location 'Resources\\Character' and named 'Character_<number>'\n\nYou can create your own derived classes to hold custom properties and / or code", MessageType.Info);
-            // Game Item setup
+            EditorGUILayout.LabelField("Character", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("Use these settings to provide customisation for Characters.\n\nFor automatic loading instances should be in a folder 'Resources\\Character' and named 'Character_<number>'\n\nYou can create your own Character derived classes to hold custom properties and / or code", MessageType.Info);
             EditorGUILayout.BeginVertical("Box");
             DrawBasicProperties();
-            //EditorGUILayout.Space();
-            //DrawCharacterProperties();
             EditorGUILayout.EndVertical();
         }
     }

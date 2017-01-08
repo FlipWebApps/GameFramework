@@ -51,7 +51,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
 
 
         /// <summary>
-        /// Data associated with this LocalisableText. Use IsLocalised to determine whether this is a localisation key or an actual value.
+        /// Data associated with this item. Use IsLocalised to determine whether this is a localisation key or an actual value.
         /// </summary>
         /// See GameItem for more information.
         public string Data
@@ -65,7 +65,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
                 _data = value;
             }
         }
-        [Tooltip("Indicates whether this is a localised string and if so whether Value is a localisation key or an actual value.")]
+        [Tooltip("Data associated with this item. Use IsLocalised to determine whether this is a localisation key or an actual value.")]
         [SerializeField]
         string _data;
 

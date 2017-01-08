@@ -36,46 +36,138 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         #region Editor Parameters
 
         /// <summary>
-        /// The total number of stars that can be gotten. Automatically loaded from JSON configuration if present.
+        /// The total number of stars that can be gotten.
         /// </summary>
-        public int StarTotalCount;
+        public int StarTotalCount
+        {
+            get
+            {
+                return _starTotalCount;
+            }
+            set
+            {
+                _starTotalCount = value;
+            }
+        }
+        [Tooltip("An override for the default star total count.")]
+        [SerializeField]
+        int _starTotalCount;
 
 
         /// <summary>
-        /// A field that you can set from json, extensions or code that represents a target time. 
+        /// The target for getting the first star or -1 if no target
         /// </summary>
-        /// Automatically loaded from JSON configuration if present.
+        public float Star1Target
+        {
+            get
+            {
+                return _star1Target;
+            }
+            set
+            {
+                _star1Target = value;
+            }
+        }
+        [Tooltip("The target for getting 1 star or -1 if no target")]
+        [SerializeField]
+        float _star1Target;
+
+
+        /// <summary>
+        /// A target for getting the second star or -1 if no target.
+        /// </summary>
+        public float Star2Target
+        {
+            get
+            {
+                return _star2Target;
+            }
+            set
+            {
+                _star2Target = value;
+            }
+        }
+        [Tooltip("The target for getting the second star or -1 if no target")]
+        [SerializeField]
+        float _star2Target;
+
+
+        /// <summary>
+        /// A target for getting the third star or -1 if no target.
+        /// </summary>
+        public float Star3Target
+        {
+            get
+            {
+                return _star3Target;
+            }
+            set
+            {
+                _star3Target = value;
+            }
+        }
+        [Tooltip("The target for getting the third star or -1 if no target")]
+        [SerializeField]
+        float _star3Target;
+
+
+        /// <summary>
+        /// A target for getting the fourth star or -1 if no target.
+        /// </summary>
+        public float Star4Target
+        {
+            get
+            {
+                return _star4Target;
+            }
+            set
+            {
+                _star4Target = value;
+            }
+        }
+        [Tooltip("The target for getting the fourth star or -1 if no target")]
+        [SerializeField]
+        float _star4Target;
+
+
+        /// <summary>
+        /// The time target for completing the level
+        /// </summary>
         /// You can also use StarxTarget if you want individual times for winning different stars.
-        public float TimeTarget;
-
-
-        /// <summary>
-        /// A value that can be used for holding a target the the first star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star1Target;
-
-        /// <summary>
-        /// A value that can be used for holding a target the the second star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star2Target;
-
-        /// <summary>
-        /// A value that can be used for holding a target the the third star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star3Target;
+        public float TimeTarget
+        {
+            get
+            {
+                return _timeTarget;
+            }
+            set
+            {
+                _timeTarget = value;
+            }
+        }
+        [Tooltip("The time target for completing the level.")]
+        [SerializeField]
+        float _timeTarget;
 
         /// <summary>
-        /// A value that can be used for holding a target the the third star. Automatically loaded from JSON configuration if present.
+        /// A field that you can set from json, extensions or code that represents a target score for completing the level
         /// </summary>
-        public float Star4Target;
-
-
-        /// <summary>
-        /// A field that you can set from json, extensions or code that represents a target score. 
-        /// </summary>
-        /// Automatically loaded from JSON configuration if present.
         /// You can also use StarxTarget if you want individual scores for winning different stars.
-        public int ScoreTarget;
+        public int ScoreTarget
+        {
+            get
+            {
+                return _scoreTarget;
+            }
+            set
+            {
+                _scoreTarget = value;
+            }
+        }
+        [Tooltip("The score target for completing the level.")]
+        [SerializeField]
+        int _scoreTarget;
+
         #endregion Editor Parameters
 
         /// <summary>

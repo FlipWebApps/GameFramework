@@ -28,7 +28,7 @@ using UnityEngine;
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 {
     [CustomEditor(typeof(GameManager))]
-    public class GameManagerInspector : UnityEditor.Editor
+    public class GameManagerEditor : UnityEditor.Editor
     {
         GameManager _gameManager;
         bool _showLinks;
@@ -155,7 +155,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             {
                 if (!PreferencesFactory.SupportsSecurePrefs)
                 {
-                    EditorGUILayout.HelpBox("Unity preferences are not encrypted!\n\nSee the integrations window (Window Menu | Game Framework) for assets that let you use encrypted preferences instead (e.g. Prefs Editor).", MessageType.Warning);
+                    EditorGUILayout.HelpBox("Unity preferences are not encrypted allowing users to modify them and cheat!\n\nSee the integrations window (Window Menu | Game Framework) for assets that let you use encrypted preferences instead (e.g. Prefs Editor).", MessageType.Warning);
                     GUI.enabled = false;
                 }
                 else if (!_gameManager.SecurePreferences)
@@ -207,7 +207,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                 EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
                 EditorGUILayout.PropertyField(_loadWorldDatafromResources, new GUIContent("Load From Resources"));
                 EditorGUILayout.PropertyField(_worldUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins)
+                if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadWorldDatafromResources)
                     EditorGUILayout.PropertyField(_coinsToUnlockWorldsProperty);
 
                 EditorGUILayout.BeginVertical("Box");
@@ -216,7 +216,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                 {
                     EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
                     EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
+                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadLevelDatafromResources)
                         EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
 
                     // level number ranges
@@ -250,7 +250,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                     EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
                     EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
                     EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
+                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadLevelDatafromResources)
                         EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
                 }
                 EditorGUILayout.EndVertical();
@@ -264,7 +264,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                 EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
                 EditorGUILayout.PropertyField(_loadCharacterDatafromResources, new GUIContent("Load From Resources"));
                 EditorGUILayout.PropertyField(_characterUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.CharacterUnlockMode == GameItem.UnlockModeType.Coins)
+                if (_gameManager.CharacterUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadCharacterDatafromResources)
                     EditorGUILayout.PropertyField(_coinsToUnlockCharactersProperty);
             }
             EditorGUILayout.EndVertical();

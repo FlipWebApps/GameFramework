@@ -25,28 +25,15 @@ using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 {
-    [CustomEditor(typeof(PlayerExtension))]
-    public class PlayerExtensionInspector : GameItemExtensionInspector
+    [CustomEditor(typeof(Player))]
+    public class PlayerEditor : GameItemEditor
     {
-        //PlayerExtension _playerExtension;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            //_playerExtension = (PlayerExtension)target;
-            // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
-        }
-
-
         protected override void DrawGUI()
         {
             EditorGUILayout.LabelField("Plsyer Extension", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("Use these settings to provide additional customisation for Players.\n\nFor automatic loading instances should be in the location 'Resources\\Player' and named 'Player_<number>'\n\nYou can create your own derived classes to hold custom properties and / or code", MessageType.Info);
-            // Game Item setup
+            EditorGUILayout.HelpBox("Use these settings to provide customisation for Players.\n\nFor automatic loading instances should be in a folder 'Resources\\Player' and named 'Player_<number>'\n\nYou can create your own Player derived classes to hold custom properties and / or code", MessageType.Info);
             EditorGUILayout.BeginVertical("Box");
             DrawBasicProperties();
-            //EditorGUILayout.Space();
-            //DrawCharacterProperties();
             EditorGUILayout.EndVertical();
         }
     }

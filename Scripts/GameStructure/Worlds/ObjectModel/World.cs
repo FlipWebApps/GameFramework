@@ -22,6 +22,7 @@
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
@@ -29,6 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
     /// <summary>
     /// World Game Item
     /// </summary>
+    [CreateAssetMenu(fileName = "World_x", menuName = "Game Framework/World")]
     public class World : GameItem
     {
         /// <summary>

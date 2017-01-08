@@ -20,12 +20,14 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel
 {
     /// <summary>
     /// Generic Game Item
     /// </summary>
+    [CreateAssetMenu(fileName = "GenericGameItem_x", menuName = "Game Framework/Generic Game Item")]
     public class GenericGameItem : GameItem
     {
         /// <summary>

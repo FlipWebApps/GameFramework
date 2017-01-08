@@ -24,20 +24,20 @@ using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 {
-    [CustomEditor(typeof(GameItemExtension))]
-    public class GameItemExtensionInspector : UnityEditor.Editor
+    [CustomEditor(typeof(GameItem))]
+    public class GameItemEditor : UnityEditor.Editor
     {
-        GameItemExtension _gameItemExtension;
+        //GameItem _gameItem;
         SerializedProperty _giNameProperty;
         SerializedProperty _giDescriptionProperty;
         SerializedProperty _giValueToUnlockProperty;
 
         protected virtual void OnEnable()
         {
-            _gameItemExtension = (GameItemExtension)target;
+            //_gameItem = (GameItem)target;
             // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
-            _giNameProperty = serializedObject.FindProperty("_name");
-            _giDescriptionProperty = serializedObject.FindProperty("_description");
+            _giNameProperty = serializedObject.FindProperty("_localisableName");
+            _giDescriptionProperty = serializedObject.FindProperty("_localisableDescription");
             _giValueToUnlockProperty = serializedObject.FindProperty("_valueToUnlock");
         }
 
@@ -45,7 +45,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         {
             //DrawDefaultInspector();
             serializedObject.Update();
-
             DrawGUI();
             serializedObject.ApplyModifiedProperties();
         }
@@ -64,14 +63,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         {
             EditorGUILayout.LabelField("Basic Properties", EditorStyles.boldLabel);
             EditorGUI.indentLevel += 1;
-            EditorGUILayout.PropertyField(_giNameProperty);
-            EditorGUILayout.PropertyField(_giDescriptionProperty);
-            _gameItemExtension.OverrideValueToUnlock = EditorGUILayout.BeginToggleGroup("Override ValueToUnlock", _gameItemExtension.OverrideValueToUnlock);
+            EditorGUILayout.PropertyField(_giNameProperty, true);
+            EditorGUILayout.PropertyField(_giDescriptionProperty, true);
+            //_gameItem.OverrideValueToUnlock = EditorGUILayout.BeginToggleGroup("Override ValueToUnlock", _gameItem.OverrideValueToUnlock);
             // TODO: Have a int field that allows an empty value that signifies don't override.
             //var valueToUnlock = EditorGUILayout.TextField("ValueToUnlock", _gameItemExtension.OverrideValueToUnlock ? _gameItemExtension.ValueToUnlock.ToString() : "");
             //valueToUnlock.S
             EditorGUILayout.PropertyField(_giValueToUnlockProperty);
-            EditorGUILayout.EndToggleGroup();
+            //EditorGUILayout.EndToggleGroup();
             EditorGUI.indentLevel -= 1;
         }
     }

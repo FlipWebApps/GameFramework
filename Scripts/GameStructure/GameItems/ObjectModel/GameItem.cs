@@ -45,8 +45,36 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #region Editor Parameters
 
-        public LocalisableText LocalisableName;
-        public LocalisableText LocalisableDescription;
+        public LocalisableText LocalisableName
+        {
+            get
+            {
+                return _localisableName;
+            }
+            set
+            {
+                _localisableName = value;
+            }
+        }
+        [Tooltip("The name for this item - either localised or fixed.")]
+        [SerializeField]
+        LocalisableText _localisableName;
+
+
+        public LocalisableText LocalisableDescription
+        {
+            get
+            {
+                return _localisableDescription;
+            }
+            set
+            {
+                _localisableDescription = value;
+            }
+        }
+        [Tooltip("The description for this item - either localised or fixed.")]
+        [SerializeField]
+        LocalisableText _localisableDescription;
 
 
         /// <summary>
@@ -54,7 +82,20 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
         /// -1 means that you can not unlock this item in this way.
-        public int ValueToUnlock;
+        public int ValueToUnlock
+        {
+            get
+            {
+                return _valueToUnlock;
+            }
+            set
+            {
+                _valueToUnlock = value;
+            }
+        }
+        [Tooltip("An override for the default value needed to unlock this item.")]
+        [SerializeField]
+        int _valueToUnlock;
 
         #endregion Editor Parameters
 
@@ -239,12 +280,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
         public JSONObject JsonConfigurationData { get; set; }
 
-        /// <summary>
-        /// Stored GameItemExtension data. 
-        /// </summary>
-        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
-        public GameItemExtension GameItemExtensionData { get; set; }
-
 
         bool _isPlayer;
 
@@ -373,7 +408,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             if (JsonConfigurationData == null)
                 JsonConfigurationData = LoadJsonDataFile();
-            Assert.IsFalse(JsonConfigurationData == null && GameItemExtensionData == null, "When loading game item from resources, corresponding JSON should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            Assert.IsFalse(JsonConfigurationData == null, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
             if (JsonConfigurationData!=null)
                 ParseData(JsonConfigurationData);
         }
