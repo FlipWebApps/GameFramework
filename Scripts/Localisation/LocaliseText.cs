@@ -31,18 +31,19 @@ using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 
+
+namespace FlipWebApps.GameFramework.Scripts.Localisation
+{
 /// <summary>
 /// Support for localisation including retrieval and displaying of text, helper components and notifications.
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/localisation/
-namespace FlipWebApps.GameFramework.Scripts.Localisation
-{
     public static class LocaliseText
     {
         /// <summary>
         /// Whether the localisation text is loaded.
         /// </summary>
-        public static bool IsLocalisationLoaded;
+        public static bool IsLocalisationLoaded { get; set; }
 
         /// <summary>
         /// Dictionary key is the Localisation key, values are array of languages from csv file.
@@ -83,8 +84,9 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
 
         /// <summary>
-        /// Name of the currently active Language.
+        /// The currently active Language. 
         /// </summary>
+        /// This will allow you to set the Language to something that isn't in the AllowedLanguages array.
         public static string Language
         {
             get
@@ -115,40 +117,56 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
 
         /// <summary>
-        /// Load the Localisation file.
+        /// Static constructor 
+        /// </summary>
+        static LocaliseText()
+        {
+            AllowedLanguages = new string[0];
+        }
+
+        #region Load Dictionary
+
+        /// <summary>
+        /// Load the default and user Localisation files if not already loaded
         /// </summary>
         public static void LoadDictionary()
         {
-            // Try to load the Localisation CSV
             if (!IsLocalisationLoaded)
             {
-                byte[] bytes = null;
-
-                // Try to load the default Localisation file directly
-                TextAsset asset = Resources.Load<TextAsset>("Default/Localisation");
-                if (asset != null) bytes = asset.bytes;
-                IsLocalisationLoaded = LoadCSV(bytes, true);
-                //LogState();
-
-                // Try and additionally load user specific localisations and overrides
-                asset = GameManager.LoadResource<TextAsset>("Localisation");
-                if (asset != null) bytes = asset.bytes;
-                LoadCSV(bytes);
-                LogState();
-
-                // if loaded then set default language
-                if (IsLocalisationLoaded)
-                {
-                    SetDefaultLanguage();
-                }
-                else
-                {
-                    Debug.LogError("Could not load localisation data");
-                }
+                ReloadDictionary();
             }
         }
 
+        /// <summary>
+        /// (re)load the default and user Localisation files
+        /// </summary>
+        public static void ReloadDictionary()
+        {
+            // Try to load the default Localisation file directly
+            var asset = Resources.Load<TextAsset>("Default/Localisation");
+            if (asset != null)
+                IsLocalisationLoaded = LoadCSV(asset.bytes, true);
 
+            // Try and additionally load user specific localisations and overrides
+            asset = GameManager.LoadResource<TextAsset>("Localisation");
+            if (asset != null)
+                LoadCSV(asset.bytes);
+
+            // if loaded then set default language
+            if (IsLocalisationLoaded)
+            {
+                LogState();
+                SetDefaultLanguage();
+            }
+            else
+            {
+                Debug.LogError("Could not load localisation data");
+            }
+        }
+
+        #endregion Load Dictionary
+
+        #region Load CSV
         static bool LoadCSV(byte[] bytes, bool isMasterFile = false)
         {
             try
@@ -319,7 +337,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
         }
 
-
+        #endregion Load CSV
 
         static void SetDefaultLanguage()
         {
@@ -343,7 +361,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
         /// </summary>
         /// <param name="newDefaultLanguage"></param>
         /// <returns></returns>
-        static bool TrySetAllowedLanguage(string newDefaultLanguage)
+        public static bool TrySetAllowedLanguage(string newDefaultLanguage)
         {
             if (AllowedLanguages.Contains(newDefaultLanguage) && Languages.Contains(newDefaultLanguage))
             {
@@ -355,18 +373,14 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
 
 
         /// <summary>
-        /// Localise the specified value.
-        /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
+        /// Localise the specified value based on the currently set language.
         /// </summary>
+        /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
         public static string Get(string key, string language = null)
         {
             // Ensure we have a Language to work with
-            if (!IsLocalisationLoaded)
-            {
-                LoadDictionary();
-                if (!IsLocalisationLoaded)   // if still not loaded then there was a problem
-                    return null;
-            }
+            LoadDictionary();
+            if (!IsLocalisationLoaded) return null;
 
             // try and get the key
             string[] vals;
@@ -394,16 +408,22 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
             return key;
         }
 
+
         /// <summary>
         /// Get the localised value and format it.
         /// </summary>
         public static string Format(string key, params object[] parameters) { return string.Format(Get(key), parameters); }
+
 
         /// <summary>
         /// Returns whether the specified key is present.
         /// </summary>
         public static bool Exists(string key)
         {
+            // Ensure we have a Language to work with
+            LoadDictionary();
+            if (!IsLocalisationLoaded) return false;
+
             return _localisations.ContainsKey(key);
         }
 
@@ -426,7 +446,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation
                 sb.AppendLine();
             }
             MyDebug.Log(sb);
-
         }
     }
 }
