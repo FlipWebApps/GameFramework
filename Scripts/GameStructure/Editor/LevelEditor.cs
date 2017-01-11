@@ -56,16 +56,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         {
             EditorGUILayout.LabelField("Level Extension", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Use these settings to provide customisation for Levels.\n\nFor automatic loading instances should be in a folder 'Resources\\Level' and named 'Level_<number>'\n\nYou can create your own Level derived classes to hold custom properties and / or code", MessageType.Info);
-            EditorGUILayout.BeginVertical("Box");
-            DrawBasicProperties();
-            EditorGUILayout.Space();
+            DrawProperties();
             DrawLevelProperties();
-            EditorGUILayout.EndVertical();
         }
 
 
         protected void DrawLevelProperties()
         {
+            EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField("Level Properties", EditorStyles.boldLabel);
             EditorGUI.indentLevel += 1;
             EditorGUILayout.PropertyField(_starTotalCountProperty);
@@ -76,6 +74,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             EditorGUILayout.PropertyField(_timeTargetProperty);
             EditorGUILayout.PropertyField(_scoreTargetProperty);
             EditorGUI.indentLevel -= 1;
+            EditorGUILayout.EndVertical();
         }
 
     }

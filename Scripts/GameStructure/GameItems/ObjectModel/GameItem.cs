@@ -19,6 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
@@ -45,7 +47,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #region Editor Parameters
 
-        public LocalisableText LocalisableName
+        /// <summary>
+        /// (private) Localisable name for this GameItem. See also Name for easier access.
+        /// </summary>
+        LocalisableText LocalisableName
         {
             get
             {
@@ -61,7 +66,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         LocalisableText _localisableName;
 
 
-        public LocalisableText LocalisableDescription
+        /// <summary>
+        /// (private) Localisable description for this GameItem. See also Description for easier access.
+        /// </summary>
+        LocalisableText LocalisableDescription
         {
             get
             {
@@ -96,6 +104,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         [SerializeField]
         int _valueToUnlock = -1;
 
+        [SerializeField]
+        List<LocalisablePrefabEntry> _localisablePrefabs;
+
+        [SerializeField]
+        List<LocalisableSpriteEntry> _localisableSprites;
         #endregion Editor Parameters
 
         /// <summary>
@@ -113,11 +126,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public virtual string IdentifierBasePrefs { get; protected set; }
 
         /// <summary>
-        /// A number that represents this game item that is unique for this class of GameItem
-        /// </summary>
-        public int Number { get; set; }
-
-        /// <summary>
         /// Returns whether this GameItem is setup and initialised.
         /// </summary>
         public bool IsInitialised { get; private set; }
@@ -130,25 +138,31 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public Player Player { get; private set; }
         //public GameItem Parent;
 
+        /// <summary>
+        /// A number that represents this game item that is unique for this class of GameItem
+        /// </summary>
+        public int Number { get; set; }
 
         /// <summary>
-        /// The name of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// The name of this gameitem (localised if so configured). 
         /// </summary>
+        /// Through the initialise function you can specify whether this is part of a localisation key, or a fixed value
         public string Name {
             get
             {
-                return LocalisableName.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Name")) : LocalisableName.GetValue();
+                return LocalisableName.GetValue();
             }
         }
 
         /// <summary>
-        /// A description of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// A description of this gameitem. 
         /// </summary>
+        /// Through the the initialise function you can specify whether this is part of a localisation key, or a fixed value
         public string Description
         {
             get
             {
-                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Desc")) : LocalisableDescription.GetValue();
+                return LocalisableDescription.GetValue();
             }
         }
 
@@ -313,12 +327,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             IdentifierBasePrefs = identifierBasePrefs;
             _isPlayer = IdentifierBase == "Player";
 
+            LocalisableName = name;
+            LocalisableDescription = description;
+
             Number = number;
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
             Player = player ?? (_isPlayer ? null : GameManager.Instance.Player);
             //Parent = parent;
-            LocalisableName = name;
-            LocalisableDescription = description;
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
@@ -374,8 +389,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
         /// </summary>
-        /// This is called after ParseLevelFileData (if loading from resources) so you can use values setup by that method. 
-        /// 
         /// If overriding from a base class be sure to call base.CustomInitialisation()
         public virtual void CustomInitialisation()
         {
@@ -504,6 +517,21 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             if (HighScoreLocalPlayersPlayerNumber != -1)
                 PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
+
+        #region Prefab Related
+
+        //THIS IS TO DO
+        GameObject GetPrefab(string name)
+        {
+            foreach (var prefabEntry in _localisablePrefabs)
+            {
+                if (name == prefabEntry.Name)
+                    return prefabEntry.LocalisablePrefab.Default;
+            }
+            return null;
+        }
+
+        #endregion Prefab Related
 
         #region Score Related
 
@@ -809,6 +837,26 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return IdentifierBasePrefs + Number + "." + key;
         }
         #endregion
+
+        [Serializable]
+        public class LocalisablePrefabEntry
+        {
+            public enum LocalisablePrefabEntryTypeEnum { Custom, SelectionMenu, InGame }
+
+            public LocalisablePrefabEntryTypeEnum LocalisablePrefabEntryType;
+            public string Name;
+            public LocalisablePrefab LocalisablePrefab;
+        }
+
+        [Serializable]
+        public class LocalisableSpriteEntry
+        {
+            public enum LocalisableSpriteEntryTypeEnum { Custom, SelectionMenu, InGame }
+
+            public LocalisableSpriteEntryTypeEnum LocalisableSpriteEntryType;
+            public string Name;
+            public LocalisableSprite LocalisableSprite;
+        } 
     }
 
 }

@@ -31,9 +31,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         {
             EditorGUILayout.LabelField("Character", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Use these settings to provide customisation for Characters.\n\nFor automatic loading instances should be in a folder 'Resources\\Character' and named 'Character_<number>'\n\nYou can create your own Character derived classes to hold custom properties and / or code", MessageType.Info);
-            EditorGUILayout.BeginVertical("Box");
-            DrawBasicProperties();
-            EditorGUILayout.EndVertical();
+            DrawProperties();
+            //EditorGUILayout.BeginVertical("Box");
+            //EditorGUILayout.EndVertical();
         }
     }
 }
