@@ -26,7 +26,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor
 {
     [CustomPropertyDrawer(typeof(LocalisablePrefab))]
-    public class LocalisablePrefabDrawer : LocalisableItemDrawer
+    public class LocalisablePrefabDrawer : LocalisableObjectDrawer
     {
     }
 }

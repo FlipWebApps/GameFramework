@@ -20,95 +20,59 @@
 //----------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel.AbstractClasses;
 using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
 {
     /// <summary>
-    /// Simple struture to hold information about localisable sprites.
+    /// Class to hold information about localisable sprites.
     /// </summary>
     [Serializable]
-    public class LocalisableSprite
+    public class LocalisableSprite : LocalisableObject
     {
-
         /// <summary>
         /// The default sprite that should be used.
         /// </summary>
-        /// See GameItem for more information.
-        public Sprite Default
+        public new Sprite Default
         {
-            get
-            {
-                return _default;
-            }
-            set
-            {
-                _default = value;
-            }
+            get { return base.Default as Sprite; }
+            set { base.Default = value; }
         }
-        [Tooltip("The default sprite that should be used.")]
-        [SerializeField]
-        Sprite _default;
+
 
         /// <summary>
-        /// A list of sprites for different localisations.
+        /// Get a sprite that corresponds to the currently set language
         /// </summary>
-        /// See GameItem for more information.
-        public List<LocalisedSprite> LocalisedSprites
+        /// <param name="fallbackToDefault">Whether to fall back to the default object if no language specific entry is found</param>
+        /// <returns></returns>
+        public Sprite GetSprite(bool fallbackToDefault = true)
         {
-            get
-            {
-                return _localisedItems;
-            }
-            set
-            {
-                _localisedItems = value;
-            }
+            return GetObject(fallbackToDefault) as Sprite;
         }
-        [Tooltip("A list of sprites for different localisations.")]
-        [SerializeField]
-        List<LocalisedSprite> _localisedItems;
 
-        [Serializable]
-        public class LocalisedSprite
+
+        /// <summary>
+        /// Get a sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault">Whether to fall back to the default object if no language specific entry is found</param>
+        /// <returns></returns>
+        public Sprite GetSprite(SystemLanguage language, bool fallbackToDefault = true)
         {
-            /// <summary>
-            /// The language that this sprite override is for.
-            /// </summary>
-            public SystemLanguage Language
-            {
-                get
-                {
-                    return _language;
-                }
-                set
-                {
-                    _language = value;
-                }
-            }
-            [Tooltip("The language that this sprite override is for.")]
-            [SerializeField]
-            SystemLanguage _language;
+            return GetObject(language, fallbackToDefault) as Sprite;
+        }
 
 
-            /// <summary>
-            /// The sprite for this language
-            /// </summary>
-            public Sprite Sprite
-            {
-                get
-                {
-                    return _item;
-                }
-                set
-                {
-                    _item = value;
-                }
-            }
-            [Tooltip("The sprite for this language")]
-            [SerializeField]
-            Sprite _item;
+        /// <summary>
+        /// Get a sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault">Whether to fall back to the default object if no language specific entry is found</param>
+        /// <returns></returns>
+        public Sprite GetSprite(string language, bool fallbackToDefault = true)
+        {
+            return GetObject(language, fallbackToDefault) as Sprite;
         }
     }
 }

@@ -25,14 +25,14 @@ using UnityEditor;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
 {
-    public abstract class LocalisableItemDrawer : PropertyDrawer
+    public abstract class LocalisableObjectDrawer : PropertyDrawer
     {
         readonly float _propertyRowHeight = EditorGUIUtility.singleLineHeight + 2;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var defaultProperty = property.FindPropertyRelative("_default");
-            var localisedItemsProperty = property.FindPropertyRelative("_localisedItems");
+            var localisedItemsProperty = property.FindPropertyRelative("_localisedObjects");
 
             var rowPosition = new Rect(position) { height = EditorGUIUtility.singleLineHeight };
 
@@ -52,7 +52,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
                     {
                         var arrayProperty = localisedItemsProperty.GetArrayElementAtIndex(i);
                         var languageProperty = arrayProperty.FindPropertyRelative("_language");
-                        var itemProperty = arrayProperty.FindPropertyRelative("_item");
+                        var itemProperty = arrayProperty.FindPropertyRelative("_object");
                         var contentRect = new Rect(rowPosition) {width = rowPosition.width/2};
                         EditorGUI.PropertyField(contentRect, languageProperty, GUIContent.none);
                         contentRect.x += contentRect.width + 2;
@@ -75,7 +75,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
                         localisedItemsProperty.GetArrayElementAtIndex(localisedItemsProperty.arraySize - 1);
                     var languageOverrideProperty = newElement.FindPropertyRelative("_language");
                     languageOverrideProperty.enumValueIndex = (int)SystemLanguage.Unknown;
-                    var prefabOverrideProperty = newElement.FindPropertyRelative("_item");
+                    var prefabOverrideProperty = newElement.FindPropertyRelative("_object");
                     prefabOverrideProperty.objectReferenceValue = null;
                 }
             }
@@ -88,7 +88,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
             var height = _propertyRowHeight*2;
             if (property.isExpanded)
             {
-                var localisedItemsProperty = property.FindPropertyRelative("_localisedItems");
+                var localisedItemsProperty = property.FindPropertyRelative("_localisedObjects");
                 height += localisedItemsProperty.arraySize *_propertyRowHeight + _propertyRowHeight;
             }
 
