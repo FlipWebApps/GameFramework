@@ -21,7 +21,6 @@
 
 using System;
 using System.Linq;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using FlipWebApps.GameFramework.Scripts.Debugging;
@@ -29,7 +28,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
     /// For managing an array of game items inlcuding selection, unlocking
@@ -54,29 +53,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         public string TypeName = typeof(T).Name;
 
         /// <summary>
-        /// A list of items of type T
+        /// An array of items of type T
         /// </summary>
         public T[] Items { get; set; }
-
-        /// <summary>
-        /// An optional Parent item
-        /// </summary>
-        public TParent Parent { get; set; }
-
-        /// <summary>
-        /// An action called when this GameItem is Unlocked. 
-        /// </summary>
-        /// Note: This may be replaced by global messaging in the future.
-        public Action<T> Unlocked;
-
-        /// <summary>
-        /// An action called when the selection changes, passing the old and newly selected items
-        /// </summary>
-        /// Note: This may be replaced by global messaging in the future.
-        public Action<T, T> SelectedChanged;
-
-        readonly string _baseKey;
-        readonly bool _holdsPlayers;
 
         /// <summary>
         /// The currently selected item
@@ -91,6 +70,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
                 _selected = value;
                 if (SelectedChanged != null)
                     SelectedChanged(oldItem, Selected);
+                OnSelectedChanged(Selected, oldItem);
+
                 if (_holdsPlayers)
                     PreferencesFactory.SetInt("Selected" + TypeName, Selected.Number);
                 else
@@ -99,6 +80,29 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
         }
         T _selected;
 
+        /// <summary>
+        /// An optional Parent item
+        /// </summary>
+        public TParent Parent { get; set; }
+
+        #region Callbacks
+
+        /// <summary>
+        /// An action called when this GameItem is Unlocked. 
+        /// </summary>
+        public Action<T> Unlocked;
+
+        /// <summary>
+        /// An action called when the selection changes, passing the old and newly selected items
+        /// </summary>
+        public Action<T, T> SelectedChanged;
+
+        #endregion Callbacks
+
+        readonly string _baseKey;
+        readonly bool _holdsPlayers;
+
+
         public GameItemsManager() : this(null) { }
 
         public GameItemsManager(TParent parent)
@@ -106,7 +110,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             MyDebug.Log(TypeNameFull + ": Constructor");
             Parent = parent;
 
-            // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this e.g. worlds->levels
+            // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this
             _baseKey = parent == null ? "" : Parent.FullKey("");
 
             // determine if holding players - if so we need to handle setting selected at global level.
@@ -183,6 +187,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems
             }
             if (Selected == null)
                 Selected = Items[0];
+        }
+
+
+        /// <summary>
+        /// Called when the current selection changes. Override this in any base class to provide further handling such as sending out messaging.
+        /// </summary>
+        /// <param name="newSelection"></param>
+        /// <param name="oldSelection"></param>
+        /// You may want to override this in your derived classes to send custom messages.
+        public virtual void OnSelectedChanged(T newSelection, T oldSelection)
+        {
         }
 
 
