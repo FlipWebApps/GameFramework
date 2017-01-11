@@ -109,6 +109,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                 {
                     var arrayProperty = _giLocalisablePrefabsProperty.GetArrayElementAtIndex(i);
                     var nameProperty = arrayProperty.FindPropertyRelative("Name");
+                    var typeProperty = arrayProperty.FindPropertyRelative("LocalisablePrefabType");
 
                     var deleted = false;
                     // indent
@@ -116,7 +117,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue);
+                    var name = typeProperty.enumValueIndex == 0
+                        ? (string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue)
+                        : typeProperty.enumDisplayNames[typeProperty.enumValueIndex];
+                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, name);
                     if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
                         EditorUtility.DisplayDialog("Remove Entry?", "Are you sure you want to remove this entry?", "Yes",
                             "No"))
@@ -129,19 +133,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 
                     if (!deleted && arrayProperty.isExpanded)
                     {
-                        var typeProperty = arrayProperty.FindPropertyRelative("LocalisablePrefabEntryType");
                         var defaultPrefabProperty = arrayProperty.FindPropertyRelative("LocalisablePrefab");
 
                         EditorGUILayout.PropertyField(typeProperty, new GUIContent("Type", typeProperty.tooltip));
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisablePrefabEntry.LocalisablePrefabEntryTypeEnum.SelectionMenu)
-                        {
-                            nameProperty.stringValue = "Selection Menu";
-                        }
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisablePrefabEntry.LocalisablePrefabEntryTypeEnum.InGame)
-                        {
-                            nameProperty.stringValue = "In Game";
-                        }
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisablePrefabEntry.LocalisablePrefabEntryTypeEnum.Custom)
+                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisablePrefabType.Custom)
                         {
                             EditorGUILayout.PropertyField(nameProperty, new GUIContent("Name", nameProperty.tooltip));
                         }
@@ -172,13 +167,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             var newElement =
                 _giLocalisablePrefabsProperty.GetArrayElementAtIndex(_giLocalisablePrefabsProperty.arraySize - 1);
             newElement.isExpanded = true;
-            var propType = newElement.FindPropertyRelative("LocalisablePrefabEntryType");
+            var propType = newElement.FindPropertyRelative("LocalisablePrefabType");
             propType.enumValueIndex = 0;
             var propName = newElement.FindPropertyRelative("Name");
             propName.stringValue = null;
             var propPrefab = newElement.FindPropertyRelative("LocalisablePrefab._default");
             propPrefab.objectReferenceValue = prefab;
-            var propLocalisedPrefabs = newElement.FindPropertyRelative("LocalisablePrefab._localisedItems");
+            var propLocalisedPrefabs = newElement.FindPropertyRelative("LocalisablePrefab._localisedObjects");
             propLocalisedPrefabs.arraySize = 0;
         }
 
@@ -195,6 +190,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                 {
                     var arrayProperty = _giLocalisableSpritesProperty.GetArrayElementAtIndex(i);
                     var nameProperty = arrayProperty.FindPropertyRelative("Name");
+                    var typeProperty = arrayProperty.FindPropertyRelative("LocalisableSpriteType");
 
                     var deleted = false;
                     // indent
@@ -202,7 +198,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue);
+                    var name = typeProperty.enumValueIndex == 0
+                        ? (string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue)
+                        : typeProperty.enumDisplayNames[typeProperty.enumValueIndex];
+                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, name);
                     if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
                         EditorUtility.DisplayDialog("Remove Entry?", "Are you sure you want to remove this entry?", "Yes",
                             "No"))
@@ -214,19 +213,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
 
                     if (!deleted && arrayProperty.isExpanded)
                     {
-                        var typeProperty = arrayProperty.FindPropertyRelative("LocalisableSpriteEntryType");
                         var defaultSpriteProperty = arrayProperty.FindPropertyRelative("LocalisableSprite");
 
                         EditorGUILayout.PropertyField(typeProperty, new GUIContent("Type", typeProperty.tooltip));
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisableSpriteEntry.LocalisableSpriteEntryTypeEnum.SelectionMenu)
-                        {
-                            nameProperty.stringValue = "Selection Menu";
-                        }
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisableSpriteEntry.LocalisableSpriteEntryTypeEnum.InGame)
-                        {
-                            nameProperty.stringValue = "In Game";
-                        }
-                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisableSpriteEntry.LocalisableSpriteEntryTypeEnum.Custom)
+                        if (typeProperty.enumValueIndex == (int)GameItem.LocalisableSpriteType.Custom)
                         {
                             EditorGUILayout.PropertyField(nameProperty, new GUIContent("Name", nameProperty.tooltip));
                         }
@@ -258,13 +248,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
             var newElement =
                 _giLocalisableSpritesProperty.GetArrayElementAtIndex(_giLocalisableSpritesProperty.arraySize - 1);
             newElement.isExpanded = true;
-            var propType = newElement.FindPropertyRelative("LocalisableSpriteEntryType");
-            propType.enumValueIndex = (int)GameItem.LocalisableSpriteEntry.LocalisableSpriteEntryTypeEnum.Custom;
+            var propType = newElement.FindPropertyRelative("LocalisableSpriteType");
+            propType.enumValueIndex = 0;
             var propName = newElement.FindPropertyRelative("Name");
             propName.stringValue = null;
             var propSprite = newElement.FindPropertyRelative("LocalisableSprite._default");
             propSprite.objectReferenceValue = sprite;
-            var propLocalisedSprite = newElement.FindPropertyRelative("LocalisableSprite._localisedItems");
+            var propLocalisedSprite = newElement.FindPropertyRelative("LocalisableSprite._localisedObjects");
             propLocalisedSprite.arraySize = 0;
         }
 

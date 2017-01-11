@@ -40,10 +40,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// localisation support, the ability to unlock, a score or value etc.
     public class GameItem : ScriptableObject
     {
+        #region Enums
         /// <summary>
         /// Ways in which a GameItem can be unlocked
         /// </summary>
         public enum UnlockModeType { Custom, Completion, Coins }
+
+        /// <summary>
+        /// The different types of prefab we have
+        /// </summary>
+        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame }
+
+        /// <summary>
+        /// The different types of sprites we have
+        /// </summary>
+        public enum LocalisableSpriteType { Custom, SelectionMenu, InGame }
+        #endregion Enums
 
         #region Editor Parameters
 
@@ -167,7 +179,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
 
         /// <summary>
-        /// A sprite that is associated with this gameitem. 
+        /// A sprite that is associated with this gameitem loaded automatically from resources. 
         /// </summary>
         /// The sprite is loaded from resources on first access.
         public Sprite Sprite {
@@ -520,18 +532,363 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #region Prefab Related
 
-        //THIS IS TO DO
-        GameObject GetPrefab(string name)
+        /// <summary>
+        /// Get a prefab with the given name that corresponds to the currently set language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab();
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given name that correspondsto the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given name that corresponds to the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name, string language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu()
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu(string language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame()
+        {
+            return GetPrefab(LocalisablePrefabType.InGame);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame(string language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab();
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that correspondsto the specified language
+        /// </summary>
+        /// <param name="prefabType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that corresponds to the specified language
+        /// </summary>
+        /// <param name="prefabType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType, string language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a localised prefab entry with the given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        LocalisablePrefab GetLocalisablePrefab(string name)
         {
             foreach (var prefabEntry in _localisablePrefabs)
             {
-                if (name == prefabEntry.Name)
-                    return prefabEntry.LocalisablePrefab.Default;
+                if (prefabEntry.Name == name) return prefabEntry.LocalisablePrefab;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Get a localised prefab entry with the given type
+        /// </summary>
+        /// <param name="localisablePrefabTypeEnum"></param>
+        /// <returns></returns>
+        LocalisablePrefab GetLocalisablePrefab(LocalisablePrefabType localisablePrefabTypeEnum)
+        {
+            foreach (var prefabEntry in _localisablePrefabs)
+            {
+                if (prefabEntry.LocalisablePrefabType == localisablePrefabTypeEnum) return prefabEntry.LocalisablePrefab;
             }
             return null;
         }
 
         #endregion Prefab Related
+
+        #region Sprite Related
+
+        /// <summary>
+        /// Get a sprite with the given name that corresponds to the currently set language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite();
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given name that correspondsto the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given name that corresponds to the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name, string language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu()
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame()
+        {
+            return GetSprite(LocalisableSpriteType.InGame);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given type that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite();
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given type that correspondsto the specified language
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given type that corresponds to the specified language
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType, string language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a localised sprite entry with the given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        LocalisableSprite GetLocalisableSprite(string name)
+        {
+            foreach (var spriteEntry in _localisableSprites)
+            {
+                if (spriteEntry.Name == name) return spriteEntry.LocalisableSprite;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Get a localised sprite entry with the given type
+        /// </summary>
+        /// <param name="localisableSpriteTypeEnum"></param>
+        /// <returns></returns>
+        LocalisableSprite GetLocalisableSprite(LocalisableSpriteType localisableSpriteTypeEnum)
+        {
+            foreach (var spriteEntry in _localisableSprites)
+            {
+                if (spriteEntry.LocalisableSpriteType == localisableSpriteTypeEnum) return spriteEntry.LocalisableSprite;
+            }
+            return null;
+        }
+
+        #endregion Sprite Related
 
         #region Score Related
 
@@ -841,9 +1198,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         [Serializable]
         public class LocalisablePrefabEntry
         {
-            public enum LocalisablePrefabEntryTypeEnum { Custom, SelectionMenu, InGame }
-
-            public LocalisablePrefabEntryTypeEnum LocalisablePrefabEntryType;
+            public LocalisablePrefabType LocalisablePrefabType;
             public string Name;
             public LocalisablePrefab LocalisablePrefab;
         }
@@ -851,12 +1206,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         [Serializable]
         public class LocalisableSpriteEntry
         {
-            public enum LocalisableSpriteEntryTypeEnum { Custom, SelectionMenu, InGame }
 
-            public LocalisableSpriteEntryTypeEnum LocalisableSpriteEntryType;
+            public LocalisableSpriteType LocalisableSpriteType;
             public string Name;
             public LocalisableSprite LocalisableSprite;
-        } 
+        }
     }
 
 }
