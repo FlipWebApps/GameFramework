@@ -33,7 +33,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// <summary>
         /// Indicates whether this is a localisation key or an actual value.
         /// </summary>
-        /// See GameItem for more information.
         public bool IsLocalised
         {
             get
@@ -53,7 +52,6 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// <summary>
         /// Data associated with this item. Use IsLocalised to determine whether this is a localisation key or an actual value.
         /// </summary>
-        /// See GameItem for more information.
         public string Data
         {
             get
@@ -75,7 +73,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// </summary>
         /// <param name="isLocalised"></param>
         /// <param name="data"></param>
-        public LocalisableText(bool isLocalised, string data)
+        public LocalisableText(bool isLocalised = false, string data = null)
         {
             IsLocalised = isLocalised;
             Data = data;
@@ -109,7 +107,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         /// </summary>
         public string GetValue(string language = null)
         {
-            return IsLocalised ? LocaliseText.Get(Data, language: language) : Data;
+            return IsLocalised ? LocaliseText.Get(Data, language) : Data;
         }
 
 
@@ -122,6 +120,10 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
         }
 
 
+        /// <summary>
+        /// Whether this is localised but doesn't have any key set
+        /// </summary>
+        /// <returns></returns>
         public bool IsLocalisedWithNoKey()
         {
             return IsLocalised && string.IsNullOrEmpty(Data);
