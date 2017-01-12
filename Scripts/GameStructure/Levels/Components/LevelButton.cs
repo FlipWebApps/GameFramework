@@ -106,7 +106,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 
 
         /// <summary>
-        /// Returns the GameItemsManager that holds Levels
+        /// Returns the GameItemManager that holds Levels
         /// </summary>
         /// <returns></returns>
         protected override GameItemManager<Level, GameItem> GetGameItemManager()

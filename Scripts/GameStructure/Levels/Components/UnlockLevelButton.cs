@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     public class UnlockLevelButton : UnlockGameItemButton<Level>
     {
         /// <summary>
-        /// Returns the GameItemsManager that holds Levels
+        /// Returns the GameItemManager that holds Levels
         /// </summary>
         /// <returns></returns>
         protected override GameItemManager<Level, GameItem> GetGameItemManager()

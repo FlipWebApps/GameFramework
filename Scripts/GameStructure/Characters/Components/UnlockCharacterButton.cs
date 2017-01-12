@@ -38,7 +38,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
         /// Returns the GameItemManager that holds Characters
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Character, GameItem> GetGameItemsManager()
+        protected override GameItemManager<Character, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Characters;
         }
