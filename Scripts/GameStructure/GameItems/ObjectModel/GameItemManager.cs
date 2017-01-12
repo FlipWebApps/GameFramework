@@ -68,14 +68,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             {
                 T oldItem = Selected;
                 _selected = value;
-                if (SelectedChanged != null)
-                    SelectedChanged(oldItem, Selected);
-                OnSelectedChanged(Selected, oldItem);
+                if (_isLoaded && oldItem.Number != _selected.Number)
+                {
+                    if (SelectedChanged != null)
+                        SelectedChanged(oldItem, Selected);
+                    OnSelectedChanged(Selected, oldItem);
 
-                if (_holdsPlayers)
-                    PreferencesFactory.SetInt("Selected" + TypeName, Selected.Number);
-                else
-                    GameManager.Instance.Player.SetSetting(_baseKey + "Selected" + TypeName, Selected.Number);
+                    if (_holdsPlayers)
+                        PreferencesFactory.SetInt("Selected" + TypeName, Selected.Number);
+                    else
+                        GameManager.Instance.Player.SetSetting(_baseKey + "Selected" + TypeName, Selected.Number);
+                }
             }
         }
         T _selected;
@@ -101,6 +104,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         readonly string _baseKey;
         readonly bool _holdsPlayers;
+        bool _isLoaded;
 
 
         public GameItemManager() : this(null) { }
@@ -129,6 +133,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
             SetupSelectedItem();
             SetupUnlockedItems();
+            _isLoaded = true;
         }
 
         /// <summary>
@@ -167,6 +172,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
             SetupSelectedItem();
             SetupUnlockedItems();
+            _isLoaded = true;
         }
 
 
