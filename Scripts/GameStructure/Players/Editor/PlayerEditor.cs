@@ -19,18 +19,19 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Editor
 {
-    [CustomEditor(typeof(Character))]
-    public class CharacterEditor : GameItemEditor
+    [CustomEditor(typeof(Player))]
+    public class PlayerEditor : GameItemEditor
     {
         protected override void DrawGUI()
         {
-            EditorGUILayout.LabelField("Character", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("Use these settings to provide customisation for Characters.\n\nFor automatic loading instances should be in a folder 'Resources\\Character' and named 'Character_<number>'\n\nYou can create your own Character derived classes to hold custom properties and / or code", MessageType.Info);
+            EditorGUILayout.LabelField("Plsyer Extension", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("Use these settings to provide customisation for Players.\n\nFor automatic loading instances should be in a folder 'Resources\\Player' and named 'Player_<number>'\n\nYou can create your own Player derived classes to hold custom properties and / or code", MessageType.Info);
             DrawProperties();
         }
     }

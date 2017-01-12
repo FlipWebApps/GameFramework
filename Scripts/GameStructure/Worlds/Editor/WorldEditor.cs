@@ -20,9 +20,10 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Editor
 {
     [CustomEditor(typeof(World))]
     public class WorldEditor : GameItemEditor

@@ -20,10 +20,10 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor;
 using UnityEditor;
-using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Editor
 {
     [CustomEditor(typeof(Level))]
     public class LevelEditor : GameItemEditor
