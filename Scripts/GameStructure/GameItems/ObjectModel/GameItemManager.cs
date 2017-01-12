@@ -158,7 +158,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             {
                 if (loadFromResources)
                 {
-                    Items[i] = GameItem.LoadGameItemFromResources<T>(TypeName, startNumber + i);
+                    Items[i] = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
                     Assert.IsNotNull(Items[i], "Unable to load " + TypeName + " GameItem from resources folder " + TypeName + "\\" + TypeName + "_" + (startNumber + i) + ". Either create a new item in this folder (right click the folder | Create | Game Framework) or disable the load from resources option in GameManager.");
                     Items[i].InitialiseResources();
                 }

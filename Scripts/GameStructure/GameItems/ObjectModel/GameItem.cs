@@ -303,6 +303,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// this game item and also holding other configuration.
         /// 
         /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
+        public JSONObject JsonData { get; set; }
+
+        /// <summary>
+        /// Stored json game data from disk. 
+        /// </summary>
+        /// You can provide a json configuration file that contains both standard and custom values for setting up 
+        /// this game item and also holding other configuration.
+        /// 
+        /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
+        public JSONObject JsonGameData { get; set; }
+
+        [Obsolete("Convert to use GameItem instances or reference JsonData instead. This data is no longer automatically loaded!")]
         public JSONObject JsonConfigurationData { get; set; }
 
 
@@ -412,7 +424,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="typeName"></param>
         /// <param name="number"></param>
-        public static T LoadGameItemFromResources<T>(string typeName, int number) where T: GameItem
+        public static T LoadFromResources<T>(string typeName, int number) where T: GameItem
         {
             var gameItem = GameManager.LoadResource<T>(typeName + "\\" + typeName + "_" + number);
             gameItem.Number = number;
@@ -427,47 +439,49 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Load simple meta data associated with this game item.
         /// </summary>
         /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
-        /// or as a GameItemExtension derived ScriptableObject also from the resources folder under [IdentifierBase]\[IdentifierBase]_[Number]
-        public void LoadData()
+        public void LoadJsonData()
         {
-            if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJsonDataFile();
-            Assert.IsFalse(JsonConfigurationData == null, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (JsonConfigurationData!=null)
-                ParseData(JsonConfigurationData);
+            var path = string.Format("{0}\\{0}_{1}", IdentifierBase, Number);
+            if (JsonData == null)
+                JsonData = LoadJsonDataFile(path);
+            Assert.IsFalse(JsonData == null, "Unable to load json data. Check the file exists : " + path);
+            if (JsonData != null)
+                ParseJsonData(JsonData);
         }
 
 
         /// <summary>
         /// Parse the loaded json file data and extract certain default values
         /// </summary>
-        /// Json entries 'name', 'description' and 'valuetounlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
         /// If overriding from a base class be sure to call base.ParseLevelFileData()
         /// <param name="jsonObject"></param>
-        public virtual void ParseData(JSONObject jsonObject)
+        public virtual void ParseJsonData(JSONObject jsonObject)
         {
-            if (jsonObject.ContainsKey("name"))
-                LocalisableName = LocalisableText.CreateNonLocalised(jsonObject.GetString("name"));
-            if (jsonObject.ContainsKey("description"))
-                LocalisableDescription = LocalisableText.CreateNonLocalised(jsonObject.GetString("description"));
-            if (jsonObject.ContainsKey("valuetounlock"))
-                ValueToUnlock = (int)jsonObject.GetNumber("valuetounlock");
+        }
+
+
+        /// <summary>
+        /// Clear larger data that takes up more space or needs additional parsing
+        /// </summary>
+        /// Use this method to manually clear any loaded data to save memory
+        public void ClearJsonData()
+        {
+            JsonData = null;
         }
 
 
         /// <summary>
         /// Load larger data that takes up more space or needs additional parsing
         /// </summary>
-        /// You may not want to load and hold game data for all GameItemss, especially if it takes up a lot of memory. You can
+        /// You may not want to load and hold game data for all GameItems, especially if it takes up a lot of memory. You can
         /// use this method to selectively load such data.
-        public void LoadGameData()
+        public void LoadJsonGameData()
         {
-            if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJsonDataFile();
-            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            ParseGameData(JsonConfigurationData);
+            var path = string.Format("{0}\\{0}_GameData_{1}", IdentifierBase, Number);
+            if (JsonGameData == null)
+                JsonGameData = LoadJsonDataFile(path);
+            Assert.IsNotNull(JsonGameData, "Unable to load json data. Check the file exists : " + path);
+            ParseJsonGameData(JsonGameData);
         }
 
 
@@ -476,18 +490,28 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// If overriding from a base class be sure to call base.ParseGameData()
         /// <param name="jsonObject"></param>
-        public virtual void ParseGameData(JSONObject jsonObject)
+        public virtual void ParseJsonGameData(JSONObject jsonObject)
         {
         }
 
 
         /// <summary>
-        /// Load the json file that corresponds to this item.
+        /// Clear larger data that takes up more space or needs additional parsing
         /// </summary>
-        /// <param name="jsonObject"></param>
-        JSONObject LoadJsonDataFile()
+        /// Use this method to manually clear any loaded game data to save memory
+        public void ClearJsonGameData()
         {
-            var jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            JsonGameData = null;
+        }
+
+
+        /// <summary>
+        /// Load a json file
+        /// </summary>
+        /// <param name="path"></param>
+        JSONObject LoadJsonDataFile(string path)
+        {
+            var jsonTextAsset = GameManager.LoadResource<TextAsset>(path);
             if (jsonTextAsset == null) return null;
             //MyDebug.Log(jsonTextAsset.text);
             var jsonObject = JSONObject.Parse(jsonTextAsset.text);
@@ -1195,6 +1219,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         }
         #endregion
 
+        #region extra classes for configuration
         [Serializable]
         public class LocalisablePrefabEntry
         {
@@ -1211,6 +1236,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             public string Name;
             public LocalisableSprite LocalisableSprite;
         }
+        #endregion extra classes for configuration
     }
 
 }

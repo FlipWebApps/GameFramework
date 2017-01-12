@@ -266,32 +266,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
                 StarsWon &= (~(1 << (starNumber - 1)));
         }
 
-
-        /// <summary>
-        /// Parse the loaded level file data for level specific values. If overriding from a base class be sure to call base.ParseLevelFileData()
-        /// </summary>
-        /// <param name="jsonObject"></param>
-        public override void ParseData(Helper.JSONObject jsonObject)
-        {
-            base.ParseData(jsonObject);
-
-            if (jsonObject.ContainsKey("startotalcount"))
-                StarTotalCount = (int)jsonObject.GetNumber("startotalcount");
-            if (jsonObject.ContainsKey("star1target"))
-                Star1Target = (float)jsonObject.GetNumber("star1target");
-            if (jsonObject.ContainsKey("star2target"))
-                Star2Target = (float)jsonObject.GetNumber("star2target");
-            if (jsonObject.ContainsKey("star3target"))
-                Star3Target = (float)jsonObject.GetNumber("star3target");
-            if (jsonObject.ContainsKey("star4target"))
-                Star4Target = (float)jsonObject.GetNumber("star4target");
-            if (jsonObject.ContainsKey("timetarget"))
-                TimeTarget = (float)jsonObject.GetNumber("timetarget");
-            if (jsonObject.ContainsKey("scoretarget"))
-                ScoreTarget = (int)jsonObject.GetNumber("scoretarget");
-        }
-
-
         /// <summary>
         /// Update PlayerPrefs with setting or preferences for this item.
         /// Note: This does not call PlayerPrefs.Save()
