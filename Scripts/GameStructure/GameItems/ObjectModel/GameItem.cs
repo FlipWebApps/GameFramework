@@ -162,7 +162,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public string Name {
             get
             {
-                return LocalisableName.GetValue();
+                return LocalisableName.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Name")) : LocalisableName.GetValue();
             }
         }
 
@@ -174,7 +174,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             get
             {
-                return LocalisableDescription.GetValue();
+                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Description")) : LocalisableDescription.GetValue();
             }
         }
 
