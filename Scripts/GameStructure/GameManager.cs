@@ -434,22 +434,22 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <summary>
         /// GameItemManager containing the current Characters
         /// </summary>
-        public GameItemsManager<Character, GameItem> Characters { get; set; }
+        public GameItemManager<Character, GameItem> Characters { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Worlds
         /// </summary>
-        public GameItemsManager<World, GameItem> Worlds { get; set; }
+        public GameItemManager<World, GameItem> Worlds { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Levels
         /// </summary>
-        public GameItemsManager<Level, GameItem> Levels { get; set; }
+        public GameItemManager<Level, GameItem> Levels { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Players
         /// </summary>
-        public GameItemsManager<Player, GameItem> Players { get; set; }
+        public PlayerGameItemManager PlayerGameItem { get; set; }
 
         /// <summary>
         /// The current Player. 
@@ -459,15 +459,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             get
             {
-                Assert.IsNotNull(Players, "Players are not setup. Check that in the script execution order GameManager is setup first.");
-                return Players.Selected;
+                Assert.IsNotNull(PlayerGameItem, "Players are not setup. Check that in the script execution order GameManager is setup first.");
+                return PlayerGameItem.Selected;
             }
             set
             {
-                var oldPlayer = Player;
-                Players.SetSelected(value);
-                if (IsInitialised && oldPlayer != null && oldPlayer.Number != Player.Number)
-                    GameManager.SafeQueueMessage(new PlayerChangedMessage(oldPlayer, Player));
+                PlayerGameItem.SetSelected(value);
             }
         }
 
@@ -568,14 +565,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
             // setup players.
             Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
-            Players = new GameItemsManager<Player, GameItem>();
-            Players.Load(0, PlayerCount);
+            PlayerGameItem = new PlayerGameItemManager();
+            PlayerGameItem.Load(0, PlayerCount);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
             {
                 var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
-                Worlds = new GameItemsManager<World, GameItem>();
+                Worlds = new GameItemManager<World, GameItem>();
                 Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
                 // if we have worlds then autocreate levels for each world.
@@ -584,7 +581,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                     for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
                     {
                         var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                        Worlds.Items[i].Levels = new GameItemsManager<Level, GameItem>();
+                        Worlds.Items[i].Levels = new GameItemManager<Level, GameItem>();
                         Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
                     }
 
@@ -598,7 +595,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 if (AutoCreateLevels)
                 {
                     var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                    Levels = new GameItemsManager<Level, GameItem>();
+                    Levels = new GameItemManager<Level, GameItem>();
                     Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
                 }
             }
@@ -606,7 +603,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             // handle auto setup of characters
             if (AutoCreateCharacters)
             {
-                Characters = new GameItemsManager<Character, GameItem>();
+                Characters = new GameItemManager<Character, GameItem>();
                 if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
                     Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
                 else
@@ -924,7 +921,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Obsolete("GetPlayer(number) is deprecated - use Players.GetItem(number)")]
         public Player GetPlayer(int playerNumber)
         {
-            return Players.GetItem(playerNumber);
+            return PlayerGameItem.GetItem(playerNumber);
         }
 
         /// <summary>
@@ -934,7 +931,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Obsolete("SetPlayerByNumber(number) is deprecated - use Players.SetSelected(playerNumber);")]
         public void SetPlayerByNumber(int playerNumber)
         {
-            Players.SetSelected(playerNumber);
+            PlayerGameItem.SetSelected(playerNumber);
         }
         #endregion Player Related
     }
