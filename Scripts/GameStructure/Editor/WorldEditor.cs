@@ -31,9 +31,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
         {
             EditorGUILayout.LabelField("World Extension", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Use these settings to provide customisation for Worlds.\n\nFor automatic loading instances should be in a folder 'Resources\\World' and named 'World_<number>'\n\nYou can create your own World derived classes to hold custom properties and / or code", MessageType.Info);
-            EditorGUILayout.BeginVertical("Box");
             DrawProperties();
-            EditorGUILayout.EndVertical();
         }
     }
 }
