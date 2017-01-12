@@ -123,7 +123,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor
                             "No"))
                     {
                         _giLocalisablePrefabsProperty.DeleteArrayElementAtIndex(i);
-                        //                        _poolManager.Pools.RemoveAt(i);
                         deleted = true;
                     }
                     EditorGUILayout.EndHorizontal();

@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEditor;
 
@@ -41,7 +40,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
 
             label = EditorGUI.BeginProperty(position, label, property);
 
-            defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent(defaultProperty.name, defaultProperty.tooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
+            defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent("Default", defaultProperty.tooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
             //EditorGUI.PropertyField(rowPosition, defaultProperty, label);
             rowPosition.y += _propertyRowHeight;
 
