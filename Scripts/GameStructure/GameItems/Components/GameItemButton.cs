@@ -157,7 +157,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
 
             if (DisplayImage != null)
-                DisplayImage.sprite = CurrentItem.Sprite;
+            {
+                var selectionMenuSprite = CurrentItem.GetSpriteSelectionMenu();
+                if (selectionMenuSprite != null)
+                    DisplayImage.sprite = selectionMenuSprite;
+                else
+                    DisplayImage.sprite = CurrentItem.Sprite;
+            }
 
             if (LockGameObject != null)
                 LockGameObject.SetActive(!isUnlockedAndAnimationShown);
