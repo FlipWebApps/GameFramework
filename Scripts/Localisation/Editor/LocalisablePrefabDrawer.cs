@@ -19,14 +19,20 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses;
 using UnityEditor;
 using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
+using UnityEngine;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor
 {
     [CustomPropertyDrawer(typeof(LocalisablePrefab))]
     public class LocalisablePrefabDrawer : LocalisableObjectDrawer
     {
+        internal override Type LocalisableType
+        {
+            get { return typeof(GameObject); }
+        }
     }
 }

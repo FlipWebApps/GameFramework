@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
 using UnityEngine;
 using UnityEditor;
@@ -29,6 +30,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
     {
         readonly float _propertyRowHeight = EditorGUIUtility.singleLineHeight + 2;
 
+        internal abstract Type LocalisableType { get; }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var defaultProperty = property.FindPropertyRelative("_default");
@@ -38,7 +41,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
 
             label = EditorGUI.BeginProperty(position, label, property);
 
-            EditorGUI.PropertyField(rowPosition, defaultProperty, label);
+            defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent(defaultProperty.name, defaultProperty.tooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
+            //EditorGUI.PropertyField(rowPosition, defaultProperty, label);
             rowPosition.y += _propertyRowHeight;
 
             EditorGUI.indentLevel += 1;
@@ -56,7 +60,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
                         var contentRect = new Rect(rowPosition) {width = rowPosition.width/2};
                         EditorGUI.PropertyField(contentRect, languageProperty, GUIContent.none);
                         contentRect.x += contentRect.width + 2;
-                        EditorGUI.PropertyField(contentRect, itemProperty, GUIContent.none);
+                        itemProperty.objectReferenceValue = EditorGUI.ObjectField(contentRect, itemProperty.objectReferenceValue, LocalisableType, false);
+                        //EditorGUI.PropertyField(contentRect, itemProperty, GUIContent.none);
                         rowPosition.y += EditorGUIUtility.singleLineHeight + 2;
                     }
                 }
