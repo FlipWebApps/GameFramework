@@ -28,7 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel.AbstractCla
     /// <summary>
     /// Class that holds information about localisable Object's.
     /// </summary>
-    /// Note: Due to Unity localisation constraints we use Object's as the types here and restrict the internals to inherited classes
+    /// Note: Due to Unity localisation constraints and an inability to serialise generic types properly we use Object's as the types 
+    /// here and restrict the internals to inherited classes
     [Serializable]
     public class LocalisableObject
     {
