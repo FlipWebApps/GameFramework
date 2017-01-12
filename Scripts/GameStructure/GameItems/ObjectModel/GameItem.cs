@@ -732,6 +732,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return null;
         }
 
+        public GameObject InstantiatePrefabSelectionMenu(Transform parent = null)
+        {
+            var localisablePrefab = GetPrefab(LocalisablePrefabType.SelectionMenu);
+            if (localisablePrefab == null) return null;
+
+            var newInstance = Instantiate(localisablePrefab);
+            if (parent != null)
+                newInstance.transform.SetParent(parent, false);
+            return newInstance;
+        }
         #endregion Prefab Related
 
         #region Sprite Related
