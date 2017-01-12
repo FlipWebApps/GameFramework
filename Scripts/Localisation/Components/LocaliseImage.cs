@@ -25,49 +25,31 @@ using FlipWebApps.GameFramework.Scripts.Messaging;
 using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 
 namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
 {
     /// <summary>
-    /// Localises a Text field based upon the given Key
+    /// Localises an image field based upon the given Key
     /// </summary>
-    [RequireComponent(typeof(UnityEngine.UI.Text))]
-    [AddComponentMenu("Game Framework/Localisation/Localise Text")]
+    [RequireComponent(typeof(UnityEngine.UI.Image))]
+    [AddComponentMenu("Game Framework/Localisation/Localise Image")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class LocaliseText : RunOnMessage<LocalisationChangedMessage>
+    public class LocaliseImage : RunOnMessage<LocalisationChangedMessage>
     {
         /// <summary>
-        /// Localization key.
+        /// Localization Setup.
         /// </summary>
-        public string Key;
+        public LocalisableSprite Sprite;
 
-        /// <summary>
-        /// Manually change the value of whatever the localization component is attached to.
-        /// </summary>
-        public string Value
-        {
-            set
-            {
-                if (string.IsNullOrEmpty(value)) return;
-
-                _textComponent.text = value;
-            }
-        }
-
-        UnityEngine.UI.Text _textComponent;
+        UnityEngine.UI.Image _imageComponent;
 
         /// <summary>
         /// setup
         /// </summary>
         public override void Awake()
         {
-            _textComponent = GetComponent<UnityEngine.UI.Text>();
-
-            // If no localization key has been specified, use the text value as the key
-            if (string.IsNullOrEmpty(Key))
-            {
-                Key = _textComponent.text;
-            }
+            _imageComponent = GetComponent<UnityEngine.UI.Image>();
 
             OnLocalise();
             base.Awake();
@@ -79,8 +61,7 @@ namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
         /// </summary>
         void OnLocalise()
         {
-            // If we don't have a key then don't change the value
-            if (!string.IsNullOrEmpty(Key)) Value = Localisation.LocaliseText.Get(Key);
+            _imageComponent.sprite = Sprite.GetSprite();
         }
 
 
