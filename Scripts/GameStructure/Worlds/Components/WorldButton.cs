@@ -65,10 +65,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
         }
 
         /// <summary>
-        /// Returns the GameItemsManager that holds Worlds
+        /// Returns the GameItemManager that holds Worlds
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<World, GameItem> GetGameItemsManager()
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Worlds;
         }

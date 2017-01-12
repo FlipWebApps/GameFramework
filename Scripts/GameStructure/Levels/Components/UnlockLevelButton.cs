@@ -38,7 +38,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
         /// Returns the GameItemsManager that holds Levels
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
+        protected override GameItemManager<Level, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Levels;
         }

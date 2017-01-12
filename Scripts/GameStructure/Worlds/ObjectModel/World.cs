@@ -36,7 +36,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel
         /// <summary>
         /// Levels for this world
         /// </summary>
-        public GameItemsManager<Level, GameItem> Levels { get; set; }
+        public GameItemManager<Level, GameItem> Levels { get; set; }
 
         //public int SelectedLevel;
 

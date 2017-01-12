@@ -38,7 +38,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
         /// Returns the GameItemsMaager that holds GenericGameItems
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<GenericGameItem, GameItem> GetGameItemsManager()
+        protected override GameItemManager<GenericGameItem, GameItem> GetGameItemManager()
         {
             return GenericGameItemManager.Instance.GenericGameItems;
         }

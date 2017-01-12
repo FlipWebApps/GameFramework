@@ -103,7 +103,7 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
         static void PurchaseGameItem<T_GameItem>(
             string productId,
             string key,
-            Func<GameItemsManager<T_GameItem, GameItem>> getGameItemsManager,
+            Func<GameItemManager<T_GameItem, GameItem>> getGameItemManager,
             Func<int, BaseMessage> createMessage) where T_GameItem : GameItem, new()
         {
             Assert.IsTrue(productId.StartsWith(key), "Invalid product id found");
@@ -112,8 +112,8 @@ namespace FlipWebApps.GameFramework.Scripts.Billing
             T_GameItem multiPurposeGameItem = null;
 
             // first try and get from game manager
-            if (GameManager.IsActive && getGameItemsManager() != null)
-                multiPurposeGameItem = getGameItemsManager().GetItem(number);
+            if (GameManager.IsActive && getGameItemManager() != null)
+                multiPurposeGameItem = getGameItemManager().GetItem(number);
 
             // if not found on game manager then create a new copy to ensure this purchase is recorded
             if (multiPurposeGameItem == null)

@@ -117,7 +117,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             Button b = gameObject.GetComponent<Button>();
             b.onClick.AddListener(OnClick);
 
-            CurrentItem = GetGameItemsManager().GetItem(Number);
+            CurrentItem = GetGameItemManager().GetItem(Number);
             Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
 
             GameManager.SafeAddListener<LocalisationChangedMessage>(OnLocalisationChanged);
@@ -133,8 +133,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
                 Unlock();
 
             // add event and message listeners.
-            GetGameItemsManager().Unlocked += UnlockIfGameItemMatches;
-            GetGameItemsManager().SelectedChanged += SelectedChanged;
+            GetGameItemManager().Unlocked += UnlockIfGameItemMatches;
+            GetGameItemManager().SelectedChanged += SelectedChanged;
         }
 
         protected void OnDestroy()
@@ -142,8 +142,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             GameManager.SafeRemoveListener<LocalisationChangedMessage>(OnLocalisationChanged);
             GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
 
-            GetGameItemsManager().SelectedChanged -= SelectedChanged;
-            GetGameItemsManager().Unlocked -= UnlockIfGameItemMatches;
+            GetGameItemManager().SelectedChanged -= SelectedChanged;
+            GetGameItemManager().Unlocked -= UnlockIfGameItemMatches;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             if (SelectionMode == SelectionModeType.Select && HighlightImage != null)
             {
-                HighlightImage.enabled = GetGameItemsManager().Selected.Number == CurrentItem.Number;
+                HighlightImage.enabled = GetGameItemManager().Selected.Number == CurrentItem.Number;
             }
         }
 
@@ -185,7 +185,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// Return a GameItemsMaanger that holds the GameItem that we are displaying.
         /// </summary>
         /// <returns></returns>
-        protected abstract GameItemsManager<T, GameItem> GetGameItemsManager();
+        protected abstract GameItemManager<T, GameItem> GetGameItemManager();
 
         void SelectedChanged(T oldItem, T item)
         {
@@ -214,7 +214,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// You may override this in a derived class.
         public virtual void ClickUnlocked()
         {
-            GetGameItemsManager().Selected = CurrentItem;
+            GetGameItemManager().Selected = CurrentItem;
             PreferencesFactory.Save();
 
             if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))

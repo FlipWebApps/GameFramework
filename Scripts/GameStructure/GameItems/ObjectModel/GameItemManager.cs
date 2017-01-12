@@ -35,7 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TParent"></typeparam>
-    public class GameItemsManager<T, TParent> where T: GameItem where TParent: GameItem
+    public class GameItemManager<T, TParent> where T: GameItem where TParent: GameItem
     {
         /// <summary>
         /// The unlock mode that will be used
@@ -43,12 +43,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public GameItem.UnlockModeType UnlockMode;
 
         /// <summary>
-        /// The full name of the type (T) that this GameItemsManager represents
+        /// The full name of the type (T) that this GameItemManager represents
         /// </summary>
         public string TypeNameFull = typeof(T).FullName;
 
         /// <summary>
-        /// The type (T) name that this GameItemsManager represents
+        /// The type (T) name that this GameItemManager represents
         /// </summary>
         public string TypeName = typeof(T).Name;
 
@@ -60,7 +60,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// The currently selected item
         /// </summary>
-        /// The selected item number is persisted and loaded next time this GameItemsManager is created.
+        /// The selected item number is persisted and loaded next time this GameItemManager is created.
         public T Selected
         {
             get { return _selected; }
@@ -103,9 +103,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         readonly bool _holdsPlayers;
 
 
-        public GameItemsManager() : this(null) { }
+        public GameItemManager() : this(null) { }
 
-        public GameItemsManager(TParent parent)
+        public GameItemManager(TParent parent)
         {
             MyDebug.Log(TypeNameFull + ": Constructor");
             Parent = parent;
@@ -125,7 +125,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public void LoadCustom()
         {
             LoadCustomItems();
-            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.LoadCustomItems()");
+            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.LoadCustomItems()");
 
             SetupSelectedItem();
             SetupUnlockedItems();
@@ -163,7 +163,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                     Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
                 }
             }
-            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemsManager.Load()");
+            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.Load()");
 
             SetupSelectedItem();
             SetupUnlockedItems();

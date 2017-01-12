@@ -89,7 +89,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
             _animation = GetComponent<UnityEngine.Animation>();
 
-            _localisationBase = GetGameItemsManager().TypeName;
+            _localisationBase = GetGameItemManager().TypeName;
             _failedUnlockAttempts = GameManager.Instance.Player.GetSettingInt(_localisationBase + ".FailedUnlockAttempts", 0);
         }
 
@@ -99,7 +99,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// </summary>
         void Update()
         {
-            var minimumCoinsToOpenLevel = GetGameItemsManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
+            var minimumCoinsToOpenLevel = GetGameItemManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
             var canUnlock = minimumCoinsToOpenLevel != -1 && minimumCoinsToOpenLevel == 0;
             _button.interactable = canUnlock;
             if (_animation != null)
@@ -108,10 +108,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
 
 
         /// <summary>
-        /// Implement this method to return a GameItemsManager that contains the GameItems that this button works upon.
+        /// Implement this method to return a GameItemManager that contains the GameItems that this button works upon.
         /// </summary>
         /// <returns></returns>
-        protected abstract GameItemsManager<T, GameItem> GetGameItemsManager();
+        protected abstract GameItemManager<T, GameItem> GetGameItemManager();
 
 
         /// <summary>
@@ -125,10 +125,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             T[] gameItems;
             if (_failedUnlockAttempts >= MaxFailedUnlocks)
             {
-                gameItems = GetGameItemsManager().UnlockableItems(GameManager.Instance.Player.Coins, true);
+                gameItems = GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins, true);
             }
             else {
-                gameItems = GetGameItemsManager().UnlockableItems(GameManager.Instance.Player.Coins);
+                gameItems = GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins);
             }
 
             // There should always be an item - we should not let them unlock if there is nothing to unlock!
@@ -179,7 +179,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         {
             if (!_alreadyUnlocked)
             {
-                GetGameItemsManager().Unlocked(_gameItemToUnlock);
+                GetGameItemManager().Unlocked(_gameItemToUnlock);
 
 #if UNITY_ANALYTICS
                 // record some analytics on the item unlocked
