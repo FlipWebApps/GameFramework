@@ -117,10 +117,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         int _valueToUnlock = -1;
 
         [SerializeField]
-        List<LocalisablePrefabEntry> _localisablePrefabs;
+        List<LocalisablePrefabEntry> _localisablePrefabs = new List<LocalisablePrefabEntry>();
 
         [SerializeField]
-        List<LocalisableSpriteEntry> _localisableSprites;
+        List<LocalisableSpriteEntry> _localisableSprites = new List<LocalisableSpriteEntry>();
         #endregion Editor Parameters
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             get
             {
-                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Description")) : LocalisableDescription.GetValue();
+                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Desc")) : LocalisableDescription.GetValue();
             }
         }
 
@@ -396,7 +396,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
             if (loadFromResources)
-                LoadJsonData();
+                LoadData();
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
@@ -444,7 +444,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 GameItemExtensionData = LoadGameItemExtension();
 
             if (JsonData == null && GameItemExtensionData == null)
-                MyDebug.LogWarning("When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+                MyDebug.LogWarning("When loading game item from resources, corresponding JSON or GameItemExtension should be present. Either disable the Load From Resources option or check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number + "[_Extension]");
         }
 
         /// <summary>
@@ -537,7 +537,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         GameItemExtension LoadGameItemExtension()
         {
-            var giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            var giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number + "_Extension");
             return giExtension;
         }
 

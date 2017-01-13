@@ -566,7 +566,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             // setup players.
             Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
             Players = new PlayerGameItemManager();
-            Players.Load(0, PlayerCount);
+            Players.Load(0, PlayerCount-1);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)

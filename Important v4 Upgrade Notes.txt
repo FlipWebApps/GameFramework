@@ -1,0 +1,49 @@
+Hi,
+
+This document contains a few important notes about upgrading from previous versions of Game Framework before v4.0, but 
+before that a few words.
+
+When I released the first public version of Game Framework about a year ago, it was still quite rough around the edges, 
+lacked documentation and was missing several key features. Thanks to many late evenings, great feedback and 
+terrific support from those using it, Game Framework has come a long way over the last 12 months and it has been 
+fantastic to see some of the games that have been produced. I am especially excited that the free version has been a part
+of this creativity while also appreciating everyone who has supported my efforts through purchasing the extras bundle 
+and otherwise.
+
+The version v4.0 release is a major milestone. Not only is all documentation now in place (additional tutorials and 
+update will of course follow), the latest release also features many changes that put in place the structure and building 
+blocks for the further improvement and development of Game Framework. Unfortunately some of those changes have meant 
+introducing breaking changes that will need some (hopefully minor) changes to your code. this was not a decision taken 
+lightly but were needed to prepare for the exciting future that is planned.
+
+The notes below describe some of the changes needed, however if you have problems not listed then please post on the
+Game Framework forum and I will answer as quick as I can. I would recommend also reviewing the release notes and 
+updated tutorials to get an overview on what has changed.
+ 
+If you like Game Framework when you can support me by buying the extras bundle, leaving a rating / review on the asset
+store, or simply sending a mail telling me what you are using the framework for. All feedback inspires me to continue 
+adding new features.
+
+Happy coding!
+
+Regards,
+Mark Hewitt
+
+For more details please visit: http://www.flipwebapps.com/game-framework/
+Support forum: http://www.flipwebapps.com/forum/ 
+Asset store page: https://www.assetstore.unity3d.com/en/#!/content/55334?aid=1011lGnE
+
+- - - - - - - - - -
+
+V4 UPGRADE NOTES FROM V3 AND EARLIER
+
+Before upgrading be sure to take a backup copy of your project. You should then delete the old FlipWebApps folder or the
+upgrade will not work
+
+	1. If you have an older version installed:
+		1.1. Make a backup of your project.
+		1.2. Delete the old /FlipWebApps folder to cater for possible conflicts.
+	2. Import the new version.
+
+MAIN UPGRADE STEPS
+

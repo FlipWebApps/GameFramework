@@ -115,7 +115,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.A
             else
                 newInstance = CurrentItem.InstantiatePrefab(Name, Parent == null ? transform : Parent.transform, WorldPositionStays);
 
-            Assert.IsNotNull(newInstance, "The Prefab you are trying to instantiate is not setup. Please add it to the target GameItem.");
+            Assert.IsNotNull(newInstance, string.Format("The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.", CurrentItem.IdentifierBase, CurrentItem.Number));
         }
     }
 }
