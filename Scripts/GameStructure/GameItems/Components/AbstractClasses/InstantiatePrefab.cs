@@ -24,7 +24,7 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// Create an instance of the specified prefab
@@ -40,6 +40,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
             get { return _prefabType; }
             set { _prefabType  = value; }
         }
+        [Header("Prefab Settings")]
         [Tooltip("The type of prefab to instantiate.")]
         [SerializeField]
         GameItem.LocalisablePrefabType _prefabType;
@@ -69,6 +70,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         GameObject _parent;
 
         /// <summary>
+        /// If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.
+        /// </summary>
+        public bool WorldPositionStays
+        {
+            get { return _worldPositionStays; }
+            set { _worldPositionStays = value; }
+        }
+        [Tooltip("If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.")]
+        [SerializeField]
+        bool _worldPositionStays;
+
+        /// <summary>
         /// The current item that this button corresponds to.
         /// </summary>
         public T CurrentItem { get; set; }
@@ -94,7 +107,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
         /// </summary>
         public override void RunMethod()
         {
-            var newInstance = CurrentItem.InstantiatePrefabSelectionMenu(Parent == null ? transform : Parent.transform);
+            GameObject newInstance;
+            if (PrefabType == GameItem.LocalisablePrefabType.SelectionMenu)
+                newInstance = CurrentItem.InstantiatePrefabSelectionMenu(Parent == null ? transform : Parent.transform, WorldPositionStays);
+            else if (PrefabType == GameItem.LocalisablePrefabType.InGame)
+                newInstance = CurrentItem.InstantiatePrefabInGame(Parent == null ? transform : Parent.transform, WorldPositionStays);
+            else
+                newInstance = CurrentItem.InstantiatePrefab(Name, Parent == null ? transform : Parent.transform, WorldPositionStays);
+
             Assert.IsNotNull(newInstance, "The Prefab you are trying to instantiate is not setup. Please add it to the target GameItem.");
         }
     }

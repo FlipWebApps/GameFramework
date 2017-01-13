@@ -20,25 +20,25 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
 {
     /// <summary>
     /// Create an instance of the specified prefab
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Level Prefab")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class InstantiateLevelPrefab : InstantiatePrefab<Level>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Player Prefab")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
+    public class InstantiatePlayerPrefab : InstantiatePrefab<Player>
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// Returns the current Player GameItem
         /// </summary>
         /// <returns></returns>
-        protected override Level GetCurrentItem()
+        protected override Player GetCurrentItem()
         {
-            return GameManager.Instance.Levels.Selected;
+            return GameManager.Instance.Players.Selected;
         }
     }
 }

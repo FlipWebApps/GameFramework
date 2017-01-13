@@ -19,26 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using UnityEngine;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components;
+using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Editor
 {
-    /// <summary>
-    /// Create an instance of the specified prefab
-    /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Level Prefab")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class InstantiateLevelPrefab : InstantiatePrefab<Level>
+    [CustomEditor(typeof (InstantiatePlayerPrefab))]
+    public class InstantiatePlayerPrefabEditor : InstantiatePrefabEditor
     {
-        /// <summary>
-        /// Returns the current Level GameItem
-        /// </summary>
-        /// <returns></returns>
-        protected override Level GetCurrentItem()
-        {
-            return GameManager.Instance.Levels.Selected;
-        }
     }
 }

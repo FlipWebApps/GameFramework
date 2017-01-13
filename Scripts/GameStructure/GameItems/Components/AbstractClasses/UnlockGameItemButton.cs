@@ -34,7 +34,7 @@ using System.Collections.Generic;
 using UnityEngine.Analytics;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// abstract base Unlock GameItem button that handles the ability to unlock GameItems 

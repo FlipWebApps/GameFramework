@@ -554,7 +554,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
                 PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
 
-        #region Prefab Related
+        #region Get Prefab Related
 
         /// <summary>
         /// Get a prefab with the given name that corresponds to the currently set language
@@ -731,18 +731,65 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             }
             return null;
         }
+        #endregion Get Prefab Related
 
-        public GameObject InstantiatePrefabSelectionMenu(Transform parent = null)
+        #region Instantiate Prefab Related
+
+        /// <summary>
+        /// Instantiate a selection menu prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefabSelectionMenu(Transform parent = null, bool worldPositionStays = true)
         {
-            var localisablePrefab = GetPrefab(LocalisablePrefabType.SelectionMenu);
-            if (localisablePrefab == null) return null;
+            return InstantiatePrefab(LocalisablePrefabType.SelectionMenu, parent);
+        }
 
+        /// <summary>
+        /// Instantiate an in game prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefabInGame(Transform parent = null, bool worldPositionStays = true)
+        {
+            return InstantiatePrefab(LocalisablePrefabType.InGame, parent);
+        }
+
+        /// <summary>
+        /// Instantiate the named prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefab(string name, Transform parent = null, bool worldPositionStays = true)
+        {
+            var localisablePrefab = GetPrefab(name);
+            if (localisablePrefab == null) return null;
+            return InstantiatePrefab(localisablePrefab, parent);
+        }
+
+        /// <summary>
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="localisablePrefabType"></param>
+        /// <param name="parent"></param>
+        /// <param name = "worldPositionStays" >If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        GameObject InstantiatePrefab(LocalisablePrefabType localisablePrefabType, Transform parent = null, bool worldPositionStays = true)
+        {
+            var localisablePrefab = GetPrefab(localisablePrefabType);
+            if (localisablePrefab == null) return null;
+            return InstantiatePrefab(localisablePrefab, parent);
+        }
+
+
+        static GameObject InstantiatePrefab(GameObject localisablePrefab, Transform parent, bool worldPositionStays = true)
+        {
             var newInstance = Instantiate(localisablePrefab);
             if (parent != null)
-                newInstance.transform.SetParent(parent, false);
+                newInstance.transform.SetParent(parent, worldPositionStays);
             return newInstance;
         }
-        #endregion Prefab Related
+        #endregion Instantiate Prefab Related
 
         #region Sprite Related
 

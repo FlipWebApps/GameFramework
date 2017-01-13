@@ -449,7 +449,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// <summary>
         /// GameItemManager containing the current Players
         /// </summary>
-        public PlayerGameItemManager PlayerGameItem { get; set; }
+        public PlayerGameItemManager Players { get; set; }
 
         /// <summary>
         /// The current Player. 
@@ -459,12 +459,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         {
             get
             {
-                Assert.IsNotNull(PlayerGameItem, "Players are not setup. Check that in the script execution order GameManager is setup first.");
-                return PlayerGameItem.Selected;
+                Assert.IsNotNull(Players, "Players are not setup. Check that in the script execution order GameManager is setup first.");
+                return Players.Selected;
             }
             set
             {
-                PlayerGameItem.SetSelected(value);
+                Players.SetSelected(value);
             }
         }
 
@@ -565,8 +565,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
 
             // setup players.
             Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
-            PlayerGameItem = new PlayerGameItemManager();
-            PlayerGameItem.Load(0, PlayerCount);
+            Players = new PlayerGameItemManager();
+            Players.Load(0, PlayerCount);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
@@ -921,7 +921,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Obsolete("GetPlayer(number) is deprecated - use Players.GetItem(number)")]
         public Player GetPlayer(int playerNumber)
         {
-            return PlayerGameItem.GetItem(playerNumber);
+            return Players.GetItem(playerNumber);
         }
 
         /// <summary>
@@ -931,7 +931,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         [Obsolete("SetPlayerByNumber(number) is deprecated - use Players.SetSelected(playerNumber);")]
         public void SetPlayerByNumber(int playerNumber)
         {
-            PlayerGameItem.SetSelected(playerNumber);
+            Players.SetSelected(playerNumber);
         }
         #endregion Player Related
     }

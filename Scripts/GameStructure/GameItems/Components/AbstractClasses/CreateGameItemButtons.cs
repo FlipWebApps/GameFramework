@@ -19,26 +19,45 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Creates instances of the passed prefab for all game items provided by the implementation class
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Level Prefab")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class InstantiateLevelPrefab : InstantiatePrefab<Level>
+    /// <typeparam name="TGameItemButton">The type of the Game Item button</typeparam>
+    /// <typeparam name="TGameItem">The type of the Game Item</typeparam>
+    public abstract class CreateGameItemButtons<TGameItemButton, TGameItem> : MonoBehaviour where TGameItemButton: GameItemButton<TGameItem> where TGameItem: GameItem, new()
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// A prefab that will be created for all GameItems.
+        /// </summary>
+        [Tooltip("A prefab that will be created for all GameItems.")]
+        public GameObject Prefab;
+
+
+        /// <summary>
+        /// Create and add all buttons
+        /// </summary>
+        public void Awake()
+        {
+            foreach (var gameItem in GetGameItems())
+            {
+                var button = Prefab.GetComponent<TGameItemButton>();
+                button.Number = gameItem.Number;
+
+                var newObject = Instantiate(Prefab);
+                newObject.transform.SetParent(transform, false);
+            }
+        }
+
+
+        /// <summary>
+        /// Implement this in your derived class to return an array of GameItems to create buttons for
         /// </summary>
         /// <returns></returns>
-        protected override Level GetCurrentItem()
-        {
-            return GameManager.Instance.Levels.Selected;
-        }
+        protected abstract GameItem[] GetGameItems();
     }
 }

@@ -19,45 +19,33 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
+namespace FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses
 {
-    /// <summary>
-    /// Creates instances of the passed prefab for all game items provided by the implementation class
-    /// </summary>
-    /// <typeparam name="TGameItemButton">The type of the Game Item button</typeparam>
-    /// <typeparam name="TGameItem">The type of the Game Item</typeparam>
-    public abstract class CreateGameItemButtons<TGameItemButton, TGameItem> : MonoBehaviour where TGameItemButton: GameItemButton<TGameItem> where TGameItem: GameItem, new()
+    public abstract class RunOnStateEditor : UnityEditor.Editor
     {
-        /// <summary>
-        /// A prefab that will be created for all GameItems.
-        /// </summary>
-        [Tooltip("A prefab that will be created for all GameItems.")]
-        public GameObject Prefab;
+        //GameItem _gameItem;
+        SerializedProperty _runProperty;
+        SerializedProperty _runFrequencyProperty;
 
-
-        /// <summary>
-        /// Create and add all buttons
-        /// </summary>
-        public void Awake()
+        public virtual void OnEnable()
         {
-            foreach (var gameItem in GetGameItems())
-            {
-                var button = Prefab.GetComponent<TGameItemButton>();
-                button.Number = gameItem.Number;
-
-                var newObject = Instantiate(Prefab);
-                newObject.transform.SetParent(transform, false);
-            }
+            //_gameItem = (GameItem)target;
+            // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
+            _runProperty = serializedObject.FindProperty("Run");
+            _runFrequencyProperty = serializedObject.FindProperty("RunFrequency");
         }
 
-
-        /// <summary>
-        /// Implement this in your derived class to return an array of GameItems to create buttons for
-        /// </summary>
-        /// <returns></returns>
-        protected abstract GameItem[] GetGameItems();
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.PropertyField(_runProperty, new GUIContent(_runProperty.displayName, _runProperty.tooltip));
+            if (_runProperty.enumValueIndex == 4)
+            EditorGUILayout.PropertyField(_runFrequencyProperty, new GUIContent(_runFrequencyProperty.displayName, _runFrequencyProperty.tooltip));
+        }
     }
 }

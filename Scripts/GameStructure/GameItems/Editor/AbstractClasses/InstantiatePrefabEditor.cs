@@ -19,26 +19,41 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses;
+using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor.AbstractClasses
 {
-    /// <summary>
-    /// Create an instance of the specified prefab
-    /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Level Prefab")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class InstantiateLevelPrefab : InstantiatePrefab<Level>
+    public abstract class InstantiatePrefabEditor : RunOnStateEditor
     {
-        /// <summary>
-        /// Returns the current Level GameItem
-        /// </summary>
-        /// <returns></returns>
-        protected override Level GetCurrentItem()
+        SerializedProperty _prefabTypeProperty;
+        SerializedProperty _nameProperty;
+        SerializedProperty _parentProperty;
+        SerializedProperty _worldPositionStaysProperty;
+
+        public override void OnEnable()
         {
-            return GameManager.Instance.Levels.Selected;
+            base.OnEnable();
+            _prefabTypeProperty = serializedObject.FindProperty("_prefabType");
+            _nameProperty = serializedObject.FindProperty("_name");
+            _parentProperty = serializedObject.FindProperty("_parent");
+            _worldPositionStaysProperty = serializedObject.FindProperty("_worldPositionStays");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            base.OnInspectorGUI();
+
+            EditorGUILayout.PropertyField(_prefabTypeProperty);
+            if (_prefabTypeProperty.enumValueIndex == 0)
+                EditorGUILayout.PropertyField(_nameProperty);
+            EditorGUILayout.PropertyField(_parentProperty);
+            EditorGUILayout.PropertyField(_worldPositionStaysProperty);
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

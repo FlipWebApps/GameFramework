@@ -39,7 +39,7 @@ using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
 using System;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// Abstract Game Item button class that displays information about the linked Game Item
