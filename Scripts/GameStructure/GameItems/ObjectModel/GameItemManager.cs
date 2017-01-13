@@ -122,28 +122,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         }
 
-        /// <summary>
-        /// A custom load method that you can use with sub classes. This will call the LoadCustomItems() method before 
-        /// standard selection and unlock setup.
-        /// </summary>
-        public void LoadCustom()
-        {
-            LoadCustomItems();
-            Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.LoadCustomItems()");
-
-            SetupSelectedItem();
-            SetupUnlockedItems();
-            _isLoaded = true;
-        }
-
-        /// <summary>
-        /// A custom load method that you can use with sub classes to manually setup the Items collection.
-        /// </summary>
-        /// If you want detault selection and unlock setting up then call LoadCustom() instead of this directly.
-        protected virtual void LoadCustomItems()
-        {
-
-        }
         
         /// <summary>
         /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup. If loadFromResources
@@ -156,16 +134,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
             for (var i = 0; i < count; i++)
             {
-                if (loadFromResources)
+                // preference is to load from resources.
+                Items[i] = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
+                if (Items[i] != null)
                 {
-                    Items[i] = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
-                    Assert.IsNotNull(Items[i], "Unable to load " + TypeName + " GameItem from resources folder " + TypeName + "\\" + TypeName + "_" + (startNumber + i) + ". Either create a new item in this folder (right click the folder | Create | Game Framework) or disable the load from resources option in GameManager.");
-                    Items[i].InitialiseResources();
+                    Items[i].InitialiseNonScriptableObjectValues(loadFromResources: loadFromResources);
                 }
-                else
-                {
+                else { 
+                    MyDebug.LogWarning("Unable to find " + TypeName + " GameItem in resources folder " + TypeName + "\\" + TypeName + "_" + (startNumber + i) + " so using defaults. To get the most from Game Framework if is recommended to create a new item in this folder (right click the folder | Create | Game Framework).");
                     Items[i] = ScriptableObject.CreateInstance<T>();
-                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
+                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock, loadFromResources: loadFromResources);
                 }
             }
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.Load()");

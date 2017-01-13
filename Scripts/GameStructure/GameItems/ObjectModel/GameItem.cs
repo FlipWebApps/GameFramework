@@ -317,6 +317,17 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         [Obsolete("Convert to use GameItem instances or reference JsonData instead. This data is no longer automatically loaded!")]
         public JSONObject JsonConfigurationData { get; set; }
 
+        /// <summary>
+        /// Stored GameItemExtension data. 
+        /// </summary>
+        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
+        public GameItemExtension GameItemExtensionData { get; set; }
+
+        /// <summary>
+        /// Stored GameItemExtension game data. 
+        /// </summary>
+        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
+        public GameItemExtension GameItemExtensionGameData { get; set; }
 
         bool _isPlayer;
 
@@ -344,39 +355,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <param name="player"></param>
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
-        /// <param name="loadFromResources">Whether a resources file is present with additional information</param>
-        public void Initialise(int number, LocalisableText name, LocalisableText description, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "") //GameItem parent = null, 
+        /// <param name="loadFromResources"></param>
+        public void Initialise(int number, LocalisableText name, LocalisableText description, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
-            _isPlayer = IdentifierBase == "Player";
-
+            Number = number;
             LocalisableName = name;
             LocalisableDescription = description;
-
-            Number = number;
-            // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
-            Player = player ?? (_isPlayer ? null : GameManager.Instance.Player);
-            //Parent = parent;
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
-            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
-            OldHighScoreLocalPlayers = HighScoreLocalPlayers;
-
-            Coins = 0;
-            Score = 0;
-            HighScore = GetSettingInt("HS", 0);
-            OldHighScore = HighScore;
-            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
-            IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
-            IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
-
-            // allow for any custom game item specific initialisation
-            CustomInitialisation();
-
-            IsInitialised = true;
+            InitialiseNonScriptableObjectValues(player, loadFromResources);
         }
 
 
@@ -384,12 +374,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
         /// want to provide your own custom initialisation.
         /// </summary>
-        public void InitialiseResources()
+        /// <param name="player"></param>
+        /// <param name="loadFromResources"></param>
+        public void InitialiseNonScriptableObjectValues(Player player = null, bool loadFromResources = false)
         {
             _isPlayer = IdentifierBase == "Player";
 
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
-            Player = GameManager.Instance.Player;
+            Player = player ?? GameManager.Instance.Player;
 
             HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
             HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
@@ -402,6 +394,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
+
+            if (loadFromResources)
+                LoadJsonData();
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
@@ -427,7 +422,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public static T LoadFromResources<T>(string typeName, int number) where T: GameItem
         {
             var gameItem = GameManager.LoadResource<T>(typeName + "\\" + typeName + "_" + number);
-            gameItem.Number = number;
+            if (gameItem != null)
+                gameItem.Number = number;
             return gameItem;
         }
 
@@ -436,17 +432,33 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         #region Load Data
 
         /// <summary>
+        /// Load simple meta data associated with this game item. Called when this GameItem is initialised.
+        /// </summary>
+        /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
+        /// or as a GameItemExtension derived ScriptableObject also from the resources folder under [IdentifierBase]\[IdentifierBase]_[Number]
+        public void LoadData()
+        {
+            if (JsonData == null)
+                JsonData = LoadJsonData();
+            if (GameItemExtensionData == null)
+                GameItemExtensionData = LoadGameItemExtension();
+
+            if (JsonData == null && GameItemExtensionData == null)
+                MyDebug.LogWarning("When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+        }
+
+        /// <summary>
         /// Load simple meta data associated with this game item.
         /// </summary>
         /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
-        public void LoadJsonData()
+        public JSONObject LoadJsonData()
         {
             var path = string.Format("{0}\\{0}_{1}", IdentifierBase, Number);
             if (JsonData == null)
                 JsonData = LoadJsonDataFile(path);
-            Assert.IsFalse(JsonData == null, "Unable to load json data. Check the file exists : " + path);
             if (JsonData != null)
                 ParseJsonData(JsonData);
+            return JsonData;
         }
 
 
@@ -475,13 +487,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// You may not want to load and hold game data for all GameItems, especially if it takes up a lot of memory. You can
         /// use this method to selectively load such data.
-        public void LoadJsonGameData()
+        public JSONObject LoadJsonGameData()
         {
             var path = string.Format("{0}\\{0}_GameData_{1}", IdentifierBase, Number);
             if (JsonGameData == null)
                 JsonGameData = LoadJsonDataFile(path);
-            Assert.IsNotNull(JsonGameData, "Unable to load json data. Check the file exists : " + path);
-            ParseJsonGameData(JsonGameData);
+            if (JsonGameData != null)
+                ParseJsonGameData(JsonGameData);
+            return JsonGameData;
         }
 
 
@@ -518,6 +531,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return jsonObject;
         }
 
+
+        /// <summary>
+        /// Load the GameItemExtension that corresponds to this item.
+        /// </summary>
+        GameItemExtension LoadGameItemExtension()
+        {
+            var giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            return giExtension;
+        }
+
+
+        /// <summary>
+        /// Return GameItemExtension object, caasted to type <T>
+        /// </summary>
+        public T GetExtension<T>() where T : class
+        {
+            Assert.IsNotNull(GameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
+            return GameItemExtensionData as T;
+        }
         #endregion Load Data
 
         /// <summary>
