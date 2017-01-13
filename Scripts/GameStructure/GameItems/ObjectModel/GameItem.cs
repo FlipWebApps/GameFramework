@@ -49,12 +49,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// The different types of prefab we have
         /// </summary>
-        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame }
+        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame, UnlockWindow }
 
         /// <summary>
         /// The different types of sprites we have
         /// </summary>
-        public enum LocalisableSpriteType { Custom, SelectionMenu, InGame }
+        public enum LocalisableSpriteType { Custom, SelectionMenu, InGame, UnlockWindow }
         #endregion Enums
 
         #region Editor Parameters
@@ -123,6 +123,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         List<LocalisableSpriteEntry> _localisableSprites = new List<LocalisableSpriteEntry>();
         #endregion Editor Parameters
 
+        #region General Variables
         /// <summary>
         /// A unique identifier for this type of GameItem (override in your derived classes)
         /// </summary>
@@ -218,6 +219,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         public int OldHighScoreLocalPlayers { get; set; }
 
+        #endregion General Variables
+
         #region User Specific Settings
 
         /// <summary>
@@ -296,6 +299,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #endregion User Specific Settings
 
+        #region Extension Data
         /// <summary>
         /// Stored json data from disk. 
         /// </summary>
@@ -328,6 +332,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
         public GameItemExtension GameItemExtensionGameData { get; set; }
+
+        #endregion Extension Data
 
         bool _isPlayer;
 
@@ -932,6 +938,39 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
         }
 
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow()
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
 
         /// <summary>
         /// Get a sprite with the given type that corresponds to the currently set language

@@ -155,11 +155,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.A
                 // save updated counter for later.
                 GameManager.Instance.Player.SetSetting(_localisationBase + ".FailedUnlockAttempts", _failedUnlockAttempts);
                 GameManager.Instance.Player.UpdatePlayerPrefs();
-
+                var unlockWindowSprite = _gameItemToUnlock.GetSpriteUnlockWindow();
                 dialogInstance.Show(titleKey: _localisationBase + ".Unlock.Title",
                     textKey: textKey,
                     text2Key: text2Key,
-                    sprite: _gameItemToUnlock.Sprite,
+                    sprite: unlockWindowSprite ?? _gameItemToUnlock.Sprite,
                     doneCallback: UnlockedCallback,
                     dialogButtons: ContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
             }
