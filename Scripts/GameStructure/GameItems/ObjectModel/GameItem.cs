@@ -742,7 +742,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <returns></returns>
         public GameObject InstantiatePrefabSelectionMenu(Transform parent = null, bool worldPositionStays = true)
         {
-            return InstantiatePrefab(LocalisablePrefabType.SelectionMenu, parent);
+            return InstantiatePrefab(LocalisablePrefabType.SelectionMenu, parent, worldPositionStays);
         }
 
         /// <summary>
@@ -752,7 +752,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <returns></returns>
         public GameObject InstantiatePrefabInGame(Transform parent = null, bool worldPositionStays = true)
         {
-            return InstantiatePrefab(LocalisablePrefabType.InGame, parent);
+            return InstantiatePrefab(LocalisablePrefabType.InGame, parent, worldPositionStays);
         }
 
         /// <summary>
@@ -764,7 +764,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             var localisablePrefab = GetPrefab(name);
             if (localisablePrefab == null) return null;
-            return InstantiatePrefab(localisablePrefab, parent);
+            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
         }
 
         /// <summary>
@@ -778,7 +778,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         {
             var localisablePrefab = GetPrefab(localisablePrefabType);
             if (localisablePrefab == null) return null;
-            return InstantiatePrefab(localisablePrefab, parent);
+            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
         }
 
 
