@@ -19,29 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Editor
 {
-    public abstract class RunOnStateEditor : UnityEditor.Editor
+    [CustomEditor(typeof (SetSpriteRendererToWorldSprite))]
+    public class SetSpriteRendererToWorldSpriteEditor : SetSpriteEditor
     {
-        //GameItem _gameItem;
-        SerializedProperty _runProperty;
-        SerializedProperty _runFrequencyProperty;
-
-        public virtual void OnEnable()
-        {
-            //_gameItem = (GameItem)target;
-            // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
-            _runProperty = serializedObject.FindProperty("Run");
-            _runFrequencyProperty = serializedObject.FindProperty("RunFrequency");
-        }
-
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.PropertyField(_runProperty);
-            if (_runProperty.enumValueIndex == 4)
-            EditorGUILayout.PropertyField(_runFrequencyProperty);
-        }
     }
 }

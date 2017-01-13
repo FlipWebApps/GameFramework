@@ -19,29 +19,26 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using UnityEditor;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
+using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
+using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses
+namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
 {
-    public abstract class RunOnStateEditor : UnityEditor.Editor
+    /// <summary>
+    /// Set an image to the specified sprite
+    /// </summary>
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set SpriteRenderer To World Sprite")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Worlds/")]
+    public class SetSpriteRendererToWorldSprite : SetSpriteRendererToSprite<World>
     {
-        //GameItem _gameItem;
-        SerializedProperty _runProperty;
-        SerializedProperty _runFrequencyProperty;
-
-        public virtual void OnEnable()
+        /// <summary>
+        /// Returns the current GameItem
+        /// </summary>
+        /// <returns></returns>
+        protected override World GetCurrentItem()
         {
-            //_gameItem = (GameItem)target;
-            // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
-            _runProperty = serializedObject.FindProperty("Run");
-            _runFrequencyProperty = serializedObject.FindProperty("RunFrequency");
-        }
-
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.PropertyField(_runProperty);
-            if (_runProperty.enumValueIndex == 4)
-            EditorGUILayout.PropertyField(_runFrequencyProperty);
+            return GameManager.Instance.Worlds.Selected;
         }
     }
 }

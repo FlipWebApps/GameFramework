@@ -30,7 +30,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.A
     /// Create an instance of the specified prefab
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class InstantiatePrefab<T> : RunOnState where T : GameItem, new()
+    public abstract class InstantiatePrefab<T> : RunOnState where T : GameItem
     {
         /// <summary>
         ///  The type of prefab to instantiate.
