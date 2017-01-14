@@ -72,7 +72,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.A
                 sprite = currentItem.GetSpriteInGame();
             else
                 sprite = currentItem.GetSprite(Name);
-            Assert.IsNotNull(sprite, "The Sprite you are trying to instantiate is not setup. Please add it to the target GameItem.");
+            Assert.IsNotNull(sprite, string.Format("The Sprite you are trying to instantiate is not setup. Please add it to  the target GameItem {0}_{1}.", currentItem.IdentifierBase, currentItem.Number));
 
             AssignSprite(component, sprite);
         }

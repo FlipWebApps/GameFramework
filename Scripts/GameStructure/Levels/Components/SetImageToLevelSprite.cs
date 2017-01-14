@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     /// <summary>
     /// Set an image to the specified sprite
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Set Image To Sprite")]
+    [AddComponentMenu("Game Framework/GameStructure/Levels/Set Image To Level Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class SetImageToLevelSprite : SetImageToSprite<Level>
     {

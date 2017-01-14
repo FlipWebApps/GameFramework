@@ -28,8 +28,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
     /// <summary>
     /// Set an image to the specified sprite
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set Image To Sprite")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Worlds/")]
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set Image To World Sprite")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class SetImageToWorldSprite : SetImageToSprite<World>
     {
         /// <summary>

@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     /// <summary>
     /// Set an image to the specified sprite
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Characters/Set Image To Sprite")]
+    [AddComponentMenu("Game Framework/GameStructure/Characters/Set Image To Character Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Characters/")]
     public class SetImageToCharacterSprite : SetImageToSprite<Character>
     {
