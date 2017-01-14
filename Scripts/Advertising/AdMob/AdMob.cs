@@ -18,7 +18,7 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-using FlipWebApps.GameFramework.Scripts.Display.Other;
+using GameFramework.Display.Other;
 using UnityEngine;
 #if GOOGLE_ADS
 using GoogleMobileAds.Api;
@@ -28,7 +28,7 @@ using GoogleMobileAds.Api;
 /// Support and extensions for advertising including AdMob and UnityAds
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/advertising/
-namespace FlipWebApps.GameFramework.Scripts.Advertising
+namespace GameFramework.Advertising
 {
     // For doxygen documentation purposes only 
 }
@@ -38,7 +38,7 @@ namespace FlipWebApps.GameFramework.Scripts.Advertising
 /// 
 /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
 /// </summary>
-namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob
+namespace GameFramework.Advertising.AdMob
 {
     /// <summary>
     /// Helper class for using AdMob that provides properties and methods for managing the adverts.

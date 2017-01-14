@@ -19,13 +19,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameStructure;
+using GameFramework.UI.Buttons.Components.AbstractClasses;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components
+namespace GameFramework.UI.Buttons.Components
 {
     /// <summary>
     /// Load the specified scene when the button is clicked.

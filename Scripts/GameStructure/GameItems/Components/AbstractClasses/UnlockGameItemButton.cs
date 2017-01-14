@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System.Collections;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameObjects;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Localisation;
+using GameFramework.UI.Dialogs.Components;
+using GameFramework.UI.Other;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +34,7 @@ using System.Collections.Generic;
 using UnityEngine.Analytics;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// abstract base Unlock GameItem button that handles the ability to unlock GameItems 

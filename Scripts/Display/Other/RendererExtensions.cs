@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other
+namespace GameFramework.Display.Other
 {
     /// <summary>
     /// Some renderer extensions

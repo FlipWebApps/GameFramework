@@ -21,17 +21,17 @@
 
 using System;
 using System.Collections.Generic;
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Helper;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
+using GameFramework.Preferences;
+using GameFramework.Debugging;
+using GameFramework.GameStructure.GameItems.Messages;
+using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.Helper;
+using GameFramework.Localisation;
+using GameFramework.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
+namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
     /// Base representation for many in game items such as players, worlds, levels and characters...

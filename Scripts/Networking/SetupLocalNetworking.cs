@@ -21,7 +21,7 @@
 
 using UnityEngine.Networking;
 
-namespace FlipWebApps.GameFramework.Scripts.Networking
+namespace GameFramework.Networking
 {
     /// <summary>
     /// 

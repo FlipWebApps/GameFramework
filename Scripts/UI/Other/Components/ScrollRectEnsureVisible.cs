@@ -1,8 +1,8 @@
-﻿using FlipWebApps.GameFramework.Scripts.Debugging;
+﻿using GameFramework.Debugging;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
+namespace GameFramework.UI.Other.Components
 {
     /// <summary>
     /// Provides support for scrolling a scrollrect to ensure that a specified item is displayed.

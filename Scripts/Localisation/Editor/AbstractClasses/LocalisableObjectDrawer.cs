@@ -23,7 +23,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses
+namespace GameFramework.Localisation.Editor.AbstractClasses
 {
     public abstract class LocalisableObjectDrawer : PropertyDrawer
     {

@@ -21,25 +21,25 @@
 
 using System.Collections;
 #if UNITY_PURCHASING
-using FlipWebApps.GameFramework.Scripts.Billing.Components;
+using GameFramework.Billing.Components;
 #endif
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameObjects;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.UI.Dialogs.Components;
+using GameFramework.UI.Other;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using GameFramework.GameStructure.Players.Messages;
+using GameFramework.Messaging;
+using GameFramework.Localisation;
+using GameFramework.Localisation.Messages;
 using System;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// Abstract Game Item button class that displays information about the linked Game Item

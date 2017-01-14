@@ -25,7 +25,7 @@ using UnityEngine;
 /// Contains components and libraries to help with positioning and movement of gameobjects and other items
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement
+namespace GameFramework.Display.Placement
 {
     /// <summary>
     /// Size and placement conversion functions

@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace GameFramework.GameObjects.Components
 {
     /// <summary>
     ///  A singleton implementation pattern that is persistant across scene changes

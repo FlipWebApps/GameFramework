@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.Players.ObjectModel;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
     /// Set an image to the specified sprite

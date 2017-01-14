@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Colliders
+namespace GameFramework.GameStructure.Colliders
 {
     /// <summary>
     /// Collider for increasing or decreasing a players / levels points when a tagged gameobject touches the attached collider or trigger.

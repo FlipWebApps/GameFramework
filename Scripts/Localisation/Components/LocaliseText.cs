@@ -20,13 +20,13 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.GameStructure;
+using GameFramework.Messaging;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using GameFramework.Localisation.Messages;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
+namespace GameFramework.Localisation.Components
 {
     /// <summary>
     /// Localises a Text field based upon the given Key

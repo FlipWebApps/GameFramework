@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
+namespace GameFramework.Display.Placement.Components
 {
     /// <summary>
     /// Align this game object with the screen bounds. Useful when catering for dynamic screen sizes.

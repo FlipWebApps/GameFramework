@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
+namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
     /// <summary>
     /// Allows for adding your own custom data and functionality to a GameItem

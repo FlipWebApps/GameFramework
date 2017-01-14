@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses;
+using GameFramework.GameObjects.Editor.AbstractClasses;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
     public abstract class SetSpriteEditor : UnityEditor.Editor
     {

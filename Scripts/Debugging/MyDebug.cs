@@ -25,7 +25,7 @@ using UnityEngine;
 /// Support tools, scripts and components for debugging your games
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/debugging/
-namespace FlipWebApps.GameFramework.Scripts.Debugging
+namespace GameFramework.Debugging
 {
     /// <summary>
     /// Debugging functions that supplement those provided by unity.

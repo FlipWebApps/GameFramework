@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
+namespace GameFramework.Display.Placement.Components
 {
     /// <summary>
     /// Center this gameobject within the main camera.

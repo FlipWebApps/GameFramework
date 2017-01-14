@@ -20,9 +20,9 @@
 //----------------------------------------------
 
 using System.Collections;
-using FlipWebApps.GameFramework.Scripts.GameFramework;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.GameFramework;
+using GameFramework.GameStructure;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.UI;
 

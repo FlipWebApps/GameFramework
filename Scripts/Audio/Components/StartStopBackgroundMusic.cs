@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.GameStructure;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Audio.Components
+namespace GameFramework.Audio.Components
 {
     /// <summary>
     /// Start or stop the global background music when this component is enabled / disabled
@@ -54,8 +54,8 @@ namespace FlipWebApps.GameFramework.Scripts.Audio.Components
 
         void OnEnable()
         {
-            Assert.IsTrue(GameManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
-                                                "FlipWebApps.GameFramework.Scripts.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
+            Assert.IsTrue(GameManager.IsActive, "Please ensure that GameFramework.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
+                                                "GameFramework.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
             Assert.IsNotNull(GameManager.Instance.BackGroundAudioSource, "Please add an AudioSource to the same GameObject as GameManager before using the StartStopBackgroundMusic component.");
 
             if (Enable == ModeType.Play && !GameManager.Instance.BackGroundAudioSource.isPlaying)

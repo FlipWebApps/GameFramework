@@ -20,11 +20,11 @@
 //----------------------------------------------
 
 using System.Collections;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.GameStructure.Players.Messages;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
     /// A handler for setting the number of stars won by the amount of coins the player collects.

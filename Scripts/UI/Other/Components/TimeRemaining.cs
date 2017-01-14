@@ -19,14 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.EditorExtras;
+using GameFramework.GameStructure;
+using GameFramework.GameStructure.Levels;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
+namespace GameFramework.UI.Other.Components
 {
     [AddComponentMenu("Game Framework/UI/Other/TimeRemaining")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]

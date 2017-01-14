@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Colliders
+namespace GameFramework.GameStructure.Colliders
 {
     /// <summary>
     /// Health collider for increasing or decreasing a players health when a tagged gameobject touches the attached collider or trigger.

@@ -27,12 +27,12 @@ using UnityEngine.Assertions;
 /// 
 /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/animations/
 /// </summary>
-namespace FlipWebApps.GameFramework.Scripts.Animation
+namespace GameFramework.Animation
 {
     // For doxygen documentation purposes only 
 }
 
-namespace FlipWebApps.GameFramework.Scripts.Animation.Components
+namespace GameFramework.Animation.Components
 {
     /// <summary>
     /// Set a list of start values on an Animator. 

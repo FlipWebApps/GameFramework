@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.GameStructure;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Input.Components
+namespace GameFramework.Input.Components
 {
     /// <summary>
     /// Loads the specified scene when the escape key or android back button is pressed

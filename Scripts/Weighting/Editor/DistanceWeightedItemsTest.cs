@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using NUnit.Framework;
-using FlipWebApps.GameFramework.Scripts.Weighting;
+using GameFramework.Weighting;
 using System.Collections.Generic;
 using System.Linq;
 

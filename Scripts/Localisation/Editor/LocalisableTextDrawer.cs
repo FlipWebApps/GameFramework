@@ -20,11 +20,11 @@
 //----------------------------------------------
 
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using GameFramework.EditorExtras.Editor;
 using UnityEditor;
-using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
+using GameFramework.Localisation.ObjectModel;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor
+namespace GameFramework.Localisation.Editor
 {
     [CustomPropertyDrawer(typeof(LocalisableText))]
     public class LocalisableTextDrawer : PropertyDrawer

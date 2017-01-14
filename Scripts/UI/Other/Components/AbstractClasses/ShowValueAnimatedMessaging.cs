@@ -19,17 +19,17 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.Localisation;
 using System;
 using System.Collections.Generic;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.Messaging;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using GameFramework.GameStructure;
+using GameFramework.Localisation.Messages;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
+namespace GameFramework.UI.Other.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class that runs updates a value in an optional animated fashion.

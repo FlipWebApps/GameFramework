@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects;
+using GameFramework.GameObjects;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Call back that will show the specified dialog buttons. 

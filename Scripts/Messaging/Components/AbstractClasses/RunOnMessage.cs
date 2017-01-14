@@ -19,14 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.GameStructure;
 using UnityEngine;
 
 #if NETFX_CORE
 using System.Reflection;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
+namespace GameFramework.Messaging.Components.AbstractClasses
 {
     /// <summary>
     /// An simple message listener abstract class that subscribes and unsubscribes to messages and 

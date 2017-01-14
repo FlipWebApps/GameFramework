@@ -25,7 +25,7 @@
 /// Helper libraries and components for working within the editor
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/editor-extras/
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras
+namespace GameFramework.EditorExtras
 {
 }
 
@@ -34,7 +34,7 @@ namespace FlipWebApps.GameFramework.Scripts.EditorExtras
 /// Display, positioning, movement and particles helper components and libraries
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
-namespace FlipWebApps.GameFramework.Scripts.Display
+namespace GameFramework.Display
 {
     // For doxygen documentation purposes only 
 }
@@ -44,7 +44,7 @@ namespace FlipWebApps.GameFramework.Scripts.Display
 /// Helper libraries and components for easy setup and usage of Facebook
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/facebook/
-namespace FlipWebApps.GameFramework.Scripts.Facebook
+namespace GameFramework.Facebook
 {
     // For doxygen documentation purposes only 
 }

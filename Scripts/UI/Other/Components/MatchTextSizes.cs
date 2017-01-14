@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components {
+namespace GameFramework.UI.Other.Components {
     /// <summary>
     /// Size all the Text components so that they are the same.
     /// NOTE: MAY NOT WORK!

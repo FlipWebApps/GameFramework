@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
+namespace GameFramework.Display.Other.Components
 {
     /// <summary>
     /// Used for scrolling a material within the gameobjects renderer

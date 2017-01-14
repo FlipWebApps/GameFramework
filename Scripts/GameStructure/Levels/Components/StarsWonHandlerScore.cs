@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.EditorExtras;
+using GameFramework.GameStructure.Levels.Messages;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
     /// A handler for setting the number of stars won by the amount of points the player gets.

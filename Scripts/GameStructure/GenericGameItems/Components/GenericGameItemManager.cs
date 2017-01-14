@@ -19,13 +19,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure.GameItems;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.GenericGameItems.ObjectModel;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Components
+namespace GameFramework.GameStructure.GenericGameItems.Components
 {
     /// <summary>
     /// Allows for automatic setup and referencing of a set of generic game items for your own usage.

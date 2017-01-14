@@ -25,14 +25,14 @@ using System;
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
 #endif
 
-using FlipWebApps.GameFramework.Scripts.Display.Other;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
+using GameFramework.Display.Other;
+using GameFramework.GameObjects;
+using GameFramework.Localisation;
+using GameFramework.UI.Other;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Represents an instance of a dialog. Allows for animation and managing feedback state.

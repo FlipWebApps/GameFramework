@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
+namespace GameFramework.Display.Particles.Components
 {
     /// <summary>
     /// Provides a callback for creating a new particle system.

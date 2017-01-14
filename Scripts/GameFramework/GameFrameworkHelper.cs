@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameFramework
+namespace GameFramework.GameFramework
 {
     /// <summary>
     /// General GameFramework helper functions

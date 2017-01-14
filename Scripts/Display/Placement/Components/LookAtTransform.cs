@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
+namespace GameFramework.Display.Placement.Components
 {
     /// <summary>
     /// Rotate so that the gameobject looks towards the specified transform

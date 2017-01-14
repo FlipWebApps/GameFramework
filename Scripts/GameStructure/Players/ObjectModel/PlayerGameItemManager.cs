@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Players.Messages;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
+namespace GameFramework.GameStructure.Players.ObjectModel
 {
     /// <summary>
     /// For managing an array of players inlcuding selection, unlocking

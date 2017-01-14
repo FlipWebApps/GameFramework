@@ -22,7 +22,7 @@
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging
+namespace GameFramework.Messaging
 {
     /// <summary>
     /// A messaging system to allow for simple decoupling of components using either queued (QueueMessage) 

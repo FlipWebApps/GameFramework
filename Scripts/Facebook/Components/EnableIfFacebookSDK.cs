@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace GameFramework.Facebook.Components
 {
     /// <summary>
     /// Enables one of two gameobjects based upon whether the facebook SDK is installed

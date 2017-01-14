@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging
+namespace GameFramework.Messaging
 {
     public enum LogEntryType { AddListener, RemoveListener, Send }
 

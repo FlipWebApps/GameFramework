@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
+using GameFramework.EditorExtras;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
     /// Creates instances of a life icon

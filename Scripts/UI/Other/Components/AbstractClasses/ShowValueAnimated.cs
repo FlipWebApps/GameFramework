@@ -19,13 +19,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.Localisation;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components.AbstractClasses
+namespace GameFramework.UI.Other.Components.AbstractClasses
 {
     public enum UpdateModeType { Immediate, Aggregated, Queued };
 

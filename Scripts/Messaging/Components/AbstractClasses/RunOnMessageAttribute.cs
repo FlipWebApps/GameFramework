@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses
+namespace GameFramework.Messaging.Components.AbstractClasses
 {
     /// <summary>
     /// Attribute for controlling usage of the RunOnMessage class

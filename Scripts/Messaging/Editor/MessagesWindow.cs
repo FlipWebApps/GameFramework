@@ -21,10 +21,10 @@
 
 using UnityEditor;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using GameFramework.EditorExtras.Editor;
 using System.Linq;
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging.Editor
+namespace GameFramework.Messaging.Editor
 {
     /// <summary>
     /// Editor window that shows the messaging activity.

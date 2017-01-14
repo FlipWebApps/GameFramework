@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameFramework.Editor {
+namespace GameFramework.GameFramework.Editor {
 
     /// <summary>
     /// Window allowing to enable integrations with various 3rd party assets.

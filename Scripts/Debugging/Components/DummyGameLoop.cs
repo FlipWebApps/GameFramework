@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.GameStructure.Levels;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
+namespace GameFramework.Debugging.Components
 {
     /// <summary>
     /// A simple dummy game loop that will allow you to test the structure and interfaces in your game.

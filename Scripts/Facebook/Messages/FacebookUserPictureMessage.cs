@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Messaging;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
+namespace GameFramework.Facebook.Messages
 {
     /// <summary>
     /// Generated when Facebook user profile picture loading has completed. (either successfully or with errors)

@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Animation.Components
+namespace GameFramework.Animation.Components
 {
     /// <summary>
     /// Set an animation bool one time only for the entire lifetime of your game, optionally only after another 

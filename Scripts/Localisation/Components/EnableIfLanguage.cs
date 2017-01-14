@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
+namespace GameFramework.Localisation.Components
 {
     /// <summary>
     /// Enabled or a disabled a gameobject based upon whether the specified language matches that currently used by Game Framework

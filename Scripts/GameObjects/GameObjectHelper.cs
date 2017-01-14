@@ -23,7 +23,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects
+namespace GameFramework.GameObjects
 {
     /// <summary>
     /// Helper functions for quickly and simply finding and manipulating game objects

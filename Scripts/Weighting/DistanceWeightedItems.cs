@@ -19,14 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Debugging;
+using GameFramework.Debugging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Weighting {
+namespace GameFramework.Weighting {
     /// <summary>
     /// Used for determining the relating weighting between items over a given distance (or time).
     /// This can be used to control things such as what is displayed, behavious, or other such things.

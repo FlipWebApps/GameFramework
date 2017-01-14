@@ -20,14 +20,14 @@
 //----------------------------------------------
 
 using System.Security.Cryptography;
-using FlipWebApps.GameFramework.Scripts.Social.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.Social.Components;
+using GameFramework.UI.Dialogs.Components;
 
 #if UNITY_ADS
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameStructure;
+using GameFramework.Preferences;
+using GameFramework.Localisation;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Advertisements;
 #endif
@@ -37,7 +37,7 @@ using UnityEngine.Advertisements;
 /// 
 /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/advertising/
 /// </summary>
-namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds
+namespace GameFramework.Advertising.UnityAds
 {
     /// <summary>
     /// Helper functions for Unity Adverts

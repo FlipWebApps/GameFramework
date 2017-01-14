@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Messages
+namespace GameFramework.Localisation.Messages
 {
     /// <summary>
     /// A message that is generated when the localisation changes.

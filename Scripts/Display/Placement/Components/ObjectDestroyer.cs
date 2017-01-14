@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
+namespace GameFramework.Display.Placement.Components
 {
     /// <summary>
     /// Automatically destroys gameobjects that collide with this one.

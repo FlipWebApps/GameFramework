@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
+using GameFramework.GameObjects.Components.AbstractClasses;
+using GameFramework.GameStructure.Game.Messages;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Components
+namespace GameFramework.GameStructure.Game.Components
 {
     /// <summary>
     /// Shows one of two gameobjects based upon whether the game is unlocked.

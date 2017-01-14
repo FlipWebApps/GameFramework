@@ -19,27 +19,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Billing.Messages;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.Billing.Messages;
+using GameFramework.Debugging;
+using GameFramework.GameStructure;
+using GameFramework.GameStructure.Characters.ObjectModel;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.Worlds.ObjectModel;
+using GameFramework.UI.Dialogs.Components;
 using System;
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Components;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Preferences;
+using GameFramework.GameStructure.GenericGameItems.ObjectModel;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.GameItems;
+using GameFramework.GameStructure.GenericGameItems.Components;
+using GameFramework.Messaging;
 using UnityEngine.Assertions;
 
 /// <summary>
 /// Extended support and integration of In App Purchasing.
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/billing/
-namespace FlipWebApps.GameFramework.Scripts.Billing
+namespace GameFramework.Billing
 {
 
     /// <summary>

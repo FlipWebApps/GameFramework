@@ -19,13 +19,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.Preferences;
+using GameFramework.GameStructure;
+using GameFramework.Localisation;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Social
+namespace GameFramework.Social
 {
     /// <summary>
     /// Functionality for getting game feedback from the user.

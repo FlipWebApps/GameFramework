@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor
+namespace GameFramework.GameStructure.GameItems.Editor
 {
     [CustomEditor(typeof(GameItem))]
     public class GameItemEditor : UnityEditor.Editor

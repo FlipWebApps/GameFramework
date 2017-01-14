@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
     /// Show information about the currently selected level

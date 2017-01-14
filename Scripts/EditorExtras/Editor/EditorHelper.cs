@@ -21,7 +21,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
+namespace GameFramework.EditorExtras.Editor
 {
     /// <summary>
     /// Helper functions for dealing with editor windows, inspectors etc...

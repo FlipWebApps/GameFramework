@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.Localisation.Editor.AbstractClasses;
+using GameFramework.Localisation.Editor.AbstractClasses;
 using UnityEngine;
 using UnityEditor;
-using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
+using GameFramework.Localisation.ObjectModel;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Editor
+namespace GameFramework.Localisation.Editor
 {
     [CustomPropertyDrawer(typeof(LocalisableSprite))]
     public class LocalisableSpriteDrawer : LocalisableObjectDrawer

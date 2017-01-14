@@ -19,9 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
+namespace GameFramework.GameStructure.Players.Messages
 {
     /// <summary>
     /// A message that is generated when the player wins the game. This is only sent the first time the player wins the game.

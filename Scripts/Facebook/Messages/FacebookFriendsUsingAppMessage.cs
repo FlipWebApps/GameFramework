@@ -19,9 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Messages
+namespace GameFramework.Facebook.Messages
 {
     /// <summary>
     /// Generated when Facebook has loaded the users friends who are using the app (either successfully or with errors)

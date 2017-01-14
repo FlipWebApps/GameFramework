@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.Messaging;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
+namespace GameFramework.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class to enable one of two gameobjects based upon a given condition.

@@ -49,11 +49,14 @@ upgrade will not work
 
 MAIN UPGRADE STEPS
 
-The following methods are removed:
+* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity
+  you should rename all references in your code accordingly.
+
+REMOVED METHODS:
 
 * GameItemManager.LoadItems -> Override the 'other' load method or preferably use the new way of extending GameItems.
 
-The following items have gotten new names:
+RENAMED ITEMS:
 
 * GameItemsManager -> GameItemManager
 * GameItem.ParseData -> GameItem.ParseJsonData

@@ -25,14 +25,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.Debugging;
+using GameFramework.GameStructure;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Localisation.Messages;
+using GameFramework.Preferences;
 
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation
+namespace GameFramework.Localisation
 {
 /// <summary>
 /// Support for localisation including retrieval and displaying of text, helper components and notifications.

@@ -20,15 +20,15 @@
 //----------------------------------------------
 
 using System.Collections.Generic;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameObjects;
+using GameFramework.GameObjects.Components;
+using GameFramework.UI.Dialogs.Components;
+using GameFramework.UI.Other;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Networking
+namespace GameFramework.Networking
 {
     /// <summary>
     /// 

@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages
+namespace GameFramework.GameStructure.GameItems.Messages
 {
     /// <summary>
     /// A message that is generated when the Coins of a gameitem changes (assuming no overrides are in place).

@@ -19,13 +19,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
+using GameFramework.GameStructure.GameItems;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
     /// Unlock GameItem button for Worlds 

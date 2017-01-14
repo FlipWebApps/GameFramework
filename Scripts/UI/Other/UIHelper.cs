@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.GameObjects;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other
+namespace GameFramework.UI.Other
 {
     /// <summary>
     /// UI Helper functions

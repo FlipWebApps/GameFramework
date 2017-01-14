@@ -21,23 +21,23 @@
 
 using System;
 using System.Collections;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.Social;
-using FlipWebApps.GameFramework.Scripts.UI.Other;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.GameObjects;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
+using GameFramework.GameStructure.Levels;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.Localisation;
+using GameFramework.Social;
+using GameFramework.UI.Other;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Game;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.GameStructure.Game;
+using GameFramework.Preferences;
 
 #if FACEBOOK_SDK
-using FlipWebApps.GameFramework.Scripts.Facebook.Components;
+using GameFramework.Facebook.Components;
 #endif
 
 #if UNITY_ANALYTICS
@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using UnityEngine.Analytics;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Base class for a game over dialog.

@@ -22,7 +22,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
+namespace GameFramework.Debugging.Components
 {
     /// <summary>
     /// Displays the current log onto the screen for debugging purposes

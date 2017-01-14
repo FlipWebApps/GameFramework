@@ -28,7 +28,7 @@ using Object = UnityEngine.Object;
 using System.Reflection;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects
+namespace GameFramework.GameObjects
 {
     /// <summary>
     /// Extension methods for game objects

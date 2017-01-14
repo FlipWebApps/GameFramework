@@ -21,11 +21,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace FlipWebApps.GameFramework.Scripts.Input.Components.AbstractClasses
+namespace GameFramework.Input.Components.AbstractClasses
 {
     /// <summary>
     /// Abstract class that calls a method when a mouse button is pressed or the screen is tapped anywhere on the screen

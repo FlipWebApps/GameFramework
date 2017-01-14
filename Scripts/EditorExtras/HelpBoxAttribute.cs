@@ -22,7 +22,7 @@
 using UnityEngine;
 using System;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras
+namespace GameFramework.EditorExtras
 {
     /// <summary>
     /// Attribute for causing a help box to be displayed and controlling its setup

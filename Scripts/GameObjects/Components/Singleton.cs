@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Debugging;
+using GameFramework.Debugging;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace GameFramework.GameObjects.Components
 {
     /// <summary>
     ///  A singleton implementation pattern

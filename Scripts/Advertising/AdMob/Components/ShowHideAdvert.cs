@@ -22,7 +22,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
+namespace GameFramework.Advertising.AdMob.Components
 {
     /// <summary>
     /// Component to automatically show or hide an advert. 

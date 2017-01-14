@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Preferences;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game
+namespace GameFramework.GameStructure.Game
 {
     /// <summary>
     /// This class contains helper functions about the overall game structure. For more specific use of

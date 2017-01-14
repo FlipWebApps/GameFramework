@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.GameStructure.Players.Messages;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
     /// Decreases the number of lives that the player has when their health reaches zero.

@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
+using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Helper.Components
+namespace GameFramework.Helper.Components
 {
     /// <summary>
     /// A collection of generic callback functions that can be used from UI input,  animators or otherwise that didn't really fit anywhere else!

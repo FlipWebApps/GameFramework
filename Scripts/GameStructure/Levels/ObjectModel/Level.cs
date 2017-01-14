@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System.Runtime.InteropServices;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Levels.Messages;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
+namespace GameFramework.GameStructure.Levels.ObjectModel
 {
     /// <summary>
     /// Level Game Item

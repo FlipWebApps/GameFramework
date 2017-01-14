@@ -22,7 +22,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
+namespace GameFramework.Display.Other.Components
 {
     /// <summary>
     /// Simple level of detail script that enables different gameobjects based upon the distance from the camera

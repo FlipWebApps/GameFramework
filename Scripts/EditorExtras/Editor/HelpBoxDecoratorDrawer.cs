@@ -22,7 +22,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
+namespace GameFramework.EditorExtras.Editor
 {
     /// <summary>
     /// Decorator drawer for showing a help box with text and type specified by HelpBoxAttribute

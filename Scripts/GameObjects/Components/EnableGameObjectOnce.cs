@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace GameFramework.GameObjects.Components
 {
     /// <summary>
     /// Enables a gameobject one time only. This can be useful for e.g. showing information on using a game when a user first starts.

@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
+using GameFramework.GameStructure;
+using GameFramework.GameStructure.Levels;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement.Components
+namespace GameFramework.Display.Placement.Components
 {
     /// <summary>
     /// Rotate this gameobject at a given rate.

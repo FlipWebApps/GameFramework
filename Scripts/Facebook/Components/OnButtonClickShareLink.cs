@@ -18,11 +18,11 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
+using GameFramework.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components {
+namespace GameFramework.Facebook.Components {
     /// <summary>
     /// Automatically hooks a button on click event to show a Facebook ShareLink dialog
     /// </summary>

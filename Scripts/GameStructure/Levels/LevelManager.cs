@@ -21,13 +21,13 @@
 
 using System;
 using System.Collections;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
+using GameFramework.Debugging;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
+namespace GameFramework.GameStructure.Levels
 {
     /// <summary>
     /// Manages the concept of a running level and holds state and other information relating to this

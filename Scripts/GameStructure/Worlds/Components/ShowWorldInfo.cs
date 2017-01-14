@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
     /// Show information about the currently selected world

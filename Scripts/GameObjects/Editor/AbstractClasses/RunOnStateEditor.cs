@@ -21,7 +21,7 @@
 
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Editor.AbstractClasses
+namespace GameFramework.GameObjects.Editor.AbstractClasses
 {
     public abstract class RunOnStateEditor : UnityEditor.Editor
     {

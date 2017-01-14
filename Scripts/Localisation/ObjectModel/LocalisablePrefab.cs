@@ -20,10 +20,10 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel.AbstractClasses;
+using GameFramework.Localisation.ObjectModel.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
+namespace GameFramework.Localisation.ObjectModel
 {
     /// <summary>
     /// Class to hold information about localisable prefabs.

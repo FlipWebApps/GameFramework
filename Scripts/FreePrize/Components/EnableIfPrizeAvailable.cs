@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
+using GameFramework.GameObjects.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
+namespace GameFramework.FreePrize.Components
 {
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon whether there is a free prize available
@@ -55,8 +55,8 @@ namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
         /// </summary>
         public override void RunMethod()
         {
-            Assert.IsTrue(FreePrizeManager.IsActive, "Please ensure that FlipWebApps.GameFramework.Scripts.FreePrize.Components.FreePrizeManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
-                                                "FlipWebApps.GameFramework.Scripts.FreePrize.Components.EnableIfPrizeAvailable does not necessarily need to appear in this list, but if it does ensure FreePrizeManager comes first");
+            Assert.IsTrue(FreePrizeManager.IsActive, "Please ensure that GameFramework.FreePrize.Components.FreePrizeManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
+                                                "GameFramework.FreePrize.Components.EnableIfPrizeAvailable does not necessarily need to appear in this list, but if it does ensure FreePrizeManager comes first");
 
             var isPrizeAvailable = FreePrizeManager.Instance.IsPrizeAvailable();
             var isCountingDown = FreePrizeManager.Instance.IsCountingDown();

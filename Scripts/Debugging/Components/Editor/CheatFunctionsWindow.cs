@@ -19,19 +19,19 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Billing;
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.FreePrize.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.Billing;
+using GameFramework.EditorExtras;
+using GameFramework.FreePrize.Components;
+using GameFramework.GameStructure;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
+using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Debugging.Components.Editor {
+namespace GameFramework.Debugging.Components.Editor {
 
     /// <summary>
     /// Component for allowing various cheat functions to be called such as increasing score, resetting prefs etc..

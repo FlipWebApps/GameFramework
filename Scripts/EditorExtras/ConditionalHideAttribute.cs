@@ -4,7 +4,7 @@ using UnityEngine;
 //Original version of the ConditionalHideAttribute created by Brecht Lecluyse (www.brechtos.com)
 //Modified by: -
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras
+namespace GameFramework.EditorExtras
 {
     /// <summary>
     /// Attribute for causing a field to be conditionally hidden based upon the status of a seperate boolean value

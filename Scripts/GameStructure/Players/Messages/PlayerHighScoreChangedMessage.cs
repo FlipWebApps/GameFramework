@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages
+namespace GameFramework.GameStructure.Players.Messages
 {
     /// <summary>
     /// A message that is generated when the players high score changes.

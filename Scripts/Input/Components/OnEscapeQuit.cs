@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Input.Components
+namespace GameFramework.Input.Components
 {
     /// <summary>
     /// Quit the application when the escape key or android back button is pressed

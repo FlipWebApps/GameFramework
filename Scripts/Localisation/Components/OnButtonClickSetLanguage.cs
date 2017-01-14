@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
+using GameFramework.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.Components
+namespace GameFramework.Localisation.Components
 {
     /// <summary>
     /// Show the settings dialog

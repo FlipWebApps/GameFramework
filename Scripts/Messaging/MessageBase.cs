@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging
+namespace GameFramework.Messaging
 {
     /// <summary>
     /// A base class that should be used and inherited for all messages that we send through the 

@@ -20,12 +20,12 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
+using GameFramework.EditorExtras;
+using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Colliders
+namespace GameFramework.GameStructure.Colliders
 {
     /// <summary>
     /// Generic collider for acting when a tagged gameobject touches the attached collider or trigger.

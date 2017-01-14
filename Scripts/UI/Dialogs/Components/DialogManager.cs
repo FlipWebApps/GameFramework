@@ -21,14 +21,14 @@
 
 using System;
 using System.Linq;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.GameObjects;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
 using UnityEngine;
 using UnityEngine.Assertions;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Provides dialog creation, display and management functionality.

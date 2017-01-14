@@ -22,32 +22,32 @@
 using System;
 using System.Collections;
 using System.Linq;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.Display.Placement;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.Debugging;
+using GameFramework.Display.Placement;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure.Characters.ObjectModel;
+using GameFramework.GameStructure.GameItems;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.GameStructure.Worlds.ObjectModel;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
-using FlipWebApps.GameFramework.Scripts.Audio.Messages;
+using GameFramework.GameObjects;
+using GameFramework.Messaging;
+using GameFramework.GameStructure.Game.Messages;
+using GameFramework.Preferences;
+using GameFramework.GameStructure.Players.Messages;
+using GameFramework.Audio.Messages;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure
+namespace GameFramework.GameStructure
 {
     /// <summary>
     /// Contains details about the game and is the base class for managing other aspects such as levels etc.

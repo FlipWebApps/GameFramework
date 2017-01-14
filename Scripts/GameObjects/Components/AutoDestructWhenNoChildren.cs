@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace GameFramework.GameObjects.Components
 {
     /// <summary>
     /// Automatically destroys the GameObject when there are no children left.

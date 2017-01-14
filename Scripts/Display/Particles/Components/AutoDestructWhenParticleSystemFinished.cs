@@ -26,7 +26,7 @@ using UnityEngine;
 /// Contains components to help with using particles
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
-namespace FlipWebApps.GameFramework.Scripts.Display.Particles.Components
+namespace GameFramework.Display.Particles.Components
 {
     /// <summary>
     /// Destroy or disable the specified gameobject once the particle system is finished playing.

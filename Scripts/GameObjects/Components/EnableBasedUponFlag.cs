@@ -20,11 +20,11 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.GameObjects.Components.AbstractClasses;
+using GameFramework.Preferences;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components
+namespace GameFramework.GameObjects.Components
 {
     /// <summary>
     /// Enable one of two gameobjects based upon a given flag (preferences key)

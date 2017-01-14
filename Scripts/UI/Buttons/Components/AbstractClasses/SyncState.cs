@@ -23,7 +23,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses
+namespace GameFramework.UI.Buttons.Components.AbstractClasses
 {
     /// <summary>
     /// Abstract base class that when added to a gameobject with a UI Button will monitor for state changes and

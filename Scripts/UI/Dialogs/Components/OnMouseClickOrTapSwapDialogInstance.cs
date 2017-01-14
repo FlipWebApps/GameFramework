@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Input.Components.AbstractClasses;
+using GameFramework.Input.Components.AbstractClasses;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Loads the given level when a mouse button is pressed or the screen is tapped anywhere on the screen

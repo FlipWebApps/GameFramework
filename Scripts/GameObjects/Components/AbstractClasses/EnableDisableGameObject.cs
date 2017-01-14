@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
+namespace GameFramework.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class to enable one of two gameobjects based upon a given condition.

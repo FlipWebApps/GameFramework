@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
+namespace GameFramework.Display.Other.Components
 {
     /// <summary>
     /// Creates a background for the camera, which is a simple gradient blend between three colors.

@@ -19,16 +19,16 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Preferences.PlayerPrefsIntegration;
+using GameFramework.Preferences.PlayerPrefsIntegration;
 #if PREFS_EDITOR
-using FlipWebApps.GameFramework.Scripts.Preferences.PrefsEditorIntegration;
+using GameFramework.Preferences.PrefsEditorIntegration;
 #endif
 
 /// <summary>
 /// Extentions to PlayerPrefs providing encrypted preferences, new data types and integration with third party assets./// 
 /// </summary>
 /// For further information please see http://www.flipwebapps.com/unity-assets/game-framework/preferences/
-namespace FlipWebApps.GameFramework.Scripts.Preferences
+namespace GameFramework.Preferences
 {
     /// <summary>
     /// Extends PlayerPrefs to provide encrypted preferences, new data types and integration with third party assets.

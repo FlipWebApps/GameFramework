@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// Set a sprite to the specified sprite

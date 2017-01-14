@@ -19,7 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-namespace FlipWebApps.GameFramework.Scripts.Messaging
+namespace GameFramework.Messaging
 {
     /// <summary>
     /// A dummy message that will never be used or called. Can be used in instances where you need to 

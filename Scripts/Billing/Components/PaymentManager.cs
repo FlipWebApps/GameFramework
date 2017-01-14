@@ -21,14 +21,14 @@
 #if UNITY_PURCHASING
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.GameObjects.Components;
+using GameFramework.Localisation;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Purchasing;
 
-namespace FlipWebApps.GameFramework.Scripts.Billing.Components
+namespace GameFramework.Billing.Components
 {
 
     /// <summary>

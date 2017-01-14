@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Messaging;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages
+namespace GameFramework.GameStructure.Game.Messages
 {
     /// <summary>
     /// A message that is generated when the game resolution changes.

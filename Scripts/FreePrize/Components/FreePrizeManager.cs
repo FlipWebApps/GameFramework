@@ -20,15 +20,15 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
+using GameFramework.Localisation;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Debugging;
+using GameFramework.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
+namespace GameFramework.FreePrize.Components
 {
     /// <summary>
     /// Manager class for handling the Free Prize status and configuration

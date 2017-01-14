@@ -24,10 +24,10 @@
 #define SKIP_CODE
 #endif
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using GameFramework.GameObjects.Components;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Debugging.Components
+namespace GameFramework.Debugging.Components
 {
     /// <summary>
     /// Used for storing logging information to a file in debug build mode.

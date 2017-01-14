@@ -23,11 +23,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
+using GameFramework.GameObjects.Components;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace FlipWebApps.GameFramework.Scripts.Networking
+namespace GameFramework.Networking
 {
     /// <summary>
     /// 

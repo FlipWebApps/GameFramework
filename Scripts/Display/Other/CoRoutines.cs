@@ -27,7 +27,7 @@ using UnityEngine.Assertions;
 //#define DEBUG
 //#endif
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other
+namespace GameFramework.Display.Other
 {
     /// <summary>
     /// Generic coroutines that can be called

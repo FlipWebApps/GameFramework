@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
+namespace GameFramework.EditorExtras.Editor
 {
     /// <summary>
     /// Helper methods for interacting with the player settings

@@ -22,7 +22,7 @@
 using System;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel
+namespace GameFramework.Localisation.ObjectModel
 {
     /// <summary>
     /// Simple struture to hold information about localisable text.

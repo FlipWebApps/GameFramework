@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Display.Placement;
+using GameFramework.Display.Placement;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Input
+namespace GameFramework.Input
 {
     /// <summary>
     /// Input helper functions

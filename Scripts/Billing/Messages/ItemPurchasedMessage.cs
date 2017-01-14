@@ -19,9 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.Billing.Messages
+namespace GameFramework.Billing.Messages
 {
     /// <summary>
     /// A generic message that is generated when any item is purchased.

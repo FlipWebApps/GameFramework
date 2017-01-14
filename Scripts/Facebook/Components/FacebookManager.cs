@@ -25,21 +25,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Facebook.MiniJSON;
 using Facebook.Unity;
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Helper;
-using FlipWebApps.GameFramework.Scripts.Localisation;
-using FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components;
-using FlipWebApps.GameFramework.Scripts.UI.Other.Components;
+using GameFramework.Debugging;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
+using GameFramework.Helper;
+using GameFramework.Localisation;
+using GameFramework.UI.Dialogs.Components;
+using GameFramework.UI.Other.Components;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.Preferences;
-using FlipWebApps.GameFramework.Scripts.Facebook.Messages;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.EditorExtras;
+using GameFramework.Preferences;
+using GameFramework.Facebook.Messages;
+using GameFramework.Messaging;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace GameFramework.Facebook.Components
 {
     /// <summary>
     /// Functionality to handle logging into facebook and interactions such as posting updates, inviting friends etc.

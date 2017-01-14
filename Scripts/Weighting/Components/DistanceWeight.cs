@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Weighting.Components {
+namespace GameFramework.Weighting.Components {
     /// <summary>
     /// Used for holding a list of weight values for different distances.
     /// </summary>

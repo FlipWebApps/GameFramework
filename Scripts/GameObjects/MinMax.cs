@@ -21,7 +21,7 @@
 
 using System;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects
+namespace GameFramework.GameObjects
 {
     /// <summary>
     /// Simple struture to hold a set of minimum and maximum integer values.

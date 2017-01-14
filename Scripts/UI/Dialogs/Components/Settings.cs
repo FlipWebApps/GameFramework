@@ -20,19 +20,19 @@
 //----------------------------------------------
 
 #if UNITY_PURCHASING
-using FlipWebApps.GameFramework.Scripts.Billing.Components;
+using GameFramework.Billing.Components;
 #endif
 using System.Linq;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.GameObjects;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
+using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Preferences;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Dialogs.Components
+namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
     /// Base class for a settings dialog that contains built in support for settings audio and effect volumes and restoring 

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.UI.Other.Components
+namespace GameFramework.UI.Other.Components
 {
     /// <summary>
     /// Provides a gradient effect for UI elements

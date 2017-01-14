@@ -22,9 +22,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
-using FlipWebApps.GameFramework.Scripts.GameObjects;
+using GameFramework.GameObjects;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Editor
+namespace GameFramework.GameObjects.Editor
 {
     [CustomPropertyDrawer(typeof(MinMax))]
     public class MinMaxDrawer : PropertyDrawer

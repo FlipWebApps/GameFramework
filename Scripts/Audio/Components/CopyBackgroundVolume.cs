@@ -18,9 +18,9 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-using FlipWebApps.GameFramework.Scripts.Audio.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Messaging.Components.AbstractClasses;
+using GameFramework.Audio.Messages;
+using GameFramework.GameStructure;
+using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -29,12 +29,12 @@ using UnityEngine.Assertions;
 /// 
 /// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/audio/
 /// </summary>
-namespace FlipWebApps.GameFramework.Scripts.Audio
+namespace GameFramework.Audio
 {
     // For doxygen documentation purposes only 
 }
 
-namespace FlipWebApps.GameFramework.Scripts.Audio.Components
+namespace GameFramework.Audio.Components
 {
     /// <summary>
     /// Copy the global effect volume to the attached Audio Source

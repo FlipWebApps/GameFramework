@@ -22,7 +22,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
+namespace GameFramework.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class that runs a method at the specified perion.

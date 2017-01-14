@@ -20,13 +20,13 @@
 //----------------------------------------------
 
 #if FACEBOOK_SDK
-using FlipWebApps.GameFramework.Scripts.Facebook.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Facebook.Messages;
+using GameFramework.GameStructure;
+using GameFramework.Messaging;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Facebook.Components
+namespace GameFramework.Facebook.Components
 {
     /// <summary>
     /// Support for login / logout functionality.

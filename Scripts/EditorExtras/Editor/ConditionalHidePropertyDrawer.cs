@@ -4,7 +4,7 @@ using UnityEngine;
 //Original version of the ConditionalHideAttribute created by Brecht Lecluyse (www.brechtos.com)
 //Modified by: -
 
-namespace FlipWebApps.GameFramework.Scripts.EditorExtras.Editor
+namespace GameFramework.EditorExtras.Editor
 {
     [CustomPropertyDrawer(typeof(ConditionalHideAttribute))]
     public class ConditionalHidePropertyDrawer : PropertyDrawer

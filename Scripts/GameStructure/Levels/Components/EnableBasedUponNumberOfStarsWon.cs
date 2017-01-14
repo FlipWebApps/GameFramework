@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
+using GameFramework.GameObjects.Components.AbstractClasses;
+using GameFramework.GameStructure.Levels.Messages;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
     /// Shows an enabled or a disabled gameobject based upon the number of stars the player has for the current level.

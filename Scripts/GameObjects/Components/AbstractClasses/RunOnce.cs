@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.Debugging;
-using FlipWebApps.GameFramework.Scripts.EditorExtras;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.Debugging;
+using GameFramework.EditorExtras;
+using GameFramework.Preferences;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses
+namespace GameFramework.GameObjects.Components.AbstractClasses
 {
     /// <summary>
     /// An abstract class to run something one time only.

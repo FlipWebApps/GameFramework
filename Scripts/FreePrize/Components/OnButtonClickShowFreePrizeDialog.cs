@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.UI.Buttons.Components.AbstractClasses;
+using GameFramework.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
+namespace GameFramework.FreePrize.Components
 {
     /// <summary>
     /// Show the free prize dialog when the button is clicked.

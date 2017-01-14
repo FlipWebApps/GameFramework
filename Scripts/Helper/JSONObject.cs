@@ -114,7 +114,7 @@ using UnityEngine;
 using System.Diagnostics;
 #endif
 
-namespace FlipWebApps.GameFramework.Scripts.Helper {
+namespace GameFramework.Helper {
 
 	public static class Extensions {
 		public static T Pop<T>(this List<T> list) {

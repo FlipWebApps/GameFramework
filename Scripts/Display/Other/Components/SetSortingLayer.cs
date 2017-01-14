@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
+namespace GameFramework.Display.Other.Components
 {
     /// <summary>
     /// Set the attached Renderer's sorting layer name and sorting order

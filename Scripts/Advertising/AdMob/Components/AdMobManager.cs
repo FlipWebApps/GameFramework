@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
+using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Advertising.AdMob.Components
+namespace GameFramework.Advertising.AdMob.Components
 {
     /// <summary>
     /// Manager class for setting up and accessing AdMob functionality.

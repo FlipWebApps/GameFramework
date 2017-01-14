@@ -20,17 +20,17 @@
 //----------------------------------------------
 
 #if UNITY_PURCHASING
-using FlipWebApps.GameFramework.Scripts.Billing.Components;
+using GameFramework.Billing.Components;
 #endif
-using FlipWebApps.GameFramework.Scripts.Billing.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.Billing.Messages;
+using GameFramework.GameStructure.GenericGameItems.ObjectModel;
+using GameFramework.GameStructure.GameItems;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Messaging;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Components
+namespace GameFramework.GameStructure.GenericGameItems.Components
 {
     /// <summary>
     /// GenericGameItem Details Button

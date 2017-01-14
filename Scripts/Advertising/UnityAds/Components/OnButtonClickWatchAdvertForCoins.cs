@@ -22,7 +22,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework.Scripts.Advertising.UnityAds.Components
+namespace GameFramework.Advertising.UnityAds.Components
 {
     /// <summary>
     /// Component for showing the watch advert for coins dialog on button click. 

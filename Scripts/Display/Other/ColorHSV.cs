@@ -50,7 +50,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other
+namespace GameFramework.Display.Other
 {
     public struct ColorHSV
     {

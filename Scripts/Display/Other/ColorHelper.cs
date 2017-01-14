@@ -28,7 +28,7 @@ using UnityEngine;
 /// Various display related components and helper classes
 /// </summary>
 /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/display/
-namespace FlipWebApps.GameFramework.Scripts.Display.Other { 
+namespace GameFramework.Display.Other { 
     /// <summary>
     /// Functions to help with color usage and conversion
     /// </summary>

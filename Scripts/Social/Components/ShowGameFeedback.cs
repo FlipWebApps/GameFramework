@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Social.Components
+namespace GameFramework.Social.Components
 {
     /// <summary>
     /// Callback functions for showing the game feedback dialog

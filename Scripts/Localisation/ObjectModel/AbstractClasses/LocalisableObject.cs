@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel.AbstractClasses
+namespace GameFramework.Localisation.ObjectModel.AbstractClasses
 {
     /// <summary>
     /// Class that holds information about localisable Object's.

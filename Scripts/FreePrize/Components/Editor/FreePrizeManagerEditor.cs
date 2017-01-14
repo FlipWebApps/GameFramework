@@ -22,7 +22,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components.Editor
+namespace GameFramework.FreePrize.Components.Editor
 {
     [CustomEditor(typeof(FreePrizeManager))]
     public class FreePrizeManagerEditor : UnityEditor.Editor {

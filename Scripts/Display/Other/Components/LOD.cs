@@ -17,7 +17,7 @@ attach your camera or player to the script at "scene camera" slot
 using System.Collections;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Other.Components
+namespace GameFramework.Display.Other.Components
 {
     /// <summary>
     /// Deprecated: Please see LevelOfDetail instead

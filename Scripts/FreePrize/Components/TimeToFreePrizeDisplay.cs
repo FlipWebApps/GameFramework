@@ -20,14 +20,14 @@
 //----------------------------------------------
 
 using System;
-using FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClasses;
-using FlipWebApps.GameFramework.Scripts.Localisation;
+using GameFramework.GameObjects.Components.AbstractClasses;
+using GameFramework.Localisation;
 using UnityEngine;
-using FlipWebApps.GameFramework.Scripts.Messaging;
-using FlipWebApps.GameFramework.Scripts.GameStructure;
-using FlipWebApps.GameFramework.Scripts.Localisation.Messages;
+using GameFramework.Messaging;
+using GameFramework.GameStructure;
+using GameFramework.Localisation.Messages;
 
-namespace FlipWebApps.GameFramework.Scripts.FreePrize.Components
+namespace GameFramework.FreePrize.Components
 {
     /// <summary>
     /// Shows the amount of time until the free prize is available

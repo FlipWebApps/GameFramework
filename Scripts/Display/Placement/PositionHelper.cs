@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Display.Placement
+namespace GameFramework.Display.Placement
 {
     /// <summary>
     /// Provides methods to help with positioning and moving items.

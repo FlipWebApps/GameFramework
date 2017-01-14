@@ -19,14 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.EditorExtras.Editor;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Preferences;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Preferences;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Editor
+namespace GameFramework.GameStructure.Editor
 {
     [CustomEditor(typeof(GameManager))]
     public class GameManagerEditor : UnityEditor.Editor

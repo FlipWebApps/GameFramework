@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Editor;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.GameItems.Editor;
 using UnityEditor;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Editor
+namespace GameFramework.GameStructure.Levels.Editor
 {
     [CustomEditor(typeof(Level))]
     public class LevelEditor : GameItemEditor

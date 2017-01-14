@@ -21,7 +21,7 @@
 
 using UnityEngine;
 
-namespace FlipWebApps.GameFramework.Scripts.Preferences
+namespace GameFramework.Preferences
 {
     /// <summary>
     /// Interface that is used for communicating with third party assets.

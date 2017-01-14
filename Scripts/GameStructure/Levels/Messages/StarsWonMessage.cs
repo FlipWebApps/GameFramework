@@ -19,10 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.Messaging;
+using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.Messaging;
 
-namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages
+namespace GameFramework.GameStructure.Levels.Messages
 {
     /// <summary>
     /// A message that is generated when the number of stars won changes for a level.
