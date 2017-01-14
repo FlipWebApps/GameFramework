@@ -83,13 +83,13 @@ namespace GameFramework.Helper.Components
 
 
         /// <summary>
-        /// Start teh current level
+        /// Start the current level
         /// </summary>
         public void LevelStarted()
         {
-            Assert.IsTrue(LevelManager.IsActive, "LevelManager not found. Ensuer that it is added to the current scene.");
+            Assert.IsTrue(LevelManager.IsActive, "LevelManager not found. Ensure that it is added to the current scene.");
 
-            LevelManager.Instance.LevelStarted();
+            LevelManager.Instance.StartLevel();
         }
     }
 }

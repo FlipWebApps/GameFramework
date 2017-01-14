@@ -112,11 +112,16 @@ namespace GameFramework.GameStructure.Levels
         public bool IsLevelFinished { get; set; }
 
         /// <summary>
+        /// Whether the level is paused.
+        /// </summary>
+        public bool IsLevelPaused { get; private set; }
+
+        /// <summary>
         /// Whether the level is running (i.e. started but not finished)
         /// </summary>
         public bool IsLevelRunning
         {
-            get { return IsLevelStarted && !IsLevelFinished; }
+            get { return IsLevelStarted && !IsLevelFinished && !IsLevelPaused; }
         }
 
         /// <summary>
@@ -127,6 +132,7 @@ namespace GameFramework.GameStructure.Levels
             get { return GameManager.Instance.Levels != null ? GameManager.Instance.Levels.Selected : null; }
         }
 
+        float _prePauseTimeScale;
 
         protected override void GameSetup()
         {
@@ -152,7 +158,7 @@ namespace GameFramework.GameStructure.Levels
 #endif
 
             if (AutoStart)
-                LevelStarted();
+                StartLevel();
         }
 
 
@@ -176,7 +182,7 @@ namespace GameFramework.GameStructure.Levels
         /// <summary>
         /// State change to level started
         /// </summary>
-        public void LevelStarted()
+        public void StartLevel()
         {
             StartTime = DateTime.Now;
             if (Level != null)
@@ -186,15 +192,60 @@ namespace GameFramework.GameStructure.Levels
             IsLevelStarted = true;
         }
 
+        [Obsolete("Call StartLevel() instead.")]
+        public void LevelStarted()
+        {
+            StartLevel();
+        }
 
         /// <summary>
-        /// State change to level finished.
+        /// State change to level finished. Call GameOver if you want the GameOver dialog to be displayed.
         /// </summary>
-        public void LevelFinished()
+        public void EndLevel()
         {
             IsLevelFinished = true;
             GameManager.Instance.TimesLevelsPlayed++;
             GameManager.Instance.TimesPlayedForRatingPrompt++;
+        }
+
+        [Obsolete("Call EndLevel() instead.")]
+        public void LevelFinished()
+        {
+            StartLevel();
+        }
+
+
+        /// <summary>
+        /// Pause the level optionally showing a dialog and setting the timeScale.
+        /// </summary>
+        public void PauseLevel(bool showPauseDialog, float timeScale = 0)
+        {
+            if (IsLevelPaused) return;
+
+            IsLevelPaused = true;
+            _prePauseTimeScale = Time.timeScale;
+            Time.timeScale = timeScale;
+        }
+
+
+        /// <summary>
+        /// Pause a level showing a dialog
+        /// </summary>
+        public void PauseLevel()
+        {
+            PauseLevel(true);
+        }
+
+
+        /// <summary>
+        /// Resume a paused level.
+        /// </summary>
+        public void ResumeLevel()
+        {
+            if (!IsLevelPaused) return;
+
+            IsLevelPaused = false;
+            Time.timeScale = _prePauseTimeScale;
         }
 
 
@@ -210,7 +261,7 @@ namespace GameFramework.GameStructure.Levels
             Assert.IsTrue(UI.Dialogs.Components.GameOver.IsActive,
                 "Please ensure that you have a GameOver component added to your scene, or are using one of the default GameOver prefabs.");
 
-            LevelFinished();
+            EndLevel();
 
             //TODO: move delayed showing into dialog instance.Show()!
             StartCoroutine(ShowGameOverDialog(isWon, showDialogDelay));

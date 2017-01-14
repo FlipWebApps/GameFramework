@@ -1314,7 +1314,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Get a float preferences setting that is unique to this GameItem instance
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="value">param>
         /// <param name="defaultValue"></param>
         public float GetSettingFloat(string key, float defaultValue)
         {

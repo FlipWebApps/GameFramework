@@ -299,8 +299,6 @@ namespace GameFramework.GameStructure
         }
         bool _isUnlocked;
 
-        [Obsolete("Use functions in LevelManager instead")]
-        public bool IsPaused { get; set; }
         [Obsolete("Use functions in LevelManager instead?")]
         public bool IsUserInteractionEnabled { get; set; }
 
