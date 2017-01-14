@@ -168,6 +168,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         [SerializeField]
         int _scoreTarget;
 
+        /// <summary>
+        /// A field that you can set from json, extensions or code that represents a target coins for completing the level
+        /// </summary>
+        /// You can also use StarxTarget if you want individual scores for winning different stars.
+        public int CoinTarget
+        {
+            get
+            {
+                return _coinTarget;
+            }
+            set
+            {
+                _coinTarget = value;
+            }
+        }
+        [Tooltip("The coins target for completing the level.")]
+        [SerializeField]
+        int _coinTarget;
         #endregion Editor Parameters
 
         /// <summary>

@@ -36,6 +36,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Editor
         SerializedProperty _star4TargetProperty;
         SerializedProperty _timeTargetProperty;
         SerializedProperty _scoreTargetProperty;
+        SerializedProperty _coinTargetProperty;
 
         protected override void OnEnable()
         {
@@ -49,6 +50,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Editor
             _star4TargetProperty = serializedObject.FindProperty("_star4Target");
             _timeTargetProperty = serializedObject.FindProperty("_timeTarget");
             _scoreTargetProperty = serializedObject.FindProperty("_scoreTarget");
+            _coinTargetProperty = serializedObject.FindProperty("_coinTarget");
         }
 
 
@@ -67,12 +69,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Editor
             EditorGUILayout.LabelField("Level Properties", EditorStyles.boldLabel);
             EditorGUI.indentLevel += 1;
             EditorGUILayout.PropertyField(_starTotalCountProperty);
-            EditorGUILayout.PropertyField(_star1TargetProperty);
-            EditorGUILayout.PropertyField(_star2TargetProperty);
-            EditorGUILayout.PropertyField(_star3TargetProperty);
-            EditorGUILayout.PropertyField(_star4TargetProperty);
+            EditorGUI.indentLevel += 1;
+            if (_starTotalCountProperty.intValue >= 1)
+                EditorGUILayout.PropertyField(_star1TargetProperty);
+            if (_starTotalCountProperty.intValue >= 2)
+                EditorGUILayout.PropertyField(_star2TargetProperty);
+            if (_starTotalCountProperty.intValue >= 3)
+                EditorGUILayout.PropertyField(_star3TargetProperty);
+            if (_starTotalCountProperty.intValue >= 4)
+                EditorGUILayout.PropertyField(_star4TargetProperty);
+            EditorGUI.indentLevel -= 1;
             EditorGUILayout.PropertyField(_timeTargetProperty);
             EditorGUILayout.PropertyField(_scoreTargetProperty);
+            EditorGUILayout.PropertyField(_coinTargetProperty);
             EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }

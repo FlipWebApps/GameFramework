@@ -81,6 +81,12 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         public bool GameWonWhenTargetScoreReached;
 
         /// <summary>
+        /// Whether the user should automatically win the game once the levels target coins is reached
+        /// </summary>
+        [Tooltip("Whether the user should automatically win the game once the levels target coins is reached")]
+        public bool GameWonWhenTargetCoinsReached;
+
+        /// <summary>
         /// Time when the level was started.
         /// </summary>
         public DateTime StartTime { get; set; }
@@ -141,6 +147,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
                 MyDebug.LogWarningF("You have enabled the option 'GameOverWhenTargetTimeReached' in LevelManager however the current level has a configured TimeTarget of 0 and so will end immediately. Consider using Level resource configuration files and setting this value.");
             if (GameWonWhenTargetScoreReached && Mathf.Approximately(Level.ScoreTarget, 0))
                 MyDebug.LogWarningF("You have enabled the option 'GameWonWhenTargetScoreReached' in LevelManager however the current level has a configured ScoreTarget of 0 and so will end immediately. Consider using Level resource configuration files and setting this value.");
+            if (GameWonWhenTargetCoinsReached && Mathf.Approximately(Level.CoinTarget, 0))
+                MyDebug.LogWarningF("You have enabled the option 'GameWonWhenTargetCoinsReached' in LevelManager however the current level has a configured CoinTarget of 0 and so will end immediately. Consider using Level resource configuration files and setting this value.");
 #endif
 
             if (AutoStart)
@@ -236,7 +244,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
 
                 // check for gameover (win) conditions.
                 if ((GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon) ||
-                    GameWonWhenTargetScoreReached && Level.Score >= Level.ScoreTarget)
+                    GameWonWhenTargetScoreReached && Level.Score >= Level.ScoreTarget ||
+                    GameWonWhenTargetCoinsReached && Level.Coins >= Level.CoinTarget)
                     GameOver(true, ShowGameOverDialogDelay);
             }
 
