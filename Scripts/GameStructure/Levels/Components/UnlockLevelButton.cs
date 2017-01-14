@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using UnityEngine;
@@ -35,10 +35,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
     public class UnlockLevelButton : UnlockGameItemButton<Level>
     {
         /// <summary>
-        /// Returns the GameItemsManager that holds Levels
+        /// Returns the GameItemManager that holds Levels
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
+        protected override GameItemManager<Level, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Levels;
         }

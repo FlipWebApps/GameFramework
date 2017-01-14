@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameObjects.Components;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using UnityEngine;
@@ -134,6 +135,14 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels
         /// </summary>
         void Start()
         {
+#if UNITY_EDITOR
+            // some sanity checking and warnings
+            if (GameOverWhenTargetTimeReached && Mathf.Approximately(Level.TimeTarget, 0))
+                MyDebug.LogWarningF("You have enabled the option 'GameOverWhenTargetTimeReached' in LevelManager however the current level has a configured TimeTarget of 0 and so will end immediately. Consider using Level resource configuration files and setting this value.");
+            if (GameWonWhenTargetScoreReached && Mathf.Approximately(Level.ScoreTarget, 0))
+                MyDebug.LogWarningF("You have enabled the option 'GameWonWhenTargetScoreReached' in LevelManager however the current level has a configured ScoreTarget of 0 and so will end immediately. Consider using Level resource configuration files and setting this value.");
+#endif
+
             if (AutoStart)
                 LevelStarted();
         }

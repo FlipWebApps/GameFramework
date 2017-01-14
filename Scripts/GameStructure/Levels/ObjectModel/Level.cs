@@ -22,6 +22,7 @@
 using System.Runtime.InteropServices;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Messages;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
@@ -29,8 +30,146 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
     /// <summary>
     /// Level Game Item
     /// </summary>
+    [CreateAssetMenu(fileName = "Level_x", menuName = "Game Framework/Level")]
     public class Level : GameItem
     {
+        #region Editor Parameters
+
+        /// <summary>
+        /// The total number of stars that can be gotten.
+        /// </summary>
+        public int StarTotalCount
+        {
+            get
+            {
+                return _starTotalCount;
+            }
+            set
+            {
+                _starTotalCount = value;
+            }
+        }
+        [Tooltip("An override for the default star total count.")]
+        [SerializeField]
+        int _starTotalCount = 3;
+
+
+        /// <summary>
+        /// The target for getting the first star or -1 if no target
+        /// </summary>
+        public float Star1Target
+        {
+            get
+            {
+                return _star1Target;
+            }
+            set
+            {
+                _star1Target = value;
+            }
+        }
+        [Tooltip("The target for getting 1 star or -1 if no target")]
+        [SerializeField]
+        float _star1Target = 10;
+
+
+        /// <summary>
+        /// A target for getting the second star or -1 if no target.
+        /// </summary>
+        public float Star2Target
+        {
+            get
+            {
+                return _star2Target;
+            }
+            set
+            {
+                _star2Target = value;
+            }
+        }
+        [Tooltip("The target for getting the second star or -1 if no target")]
+        [SerializeField]
+        float _star2Target = 10;
+
+
+        /// <summary>
+        /// A target for getting the third star or -1 if no target.
+        /// </summary>
+        public float Star3Target
+        {
+            get
+            {
+                return _star3Target;
+            }
+            set
+            {
+                _star3Target = value;
+            }
+        }
+        [Tooltip("The target for getting the third star or -1 if no target")]
+        [SerializeField]
+        float _star3Target = 10;
+
+
+        /// <summary>
+        /// A target for getting the fourth star or -1 if no target.
+        /// </summary>
+        public float Star4Target
+        {
+            get
+            {
+                return _star4Target;
+            }
+            set
+            {
+                _star4Target = value;
+            }
+        }
+        [Tooltip("The target for getting the fourth star or -1 if no target")]
+        [SerializeField]
+        float _star4Target = 10;
+
+
+        /// <summary>
+        /// The time target for completing the level
+        /// </summary>
+        /// You can also use StarxTarget if you want individual times for winning different stars.
+        public float TimeTarget
+        {
+            get
+            {
+                return _timeTarget;
+            }
+            set
+            {
+                _timeTarget = value;
+            }
+        }
+        [Tooltip("The time target for completing the level.")]
+        [SerializeField]
+        float _timeTarget;
+
+        /// <summary>
+        /// A field that you can set from json, extensions or code that represents a target score for completing the level
+        /// </summary>
+        /// You can also use StarxTarget if you want individual scores for winning different stars.
+        public int ScoreTarget
+        {
+            get
+            {
+                return _scoreTarget;
+            }
+            set
+            {
+                _scoreTarget = value;
+            }
+        }
+        [Tooltip("The score target for completing the level.")]
+        [SerializeField]
+        int _scoreTarget;
+
+        #endregion Editor Parameters
+
         /// <summary>
         /// A unique identifier for this type of GameItem
         /// </summary>
@@ -41,10 +180,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// </summary>
         public override string IdentifierBasePrefs { get { return "L"; } }
 
-        /// <summary>
-        /// The total number of stars that can be gotten. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public int StarTotalCount { get; set; }
 
         /// <summary>
         /// The number of stars that have been won for this level. Represented as a bitmask.
@@ -79,26 +214,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         }
 
         /// <summary>
-        /// A value that can be used for holding a target the the first star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star1Target { get; set; }
-
-        /// <summary>
-        /// A value that can be used for holding a target the the second star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star2Target { get; set; }
-
-        /// <summary>
-        /// A value that can be used for holding a target the the third star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star3Target { get; set; }
-
-        /// <summary>
-        /// A value that can be used for holding a target the the third star. Automatically loaded from JSON configuration if present.
-        /// </summary>
-        public float Star4Target { get; set; }
-
-        /// <summary>
         /// A field that you can optionally use for recording the progress. Typically this should be in the range 0..1
         /// </summary>
         public float Progress { get; set; }
@@ -113,29 +228,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
         /// </summary>
         public float TimeBest { get; set; }
 
-        /// <summary>
-        /// A field that you can set from json, extensions or code that represents a target time. 
-        /// </summary>
-        /// Automatically loaded from JSON configuration if present.
-        /// You can also use StarxTarget if you want individual times for winning different stars.
-        public float TimeTarget { get; set; }
-
-        /// <summary>
-        /// A field that you can set from json, extensions or code that represents a target score. 
-        /// </summary>
-        /// Automatically loaded from JSON configuration if present.
-        /// You can also use StarxTarget if you want individual scores for winning different stars.
-        public int ScoreTarget { get; set; }
-
-
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Level()
-        {
-            StarTotalCount = 3;
-        }
 
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
@@ -173,64 +265,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel
             else
                 StarsWon &= (~(1 << (starNumber - 1)));
         }
-
-
-        /// <summary>
-        /// Parse the loaded level file data for level specific values. If overriding from a base class be sure to call base.ParseLevelFileData()
-        /// </summary>
-        /// <param name="jsonObject"></param>
-        public override void ParseData(Helper.JSONObject jsonObject)
-        {
-            base.ParseData(jsonObject);
-
-            if (jsonObject.ContainsKey("startotalcount"))
-                StarTotalCount = (int)jsonObject.GetNumber("startotalcount");
-            if (jsonObject.ContainsKey("star1target"))
-                Star1Target = (float)jsonObject.GetNumber("star1target");
-            if (jsonObject.ContainsKey("star2target"))
-                Star2Target = (float)jsonObject.GetNumber("star2target");
-            if (jsonObject.ContainsKey("star3target"))
-                Star3Target = (float)jsonObject.GetNumber("star3target");
-            if (jsonObject.ContainsKey("star4target"))
-                Star4Target = (float)jsonObject.GetNumber("star4target");
-            if (jsonObject.ContainsKey("timetarget"))
-                TimeTarget = (float)jsonObject.GetNumber("timetarget");
-            if (jsonObject.ContainsKey("scoretarget"))
-                ScoreTarget = (int)jsonObject.GetNumber("scoretarget");
-        }
-
-
-        /// <summary>
-        /// Parse the loaded GameItemExtension object and extract certain default values
-        /// </summary>
-        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
-        /// If overriding from a base class be sure to call base.ParseData()
-        /// <param name="gameItemExtension"></param>
-        public override void ParseData(GameItemExtension gameItemExtension)
-        {
-            base.ParseData(gameItemExtension);
-
-            var levelExtension = gameItemExtension as LevelExtension;
-            Assert.IsNotNull(levelExtension, string.Format("Unable to cast gameItemExtension to LevelExtension for level {0}. Check you have created an extension of the correct type.", Number));
-
-            if (levelExtension.OverrideStarTotalCount)
-                StarTotalCount = levelExtension.StarTotalCount;
-            if (levelExtension.OverrideStar1Target)
-                Star1Target = levelExtension.Star1Target;
-            if (levelExtension.OverrideStar2Target)
-                Star2Target = levelExtension.Star2Target;
-            if (levelExtension.OverrideStar3Target)
-                Star3Target = levelExtension.Star3Target;
-            if (levelExtension.OverrideStar4Target)
-                Star4Target = levelExtension.Star4Target;
-            if (levelExtension.OverrideTimeTarget)
-                TimeTarget = levelExtension.TimeTarget;
-            if (levelExtension.OverrideScoreTarget)
-                ScoreTarget = levelExtension.ScoreTarget;
-        }
-
 
         /// <summary>
         /// Update PlayerPrefs with setting or preferences for this item.

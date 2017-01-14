@@ -73,7 +73,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
         /// <summary>
         /// GameItemManager containing the current GenericGameItems
         /// </summary>
-        public GameItemsManager<GenericGameItem, GameItem> GenericGameItems { get; set; }
+        public GameItemManager<GenericGameItem, GameItem> GenericGameItems { get; set; }
 
         #endregion Properties
 
@@ -89,8 +89,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
             if (!AutoCreateItems) return;
 
             var coinsToUnlock = UnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlock : -1;
-            GenericGameItems = new GameItemsManager<GenericGameItem, GameItem>();
-            GenericGameItems.LoadDefaultItems(1, NumberOfItems, coinsToUnlock, LoadFromResources);
+            GenericGameItems = new GameItemManager<GenericGameItem, GameItem>();
+            GenericGameItems.Load(1, NumberOfItems, coinsToUnlock); //, LoadFromResources);
         }
 
         #endregion Setup

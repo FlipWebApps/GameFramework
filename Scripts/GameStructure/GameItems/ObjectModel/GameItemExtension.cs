@@ -1,4 +1,4 @@
-﻿//----------------------------------------------
+//----------------------------------------------
 // Flip Web Apps: Game Framework
 // Copyright © 2016 Flip Web Apps / Mark Hewitt
 //
@@ -26,83 +26,9 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// <summary>
     /// Allows for adding your own custom data and functionality to a GameItem
     /// </summary>
-    [CreateAssetMenu(fileName = "type_x", menuName="Game Framework/GameItem Extension")]
+    [CreateAssetMenu(fileName = "type_x", menuName = "Game Framework/GameItem Extension")]
     public class GameItemExtension : ScriptableObject
     {
-        /// <summary>
-        /// An override for the default name. For automatically created GameItems this will be a localisation key rather than a literal value.
-        /// </summary>
-        /// See GameItem for more information.
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        [Tooltip("An override for the default name. For automatically created GameItems this will be a localisation key rather than a literal value.")]
-        [SerializeField]
-        string _name;
-
-        /// <summary>
-        /// An override for the default description. For automatically created GameItems this will be a localisation key rather than a literal value.
-        /// </summary>
-        /// See GameItem for more information.
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                _description = value;
-            }
-        }
-        [Tooltip("An override for the default description. For automatically created GameItems this will be a localisation key rather than a literal value.")]
-        [SerializeField]
-        string _description;
-
-        /// <summary>
-        /// Whether to override the value to unlock field (we need this as we can't otherwise tell if the integer value is set or the default 0)
-        /// </summary>
-        /// See GameItem for more information.
-        public bool OverrideValueToUnlock
-        {
-            get
-            {
-                return _overrideValueToUnlock;
-            }
-            set
-            {
-                _overrideValueToUnlock = value;
-            }
-        }
-        [Tooltip("Whether to override the value to unlock field (we need this as we can't otherwise tell if the integer value is set or the default 0)")]
-        [SerializeField]
-        public bool _overrideValueToUnlock;
-
-        /// <summary>
-        /// An override for the default value needed to unlock this item.
-        /// </summary>
-        /// See GameItem for more information.
-        public int ValueToUnlock {
-            get
-            {
-                return _valueToUnlock;
-            }
-            set
-            {
-                _valueToUnlock = value;
-            }
-        }
-        [Tooltip("An override for the default value needed to unlock this item.")]
-        [SerializeField]
-        int _valueToUnlock;
     }
 
 }

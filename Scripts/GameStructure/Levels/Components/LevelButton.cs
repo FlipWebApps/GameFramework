@@ -24,8 +24,7 @@ using FlipWebApps.GameFramework.Scripts.Billing.Components;
 #endif
 using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 using FlipWebApps.GameFramework.Scripts.GameObjects;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Messaging;
@@ -106,10 +105,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Levels.Components
 
 
         /// <summary>
-        /// Returns the GameItemsManager that holds Levels
+        /// Returns the GameItemManager that holds Levels
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<Level, GameItem> GetGameItemsManager()
+        protected override GameItemManager<Level, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Levels;
         }

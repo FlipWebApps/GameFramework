@@ -23,7 +23,7 @@
 using FlipWebApps.GameFramework.Scripts.Billing.Components;
 #endif
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
@@ -65,10 +65,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
         }
 
         /// <summary>
-        /// Returns the GameItemsManager that holds Worlds
+        /// Returns the GameItemManager that holds Worlds
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<World, GameItem> GetGameItemsManager()
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Worlds;
         }

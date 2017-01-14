@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Worlds.Components
         /// Returns the GameItemsMaager that holds Characters
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<World, GameItem> GetGameItemsManager()
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Worlds;
         }

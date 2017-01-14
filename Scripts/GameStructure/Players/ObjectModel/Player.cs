@@ -28,7 +28,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
     /// <summary>
     /// Player Game Item
     /// </summary>
-
+    [CreateAssetMenu(fileName = "Player_x", menuName = "Game Framework/Player")]
     public class Player : GameItem
     {
         /// <summary>
@@ -115,10 +115,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         bool _isGameWon;
 
 
-        public int MaximumWorld;
-        public int MaximumLevel;
-        public int SelectedWorld;
-        public int SelectedLevel;   // only use when not using worlds, other use World.SelectedLevel for world specific level.
+        public int MaximumWorld { get; set; }
+        public int MaximumLevel { get; set; }
+        public int SelectedWorld { get; set; }
+        public int SelectedLevel { get; set; }   // only use when not using worlds, other use World.SelectedLevel for world specific level.
 
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
@@ -129,8 +129,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel
         public override void CustomInitialisation()
         {
             Reset();
-
-            Name = GetSettingString("CustomName", CustomName);
+            
+            //Name = GetSettingString("CustomName", CustomName);
 
             Score = GetSettingInt("TotalScore", Score);
             Coins = GetSettingInt("TotalCoins", Coins);

@@ -21,7 +21,7 @@
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
@@ -35,10 +35,10 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Characters.Components
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
         /// <summary>
-        /// Returns the GameItemsManager that holds Characters
+        /// Returns the GameItemManager that holds Characters
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<Character, GameItem> GetGameItemsManager()
+        protected override GameItemManager<Character, GameItem> GetGameItemManager()
         {
             return GameManager.Instance.Characters;
         }

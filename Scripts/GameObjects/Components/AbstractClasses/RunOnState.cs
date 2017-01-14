@@ -35,6 +35,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameObjects.Components.AbstractClass
         /// <summary>
         /// When we want this to run.
         /// </summary>
+        [Header("Run Settings")]
         [Tooltip("When we want this to run.")]
         public RunType Run;
 

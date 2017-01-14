@@ -42,7 +42,6 @@ using FlipWebApps.GameFramework.Scripts.GameStructure.Game.Messages;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.Messages;
 using FlipWebApps.GameFramework.Scripts.Audio.Messages;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
@@ -429,7 +428,28 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         public float PhysicalScreenHeightMultiplier { get; private set; }   // Ratio above and beyong 4:3 ratio
 
         #endregion Display properties
-        #region Player properties 
+
+        #region Game Structure Properties
+
+        /// <summary>
+        /// GameItemManager containing the current Characters
+        /// </summary>
+        public GameItemManager<Character, GameItem> Characters { get; set; }
+
+        /// <summary>
+        /// GameItemManager containing the current Worlds
+        /// </summary>
+        public GameItemManager<World, GameItem> Worlds { get; set; }
+
+        /// <summary>
+        /// GameItemManager containing the current Levels
+        /// </summary>
+        public GameItemManager<Level, GameItem> Levels { get; set; }
+
+        /// <summary>
+        /// GameItemManager containing the current Players
+        /// </summary>
+        public PlayerGameItemManager Players { get; set; }
 
         /// <summary>
         /// The current Player. 
@@ -437,37 +457,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         /// PlayerChangedMessage is sent whenever this value changes outside of initialisation.
         public Player Player
         {
-            get { return _player; }
+            get
+            {
+                Assert.IsNotNull(Players, "Players are not setup. Check that in the script execution order GameManager is setup first.");
+                return Players.Selected;
+            }
             set
             {
-                var oldPlayer = Player;
-                _player = value;
-                if (IsInitialised && oldPlayer != null && oldPlayer.Number != Player.Number)
-                    GameManager.SafeQueueMessage(new PlayerChangedMessage(oldPlayer, Player));
+                Players.SetSelected(value);
             }
         }
-        Player _player;
-        protected Player[] Players;
 
-        #endregion Player properties 
-        #region GameManager properties
+        #endregion Game Structure Properties
 
-        /// <summary>
-        /// GameItemManager containing the current Characters
-        /// </summary>
-        public GameItemsManager<Character, GameItem> Characters { get; set; }
-
-        /// <summary>
-        /// GameItemManager containing the current Worlds
-        /// </summary>
-        public GameItemsManager<World, GameItem> Worlds { get; set; }
-
-        /// <summary>
-        /// GameItemManager containing the current Levels
-        /// </summary>
-        public GameItemsManager<Level, GameItem> Levels { get; set; }
-
-        #endregion GameManager properties
         #region Messaging properties 
 
         /// <summary>
@@ -562,19 +564,16 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             LocaliseText.AllowedLanguages = SupportedLanguages;
 
             // setup players.
-            Players = new Player[Instance.PlayerCount];
-            for (var i = 0; i < Instance.PlayerCount; i++)
-            {
-                Players[i] = CreatePlayer(i);
-            }
-            SetPlayerByNumber(0);
+            Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
+            Players = new PlayerGameItemManager();
+            Players.Load(0, PlayerCount-1);
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)
             {
                 var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
-                Worlds = new GameItemsManager<World, GameItem>();
-                Worlds.LoadDefaultItems(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
+                Worlds = new GameItemManager<World, GameItem>();
+                Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
                 // if we have worlds then autocreate levels for each world.
                 if (AutoCreateLevels)
@@ -582,8 +581,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                     for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
                     {
                         var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                        Worlds.Items[i].Levels = new GameItemsManager<Level, GameItem>();
-                        Worlds.Items[i].Levels.LoadDefaultItems(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
+                        Worlds.Items[i].Levels = new GameItemManager<Level, GameItem>();
+                        Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
                     }
 
                     // and assign the selected set of levels
@@ -596,19 +595,19 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
                 if (AutoCreateLevels)
                 {
                     var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                    Levels = new GameItemsManager<Level, GameItem>();
-                    Levels.LoadDefaultItems(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
+                    Levels = new GameItemManager<Level, GameItem>();
+                    Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
                 }
             }
 
             // handle auto setup of characters
             if (AutoCreateCharacters)
             {
-                Characters = new GameItemsManager<Character, GameItem>();
+                Characters = new GameItemManager<Character, GameItem>();
                 if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
-                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
+                    Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
                 else
-                    Characters.LoadDefaultItems(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
+                    Characters.Load(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
             }
 
             // coroutine to check for display changes (don't need to do this every frame)
@@ -768,7 +767,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
             //}
 
             // otherwise we create and add a new one
-            MyDebug.LogWarningF("Not enough free effect AudioSources for playing {0}, ({1}). Adding a new one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
+            MyDebug.LogF("Not enough free effect AudioSources for playing {0}, ({1}). Adding a new one - consider adding more AudioSources to the GameManager gameobject for performance.", clip.name, newPitch);
             var newAudioSource = gameObject.AddComponent<AudioSource>();
             newAudioSource.playOnAwake = false;
             newAudioSource.volume = EffectAudioVolume;
@@ -905,46 +904,34 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure
         #region Player related code
 
         /// <summary>
-        /// Create the given player number (note: probably soon to be made obsolete)
-        /// </summary>
-        /// Can be overridden if you have a custom player class.
-        /// <param name="playerNumber"></param>
-        /// <returns></returns>
-        protected virtual Player CreatePlayer(int playerNumber)
-        {
-            MyDebug.Log("GameManager: CreatePlayer");
-
-            var player = new Player();
-            player.Initialise(playerNumber, localiseDescription: false);
-            return player;
-        }
-
-        /// <summary>
-        /// Get the current player
+        /// Get the current player - Obsolete
         /// </summary>
         /// <returns></returns>
+        [Obsolete("GetPlayer() is deprecated - use Player")]
         public Player GetPlayer()
         {
             return Player;
         }
 
         /// <summary>
-        /// Get the specified player
+        /// Get the specified player - Obsolete
         /// </summary>
         /// <param name="playerNumber">player number 0 being the first player</param>
         /// <returns></returns>
+        [Obsolete("GetPlayer(number) is deprecated - use Players.GetItem(number)")]
         public Player GetPlayer(int playerNumber)
         {
-            return Players[playerNumber];
+            return Players.GetItem(playerNumber);
         }
 
         /// <summary>
-        /// Set the current player by player number
+        /// Set the current player by player number - Obsolete
         /// </summary>
         /// <param name="playerNumber"></param>
+        [Obsolete("SetPlayerByNumber(number) is deprecated - use Players.SetSelected(playerNumber);")]
         public void SetPlayerByNumber(int playerNumber)
         {
-            Player = Players[playerNumber];
+            Players.SetSelected(playerNumber);
         }
         #endregion Player Related
     }

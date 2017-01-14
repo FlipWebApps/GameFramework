@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using System;
+using FlipWebApps.GameFramework.Scripts.EditorExtras;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -386,6 +387,11 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Colliders
             if (triggerData.InstantiatePrefab != null)
                 Instantiate(triggerData.InstantiatePrefab, transform.position, Quaternion.identity);
 
+#if PRO_POOLING
+            if (!string.IsNullOrEmpty(triggerData.AddPooledItem))
+                ProPooling.PoolManager.Instance.GetFromPool(triggerData.AddPooledItem, transform);
+#endif
+
             if (triggerData.AudioClip != null)
             {
                 Assert.IsTrue(GameManager.Instance.IsInitialised, "Add a GameManager component to your scene to play audio effects.");
@@ -422,6 +428,24 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.Colliders
             [Tooltip("An optional prefab to instantiate")]
             [SerializeField]
             GameObject _instantiatePrefab;
+
+            /// <summary>
+            /// Get an item from a Pro Pooling PoolManager pool with the given name (requires Pro Pooling)
+            /// </summary>
+            public string AddPooledItem
+            {
+                get
+                {
+                    return _addPooledItem;
+                }
+                set
+                {
+                    _addPooledItem = value;
+                }
+            }
+            [Tooltip("Get an item from a Pro Pooling PoolManager pool with the given name (requires Pro Pooling)")]
+            [SerializeField]
+            string _addPooledItem;
 
             /// <summary>
             /// An audio clip to play

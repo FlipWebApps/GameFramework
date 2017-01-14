@@ -19,12 +19,15 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using FlipWebApps.GameFramework.Scripts.Preferences;
 using FlipWebApps.GameFramework.Scripts.Debugging;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.Players.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Helper;
 using FlipWebApps.GameFramework.Scripts.Localisation;
+using FlipWebApps.GameFramework.Scripts.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -35,13 +38,92 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
     /// </summary>
     /// This provides many of the common features that game items need such as a name and description, 
     /// localisation support, the ability to unlock, a score or value etc.
-    public class GameItem
+    public class GameItem : ScriptableObject
     {
+        #region Enums
         /// <summary>
         /// Ways in which a GameItem can be unlocked
         /// </summary>
         public enum UnlockModeType { Custom, Completion, Coins }
 
+        /// <summary>
+        /// The different types of prefab we have
+        /// </summary>
+        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame, UnlockWindow }
+
+        /// <summary>
+        /// The different types of sprites we have
+        /// </summary>
+        public enum LocalisableSpriteType { Custom, SelectionMenu, InGame, UnlockWindow }
+        #endregion Enums
+
+        #region Editor Parameters
+
+        /// <summary>
+        /// (private) Localisable name for this GameItem. See also Name for easier access.
+        /// </summary>
+        LocalisableText LocalisableName
+        {
+            get
+            {
+                return _localisableName;
+            }
+            set
+            {
+                _localisableName = value;
+            }
+        }
+        [Tooltip("The name for this item - either localised or fixed.")]
+        [SerializeField]
+        LocalisableText _localisableName;
+
+
+        /// <summary>
+        /// (private) Localisable description for this GameItem. See also Description for easier access.
+        /// </summary>
+        LocalisableText LocalisableDescription
+        {
+            get
+            {
+                return _localisableDescription;
+            }
+            set
+            {
+                _localisableDescription = value;
+            }
+        }
+        [Tooltip("The description for this item - either localised or fixed.")]
+        [SerializeField]
+        LocalisableText _localisableDescription;
+
+        /// <summary>
+        /// A value that is needed to unlock this item.
+        /// </summary>
+        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
+        /// -1 means that you can not unlock this item in this way.
+        public int ValueToUnlock
+        {
+            get
+            {
+                return _valueToUnlock;
+            }
+            set
+            {
+                _valueToUnlock = value;
+            }
+        }
+        [Tooltip("An override for the default value needed to unlock this item.")]
+        [SerializeField]
+        int _valueToUnlock = -1;
+
+        [SerializeField]
+        List<LocalisablePrefabEntry> _localisablePrefabs = new List<LocalisablePrefabEntry>();
+
+        [SerializeField]
+        List<LocalisableSpriteEntry> _localisableSprites = new List<LocalisableSpriteEntry>();
+        #endregion Editor Parameters
+
+        #region General Variables
         /// <summary>
         /// A unique identifier for this type of GameItem (override in your derived classes)
         /// </summary>
@@ -66,47 +148,39 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// Many game items will hold unique values depending upon the player e.g. high score. This field is used to identify 
         /// the current player that the GameItem represents.
-        public Player Player;
+        public Player Player { get; private set; }
         //public GameItem Parent;
 
         /// <summary>
         /// A number that represents this game item that is unique for this class of GameItem
         /// </summary>
-        public int Number { get; protected set; }
+        public int Number { get; set; }
 
         /// <summary>
-        /// The name of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// The name of this gameitem (localised if so configured). 
         /// </summary>
+        /// Through the initialise function you can specify whether this is part of a localisation key, or a fixed value
         public string Name {
             get
             {
-                return _localiseName? LocaliseText.Get(FullKey(_name ?? "Name")) : _name;
-            }
-            set
-            {
-                _name = value;
+                return LocalisableName.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Name")) : LocalisableName.GetValue();
             }
         }
-        string _name;
 
         /// <summary>
-        /// A description of this gameitem. Through the constructor you can specify whether this is part of a localisation key, or a fixed value
+        /// A description of this gameitem. 
         /// </summary>
+        /// Through the the initialise function you can specify whether this is part of a localisation key, or a fixed value
         public string Description
         {
             get
             {
-                return _localiseDescription ? LocaliseText.Get(FullKey(_description ?? "Desc")) : _description;
-            }
-            set
-            {
-                _description = value;
+                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Desc")) : LocalisableDescription.GetValue();
             }
         }
-        string _description;
 
         /// <summary>
-        /// A sprite that is associated with this gameitem. 
+        /// A sprite that is associated with this gameitem loaded automatically from resources. 
         /// </summary>
         /// The sprite is loaded from resources on first access.
         public Sprite Sprite {
@@ -131,13 +205,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         public bool IsBought { get; set; }
 
         /// <summary>
-        /// A value that is needed to unlock this item.
-        /// </summary>
-        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
-        /// -1 means that you can not unlock this item in this way.
-        public int ValueToUnlock { get; set; }
-
-        /// <summary>
         /// A global high score for this GameItem for all local players
         /// </summary>
         public int HighScoreLocalPlayers { get; set; }
@@ -151,6 +218,8 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Local player high score for this GameItem before this turn
         /// </summary>
         public int OldHighScoreLocalPlayers { get; set; }
+
+        #endregion General Variables
 
         #region User Specific Settings
 
@@ -230,6 +299,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
 
         #endregion User Specific Settings
 
+        #region Extension Data
         /// <summary>
         /// Stored json data from disk. 
         /// </summary>
@@ -237,6 +307,18 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// this game item and also holding other configuration.
         /// 
         /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
+        public JSONObject JsonData { get; set; }
+
+        /// <summary>
+        /// Stored json game data from disk. 
+        /// </summary>
+        /// You can provide a json configuration file that contains both standard and custom values for setting up 
+        /// this game item and also holding other configuration.
+        /// 
+        /// You can access the Json data directly however it may be cleaner to creating a new subclass to save this instead.
+        public JSONObject JsonGameData { get; set; }
+
+        [Obsolete("Convert to use GameItem instances or reference JsonData instead. This data is no longer automatically loaded!")]
         public JSONObject JsonConfigurationData { get; set; }
 
         /// <summary>
@@ -245,13 +327,27 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
         public GameItemExtension GameItemExtensionData { get; set; }
 
+        /// <summary>
+        /// Stored GameItemExtension game data. 
+        /// </summary>
+        /// You can provide a GameItemExtension configuration object that contains custom values to replace default GameItem values.
+        public GameItemExtension GameItemExtensionGameData { get; set; }
+
+        #endregion Extension Data
 
         bool _isPlayer;
-        bool _localiseName;
-        bool _localiseDescription;
 
         #region Initialisation
 
+        /// <summary>
+        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        /// </summary>
+        /// <param name="number"></param>
+        public void Initialise(int number)
+        {
+            Initialise(number, LocalisableText.CreateNonLocalised(), LocalisableText.CreateNonLocalised());
+        }
 
         /// <summary>
         /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
@@ -259,41 +355,49 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="number"></param>
         /// <param name="name"></param>
-        /// <param name="localiseName">Whether name represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="description"></param>
-        /// <param name="localiseDescription">Whether description represents a localisation key (true) or a fixed value (false). Default is a localisation key</param>
         /// <param name="sprite"></param>
         /// <param name="valueToUnlock"></param>
         /// <param name="player"></param>
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
-        /// <param name="loadFromResources">Whether a resources file is present with additional information</param>
-        public void Initialise(int number, string name = null, bool localiseName = true, string description = null, bool localiseDescription = true, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        /// <param name="loadFromResources"></param>
+        public void Initialise(int number, LocalisableText name, LocalisableText description, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
-            _isPlayer = IdentifierBase == "Player";
-
             Number = number;
-            // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
-            Player = player ?? (_isPlayer ? null : GameManager.Instance.Player);
-            //Parent = parent;
-            _localiseName = localiseName;
-            Name = name;
-            _localiseDescription = localiseDescription;
-            Description = description;
+            LocalisableName = name;
+            LocalisableDescription = description;
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than pre player.
-            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than pre player.
+            InitialiseNonScriptableObjectValues(player, loadFromResources);
+        }
+
+
+        /// <summary>
+        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="loadFromResources"></param>
+        public void InitialiseNonScriptableObjectValues(Player player = null, bool loadFromResources = false)
+        {
+            _isPlayer = IdentifierBase == "Player";
+
+            // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
+            Player = player ?? GameManager.Instance.Player;
+
+            HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
+            HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
             OldHighScoreLocalPlayers = HighScoreLocalPlayers;
 
             Coins = 0;
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than pre player.
+            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
 
@@ -310,86 +414,93 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Provides a simple method that you can overload to do custom initialisation in your own classes.
         /// </summary>
-        /// This is called after ParseLevelFileData (if loading from resources) so you can use values setup by that method. 
-        /// 
         /// If overriding from a base class be sure to call base.CustomInitialisation()
         public virtual void CustomInitialisation()
         {
         }
 
+
+        /// <summary>
+        /// Load a gameitem of the specified type and number from resources
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="number"></param>
+        public static T LoadFromResources<T>(string typeName, int number) where T: GameItem
+        {
+            var gameItem = GameManager.LoadResource<T>(typeName + "\\" + typeName + "_" + number);
+            if (gameItem != null)
+                gameItem.Number = number;
+            return gameItem;
+        }
+
         #endregion Initialisation
 
         #region Load Data
+
         /// <summary>
-        /// Load simple meta data associated with this game item.
+        /// Load simple meta data associated with this game item. Called when this GameItem is initialised.
         /// </summary>
         /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
         /// or as a GameItemExtension derived ScriptableObject also from the resources folder under [IdentifierBase]\[IdentifierBase]_[Number]
         public void LoadData()
         {
-            if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJSONDataFile();
+            if (JsonData == null)
+                JsonData = LoadJsonData();
             if (GameItemExtensionData == null)
                 GameItemExtensionData = LoadGameItemExtension();
 
-            Assert.IsFalse(JsonConfigurationData == null && GameItemExtensionData == null, "When loading game item from resources, corresponding JSON or GameItemExtension should be present. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
+            if (JsonData == null && GameItemExtensionData == null)
+                MyDebug.LogWarning("When loading game item from resources, corresponding JSON or GameItemExtension should be present. Either disable the Load From Resources option or check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number + "[_Extension]");
+        }
 
-            if (JsonConfigurationData!=null)
-                ParseData(JsonConfigurationData);
-            else if (GameItemExtensionData != null)
-                ParseData(GameItemExtensionData);
+        /// <summary>
+        /// Load simple meta data associated with this game item.
+        /// </summary>
+        /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
+        public JSONObject LoadJsonData()
+        {
+            var path = string.Format("{0}\\{0}_{1}", IdentifierBase, Number);
+            if (JsonData == null)
+                JsonData = LoadJsonDataFile(path);
+            if (JsonData != null)
+                ParseJsonData(JsonData);
+            return JsonData;
         }
 
 
         /// <summary>
         /// Parse the loaded json file data and extract certain default values
         /// </summary>
-        /// Json entries 'name', 'description' and 'valuetounlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
         /// If overriding from a base class be sure to call base.ParseLevelFileData()
         /// <param name="jsonObject"></param>
-        public virtual void ParseData(JSONObject jsonObject)
+        public virtual void ParseJsonData(JSONObject jsonObject)
         {
-            if (jsonObject.ContainsKey("name"))
-                Name = jsonObject.GetString("name");
-            if (jsonObject.ContainsKey("description"))
-                Description = jsonObject.GetString("description");
-            if (jsonObject.ContainsKey("valuetounlock"))
-                ValueToUnlock = (int)jsonObject.GetNumber("valuetounlock");
         }
 
 
         /// <summary>
-        /// Parse the loaded GameItemExtension object and extract certain default values
+        /// Clear larger data that takes up more space or needs additional parsing
         /// </summary>
-        /// GameExtension properties 'Name', 'Description' and 'ValueToUnlock' will be used to automatically set the corresponding GameItem
-        /// properties. You can also override this method to parse and extract your own custom values.
-        /// 
-        /// If overriding from a base class be sure to call base.ParseData()
-        /// <param name="gameItemExtension"></param>
-        public virtual void ParseData(GameItemExtension gameItemExtension)
+        /// Use this method to manually clear any loaded data to save memory
+        public void ClearJsonData()
         {
-            if (!string.IsNullOrEmpty(gameItemExtension.Name))
-                Name = gameItemExtension.Name;
-            if (!string.IsNullOrEmpty(gameItemExtension.Description))
-                Description = gameItemExtension.Description;
-            if (gameItemExtension.OverrideValueToUnlock)
-                ValueToUnlock = gameItemExtension.ValueToUnlock;
+            JsonData = null;
         }
 
 
         /// <summary>
         /// Load larger data that takes up more space or needs additional parsing
         /// </summary>
-        /// You may not want to load and hold game data for all GameItemss, especially if it takes up a lot of memory. You can
+        /// You may not want to load and hold game data for all GameItems, especially if it takes up a lot of memory. You can
         /// use this method to selectively load such data.
-        public void LoadGameData()
+        public JSONObject LoadJsonGameData()
         {
-            if (JsonConfigurationData == null)
-                JsonConfigurationData = LoadJSONDataFile();
-            Assert.IsNotNull(JsonConfigurationData, "Unable to load json data. Check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            ParseGameData(JsonConfigurationData);
+            var path = string.Format("{0}\\{0}_GameData_{1}", IdentifierBase, Number);
+            if (JsonGameData == null)
+                JsonGameData = LoadJsonDataFile(path);
+            if (JsonGameData != null)
+                ParseJsonGameData(JsonGameData);
+            return JsonGameData;
         }
 
 
@@ -398,22 +509,31 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// If overriding from a base class be sure to call base.ParseGameData()
         /// <param name="jsonObject"></param>
-        public virtual void ParseGameData(JSONObject jsonObject)
+        public virtual void ParseJsonGameData(JSONObject jsonObject)
         {
         }
 
 
         /// <summary>
-        /// Load the json file that corresponds to this item.
+        /// Clear larger data that takes up more space or needs additional parsing
         /// </summary>
-        /// <param name="jsonObject"></param>
-        JSONObject LoadJSONDataFile()
+        /// Use this method to manually clear any loaded game data to save memory
+        public void ClearJsonGameData()
         {
-            TextAsset jsonTextAsset = GameManager.LoadResource<TextAsset>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (jsonTextAsset == null) return null;
+            JsonGameData = null;
+        }
 
-            MyDebug.Log(jsonTextAsset.text);
-            JSONObject jsonObject = JSONObject.Parse(jsonTextAsset.text);
+
+        /// <summary>
+        /// Load a json file
+        /// </summary>
+        /// <param name="path"></param>
+        JSONObject LoadJsonDataFile(string path)
+        {
+            var jsonTextAsset = GameManager.LoadResource<TextAsset>(path);
+            if (jsonTextAsset == null) return null;
+            //MyDebug.Log(jsonTextAsset.text);
+            var jsonObject = JSONObject.Parse(jsonTextAsset.text);
             return jsonObject;
         }
 
@@ -423,8 +543,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// </summary>
         GameItemExtension LoadGameItemExtension()
         {
-            GameItemExtension giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number);
-            if (giExtension == null) return null;
+            var giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number + "_Extension");
             return giExtension;
         }
 
@@ -472,6 +591,456 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             if (HighScoreLocalPlayersPlayerNumber != -1)
                 PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
         }
+
+        #region Get Prefab Related
+
+        /// <summary>
+        /// Get a prefab with the given name that corresponds to the currently set language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab();
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given name that correspondsto the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given name that corresponds to the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefab(string name, string language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(name);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu()
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu prefab that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabSelectionMenu(string language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame()
+        {
+            return GetPrefab(LocalisablePrefabType.InGame);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game prefab that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public GameObject GetPrefabInGame(string language, bool fallbackToDefault = true)
+        {
+            return GetPrefab(LocalisablePrefabType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab();
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that correspondsto the specified language
+        /// </summary>
+        /// <param name="prefabType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a prefab with the given type that corresponds to the specified language
+        /// </summary>
+        /// <param name="prefabType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        GameObject GetPrefab(LocalisablePrefabType prefabType, string language, bool fallbackToDefault = true)
+        {
+            var localisablePrefab = GetLocalisablePrefab(prefabType);
+            return localisablePrefab == null ? null : localisablePrefab.GetPrefab(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a localised prefab entry with the given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        LocalisablePrefab GetLocalisablePrefab(string name)
+        {
+            foreach (var prefabEntry in _localisablePrefabs)
+            {
+                if (prefabEntry.Name == name) return prefabEntry.LocalisablePrefab;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Get a localised prefab entry with the given type
+        /// </summary>
+        /// <param name="localisablePrefabTypeEnum"></param>
+        /// <returns></returns>
+        LocalisablePrefab GetLocalisablePrefab(LocalisablePrefabType localisablePrefabTypeEnum)
+        {
+            foreach (var prefabEntry in _localisablePrefabs)
+            {
+                if (prefabEntry.LocalisablePrefabType == localisablePrefabTypeEnum) return prefabEntry.LocalisablePrefab;
+            }
+            return null;
+        }
+        #endregion Get Prefab Related
+
+        #region Instantiate Prefab Related
+
+        /// <summary>
+        /// Instantiate a selection menu prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefabSelectionMenu(Transform parent = null, bool worldPositionStays = true)
+        {
+            return InstantiatePrefab(LocalisablePrefabType.SelectionMenu, parent, worldPositionStays);
+        }
+
+        /// <summary>
+        /// Instantiate an in game prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefabInGame(Transform parent = null, bool worldPositionStays = true)
+        {
+            return InstantiatePrefab(LocalisablePrefabType.InGame, parent, worldPositionStays);
+        }
+
+        /// <summary>
+        /// Instantiate the named prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// </summary>
+        /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefab(string name, Transform parent = null, bool worldPositionStays = true)
+        {
+            var localisablePrefab = GetPrefab(name);
+            if (localisablePrefab == null) return null;
+            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
+        }
+
+        /// <summary>
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="localisablePrefabType"></param>
+        /// <param name="parent"></param>
+        /// <param name = "worldPositionStays" >If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        GameObject InstantiatePrefab(LocalisablePrefabType localisablePrefabType, Transform parent = null, bool worldPositionStays = true)
+        {
+            var localisablePrefab = GetPrefab(localisablePrefabType);
+            if (localisablePrefab == null) return null;
+            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
+        }
+
+
+        static GameObject InstantiatePrefab(GameObject localisablePrefab, Transform parent, bool worldPositionStays = true)
+        {
+            var newInstance = Instantiate(localisablePrefab);
+            if (parent != null)
+                newInstance.transform.SetParent(parent, worldPositionStays);
+            return newInstance;
+        }
+        #endregion Instantiate Prefab Related
+
+        #region Sprite Related
+
+        /// <summary>
+        /// Get a sprite with the given name that corresponds to the currently set language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite();
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given name that correspondsto the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given name that corresponds to the specified language
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(string name, string language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(name);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu()
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteSelectionMenu(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame()
+        {
+            return GetSprite(LocalisableSpriteType.InGame);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteInGame(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow()
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSpriteUnlockWindow(string language, bool fallbackToDefault = true)
+        {
+            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
+
+        /// <summary>
+        /// Get a sprite with the given type that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite();
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given type that correspondsto the specified language
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a sprite with the given type that corresponds to the specified language
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        Sprite GetSprite(LocalisableSpriteType spriteType, string language, bool fallbackToDefault = true)
+        {
+            var localisableSprite = GetLocalisableSprite(spriteType);
+            return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a localised sprite entry with the given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        LocalisableSprite GetLocalisableSprite(string name)
+        {
+            foreach (var spriteEntry in _localisableSprites)
+            {
+                if (spriteEntry.Name == name) return spriteEntry.LocalisableSprite;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Get a localised sprite entry with the given type
+        /// </summary>
+        /// <param name="localisableSpriteTypeEnum"></param>
+        /// <returns></returns>
+        LocalisableSprite GetLocalisableSprite(LocalisableSpriteType localisableSpriteTypeEnum)
+        {
+            foreach (var spriteEntry in _localisableSprites)
+            {
+                if (spriteEntry.LocalisableSpriteType == localisableSpriteTypeEnum) return spriteEntry.LocalisableSprite;
+            }
+            return null;
+        }
+
+        #endregion Sprite Related
 
         #region Score Related
 
@@ -777,6 +1346,25 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
             return IdentifierBasePrefs + Number + "." + key;
         }
         #endregion
+
+        #region extra classes for configuration
+        [Serializable]
+        public class LocalisablePrefabEntry
+        {
+            public LocalisablePrefabType LocalisablePrefabType;
+            public string Name;
+            public LocalisablePrefab LocalisablePrefab;
+        }
+
+        [Serializable]
+        public class LocalisableSpriteEntry
+        {
+
+            public LocalisableSpriteType LocalisableSpriteType;
+            public string Name;
+            public LocalisableSprite LocalisableSprite;
+        }
+        #endregion extra classes for configuration
     }
 
 }

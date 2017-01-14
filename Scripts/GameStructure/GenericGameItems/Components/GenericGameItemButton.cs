@@ -25,7 +25,7 @@ using FlipWebApps.GameFramework.Scripts.Billing.Components;
 using FlipWebApps.GameFramework.Scripts.Billing.Messages;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using FlipWebApps.GameFramework.Scripts.Messaging;
 using UnityEngine;
@@ -70,7 +70,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GenericGameItems.Compo
         /// Returns the GameItemsMaager that holds GenericGameItems
         /// </summary>
         /// <returns></returns>
-        protected override GameItemsManager<GenericGameItem, GameItem> GetGameItemsManager()
+        protected override GameItemManager<GenericGameItem, GameItem> GetGameItemManager()
         {
             return GenericGameItemManager.Instance.GenericGameItems;
         }

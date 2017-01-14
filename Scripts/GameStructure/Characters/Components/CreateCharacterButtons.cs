@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using FlipWebApps.GameFramework.Scripts.GameStructure.Characters.ObjectModel;
-using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components;
+using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.Components.AbstractClasses;
 using FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
