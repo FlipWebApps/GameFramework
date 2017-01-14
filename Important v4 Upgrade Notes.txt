@@ -13,12 +13,14 @@ and otherwise.
 The version v4.0 release is a major milestone. Not only is all documentation now in place (additional tutorials and 
 update will of course follow), the latest release also features many changes that put in place the structure and building 
 blocks for the further improvement and development of Game Framework. Unfortunately some of those changes have meant 
-introducing breaking changes that will need some (hopefully minor) changes to your code. this was not a decision taken 
-lightly but were needed to prepare for the exciting future that is planned.
+introducing breaking changes that will need some (hopefully minor) changes to your code but will make things simpler and
+give much more power going forward. Introducing such breaking changes was not a decision taken lightly but they were 
+needed to prepare for the exciting future that is planned.
 
 The notes below describe some of the changes needed, however if you have problems not listed then please post on the
 Game Framework forum and I will answer as quick as I can. I would recommend also reviewing the release notes and 
-updated tutorials to get an overview on what has changed.
+updated tutorials to get an overview on what has changed. The latest version of this upgrade guide is at:
+https://github.com/FlipWebApps/GameFramework/blob/master/Important%20v4%20Upgrade%20Notes.txt
  
 If you like Game Framework when you can support me by buying the extras bundle, leaving a rating / review on the asset
 store, or simply sending a mail telling me what you are using the framework for. All feedback inspires me to continue 
@@ -46,4 +48,13 @@ upgrade will not work
 	2. Import the new version.
 
 MAIN UPGRADE STEPS
+
+The following methods are removed:
+
+* GameItemManager.LoadItems -> Override the 'other' load method or preferably use the new way of extending GameItems.
+
+The following items have gotten new names:
+
+* GameItemsManager -> GameItemManager
+* GameItem.ParseData -> GameItem.ParseJsonData
 
