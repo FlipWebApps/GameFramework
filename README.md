@@ -23,7 +23,7 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
-Note: For ease of use we will now only release stable versions through the Unity asset store.
+Note: The main branch of this repostiroy should be considered experimental. For ease of use we will now only release stable versions through the Unity asset store although such releases will be tagged here also.
 
 * [Asset store download (Free Version)](https://www.assetstore.unity3d.com/#!/content/55334?aid=1011lGnE)
 * [Asset store download (Pro Bundle)](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE)
