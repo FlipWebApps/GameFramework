@@ -2114,7 +2114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Run: 0
   RunFrequency: 1
-  _prefabType: 1
+  _prefabType: 2
   _name: 
   _parent: {fileID: 0}
   _worldPositionStays: 0

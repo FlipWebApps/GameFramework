@@ -1,30 +1,14 @@
 Hi,
 
-This document contains a few important notes about upgrading from previous versions of Game Framework before v4.0, but 
-before that a few words.
+This document contains a few important notes about upgrading from previous versions of Game Framework before v4.0, but before that a few words.
 
-When I released the first public version of Game Framework about a year ago, it was still quite rough around the edges, 
-lacked documentation and was missing several key features. Thanks to many late evenings, great feedback and 
-terrific support from those using it, Game Framework has come a long way over the last 12 months and it has been 
-fantastic to see some of the games that have been produced. I am especially excited that the free version has been a part
-of this creativity while also appreciating everyone who has supported my efforts through purchasing the extras bundle 
-and otherwise.
+When I released the first public version of Game Framework about a year ago, it was still quite rough around the edges, lacked documentation and was missing several key features. Thanks to many late evenings, great feedback and terrific support from those using it, Game Framework has come a long way over the last 12 months and it has been fantastic to see some of the games that have been produced. I am especially excited that the free version has been a part of this creativity while also appreciating everyone who has supported my efforts through purchasing the extras bundle and otherwise.
 
-The version v4.0 release is a major milestone. Not only is all documentation now in place (additional tutorials and 
-update will of course follow), the latest release also features many changes that put in place the structure and building 
-blocks for the further improvement and development of Game Framework. Unfortunately some of those changes have meant 
-introducing breaking changes that will need some (hopefully minor) changes to your code but will make things simpler and
-give much more power going forward. Introducing such breaking changes was not a decision taken lightly but they were 
-needed to prepare for the exciting future that is planned.
+The version v4.0 release is a major milestone. Not only is all documentation now in place (additional tutorials and update will of course follow), the latest release also features many changes that put in place the structure and building blocks for the further improvement and development of Game Framework. Unfortunately some of those changes have meant introducing breaking changes that will need some (hopefully minor) changes to your code but will make things simpler and give much more power going forward. Introducing such breaking changes was not a decision taken lightly but they were needed to prepare for the exciting future that is planned.
 
-The notes below describe some of the changes needed, however if you have problems not listed then please post on the
-Game Framework forum and I will answer as quick as I can. I would recommend also reviewing the release notes and 
-updated tutorials to get an overview on what has changed. The latest version of this upgrade guide is at:
-https://github.com/FlipWebApps/GameFramework/blob/master/Important%20v4%20Upgrade%20Notes.txt
+The notes below describe some of the changes needed, however if you have problems not listed then please post on the Game Framework forum and I will answer as quick as I can. I would recommend also reviewing the release notes and updated tutorials to get an overview on what has changed. The latest version of this upgrade guide is at: https://github.com/FlipWebApps/GameFramework/blob/master/Important%20v4%20Upgrade%20Notes.txt
  
-If you like Game Framework when you can support me by buying the extras bundle, leaving a rating / review on the asset
-store, or simply sending a mail telling me what you are using the framework for. All feedback inspires me to continue 
-adding new features.
+If you like Game Framework when you can support me by buying the extras bundle, leaving a rating / review on the asset store, or simply sending a mail telling me what you are using the framework for. All feedback inspires me to continue adding new features.
 
 Happy coding!
 
@@ -39,8 +23,7 @@ Asset store page: https://www.assetstore.unity3d.com/en/#!/content/55334?aid=101
 
 V4 UPGRADE NOTES FROM V3 AND EARLIER
 
-Before upgrading be sure to take a backup copy of your project. You should then delete the old FlipWebApps folder or the
-upgrade will not work
+Before upgrading be sure to take a backup copy of your project. You should then delete the old FlipWebApps folder or the upgrade will not work
 
 	1. If you have an older version installed:
 		1.1. Make a backup of your project.
@@ -49,8 +32,8 @@ upgrade will not work
 
 MAIN UPGRADE STEPS
 
-* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity
-  you should rename all references in your code accordingly.
+* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity. You should rename all references in your code accordingly.
+* GameItemExtensions are no longer used for the same purpose as you can create instances of GameItems directly and configure properties such as name, description etc. If you have used GameItemExtensions previously then you will need to create new instances and copy over configuration values manually. GameItemExtensions can still be created and used for your own purposes but with a _Extension prefix
 
 REMOVED METHODS:
 

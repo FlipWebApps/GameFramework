@@ -19,13 +19,18 @@ MonoBehaviour:
     _data: 
   _valueToUnlock: 10
   _localisablePrefabs:
-  - LocalisablePrefabType: 1
+  - LocalisablePrefabType: 2
     Name: 
     LocalisablePrefab:
       _default: {fileID: 106596, guid: 6a9df550b6f94a343befdeb33ec876e4, type: 2}
       _localisedObjects: []
   _localisableSprites:
   - LocalisableSpriteType: 1
+    Name: 
+    LocalisableSprite:
+      _default: {fileID: 21300000, guid: 80503c21193a2ce4b87cc0e06c6b4e1a, type: 3}
+      _localisedObjects: []
+  - LocalisableSpriteType: 3
     Name: 
     LocalisableSprite:
       _default: {fileID: 21300000, guid: 80503c21193a2ce4b87cc0e06c6b4e1a, type: 3}
