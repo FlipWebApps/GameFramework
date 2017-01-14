@@ -24,6 +24,7 @@ using System.Collections;
 using GameFramework.Debugging;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -225,6 +226,12 @@ namespace GameFramework.GameStructure.Levels
             IsLevelPaused = true;
             _prePauseTimeScale = Time.timeScale;
             Time.timeScale = timeScale;
+
+            if (showPauseDialog)
+            {
+                Assert.IsTrue(PauseWindow.IsActive, "Enaure that you have added a pause window prefab to your scene.");
+                PauseWindow.Instance.Show();
+            }
         }
 
 
