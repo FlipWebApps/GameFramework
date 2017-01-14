@@ -24,7 +24,7 @@ namespace GameFramework.Messaging.Components.AbstractClasses
     /// <summary>
     /// Attribute for controlling usage of the RunOnMessage class
     /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [System.AttributeUsage(System.AttributeTargets.Class)]
     public class RunOnMessageAttribute : System.Attribute
     {
         /// <summary>

@@ -20,9 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Levels;
-using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace GameFramework.Debugging.Components
 {

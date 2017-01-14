@@ -40,7 +40,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <summary>
         /// Method that you should invoke to display the dialog buttons.
         /// </summary>
-        void ShowDialogButtons()
+        public void ShowDialogButtons()
         {
             Assert.AreEqual(DialogInstance.DialogButtonsType.Ok, Buttons, "Currently only Ok button is supported.");
 

@@ -76,7 +76,7 @@ namespace GameFramework.Display.Other.Components
         public Rect UvsBottom;
 
         Mesh _mesh;
-        Vector2[] _Uvs;
+        Vector2[] _uvs;
 
         void Awake()
         {
@@ -90,8 +90,8 @@ namespace GameFramework.Display.Other.Components
             }
 
             _mesh = transform.GetComponent<MeshFilter>().mesh;
-            _Uvs = new Vector2[_mesh.uv.Length];
-            _Uvs = _mesh.uv;
+            _uvs = new Vector2[_mesh.uv.Length];
+            _uvs = _mesh.uv;
 
             SetUVs();
         }
@@ -101,43 +101,43 @@ namespace GameFramework.Display.Other.Components
             // - set UV coordinates -
 
             // FRONT    2    3    0    1
-            _Uvs[2] = new Vector2(UvsFront.x, UvsFront.y);
-            _Uvs[3] = new Vector2(UvsFront.x + UvsFront.width, UvsFront.y);
-            _Uvs[0] = new Vector2(UvsFront.x, UvsFront.y - UvsFront.height);
-            _Uvs[1] = new Vector2(UvsFront.x + UvsFront.width, UvsFront.y - UvsFront.height);
+            _uvs[2] = new Vector2(UvsFront.x, UvsFront.y);
+            _uvs[3] = new Vector2(UvsFront.x + UvsFront.width, UvsFront.y);
+            _uvs[0] = new Vector2(UvsFront.x, UvsFront.y - UvsFront.height);
+            _uvs[1] = new Vector2(UvsFront.x + UvsFront.width, UvsFront.y - UvsFront.height);
 
             // BACK    6    7   10   11
-            _Uvs[6] = new Vector2(UvsBack.x, UvsBack.y);
-            _Uvs[7] = new Vector2(UvsBack.x + UvsBack.width, UvsBack.y);
-            _Uvs[10] = new Vector2(UvsBack.x, UvsBack.y - UvsBack.height);
-            _Uvs[11] = new Vector2(UvsBack.x + UvsBack.width, UvsBack.y - UvsBack.height);
+            _uvs[6] = new Vector2(UvsBack.x, UvsBack.y);
+            _uvs[7] = new Vector2(UvsBack.x + UvsBack.width, UvsBack.y);
+            _uvs[10] = new Vector2(UvsBack.x, UvsBack.y - UvsBack.height);
+            _uvs[11] = new Vector2(UvsBack.x + UvsBack.width, UvsBack.y - UvsBack.height);
 
             // LEFT   19   17   16   18
-            _Uvs[19] = new Vector2(UvsLeft.x, UvsLeft.y);
-            _Uvs[17] = new Vector2(UvsLeft.x + UvsLeft.width, UvsLeft.y);
-            _Uvs[16] = new Vector2(UvsLeft.x, UvsLeft.y - UvsLeft.height);
-            _Uvs[18] = new Vector2(UvsLeft.x + UvsLeft.width, UvsLeft.y - UvsLeft.height);
+            _uvs[19] = new Vector2(UvsLeft.x, UvsLeft.y);
+            _uvs[17] = new Vector2(UvsLeft.x + UvsLeft.width, UvsLeft.y);
+            _uvs[16] = new Vector2(UvsLeft.x, UvsLeft.y - UvsLeft.height);
+            _uvs[18] = new Vector2(UvsLeft.x + UvsLeft.width, UvsLeft.y - UvsLeft.height);
 
             // RIGHT   23   21   20   22
-            _Uvs[23] = new Vector2(UvsRight.x, UvsRight.y);
-            _Uvs[21] = new Vector2(UvsRight.x + UvsRight.width, UvsRight.y);
-            _Uvs[20] = new Vector2(UvsRight.x, UvsRight.y - UvsRight.height);
-            _Uvs[22] = new Vector2(UvsRight.x + UvsRight.width, UvsRight.y - UvsRight.height);
+            _uvs[23] = new Vector2(UvsRight.x, UvsRight.y);
+            _uvs[21] = new Vector2(UvsRight.x + UvsRight.width, UvsRight.y);
+            _uvs[20] = new Vector2(UvsRight.x, UvsRight.y - UvsRight.height);
+            _uvs[22] = new Vector2(UvsRight.x + UvsRight.width, UvsRight.y - UvsRight.height);
 
             // TOP    4    5    8    9
-            _Uvs[4] = new Vector2(UvsTop.x, UvsTop.y);
-            _Uvs[5] = new Vector2(UvsTop.x + UvsTop.width, UvsTop.y);
-            _Uvs[8] = new Vector2(UvsTop.x, UvsTop.y - UvsTop.height);
-            _Uvs[9] = new Vector2(UvsTop.x + UvsTop.width, UvsTop.y - UvsTop.height);
+            _uvs[4] = new Vector2(UvsTop.x, UvsTop.y);
+            _uvs[5] = new Vector2(UvsTop.x + UvsTop.width, UvsTop.y);
+            _uvs[8] = new Vector2(UvsTop.x, UvsTop.y - UvsTop.height);
+            _uvs[9] = new Vector2(UvsTop.x + UvsTop.width, UvsTop.y - UvsTop.height);
 
             // BOTTOM   15   13   12   14
-            _Uvs[15] = new Vector2(UvsBottom.x, UvsBottom.y);
-            _Uvs[13] = new Vector2(UvsBottom.x + UvsBottom.width, UvsBottom.y);
-            _Uvs[12] = new Vector2(UvsBottom.x, UvsBottom.y - UvsBottom.height);
-            _Uvs[14] = new Vector2(UvsBottom.x + UvsBottom.width, UvsBottom.y - UvsBottom.height);
+            _uvs[15] = new Vector2(UvsBottom.x, UvsBottom.y);
+            _uvs[13] = new Vector2(UvsBottom.x + UvsBottom.width, UvsBottom.y);
+            _uvs[12] = new Vector2(UvsBottom.x, UvsBottom.y - UvsBottom.height);
+            _uvs[14] = new Vector2(UvsBottom.x + UvsBottom.width, UvsBottom.y - UvsBottom.height);
 
             // - Assign the mesh its new UVs -
-            _mesh.uv = _Uvs;
+            _mesh.uv = _uvs;
         }
     }
 }

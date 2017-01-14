@@ -28,7 +28,7 @@ namespace GameFramework.Networking
     /// 
     /// NOTE: This class is beta and subject to changebreaking change without warning.
     /// </summary>
-    public class NetworkManagerCallbacks : UnityEngine.Networking.NetworkManager
+    public class NetworkManagerCallbacks : NetworkManager
     {
         public override void OnClientConnect(NetworkConnection conn)
         {

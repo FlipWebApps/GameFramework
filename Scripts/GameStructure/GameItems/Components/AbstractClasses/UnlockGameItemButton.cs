@@ -19,13 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Collections;
-using GameFramework.GameObjects;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.Localisation;
 using GameFramework.UI.Dialogs.Components;
-using GameFramework.UI.Other;
-using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -122,14 +117,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController, contentSiblingIndex: 1);
 
             // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
-            T[] gameItems;
-            if (_failedUnlockAttempts >= MaxFailedUnlocks)
-            {
-                gameItems = GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins, true);
-            }
-            else {
-                gameItems = GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins);
-            }
+            var gameItems = _failedUnlockAttempts >= MaxFailedUnlocks ? 
+                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins, true) : 
+                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins);
 
             // There should always be an item - we should not let them unlock if there is nothing to unlock!
             if (gameItems.Length >= 0)

@@ -26,7 +26,6 @@ using GameFramework.Debugging;
 using GameFramework.Display.Placement;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure.Characters.ObjectModel;
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
@@ -40,7 +39,6 @@ using GameFramework.GameObjects;
 using GameFramework.Messaging;
 using GameFramework.GameStructure.Game.Messages;
 using GameFramework.Preferences;
-using GameFramework.GameStructure.Players.Messages;
 using GameFramework.Audio.Messages;
 
 #if BEAUTIFUL_TRANSITIONS
@@ -358,8 +356,8 @@ namespace GameFramework.GameStructure
                 _backGroundAudioVolume = value;
                 if (BackGroundAudioSource != null) BackGroundAudioSource.volume = value;
                 // notify others if not initial setup and value has changed
-                if (IsInitialised && oldValue != _backGroundAudioVolume)
-                    GameManager.Messenger.QueueMessage(new BackgroundVolumeChangedMessage(oldValue, _backGroundAudioVolume));
+                if (IsInitialised && !Mathf.Approximately(oldValue, _backGroundAudioVolume))
+                    Messenger.QueueMessage(new BackgroundVolumeChangedMessage(oldValue, _backGroundAudioVolume));
             }
         }
         float _backGroundAudioVolume;
@@ -379,8 +377,8 @@ namespace GameFramework.GameStructure
                         audioSource.volume = value;
                 }
                 // notify others if not initial setup and value has changed
-                if (IsInitialised && oldValue != _effectAudioVolume)
-                    GameManager.Messenger.QueueMessage(new EffectVolumeChangedMessage(oldValue, _effectAudioVolume));
+                if (IsInitialised && !Mathf.Approximately(oldValue, _effectAudioVolume))
+                    Messenger.QueueMessage(new EffectVolumeChangedMessage(oldValue, _effectAudioVolume));
 
             }
         }
@@ -475,7 +473,7 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// A reference to the global Messaging system
         /// </summary>
-        Messenger _messenger = new Messenger();
+        readonly Messenger _messenger = new Messenger();
         public static Messenger Messenger {
             get {
                 return IsActive ? Instance._messenger : null;
@@ -786,12 +784,10 @@ namespace GameFramework.GameStructure
         /// <returns></returns>
         public static string GetIdentifierBase()
         {
-            if (GameManager.IsActive)
-                return string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) ? null : GameManager.Instance.IdentifierBase;
-            else
-            {
-                return null;
-            }
+            if (IsActive)
+                return string.IsNullOrEmpty(Instance.IdentifierBase) ? null : Instance.IdentifierBase;
+
+            return null;
         }
 
         /// <summary>
@@ -823,9 +819,9 @@ namespace GameFramework.GameStructure
         /// <returns></returns>
         public static string GetIdentifierScene(string sceneName)
         {
-            string newSceneName = string.IsNullOrEmpty(GameManager.GetIdentifierBase())
+            string newSceneName = string.IsNullOrEmpty(GetIdentifierBase())
                     ? sceneName
-                    : GameManager.GetIdentifierBase() + "-" + sceneName;
+                    : GetIdentifierBase() + "-" + sceneName;
             return newSceneName;
         }
 
@@ -837,7 +833,7 @@ namespace GameFramework.GameStructure
         /// Shortcut and safe method for adding a listener without needing to test whether a gamemanager is setup.
         /// </summary>
         /// As GameManager can be destroyed before other components when you shut down your game, it is important to 
-        /// <param name="msg"></param>
+        /// <param name="handler"></param>
         /// <returns></returns>
         public static bool SafeAddListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
         {
@@ -849,7 +845,7 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// Shortcut and safe method for removing a listener without needing to test whether a gamemanager is setup.
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="handler"></param>
         /// <returns></returns>
         public static bool SafeRemoveListener<T>(Messenger.MessageListenerDelegate handler) where T : BaseMessage
         {
@@ -890,7 +886,7 @@ namespace GameFramework.GameStructure
         /// <param name="sceneName"></param>
         public static void LoadSceneWithTransitions(string sceneName)
         {
-            sceneName = GameManager.GetIdentifierScene(sceneName);
+            sceneName = GetIdentifierScene(sceneName);
 #if BEAUTIFUL_TRANSITIONS
             if (TransitionManager.IsActive)
                 TransitionManager.Instance.TransitionOutAndLoadScene(sceneName);

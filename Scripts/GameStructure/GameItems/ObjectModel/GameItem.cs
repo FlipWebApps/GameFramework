@@ -539,7 +539,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Return GameItemExtension object, caasted to type <T>
+        /// Return GameItemExtension object, caasted to type T
         /// </summary>
         public T GetExtension<T>() where T : class
         {
@@ -766,6 +766,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Instantiate a selection menu prefab that corresponds to the currently set language, optionally parented to the specified transform
         /// </summary>
+        /// <param name="parent"></param>
         /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
         /// <returns></returns>
         public GameObject InstantiatePrefabSelectionMenu(Transform parent = null, bool worldPositionStays = true)
@@ -776,6 +777,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Instantiate an in game prefab that corresponds to the currently set language, optionally parented to the specified transform
         /// </summary>
+        /// <param name="parent"></param>
         /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
         /// <returns></returns>
         public GameObject InstantiatePrefabInGame(Transform parent = null, bool worldPositionStays = true)
@@ -786,6 +788,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Instantiate the named prefab that corresponds to the currently set language, optionally parented to the specified transform
         /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
         /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
         /// <returns></returns>
         public GameObject InstantiatePrefab(string name, Transform parent = null, bool worldPositionStays = true)
@@ -1092,8 +1096,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Send a HidhScoreChangedMessage when the high score changes.
         /// </summary>
-        /// <param name="newScore"></param>
-        /// <param name="oldScore"></param>
+        /// <param name="newHighScore"></param>
+        /// <param name="oldHighScore"></param>
         /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
@@ -1262,7 +1266,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Get a string preferences setting that is unique to this GameItem instance
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="value"></param>
         /// <param name="defaultValue"></param>
         public string GetSettingString(string key, string defaultValue)
         {
@@ -1279,7 +1282,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Get an int preferences setting that is unique to this GameItem instance
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="value"></param>
         /// <param name="defaultValue"></param>
         public int GetSettingInt(string key, int defaultValue)
         {
@@ -1296,7 +1298,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Get a bool preferences setting that is unique to this GameItem instance
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="value"></param>
         /// <param name="defaultValue"></param>
         public bool GetSettingBool(string key, bool defaultValue)
         {
@@ -1313,7 +1314,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Get a float preferences setting that is unique to this GameItem instance
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="value">param>
         /// <param name="defaultValue"></param>
         public float GetSettingFloat(string key, float defaultValue)
         {

@@ -11,7 +11,7 @@ namespace GameFramework.EditorExtras
     /// </summary>
     /// Add this to the field that you want to conditionally hide when the value of the target is true (can be inverted). 
     /// See also ConditionalHidePropertyDrawer
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
     public class ConditionalHideAttribute : PropertyAttribute
     {
         /// <summary>
@@ -31,23 +31,23 @@ namespace GameFramework.EditorExtras
         // Use this for initialization
         public ConditionalHideAttribute(string conditionalSourceField)
         {
-            this.ConditionalSourceField = conditionalSourceField;
-            this.HideInInspector = false;
-            this.Inverse = false;
+            ConditionalSourceField = conditionalSourceField;
+            HideInInspector = false;
+            Inverse = false;
         }
 
         public ConditionalHideAttribute(string conditionalSourceField, bool hideInInspector)
         {
-            this.ConditionalSourceField = conditionalSourceField;
-            this.HideInInspector = hideInInspector;
-            this.Inverse = false;
+            ConditionalSourceField = conditionalSourceField;
+            HideInInspector = hideInInspector;
+            Inverse = false;
         }
 
         public ConditionalHideAttribute(string conditionalSourceField, bool hideInInspector, bool inverse)
         {
-            this.ConditionalSourceField = conditionalSourceField;
-            this.HideInInspector = hideInInspector;
-            this.Inverse = inverse;
+            ConditionalSourceField = conditionalSourceField;
+            HideInInspector = hideInInspector;
+            Inverse = inverse;
         }
    
     }

@@ -39,7 +39,5 @@ namespace GameFramework.GameStructure.Characters.ObjectModel
         /// A unique shortened version of IdentifierBase to save memory.
         /// </summary>
         public override string IdentifierBasePrefs { get { return "C"; } }
-
-        public Character() { }
     }
 }

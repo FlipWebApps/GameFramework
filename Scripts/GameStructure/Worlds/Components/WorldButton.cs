@@ -19,15 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-#if UNITY_PURCHASING
-using GameFramework.Billing.Components;
-#endif
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
-using GameFramework.GameStructure.Levels.ObjectModel;
 using GameFramework.Messaging;
 using GameFramework.Billing.Messages;
 

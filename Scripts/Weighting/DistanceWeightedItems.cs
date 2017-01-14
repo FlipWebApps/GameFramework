@@ -43,14 +43,14 @@ namespace GameFramework.Weighting {
         public int ItemCount { get; set; }
 
         // A list of all passed items that we are weighting.
-        List<DistanceWeightedItem> _items = new List<DistanceWeightedItem>();
+        readonly List<DistanceWeightedItem> _items = new List<DistanceWeightedItem>();
 
         // Master list of all distances with weights for each item.
         List<DistanceWithWeights> _distancesWithWeights = new List<DistanceWithWeights>();
 
         // Set once everything is setup and ready for retreiving weighted items.
 #pragma warning disable 414
-        bool isPreparedForUse = false;
+        bool _isPreparedForUse = false;
 #pragma warning restore 414
 
         /// <summary>
@@ -97,9 +97,8 @@ namespace GameFramework.Weighting {
                     var distanceWithWeights = _distancesWithWeights[j];
 
                     // it this item has a matching distance setting then get matching weight from item, if not then use last weight.
-                    int itemWeight;
                     var distanceWeightValue = item.DistanceWeights.FirstOrDefault(t => t.Distance == distanceWithWeights.Distance);
-                    itemWeight = distanceWeightValue != null ? distanceWeightValue.Weight : lastWeight;
+                    var itemWeight = distanceWeightValue != null ? distanceWeightValue.Weight : lastWeight;
 
                     // add to end of item weights list (this will maintain the same ordering as in _items for later)
                     distanceWithWeights.ItemWeights.Add(itemWeight);
@@ -118,7 +117,7 @@ namespace GameFramework.Weighting {
             }
 #endif
 
-            isPreparedForUse = true;
+            _isPreparedForUse = true;
         }
 
 
@@ -129,7 +128,7 @@ namespace GameFramework.Weighting {
         /// <returns></returns>
         public T GetItemForDistance(int distance)
         {
-            Assert.IsTrue(isPreparedForUse, "You must call PrepareForUse before trying to get values.");
+            Assert.IsTrue(_isPreparedForUse, "You must call PrepareForUse before trying to get values.");
 
             // loop to find matching distance.
             var distanceWithWeights = GetAssociatedDistance(distance);

@@ -21,7 +21,6 @@
 
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 //#if UNITY_EDITOR
 //#define DEBUG
@@ -126,7 +125,7 @@ namespace GameFramework.Display.Other
 
         public static IEnumerator DelayedCallback(float delay, System.Action callback)
         {
-            if (delay != 0)
+            if (!Mathf.Approximately(delay, 0))
                 yield return  new WaitForSeconds(delay);
 
             if (callback != null)

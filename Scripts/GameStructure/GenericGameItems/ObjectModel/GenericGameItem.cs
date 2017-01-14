@@ -39,7 +39,5 @@ namespace GameFramework.GameStructure.GenericGameItems.ObjectModel
         /// Override for this GameItem type
         /// </summary>
         public override string IdentifierBasePrefs { get { return "GGI"; } }
-
-        public GenericGameItem() { }
     }
 }

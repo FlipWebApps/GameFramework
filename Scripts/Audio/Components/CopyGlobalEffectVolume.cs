@@ -18,22 +18,13 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
-using System;
+
 using GameFramework.Audio.Messages;
 using GameFramework.GameStructure;
 using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-/// <summary>
-/// Support components for working with audio.
-/// 
-/// For additional information see http://www.flipwebapps.com/unity-assets/game-framework/audio/
-/// </summary>
-namespace GameFramework.Audio
-{
-    // For doxygen documentation purposes only 
-}
 
 namespace GameFramework.Audio.Components
 {

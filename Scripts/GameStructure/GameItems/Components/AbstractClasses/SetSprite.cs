@@ -29,8 +29,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// Set a sprite to the specified target
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
-    /// <typeparam name="C">Component type to target</typeparam>
-    public abstract class SetSprite<C, T> : MonoBehaviour where C : MonoBehaviour where T : GameItem
+    /// <typeparam name="TC">Component type to target</typeparam>
+    public abstract class SetSprite<TC, T> : MonoBehaviour where TC : MonoBehaviour where T : GameItem
     {
         /// <summary>
         ///  The type of sprite to set
@@ -61,7 +61,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void Awake()
         {
-            var component = GetComponent<C>();
+            var component = GetComponent<TC>();
             var currentItem = GetCurrentItem();
             Assert.IsNotNull(currentItem, "No Selected item is available.");
 
@@ -82,7 +82,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// Assigns the sprite to the target component.
         /// </summary>
         /// <returns></returns>
-        protected abstract void AssignSprite(C component, Sprite sprite);
+        protected abstract void AssignSprite(TC component, Sprite sprite);
 
 
         /// <summary>

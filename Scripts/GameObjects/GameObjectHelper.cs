@@ -62,7 +62,6 @@ namespace GameFramework.GameObjects
         /// </summary>
         /// <param name="thisGameObject"></param>
         /// <param name="name"></param>
-        /// <param name="includeInactive"></param>
         /// <returns></returns>
         public static GameObject GetParentNamedGameObject(GameObject thisGameObject, string name)
         {

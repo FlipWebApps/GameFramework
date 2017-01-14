@@ -98,14 +98,14 @@ namespace GameFramework.Networking
 
         public NetworkClient StartHost()
         {
-            Client = UnityEngine.Networking.NetworkManager.singleton.StartHost();
+            Client = NetworkManager.singleton.StartHost();
             return Client;
         }
 
         public void HostGameStop()
         {
             StopGameDiscovery();
-            UnityEngine.Networking.NetworkManager.singleton.StopHost();
+            NetworkManager.singleton.StopHost();
         }
 
 
@@ -134,16 +134,16 @@ namespace GameFramework.Networking
         public void JoinGameStop()
         {
             StopGameDiscovery();
-            UnityEngine.Networking.NetworkManager.singleton.StopClient();
+            NetworkManager.singleton.StopClient();
         }
 
         public void StartClient(string address)
         {
-            if (UnityEngine.Networking.NetworkManager.singleton != null && UnityEngine.Networking.NetworkManager.singleton.client == null)
+            if (NetworkManager.singleton != null && NetworkManager.singleton.client == null)
             {
-                UnityEngine.Networking.NetworkManager.singleton.networkAddress = address;
+                NetworkManager.singleton.networkAddress = address;
                 //UnityEngine.Networking.NetworkManager.singleton.networkPort = Convert.ToInt32(items[2]);
-                Client = UnityEngine.Networking.NetworkManager.singleton.StartClient();
+                Client = NetworkManager.singleton.StartClient();
             }
         }
 

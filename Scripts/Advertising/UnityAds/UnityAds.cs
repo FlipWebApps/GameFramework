@@ -19,8 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Security.Cryptography;
-using GameFramework.Social.Components;
 using GameFramework.UI.Dialogs.Components;
 
 #if UNITY_ADS

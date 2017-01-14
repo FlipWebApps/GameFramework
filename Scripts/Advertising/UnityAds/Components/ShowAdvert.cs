@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace GameFramework.Advertising.UnityAds.Components
 {

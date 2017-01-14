@@ -258,7 +258,7 @@ namespace GameFramework.Helper {
 					return Boolean ? "true" : "false";
 
 				case JSONValueType.Number:
-					return Number.ToString();
+					return Number.ToString(CultureInfo.InvariantCulture);
 
 				case JSONValueType.String:
 					return "\"" + Str + "\"";
@@ -817,8 +817,10 @@ namespace GameFramework.Helper {
 		}
 
 	    static int SkipWhitespace(string str, int pos) {
-			for (; pos < str.Length && char.IsWhiteSpace(str[pos]); ++pos) ;
-			return pos;
+			for (; pos < str.Length && char.IsWhiteSpace(str[pos]); ++pos)
+			{
+			}
+	        return pos;
 		}
 
 	    static string ParseString(string str, ref int startPosition) {
@@ -878,9 +880,11 @@ namespace GameFramework.Helper {
 
 			for (;
 				endPosition < str.Length && str[endPosition] != ',' && str[endPosition] != ']' && str[endPosition] != '}';
-				++endPosition) ;
+				++endPosition)
+			{
+			}
 
-			double result;
+	        double result;
 			if (
 				!double.TryParse(str.Substring(startPosition, endPosition - startPosition), NumberStyles.Float,
 				                 CultureInfo.InvariantCulture, out result)) {

@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using System;
+using System.Globalization;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure;
 using GameFramework.Localisation;
@@ -119,8 +120,8 @@ namespace GameFramework.FreePrize.Components
 
             if (SaveAcrossRestarts && PreferencesFactory.HasKey("FreePrize.NextCountdownStart"))
             {
-                NextCountdownStart = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString())); // start countdown immediately if new game
-                NextFreePrizeAvailable = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString()));
+                NextCountdownStart = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextCountdownStart", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture))); // start countdown immediately if new game
+                NextFreePrizeAvailable = DateTime.Parse(PreferencesFactory.GetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString(CultureInfo.InvariantCulture)));
                 SetCurrentPrizeAmount();
             }
             else
@@ -136,8 +137,8 @@ namespace GameFramework.FreePrize.Components
         {
             MyDebug.Log("FreePrizeManager: SaveState");
 
-            PreferencesFactory.SetString("FreePrize.NextCountdownStart", NextCountdownStart.ToString());
-            PreferencesFactory.SetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString());
+            PreferencesFactory.SetString("FreePrize.NextCountdownStart", NextCountdownStart.ToString(CultureInfo.InvariantCulture));
+            PreferencesFactory.SetString("FreePrize.NextPrize", NextFreePrizeAvailable.ToString(CultureInfo.InvariantCulture));
             PreferencesFactory.Save();
         }
 

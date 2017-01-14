@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameObjects.Components;
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.GenericGameItems.ObjectModel;
 using UnityEngine;

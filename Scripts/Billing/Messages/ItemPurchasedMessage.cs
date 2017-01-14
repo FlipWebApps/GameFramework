@@ -35,9 +35,9 @@ namespace GameFramework.Billing.Messages
         /// </summary>
         public readonly string ProductID;
 
-        public ItemPurchasedMessage(string productID)
+        public ItemPurchasedMessage(string productId)
         {
-            ProductID = productID;
+            ProductID = productId;
         }
 
         /// <summary>

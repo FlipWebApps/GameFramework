@@ -28,7 +28,7 @@ namespace GameFramework.EditorExtras
     /// Attribute for causing a help box to be displayed and controlling its setup
     /// </summary>
     /// See also HelpBoxDecoratorDrawer
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
     public class HelpBoxAttribute : PropertyAttribute
     {
         public enum MessageType

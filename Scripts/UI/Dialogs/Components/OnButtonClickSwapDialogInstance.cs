@@ -21,7 +21,6 @@
 
 using GameFramework.UI.Buttons.Components.AbstractClasses;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace GameFramework.UI.Dialogs.Components

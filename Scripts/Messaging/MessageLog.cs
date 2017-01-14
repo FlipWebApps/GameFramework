@@ -39,14 +39,9 @@ namespace GameFramework.Messaging
 
         public Dictionary<string, MessageStatistics> Statistics = new Dictionary<string, MessageStatistics>();
 
-        static public MessageLog Create()
+        public static MessageLog Create()
         {
-            var messageLog = ScriptableObject.FindObjectOfType<MessageLog>();
-
-            if (messageLog == null)
-            {
-                messageLog = ScriptableObject.CreateInstance<MessageLog>();
-            }
+            var messageLog = FindObjectOfType<MessageLog>() ?? CreateInstance<MessageLog>();
 
             return messageLog;
         }
@@ -162,7 +157,7 @@ namespace GameFramework.Messaging
         /// <param name="messageType"></param>
         /// <param name="contents"></param>
         /// <param name="message"></param>
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [Conditional("UNITY_EDITOR")]
         public static void AddLogEntry(LogEntryType logEntryType, string messageType, string contents = null, string message = null)
         {
             if (MessageLog != null)

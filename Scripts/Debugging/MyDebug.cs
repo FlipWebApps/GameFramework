@@ -100,7 +100,8 @@ namespace GameFramework.Debugging
         /// </summary>
         /// This method is similar to Debug.Log but only outputs in editor mode and if DebugLevel is
         /// DebugLevelType.Information or more.
-        /// <param name="message"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogF(string format, params object[] args)
         {
@@ -140,7 +141,8 @@ namespace GameFramework.Debugging
         /// </summary>
         /// This method is similar to Debug.LogError but only outputs in editor mode and if DebugLevel is
         /// DebugLevelType.Error or more.
-        /// <param name="message"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogErrorF(string format, params object[] args)
         {
@@ -180,7 +182,8 @@ namespace GameFramework.Debugging
         /// </summary>
         /// This method is similar to Debug.LogWarning but only outputs in editor mode and if DebugLevel is
         /// DebugLevelType.Warning or more.
-        /// <param name="message"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         public static void LogWarningF(string format, params object[] args)
         {

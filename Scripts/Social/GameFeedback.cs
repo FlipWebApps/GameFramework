@@ -140,7 +140,7 @@ namespace GameFramework.Social
         public void GameFeedbackAssumeTheyLikeOptional()
         {
             // open the text based upon the platform
-            var text2Key = "";
+            string text2Key;
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:

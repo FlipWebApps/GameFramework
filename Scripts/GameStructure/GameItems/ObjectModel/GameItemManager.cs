@@ -241,7 +241,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Get the item that comes after the specified item
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="item"></param>
         /// <returns>A GameItem or null</returns>
         public T GetNextItem(T item)
         {
@@ -280,7 +280,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <returns></returns>
         public T[] UnlockableItems(int currentValue, bool lockedOnly = false)
         {
-            return Items.Where(gameItem => (!lockedOnly || (lockedOnly && !gameItem.IsUnlocked)) && gameItem.ValueToUnlock > 0 && gameItem.ValueToUnlock <= currentValue).ToArray();
+            return Items.Where(gameItem => (!lockedOnly || !gameItem.IsUnlocked) && gameItem.ValueToUnlock > 0 && gameItem.ValueToUnlock <= currentValue).ToArray();
         }
 
         /// <summary>

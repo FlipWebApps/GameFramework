@@ -46,12 +46,12 @@ namespace GameFramework.Messaging
         /// delegates list for the different message types. We maintain this as a list to allow for future
         /// possibilities in setting priority and call order etc.
         /// </summary>
-        Dictionary<string, List<MessageListenerDelegate>> _listeners = new Dictionary<string, List<MessageListenerDelegate>>();
+        readonly Dictionary<string, List<MessageListenerDelegate>> _listeners = new Dictionary<string, List<MessageListenerDelegate>>();
 
         /// <summary>
         /// Messages waiting to be processed.
         /// </summary>
-        Queue<BaseMessage> _messageQueue = new Queue<BaseMessage>();
+        readonly Queue<BaseMessage> _messageQueue = new Queue<BaseMessage>();
 
         #region Queue Processing
 

@@ -30,7 +30,6 @@ using System;
 using GameFramework.Preferences;
 using GameFramework.GameStructure.GenericGameItems.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GenericGameItems.Components;
 using GameFramework.Messaging;
 using UnityEngine.Assertions;
@@ -95,21 +94,21 @@ namespace GameFramework.Billing
         /// <summary>
         /// Handle purchasing of a GameItem
         /// </summary>
-        /// <typeparam name="T_GameItem"></typeparam>
+        /// <typeparam name="TGameItem"></typeparam>
         /// <param name="productId"></param>
         /// <param name="key"></param>
-        /// <param name="getGameManager"></param>
+        /// <param name="getGameItemManager"></param>
         /// <param name="createMessage"></param>
-        static void PurchaseGameItem<T_GameItem>(
+        static void PurchaseGameItem<TGameItem>(
             string productId,
             string key,
-            Func<GameItemManager<T_GameItem, GameItem>> getGameItemManager,
-            Func<int, BaseMessage> createMessage) where T_GameItem : GameItem, new()
+            Func<GameItemManager<TGameItem, GameItem>> getGameItemManager,
+            Func<int, BaseMessage> createMessage) where TGameItem : GameItem, new()
         {
             Assert.IsTrue(productId.StartsWith(key), "Invalid product id found");
 
             int number = int.Parse(productId.Substring(key.Length));
-            T_GameItem multiPurposeGameItem = null;
+            TGameItem multiPurposeGameItem = null;
 
             // first try and get from game manager
             if (GameManager.IsActive && getGameItemManager() != null)
@@ -118,7 +117,7 @@ namespace GameFramework.Billing
             // if not found on game manager then create a new copy to ensure this purchase is recorded
             if (multiPurposeGameItem == null)
             {
-                multiPurposeGameItem = new T_GameItem();
+                multiPurposeGameItem = new TGameItem();
                 multiPurposeGameItem.Initialise(number);
             }
 

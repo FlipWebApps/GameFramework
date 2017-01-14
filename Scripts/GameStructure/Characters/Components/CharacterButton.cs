@@ -19,12 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-#if UNITY_PURCHASING
-using GameFramework.Billing.Components;
-#endif
 using GameFramework.Billing.Messages;
 using GameFramework.GameStructure.Characters.ObjectModel;
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Messaging;

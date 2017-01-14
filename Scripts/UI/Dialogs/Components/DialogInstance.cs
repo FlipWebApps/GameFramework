@@ -212,7 +212,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="dialogButtons"></param>
         public void Show(string title = null, string titleKey = null, string text = null, string textKey = null,
             string text2 = null, string text2Key = null, Sprite sprite = null,
-            System.Action<DialogInstance> doneCallback = null, bool destroyOnClose = true,
+            Action<DialogInstance> doneCallback = null, bool destroyOnClose = true,
             DialogButtonsType dialogButtons = DialogButtonsType.Custom)
         {
             GameObject childGameObject;

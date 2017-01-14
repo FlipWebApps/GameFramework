@@ -47,7 +47,7 @@ namespace GameFramework.Debugging.Components
         public string Stack { get; set; }
 
         static string _myLog;
-        static readonly Queue _logMessagesQueue = new Queue();
+        static readonly Queue LogMessagesQueue = new Queue();
         bool _hidden = true;
 
         void Awake()
@@ -77,20 +77,20 @@ namespace GameFramework.Debugging.Components
             Output = logString;
             Stack = stackTrace;
             string newString = "\n [" + type + "] : " + Output;
-            _logMessagesQueue.Enqueue(newString);
+            LogMessagesQueue.Enqueue(newString);
             if (type == LogType.Exception)
             {
                 newString = "\n" + stackTrace;
-                _logMessagesQueue.Enqueue(newString);
+                LogMessagesQueue.Enqueue(newString);
             }
 
-            while (_logMessagesQueue.Count > MaxLines)
+            while (LogMessagesQueue.Count > MaxLines)
             {
-                _logMessagesQueue.Dequeue();
+                LogMessagesQueue.Dequeue();
             }
 
             _myLog = string.Empty;
-            foreach (string s in _logMessagesQueue)
+            foreach (string s in LogMessagesQueue)
             {
                 _myLog += s;
             }

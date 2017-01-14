@@ -52,7 +52,6 @@ namespace GameFramework.Preferences
 #endif
                 return _instance;
             }
-            set { _instance = value; }
         }
         static IPreferences _instance;
 

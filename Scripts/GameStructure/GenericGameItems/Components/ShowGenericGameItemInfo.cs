@@ -44,12 +44,12 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
         {
             Assert.IsNotNull(GenericGameItemManager.Instance.GenericGameItems, "GenericGameItems are not setup when referenced from ShowGenericGameItemInfo");
 
-            var GenericGameItem = GenericGameItemManager.Instance.GenericGameItems.Selected;
-            if (GenericGameItem != null)
+            var genericGameItem = GenericGameItemManager.Instance.GenericGameItems.Selected;
+            if (genericGameItem != null)
             {
                 var textComponent = GetComponent<Text>();
                 var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                textComponent.text = string.Format(text, GenericGameItem.Number, GenericGameItem.Name, GenericGameItem.Description);
+                textComponent.text = string.Format(text, genericGameItem.Number, genericGameItem.Name, genericGameItem.Description);
             }
         }
     }

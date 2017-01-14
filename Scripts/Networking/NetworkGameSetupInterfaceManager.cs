@@ -24,7 +24,6 @@ using GameFramework.GameObjects;
 using GameFramework.GameObjects.Components;
 using GameFramework.UI.Dialogs.Components;
 using GameFramework.UI.Other;
-using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.UI;
 

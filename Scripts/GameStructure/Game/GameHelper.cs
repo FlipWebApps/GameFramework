@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Preferences;
 using UnityEngine;
 
@@ -99,7 +100,7 @@ namespace GameFramework.GameStructure.Game
             var nextLevel = GameManager.Instance.Levels.GetNextItem();
 
             // is the game won
-            if (GameHelper.IsCurrentLevelLastInGame())
+            if (IsCurrentLevelLastInGame())
             {
                 player.IsGameWon = true;
                 player.UpdatePlayerPrefs();
@@ -108,7 +109,7 @@ namespace GameFramework.GameStructure.Game
             // else is a world won - world load code will automatically unlock the first level if needed.
             else if (IsCurrentLevelLastInWorld())
             {
-                if (GameManager.Instance.WorldUnlockMode == GameStructure.GameItems.ObjectModel.GameItem.UnlockModeType.Completion &&
+                if (GameManager.Instance.WorldUnlockMode == GameItem.UnlockModeType.Completion &&
                     nextWorld != null)
                 {
                     nextWorld.IsUnlocked = true;
@@ -119,7 +120,7 @@ namespace GameFramework.GameStructure.Game
             // else is at least a level won
             else
             {
-                if (GameManager.Instance.LevelUnlockMode == GameStructure.GameItems.ObjectModel.GameItem.UnlockModeType.Completion &&
+                if (GameManager.Instance.LevelUnlockMode == GameItem.UnlockModeType.Completion &&
                     nextLevel != null)
                 {
                     nextLevel.IsUnlocked = true;

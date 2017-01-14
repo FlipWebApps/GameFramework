@@ -42,13 +42,13 @@ namespace GameFramework.Display.Other.Components
         public Rect Uvs;
 
         Mesh _mesh;
-        Vector2[] _Uvs;
+        Vector2[] _uvs;
 
         void Awake()
         {
             _mesh = transform.GetComponent<MeshFilter>().mesh;
-            _Uvs = new Vector2[_mesh.uv.Length];
-            _Uvs = _mesh.uv;
+            _uvs = new Vector2[_mesh.uv.Length];
+            _uvs = _mesh.uv;
 
             SetUVs(Uvs);
         }
@@ -62,13 +62,13 @@ namespace GameFramework.Display.Other.Components
             // bottom left, top right, bottom right, top left.
             Uvs = uvs;
 
-            _Uvs[0] = new Vector2(uvs.x, uvs.y);
-            _Uvs[1] = new Vector2(uvs.x + uvs.width, uvs.y + uvs.height);
-            _Uvs[2] = new Vector2(uvs.x + uvs.width, uvs.y);
-            _Uvs[3] = new Vector2(uvs.x, uvs.y + uvs.height);
+            _uvs[0] = new Vector2(uvs.x, uvs.y);
+            _uvs[1] = new Vector2(uvs.x + uvs.width, uvs.y + uvs.height);
+            _uvs[2] = new Vector2(uvs.x + uvs.width, uvs.y);
+            _uvs[3] = new Vector2(uvs.x, uvs.y + uvs.height);
 
             // assign the mesh its new UVs
-            _mesh.uv = _Uvs;
+            _mesh.uv = _uvs;
         }
     }
 }

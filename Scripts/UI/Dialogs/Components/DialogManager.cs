@@ -21,7 +21,6 @@
 
 using System;
 using System.Linq;
-using GameFramework.GameObjects;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure;
 using UnityEngine;
@@ -78,7 +77,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="doneCallback"></param>
         /// <param name="dialogButtons"></param>
         /// <returns></returns>
-        public DialogInstance ShowOnce(string dialogKey, string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
+        public DialogInstance ShowOnce(string dialogKey, string prefab = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
             // show hint panel first time only
             if (PreferencesFactory.GetInt("GeneralMessage." + dialogKey, 0) == 0)
@@ -101,7 +100,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="sprite"></param>
         /// <param name="doneCallback"></param>
         /// <returns></returns>
-        public DialogInstance ShowError(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null)
+        public DialogInstance ShowError(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null)
         {
             return Show(null, null, "GeneralMessage.Error.Title", text, textKey, text2, text2Key, sprite, doneCallback);
         }
@@ -116,7 +115,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="sprite"></param>
         /// <param name="doneCallback"></param>
         /// <returns></returns>
-        public DialogInstance ShowInfo(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null)
+        public DialogInstance ShowInfo(string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null)
         {
             return Show(null, null, "GeneralMessage.Info.Title", text, textKey, text2, text2Key, sprite, doneCallback);
         }
@@ -135,7 +134,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="doneCallback"></param>
         /// <param name="dialogButtons"></param>
         /// <returns></returns>
-        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, System.Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
+        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
         {
             var dialogInstance = Create(prefabName);
             dialogInstance.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons);

@@ -19,24 +19,21 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Collections;
 #if UNITY_PURCHASING
 using GameFramework.Billing.Components;
+using GameFramework.Localisation;
 #endif
 using GameFramework.GameObjects;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.UI.Dialogs.Components;
 using GameFramework.UI.Other;
-using GameFramework.UI.Other.Components;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 using GameFramework.GameStructure.Players.Messages;
 using GameFramework.Messaging;
-using GameFramework.Localisation;
 using GameFramework.Localisation.Messages;
-using System;
 using GameFramework.Preferences;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
@@ -129,7 +126,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             SetupDisplay();
 
             // show unlock animation if it isn't already shown.
-            if (CurrentItem.IsUnlocked == true && CurrentItem.IsUnlockedAnimationShown == false)
+            if (CurrentItem.IsUnlocked && CurrentItem.IsUnlockedAnimationShown == false)
                 Unlock();
 
             // add event and message listeners.
@@ -159,10 +156,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             if (DisplayImage != null)
             {
                 var selectionMenuSprite = CurrentItem.GetSpriteSelectionMenu();
-                if (selectionMenuSprite != null)
-                    DisplayImage.sprite = selectionMenuSprite;
-                else
-                    DisplayImage.sprite = CurrentItem.Sprite;
+                DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
             }
 
             if (LockGameObject != null)

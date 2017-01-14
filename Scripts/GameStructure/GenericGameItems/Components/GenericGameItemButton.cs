@@ -19,12 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-#if UNITY_PURCHASING
-using GameFramework.Billing.Components;
-#endif
 using GameFramework.Billing.Messages;
 using GameFramework.GameStructure.GenericGameItems.ObjectModel;
-using GameFramework.GameStructure.GameItems;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Messaging;
@@ -60,8 +56,8 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
         /// <returns></returns>
         bool GenericGameItemPurchasedHandler(BaseMessage message)
         {
-            var GenericGameItemPurchasedMessage = message as GenericGameItemPurchasedMessage;
-            UnlockIfNumberMatches(GenericGameItemPurchasedMessage.Number);
+            var genericGameItemPurchasedMessage = message as GenericGameItemPurchasedMessage;
+            UnlockIfNumberMatches(genericGameItemPurchasedMessage.Number);
             return true;
         }
 

@@ -42,7 +42,7 @@ namespace GameFramework.Messaging.Components.AbstractClasses
         /// <summary>
         /// Get and record and attribute options.
         /// </summary>
-        public RunOnMessage()
+        protected RunOnMessage()
         {
 #if NETFX_CORE          
             var runOnMessageAttribute = typeof(RunOnMessage<T>).GetTypeInfo().GetCustomAttribute<RunOnMessageAttribute>();
@@ -154,7 +154,7 @@ namespace GameFramework.Messaging.Components.AbstractClasses
         /// <summary>
         /// Get and record and attribute options.
         /// </summary>
-        public RunOnMessage()
+        protected RunOnMessage()
         {
 #if NETFX_CORE          
             var runOnMessageAttribute = typeof(RunOnMessage<T1, T2>).GetTypeInfo().GetCustomAttribute<RunOnMessageAttribute>();

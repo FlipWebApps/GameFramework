@@ -54,12 +54,8 @@ namespace GameFramework.Localisation
             {
                 return _localisations;
             }
-            private set
-            {
-                _localisations = value;
-            }
         }
-        static Dictionary<string, string[]> _localisations = new Dictionary<string, string[]>();
+        static readonly Dictionary<string, string[]> _localisations = new Dictionary<string, string[]>();
 
 
         /// <summary>
