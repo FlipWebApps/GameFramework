@@ -344,16 +344,6 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// want to provide your own custom initialisation.
         /// </summary>
         /// <param name="number"></param>
-        public void Initialise(int number)
-        {
-            Initialise(number, LocalisableText.CreateNonLocalised(), LocalisableText.CreateNonLocalised());
-        }
-
-        /// <summary>
-        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
-        /// want to provide your own custom initialisation.
-        /// </summary>
-        /// <param name="number"></param>
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="sprite"></param>
@@ -362,13 +352,13 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
         /// <param name="loadFromResources"></param>
-        public void Initialise(int number, LocalisableText name, LocalisableText description, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        public void Initialise(int number, LocalisableText name = null, LocalisableText description = null, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
             Number = number;
-            LocalisableName = name;
-            LocalisableDescription = description;
+            LocalisableName = name ?? LocalisableText.CreateNonLocalised();
+            LocalisableDescription = description ?? LocalisableText.CreateNonLocalised();
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 

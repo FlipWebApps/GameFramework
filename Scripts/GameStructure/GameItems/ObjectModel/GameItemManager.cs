@@ -127,7 +127,7 @@ namespace FlipWebApps.GameFramework.Scripts.GameStructure.GameItems.ObjectModel
         /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup. If loadFromResources
         /// is specified then this will try and load the GameItem from the resources folder
         /// </summary>
-        public void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
+        public virtual void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
         { 
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
