@@ -19,11 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.EditorExtras;
+using GameFramework.GameObjects;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 namespace GameFramework.UI.Dialogs.Components
 {
@@ -36,6 +39,120 @@ namespace GameFramework.UI.Dialogs.Components
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class PauseWindow : Singleton<PauseWindow>
     {
+        #region Editor Parameters
+
+        /// <summary>
+        /// Whether to reset the time scale on things like exit level or restart. If you don't set this and the pause window
+        /// was set to freeze time then you will need to manually reset this yourself otherwise your game might still appear paused.
+        /// </summary>
+        bool AlwaysResetTimeScale
+        {
+            get
+            {
+                return _alwaysResetTimeScale;
+            }
+            set
+            {
+                _alwaysResetTimeScale = value;
+            }
+        }
+        [Tooltip("Whether to reset the time scale on things like exit level or restart.\nIf you don't set this and the pause window was set to freeze time then you will need to manually reset this yourself otherwise your game might still appear paused.")]
+        [SerializeField]
+        bool _alwaysResetTimeScale = true;
+
+        /// <summary>
+        /// Whether to show a restart button
+        /// </summary>
+        bool ShowRestart
+        {
+            get
+            {
+                return _showRestart;
+            }
+            set
+            {
+                _showRestart = value;
+            }
+        }
+        [Header("Display Options")]
+        [Tooltip("Whether to show a restart button")]
+        [SerializeField]
+        bool _showRestart;
+
+        /// <summary>
+        /// Whether to show an options button
+        /// </summary>
+        bool ShowOptions
+        {
+            get
+            {
+                return _showOptions;
+            }
+            set
+            {
+                _showOptions = value;
+            }
+        }
+        [Tooltip("Whether to show an options button")]
+        [SerializeField]
+        bool _showOptions;
+
+        /// <summary>
+        /// Whether to show an exit level button
+        /// </summary>
+        bool ShowExitLevel
+        {
+            get
+            {
+                return _showExitLevel;
+            }
+            set
+            {
+                _showExitLevel = value;
+            }
+        }
+        [Tooltip("Whether to show an exit level button")]
+        [SerializeField]
+        bool _showExitLevel;
+
+        /// <summary>
+        /// (private) Localisable name for this GameItem. See also Name for easier access.
+        /// </summary>
+        string ExitLevelScene
+        {
+            get
+            {
+                return _exitLevelScene;
+            }
+            set
+            {
+                _exitLevelScene = value;
+            }
+        }
+        [Tooltip("The scene that should be loaded if they chose exit level.")]
+        [SerializeField]
+        [ConditionalHide("_showExitLevel")]
+        string _exitLevelScene;
+
+        /// <summary>
+        /// Whether to show a quit button
+        /// </summary>
+        bool ShowQuit
+        {
+            get
+            {
+                return _showQuit;
+            }
+            set
+            {
+                _showQuit = value;
+            }
+        }
+        [Tooltip("Whether to show a quit button")]
+        [SerializeField]
+        bool _showQuit;
+        #endregion Editor Parameters
+
         /// <summary>
         /// The DialogInstance associated with the settings dialog.
         /// </summary>
@@ -59,8 +176,12 @@ namespace GameFramework.UI.Dialogs.Components
         /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance when done.
         public virtual void Show()
         {
-            Debug.LogWarning("The Pause Window is experimental and should not be used yet!");
-            Debug.Log("TODO: Add options for what buttons to display");
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Restart", true), ShowRestart);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Options", true), ShowOptions);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "ExitLevel", true), ShowExitLevel);
+            GameObjectHelper.SafeSetActive(GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Quit", true), ShowQuit);
+
+
             // show the dialog
             DialogInstance.Show(destroyOnClose: false);
         }
@@ -69,7 +190,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <summary>
         /// Callback for resuming.
         /// </summary>
-        public void Resume()
+        public virtual void Resume()
         {
             LevelManager.Instance.ResumeLevel();
             DialogInstance.Done();
@@ -79,24 +200,38 @@ namespace GameFramework.UI.Dialogs.Components
         /// <summary>
         /// Callback for resuming.
         /// </summary>
-        public void Restart()
+        public virtual void Restart()
         {
-            Debug.Log("TODO");
+            if (AlwaysResetTimeScale) Time.timeScale = 1;
+            var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ? SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;
+            GameManager.LoadSceneWithTransitions(sceneName);
+        }
+
+
+        /// <summary>
+        /// Callback for resuming.
+        /// </summary>
+        public virtual void Options()
+        {
+            Assert.IsTrue(Settings.IsActive, "You must add a settings prefab to your scene!");
+            Settings.Instance.Show();
         }
 
 
         /// <summary>
         /// Callback for exiting the level back to ....
         /// </summary>
-        public void ExitLevel()
+        public virtual void ExitLevel()
         {
-            Debug.Log("TODO");
+            if (AlwaysResetTimeScale) Time.timeScale = 1;
+            GameManager.LoadSceneWithTransitions(ExitLevelScene);
         }
 
+        
         /// <summary>
         /// Callback for quitting the game.
         /// </summary>
-        public void Quit()
+        public virtual void Quit()
         {
             GameManager.Instance.SaveState();
             Application.Quit();
