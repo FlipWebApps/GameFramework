@@ -1,4 +1,4 @@
-Game Framework - Free v3.4.1
+Game Framework - Free
 
 Thank you for using Game Framework. 
 
@@ -51,7 +51,6 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 CREDITS
 
 ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com)
-EditorList - courtesy of catlikecoding.com
 ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 Portuguese and Spanish Translations - Bryan Jonson
 French Translation -  Fabrice Pilet

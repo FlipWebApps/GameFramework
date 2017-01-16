@@ -54,6 +54,7 @@ TextureImporter:
     21300094: Circle100
     21300096: Frame256-1
     21300098: Frame64-2
+    21300100: ButtonImagesMediumPause
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -103,8 +104,8 @@ TextureImporter:
     - name: ButtonImagesMediumArrow
       rect:
         serializedVersion: 2
-        x: 196
-        y: 202
+        x: 191
+        y: 164
         width: 51
         height: 34
       alignment: 0
@@ -139,8 +140,8 @@ TextureImporter:
     - name: ButtonImagesMediumFacebook
       rect:
         serializedVersion: 2
-        x: 167
-        y: 193
+        x: 162
+        y: 181
         width: 25
         height: 45
       alignment: 0
@@ -203,6 +204,17 @@ TextureImporter:
         - {x: 3.5, y: -17}
         - {x: 21.5, y: 5}
         - {x: 21.5, y: 17}
+    - name: ButtonImagesMediumPause
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 230
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: ButtonImagesMediumPlay
       rect:
         serializedVersion: 2
@@ -316,8 +328,8 @@ TextureImporter:
     - name: IconCoinSmall
       rect:
         serializedVersion: 2
-        x: 129
-        y: 211
+        x: 203
+        y: 202
         width: 34
         height: 34
       alignment: 9
@@ -391,7 +403,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 129
-        y: 182
+        y: 188
         width: 25
         height: 25
       alignment: 0
@@ -420,8 +432,8 @@ TextureImporter:
     - name: StarInactiveSmall
       rect:
         serializedVersion: 2
-        x: 168
-        y: 242
+        x: 129
+        y: 217
         width: 29
         height: 28
       alignment: 9

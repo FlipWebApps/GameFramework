@@ -48,7 +48,6 @@ namespace GameFramework.UI.Dialogs.Components
         /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance first.
         protected override void GameSetup()
         {
-            Debug.Log("TODO: Add options for what buttons to display");
             DialogInstance = GetComponent<DialogInstance>();
             Assert.IsNotNull(DialogInstance.Target, "Ensure that you have set the script execution order of dialog instance in project settings (see help for details.");
         }
@@ -60,6 +59,8 @@ namespace GameFramework.UI.Dialogs.Components
         /// Override this in your own base class if you want to customise the settings window. Be sure to call this base instance when done.
         public virtual void Show()
         {
+            Debug.LogWarning("The Pause Window is experimental and should not be used yet!");
+            Debug.Log("TODO: Add options for what buttons to display");
             // show the dialog
             DialogInstance.Show(destroyOnClose: false);
         }

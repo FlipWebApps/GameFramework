@@ -5,27 +5,28 @@
 # http://www.codeandweb.com/texturepacker/unity
 #
 # Sprite sheet: UI.png (256 x 512)
-# $TexturePacker:SmartUpdate:969e22253cdd7976319df7222e9997db:4c7d7d37936463f88c831c758752be6e:64d56465927d50bb5400e4c66dc46a97$
+# $TexturePacker:SmartUpdate:5cb276dc4a03c043c081d3b105a4391c:6e843ed8fcb32d56cc08733f2d376aeb:64d56465927d50bb5400e4c66dc46a97$
 #
 
-ButtonImagesMediumArrow;196;202;51;34;0.5;0.5
+ButtonImagesMediumArrow;191;164;51;34;0.5;0.5
 ButtonImagesMediumCancel;205;282;38;38;0.5;0.5
-ButtonImagesMediumFacebook;167;193;25;45;0.5;0.5
+ButtonImagesMediumFacebook;162;181;25;45;0.5;0.5
 ButtonImagesMediumHome;203;240;49;38;0.5;0.5
 ButtonImagesMediumLike;207;464;46;45;0.5;0.5
 ButtonImagesMediumOk;205;367;43;34;0.5;0.5
+ButtonImagesMediumPause;168;230;31;40;0.5;0.5
 ButtonImagesMediumPlay;168;274;31;42;0.5;0.5
 ButtonImagesMediumReload;71;198;54;47;0.5;0.5
 ButtonImagesMediumSettings;205;324;40;39;0.5;0.5
 Circle100;3;409;100;100;0.5;0.5
 Frame64-2;3;224;64;64;0.5;0.5
 IconCoinLarge;98;249;66;67;0.5075757575757576;0.4925373134328358
-IconCoinSmall;129;211;34;34;0.5147058823529411;0.4852941176470589
+IconCoinSmall;203;202;34;34;0.5147058823529411;0.4852941176470589
 IconLock;207;405;44;55;0.4772727272727273;0.49090909090909096
 IconLockBig;3;292;91;113;0.5054945054945055;0.4911504424778761
 StarActiveBig;107;320;94;92;0.5;0.5
-StarActiveSmall;129;182;25;25;0.5;0.5
+StarActiveSmall;129;188;25;25;0.5;0.5
 StarInactiveBig;107;416;96;93;0.5052083333333334;0.4946236559139785
-StarInactiveSmall;168;242;29;28;0.5172413793103449;0.4821428571428571
+StarInactiveSmall;129;217;29;28;0.5172413793103449;0.4821428571428571
 WhiteGradientRectangle;71;272;16;16;0.5;0.5
 WhiteRectangle;71;252;16;16;0.5;0.5
