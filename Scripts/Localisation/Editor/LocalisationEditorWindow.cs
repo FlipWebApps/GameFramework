@@ -45,12 +45,12 @@ namespace GameFramework.Localisation.Editor
         Vector2 _scrollPosition = Vector2.zero;
 
         // Add menu item for showing the window
-        [MenuItem("Window/Game Framework/Localisation Editor")]
+        [MenuItem("Window/Game Framework/Localisation Editor (Alpha)", priority = 1)]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
             //var prefsEditorWindow = 
-            GetWindow<LocalisationEditorWindow>("Localisation Editor", true);
+            GetWindow<LocalisationEditorWindow>("Localisations", true);
         }
 
 
@@ -158,7 +158,7 @@ namespace GameFramework.Localisation.Editor
                 int num2 = Mathf.CeilToInt(num / 13f);
                 num2 = Mathf.Clamp(num2, 1, int.MaxValue);
                 var height = 32f + (float)((num2 - 1) * 13);
-                Debug.Log(num2 + ", " + height);
+                //Debug.Log(num2 + ", " + height);
                 EditorGUILayout.LabelField(languageEntry, EditorStyles.boldLabel);
 
                 EditorGUI.BeginChangeCheck();
