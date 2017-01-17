@@ -134,10 +134,25 @@ namespace GameFramework.Localisation
         }
 
         /// <summary>
+        /// Clear any loaded dictionaries
+        /// </summary>
+        public static void ClearDictionaries()
+        {
+            _localisations.Clear();
+            _languages = new string[0];
+            IsLocalisationLoaded = false;
+            _language = null;
+            _languageIndex = -1;
+            _defaultUserLanguage = null;
+        }
+
+        /// <summary>
         /// (re)load the default and user Localisation files
         /// </summary>
         public static void ReloadDictionary()
         {
+            ClearDictionaries();
+
             // Try to load the default Localisation file directly
             var asset = Resources.Load<TextAsset>("Default/Localisation");
             if (asset != null)
