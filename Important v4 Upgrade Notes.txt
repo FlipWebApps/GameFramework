@@ -32,15 +32,25 @@ Before upgrading be sure to take a backup copy of your project. You should then 
 
 MAIN UPGRADE STEPS
 
-* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity. You should rename all references in your code accordingly.
-* GameItemExtensions are no longer used for the same purpose as you can create instances of GameItems directly and configure properties such as name, description etc. If you have used GameItemExtensions previously then you will need to create new instances and copy over configuration values manually. GameItemExtensions can still be created and used for your own purposes but with a _Extension prefix
+* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity. You should search / replace all references in your code accordingly.
+* GameItemExtensions are no longer used for the same purpose as you can now create instances of GameItems directly and configure properties such as name, description etc. If you have used GameItemExtensions previously then you will need to remove / rename these and create new instances and copy over configuration values manually. GameItemExtensions can still be created and used for your own purposes but with a _Extension prefix
+* GameManager load from resources flags now refers to loading Json / Extension files. It will try loading GameItems by default.
 
 REMOVED METHODS:
 
 * GameItemManager.LoadItems -> Override the 'other' load method or preferably use the new way of extending GameItems.
+* WorldExtension, CharacterExtension, LevelExtension -> Inherit from World, Character, Level or GameItemExtension
+
+MOVED ITEMS:
+* The namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity. You should rename all references in your code accordingly.
+* GameItemsManager moved to .ObjectModel namespace
+* GameItem abstract classes moved to .AbstractClasses folder
 
 RENAMED ITEMS:
 
 * GameItemsManager -> GameItemManager
 * GameItem.ParseData -> GameItem.ParseJsonData
+* GameItemsManager.Load() -> GameItemManager.LoadCustom() 
+* GameItemsManager.LoadItems() -> GameItemManager.LoadCustomItems()
+* GameItemsManager.LoadDefaultItems() -> GameItemManager.Load()
 

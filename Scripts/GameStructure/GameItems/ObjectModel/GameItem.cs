@@ -1341,17 +1341,22 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         [Serializable]
         public class LocalisablePrefabEntry
         {
+            [Tooltip("The type that this prefab represents, either a standard type or a custom one for your own use.")]
             public LocalisablePrefabType LocalisablePrefabType;
+            [Tooltip("A unique name that identifies this prefab that you can later use for accessing it.")]
             public string Name;
+            [Tooltip("The prefab that will be used for this type unless overridden for a particular language.")]
             public LocalisablePrefab LocalisablePrefab;
         }
 
         [Serializable]
         public class LocalisableSpriteEntry
         {
-
+            [Tooltip("The type that this sprite represents, either a standard type or a custom one for your own use.")]
             public LocalisableSpriteType LocalisableSpriteType;
+            [Tooltip("A unique name that identifies this prefab that you can later use for accessing it.")]
             public string Name;
+            [Tooltip("The sprite that will be used for this type unless overridden for a particular language.")]
             public LocalisableSprite LocalisableSprite;
         }
         #endregion extra classes for configuration

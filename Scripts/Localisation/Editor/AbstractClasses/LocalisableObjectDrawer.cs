@@ -29,6 +29,8 @@ namespace GameFramework.Localisation.Editor.AbstractClasses
     {
         readonly float _propertyRowHeight = EditorGUIUtility.singleLineHeight + 2;
 
+        internal abstract string DefaultName { get; }
+        internal abstract string DefaultTooltip { get; }
         internal abstract Type LocalisableType { get; }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -40,7 +42,7 @@ namespace GameFramework.Localisation.Editor.AbstractClasses
 
             label = EditorGUI.BeginProperty(position, label, property);
 
-            defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent("Default", defaultProperty.tooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
+            defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent(DefaultName, DefaultTooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
             //EditorGUI.PropertyField(rowPosition, defaultProperty, label);
             rowPosition.y += _propertyRowHeight;
 

@@ -30,6 +30,10 @@ namespace GameFramework.Localisation.Editor
     [CustomPropertyDrawer(typeof(LocalisablePrefab))]
     public class LocalisablePrefabDrawer : LocalisableObjectDrawer
     {
+        internal override string DefaultName { get { return "Prefab"; } }
+
+        internal override string DefaultTooltip { get { return "The prefab that will be used for this type unless overridden for a particular language."; } }
+
         internal override Type LocalisableType
         {
             get { return typeof(GameObject); }

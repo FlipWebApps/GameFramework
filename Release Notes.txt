@@ -4,6 +4,63 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.0
+IMPORTANT: This version changes several API's and all namespaces. See the seperate upgrade notes document for more details.
+If upgrading you should take a backup copy and will then need to delete the old /FlipWebApps/ folder to cater for conflicts.
+
+	Game Framework Core - Improvements
+	- All: namespace base of all items is changed from 'FlipwebApps.GameFramework.Scripts' -> 'GameFramework' for simplicity you should rename all references in your code accordingly.
+	- Demo: Updated for new GameItem configuration files.
+	- EditorExtras: Removed EditorList in favour of built in Unity option (download from http://catlikecoding.com/unity/tutorials/editor/custom-list/ if you still need this).
+	- EditorExtras: Added general GuiStyles
+	- GameStructure: GameItems now inherit ScriptableObject and can be created directly in resources removing the need for GameItemExtensions. If you have GameItemExtensions then you will need to create new items in resources and copy values over.
+	- GameStructure: GameItem editor windows includes Sprite and Prefab settings and localised strings
+	- GameStructure: GameItem methods for getting Sprites and Prefabs added
+	- GameStructure: GameItem JSON loading for standard GameItem configuration is removed in favour of GameItem objects although renamed methods for using JSON files remain for your own usage.
+	- GameStructure: GameItem predefined GameItem sprite type of Selection screen, UnlockWindow for customisation of selection and unlock window sprites.
+	- GameStructure: GameItemExtension is removed and you can now create GameItem instances directly in the resource folders. If you inherited from GameItemExtension before then inherit directly from the corresponding GameItem (e.g. Level). You will also (unfortunately) need to re-create and configure any resource files.
+	- GameStructure: GameItemExtensions (new type) are loaded from files in the format Type_x_Extension
+	- GameStructure: GameItemButtons use GameItem sprites for display if configured
+	- GameStructure: GameManager Player functionality switched to use standard GameItemsManager
+	- GameStructure: GameManager GetPlayer() and SetPlayerByNumber() methods deprecated. Use methods on GameManager.Instance.Players instead.
+	- GameStructure: GameManager IsPaused property removed. Use the new methods on LevelManager instead.
+	- GameStructure: GameItemsManager Load() / LoadItems() renamed to LoadCustom() / LoadCustomItems()
+	- GameStructure: GameItemsManager LoadDefaultItems() renamed to Load()
+	- GameStructure: GameItemsmanager moved to .ObjectModel namespace
+	- GameStructure: GameItemsmanager added OnSelectedChanged() virtual method.
+	- GameStructure: GameItemsManager renamed to GameItemManager (also other references / methods in other files to match)
+	- GameStructure: GameItemManager virtual method for custom handling when the current selection is changed (e.g. sending a custom message)
+	- GameStructure: GameItemManager only send selection changed messages if loaded and the value actually changes.
+	- GameStructure: GameItemManager tries by default to load GameItems rather than creating dynamically.
+	- GameStructure: GameManager load from resources flags now refers to loading Json / Extension files.	
+	- GameStructure: Generic Collider supports spawning items from Pro Pooling
+	- GameStructure: Added InstantiatePrefab, InstantiatePlayerlPrefab, InstantiateWorldPrefab, InstantiateLevelPrefab, InstantiateCharacterPrefab components to automatically create GameItem prefab instances
+	- GameStructure: Player specific PlayerGameItemManager added that sends PlayerChangedMessage when the selection is changed.
+	- GameStructure: LevelManager checks for invalid configuration
+	- GameStructure: LevelManager Pause() and Resume() methods and IsLevelPaused flag added
+	- GameStructure: Level CoinTarget property and LevelManager GameWonWhenTargetCoinsReached auto win option
+	- GameStructure: Support for localised per-GameItem Sprite and Prefab settings.
+	- GameStructure: Better support for localised name and description.
+	- GameStructure: Moved GameItem abstract classes to .AbstractClasses folder
+	- GameStructure: Added SetImageTo[GameItem]Sprite and SetSpriteRendererTo[GameItem]Sprite components
+	- Localisation: Added LocalisableText class for text that can optionally be localised
+	- Localisation: LocaliseText added ReloadDictionary(), TrySetAllowedLanguage() methods
+	- Localisation: Exists will try and load dictionary if not already loaded.
+	- Localisation: Added LocalisableText, LocalisableSprite and LocalisablePrefab classes
+	- Localisation: Added LocaliseImage component
+
+	Game Framework Core - Fixes
+	- Localisation: LocaliseText fix for missing initialise of AllowedLanguages array in constructor
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Advanced Extending Levels tutorial is removed as focus will be on the 'new way' of doing this in v4
+	- 2D Infinite Runner and Basic Demo updated to work with v4.
+	
+	Prefs Editor (Extras Bundle): Updated to v2.1
+
+	Pro Pooling (Extras Bundle): Updated to v2.1
+
+
 v3.4.1
 
 	NOTE: This version contains some API changes to ProPooling and may require minor code changes. See below for details. If upgrading you 
