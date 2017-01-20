@@ -30,6 +30,10 @@ namespace GameFramework.Localisation.Editor
     [CustomPropertyDrawer(typeof(LocalisableSprite))]
     public class LocalisableSpriteDrawer : LocalisableObjectDrawer
     {
+        internal override string DefaultName { get { return "Sprite"; } }
+
+        internal override string DefaultTooltip { get { return "The sprite that will be used for this type unless overridden for a particular language."; } }
+
         internal override Type LocalisableType
         {
             get { return typeof (Sprite); }
