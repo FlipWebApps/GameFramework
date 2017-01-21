@@ -39,8 +39,8 @@ namespace GameFramework.Localisation.Editor
         Texture2D _newIcon;
         Texture2D _saveIcon;
         Texture2D _refreshIcon;
-        Texture2D _deleteIcon;
-        Texture2D _redTexture;
+        //Texture2D _deleteIcon;
+        //Texture2D _redTexture;
 
         Vector2 _scrollPosition = Vector2.zero;
 
@@ -59,8 +59,8 @@ namespace GameFramework.Localisation.Editor
             _newIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\New.png", typeof(Texture2D)) as Texture2D;
             _saveIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Save.png", typeof(Texture2D)) as Texture2D;
             _refreshIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Refresh.png", typeof(Texture2D)) as Texture2D;
-            _deleteIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Delete.png", typeof(Texture2D)) as Texture2D;
-            _redTexture = MakeColoredTexture(1, 1, new Color(1.0f, 0.0f, 0.0f, 0.1f));
+            //_deleteIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Delete.png", typeof(Texture2D)) as Texture2D;
+            //_redTexture = MakeColoredTexture(1, 1, new Color(1.0f, 0.0f, 0.0f, 0.1f));
             //RefreshPlayerPrefs();
         }
 
@@ -120,7 +120,7 @@ namespace GameFramework.Localisation.Editor
 
             if (ButtonTrimmed("Refresh", _refreshIcon, EditorStyles.toolbarButton, "Reload prefs to reflect any changes"))
             {
-                Debug.LogWarning("TODO: Prompt if changes will be lost.");
+                Debug.LogWarning("Localisation Window TODO: Prompt if changes will be lost.");
                 Reload();
             }
 
