@@ -399,14 +399,26 @@ namespace GameFramework.GameStructure
         public event Action<DeviceOrientation> OnOrientationChange;         // raised on orientation change (event as only we can invoke this)
 
         /// <summary>
-        /// The world bottom left position as seen from the main camera
+        /// The world bottom left position as seen from the main camera (correct always for othograpthic camera, otherwise correct at camera z position for perspective camera)
         /// </summary>
         public Vector3 WorldBottomLeftPosition { get; private set; }
 
         /// <summary>
-        /// The world bottom top right position as seen from the main camera
+        /// The world bottom top right position as seen from the main camera (correct always for othograpthic camera, otherwise correct at camera z position for perspective camera)
         /// </summary>
         public Vector3 WorldTopRightPosition { get; private set; }
+
+        // ReSharper disable once InconsistentNaming
+        /// <summary>
+        /// The world bottom left position on the xy plane (z=0) as seen from the main camera (correct always and same as WorldBottomLeftPosition for othograpthic camera)
+        /// </summary>
+        public Vector3 WorldBottomLeftPositionXYPlane { get; private set; }
+
+        // ReSharper disable once InconsistentNaming
+        /// <summary>
+        /// The world bottom top right position on the xy plane (z=0) as seen from the main camera (correct always and same as WorldBottomLeftPosition for othograpthic camera)
+        /// </summary>
+        public Vector3 WorldTopRightPositionXYPlane { get; private set; }
 
         /// <summary>
         /// The visible world size as seen from the main camera
@@ -638,7 +650,8 @@ namespace GameFramework.GameStructure
         {
             WorldBottomLeftPosition = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
             WorldTopRightPosition = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-            WorldSize = WorldTopRightPosition - WorldBottomLeftPosition;
+            WorldBottomLeftPositionXYPlane = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0 - Camera.main.transform.position.z));
+            WorldTopRightPositionXYPlane = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0 - Camera.main.transform.position.z)); WorldSize = WorldTopRightPosition - WorldBottomLeftPosition;
             AspectRatioMultiplier = (1 / 1.3333333333f) * Camera.main.aspect;      // assume designed for a 4:3 screen
             PhysicalScreenHeightMultiplier = ReferencePhysicalScreenHeightInInches / DisplayMetrics.GetPhysicalHeight();
 

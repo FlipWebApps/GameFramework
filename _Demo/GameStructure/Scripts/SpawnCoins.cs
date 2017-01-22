@@ -19,37 +19,28 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 
 namespace GameFramework._Demo.GameStructure.Scripts
 {
-    public class Movement : MonoBehaviour {
-
-        public void Update()
+    public class SpawnCoins : MonoBehaviour
+    {
+        public GameObject CoinsPrefab;
+        public void Start()
         {
-            if (LevelManager.Instance.IsLevelRunning)
+            for (var i = 0; i < LevelManager.Instance.Level.Star3Target; i++)
             {
-                if (UnityEngine.Input.GetKey(KeyCode.RightArrow))
+                float xPos, yPos;
+                do
                 {
-                    var rigidBody = GetComponent<Rigidbody>();
-                    rigidBody.MovePosition(transform.position + new Vector3(0.1f, 0));
-                }
-                else if (UnityEngine.Input.GetKey(KeyCode.LeftArrow))
-                {
-                    var rigidBody = GetComponent<Rigidbody>();
-                    rigidBody.MovePosition(transform.position + new Vector3(-0.1f, 0));
-                }
-                else if (UnityEngine.Input.GetKey(KeyCode.UpArrow))
-                {
-                    var rigidBody = GetComponent<Rigidbody>();
-                    rigidBody.MovePosition(transform.position + new Vector3(0, 0.1f));
-                }
-                else if (UnityEngine.Input.GetKey(KeyCode.DownArrow))
-                {
-                    var rigidBody = GetComponent<Rigidbody>();
-                    rigidBody.MovePosition(transform.position + new Vector3(0, -0.1f));
-                }
+                    xPos = Random.Range(GameManager.Instance.WorldBottomLeftPositionXYPlane.x + 2, GameManager.Instance.WorldTopRightPositionXYPlane.x - 2);
+                    yPos = Random.Range(GameManager.Instance.WorldBottomLeftPositionXYPlane.y + 2, GameManager.Instance.WorldTopRightPositionXYPlane.y - 2);
+
+                } while (xPos > -1 && xPos < -1 && yPos > -2.3 && yPos < -0.3);
+                var gObj = (GameObject)Instantiate(CoinsPrefab, new Vector3(xPos, yPos), CoinsPrefab.transform.rotation);
+                gObj.transform.SetParent(transform, true);
             }
         }
     }

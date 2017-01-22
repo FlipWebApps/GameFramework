@@ -98,6 +98,7 @@ MonoBehaviour:
   _onlyWhenLevelRunning: 1
   _enter:
     _instantiatePrefab: {fileID: 0}
+    _addPooledItem: 
     _audioClip: {fileID: 8300000, guid: e9f389d111d024f40b370ba27c319414, type: 3}
     _enableGameObjects: []
     _disableGameObjects: []
@@ -105,11 +106,13 @@ MonoBehaviour:
   _runInterval: 0
   _within:
     _instantiatePrefab: {fileID: 0}
+    _addPooledItem: 
     _audioClip: {fileID: 0}
     _enableGameObjects: []
     _disableGameObjects: []
   _exit:
     _instantiatePrefab: {fileID: 0}
+    _addPooledItem: 
     _audioClip: {fileID: 0}
     _enableGameObjects: []
     _disableGameObjects: []
@@ -123,7 +126,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 174424}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -135,7 +138,27 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 174424}
