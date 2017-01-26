@@ -160,10 +160,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// The name of this gameitem (localised if so configured). 
         /// </summary>
         /// Through the initialise function you can specify whether this is part of a localisation key, or a fixed value
+        /// If this is a localisation key, or using default setup then a localised value will be attempted loaded using a
+        /// key of format "[IdentifierBasePrefs][Number].Name" e.g. L1.Name. If this is not found then this will fall back 
+        /// to the fixed text "[IdentifierBase] [Number]".
         public string Name {
             get
             {
-                return LocalisableName.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Name")) : LocalisableName.GetValue();
+                if (LocalisableName.IsLocalisedWithNoKey())
+                {
+                    var value = LocaliseText.Get(FullKey("Name"), missingReturnsNull: true);
+                    if (value == null) return IdentifierBase + " " + Number;
+                    return value;
+                }
+                return LocalisableName.GetValue();
             }
         }
 
