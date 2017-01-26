@@ -387,7 +387,7 @@ namespace GameFramework.Localisation
         /// Localise the specified value based on the currently set language.
         /// </summary>
         /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
-        public static string Get(string key, string language = null)
+        public static string Get(string key, string language = null, bool missingReturnsNull = false)
         {
             // Ensure we have a Language to work with
             LoadDictionary();
@@ -414,8 +414,9 @@ namespace GameFramework.Localisation
                 }
             }
 
-		    MyDebug.LogWarningF("Localisation key not found: '{0}' for Language {1}", key, Language);
+            if (missingReturnsNull) return null;
 
+            MyDebug.LogWarningF("Localisation key not found: '{0}' for Language {1}", key, Language);
             return key;
         }
 
