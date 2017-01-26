@@ -222,6 +222,7 @@ namespace GameFramework.UI.Dialogs.Components
             _destroyOnClose = destroyOnClose;
 
             // increase open count - not thread safe, but should be ok!
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             DialogManager.Instance.Count++;
             IsShown = true;
 
