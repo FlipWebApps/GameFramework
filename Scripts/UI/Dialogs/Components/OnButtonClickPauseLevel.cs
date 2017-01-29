@@ -32,7 +32,7 @@ namespace GameFramework.UI.Dialogs.Components
     /// </summary>
     /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
-    [AddComponentMenu("Game Framework/UI/Buttons/On Button Click Pause Level")]
+    [AddComponentMenu("Game Framework/UI/Dialogs/On Button Click Pause Level")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class OnButtonClickPauseLevel : OnButtonClick
     {

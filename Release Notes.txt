@@ -18,6 +18,7 @@ v4.0.1
 	- Themes: Fix for missing default minimalist level, character and world button prefab sizes
 	- Dialogs: DialogInstance Assert for missing DialogManager
 	- UI: Plain Pause Window prefab was not correct.
+	- UI: OnButtonClickPauseLevel moved to UI/Dialogs Add Component section.
 	
 	Game Framework Extras (Extras Bundle) - Improvements
 	- Themes: Add pause icon and Pause Window prefabs
