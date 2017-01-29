@@ -4,6 +4,31 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.0.1
+
+	Game Framework Core - Improvements
+	- GameStructure: GameManager WorldBottomLeftPositionXYPlane and WorldTopRightPositionXYPlane properties added
+	- Game Structure: GameItems will use a default Name rather than the key if localisation is specified, no key is set and a key in the default format is not found.
+	- Localisation: LocaliseText.Get() optional parameter to return null instead of the key as the returned value if the key is not found.
+	
+	Game Framework Core - Fixes
+	- Demo: Coins displayed is the same as needed to win
+	- Demo: Corrected About Demo Player configuration path so it doesn't override your own configuration file.
+	- Demo: Changed debug level in Game Structure demo from Information to Warning..
+	- Themes: Fix for missing default minimalist level, character and world button prefab sizes
+	- Dialogs: DialogInstance Assert for missing DialogManager
+	- UI: Plain Pause Window prefab was not correct.
+	
+	Game Framework Extras (Extras Bundle) - Improvements
+	- Themes: Add pause icon and Pause Window prefabs
+
+	Game Framework Extras (Extras Bundle) - Fixes
+	- GameStructure: Corrected namespace and path for ShakeScreenWhenLivesLost component. If you get compile errors delete the old copy of ShakeScreenWhenLivesLost.cs
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Demo: Updated GettingStarted demos to reflect latest v4 updates.
+
+
 v4.0
 IMPORTANT: This version changes several API's and all namespaces. See the seperate upgrade notes document for more details.
 If upgrading you should take a backup copy and will then need to delete the old /FlipWebApps/ folder to cater for conflicts.
