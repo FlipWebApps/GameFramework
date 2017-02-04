@@ -207,13 +207,27 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #region Get / Set Items
 
         /// <summary>
+        /// Get the index of the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>index or -1 if not found</returns>
+        int GetItemIndex(int number)
+        {
+            for (var i = 0; i < Items.Length; i++)
+                if (Items[i].Number == number)
+                    return i;
+            return -1;
+        }
+
+        /// <summary>
         /// Get the item with the specified number
         /// </summary>
         /// <param name="number"></param>
         /// <returns>A GameItem or null</returns>
         public T GetItem(int number)
         {
-            return Items.FirstOrDefault(gameItem => gameItem.Number == number);
+            var i = GetItemIndex(number);
+            return i == -1 ? null : Items[i];
         }
 
 
@@ -228,17 +242,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Get the item that comes after the item with the specified number
-        /// </summary>
-        /// <param name="number"></param>
-        /// <returns>A GameItem or null</returns>
-        public T GetNextItem(int number)
-        {
-            return GetItem(number + 1);
-        }
-
-
-        /// <summary>
         /// Get the item that comes after the specified item
         /// </summary>
         /// <param name="item"></param>
@@ -246,6 +249,53 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public T GetNextItem(T item)
         {
             return GetNextItem(item.Number);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes after the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>A GameItem or null</returns>
+        public T GetNextItem(int number)
+        {
+            var i = GetItemIndex(number);
+            if (i == -1) return null;
+            return i + 1 < Items.Length ? Items[i + 1] : null;
+        }
+
+
+        /// <summary>
+        /// Get the item that comes before the currently selected item
+        /// </summary>
+        /// <returns>A GameItem or null</returns>
+        public T GetPreviousItem()
+        {
+            return GetPreviousItem(Selected);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes before the specified item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>A GameItem or null</returns>
+        public T GetPreviousItem(T item)
+        {
+            return GetPreviousItem(item.Number);
+        }
+
+
+        /// <summary>
+        /// Get the item that comes before the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>A GameItem or null</returns>
+        public T GetPreviousItem(int number)
+        {
+            var i = GetItemIndex(number);
+            if (i == -1) return null;
+            return i > 0 ? Items[i - 1] : null;
         }
 
 
@@ -267,6 +317,29 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             Selected = item;
         }
+
+        /// <summary>
+        /// Set the selected item to the next item if one exists
+        /// </summary>
+        /// <param name="item"></param>
+        public void SelectNext()
+        {
+            var nextItem = GetNextItem(Selected);
+            if (nextItem != null)
+                Selected = nextItem;
+        }
+
+        /// <summary>
+        /// Set the selected item to the previous item if one exists
+        /// </summary>
+        /// <param name="item"></param>
+        public void SelectPrevious()
+        {
+            var previousItem = GetPreviousItem(Selected);
+            if (previousItem != null)
+                Selected = previousItem;
+        }
+
 
         #endregion get / set items
 
