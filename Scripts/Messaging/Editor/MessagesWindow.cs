@@ -214,11 +214,9 @@ namespace GameFramework.Messaging.Editor
                     GUILayout.Label(text);
                     GUILayout.EndHorizontal();
 
-                    Rect guiRect = GUILayoutUtility.GetLastRect();
-                    if (Event.current.type == EventType.MouseDown)
+                    if (Event.current.button == 0 && Event.current.type == EventType.MouseUp)
                     {
-                        var overGUI = guiRect.Contains(Event.current.mousePosition);
-                        if (overGUI)
+                        if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
                         {
                             _newSelectedRow = i;
                             Repaint();
