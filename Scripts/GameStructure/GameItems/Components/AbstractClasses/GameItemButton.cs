@@ -89,8 +89,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected Player CurrentPlayer;
 
         protected Image DisplayImage { get; set; }
-        protected Image HighlightImage;
         protected Text ValueToUnlockAmount;
+        protected GameObject HighlightGameObject;
         protected GameObject LockGameObject;
         protected GameObject HighScoreGameObject;
         protected GameObject ValueToUnlockGameObject;
@@ -104,21 +104,20 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             CurrentPlayer = GameManager.Instance.Player;
 
-            HighlightImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Highlight", true);
+            CurrentItem = GetGameItemManager().GetItem(Number);
+            Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
+
+            // Get some references for UI button type buttons
+            HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
             DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
             LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
             HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
             ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
-            ValueToUnlockAmount = GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(ValueToUnlockGameObject, "ValueToUnlockAmount", true);
-
-            Button b = gameObject.GetComponent<Button>();
-            b.onClick.AddListener(OnClick);
-
-            CurrentItem = GetGameItemManager().GetItem(Number);
-            Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
-
-            GameManager.SafeAddListener<LocalisationChangedMessage>(OnLocalisationChanged);
-            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
+            if (ValueToUnlockGameObject != null)
+                ValueToUnlockAmount = GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(ValueToUnlockGameObject, "ValueToUnlockAmount", true);
+            var button = gameObject.GetComponent<Button>();
+            if (button != null)
+                button.onClick.AddListener(OnClick);
         }
 
         public void Start()
@@ -132,6 +131,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             // add event and message listeners.
             GetGameItemManager().Unlocked += UnlockIfGameItemMatches;
             GetGameItemManager().SelectedChanged += SelectedChanged;
+
+            GameManager.SafeAddListener<LocalisationChangedMessage>(OnLocalisationChanged);
+            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
         protected void OnDestroy()
@@ -175,9 +177,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                     ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
-            if (SelectionMode == SelectionModeType.Select && HighlightImage != null)
+            if (SelectionMode == SelectionModeType.Select && HighlightGameObject != null)
             {
-                HighlightImage.enabled = GetGameItemManager().Selected.Number == CurrentItem.Number;
+                HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == CurrentItem.Number);
             }
         }
 
