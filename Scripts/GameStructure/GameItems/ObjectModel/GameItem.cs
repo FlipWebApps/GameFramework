@@ -49,7 +49,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// The different types of prefab we have
         /// </summary>
-        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame, UnlockWindow }
+        public enum LocalisablePrefabType { Custom, SelectionMenu, InGame, UnlockWindow, SelectionPreview }
 
         /// <summary>
         /// The different types of sprites we have
@@ -778,10 +778,12 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="parent"></param>
         /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
         /// <returns></returns>
+        [Obsolete("Use the InstantiatePrefab method and pass a type of LocalisablePrefabType.SelectionMenu")]
         public GameObject InstantiatePrefabSelectionMenu(Transform parent = null, bool worldPositionStays = true)
         {
             return InstantiatePrefab(LocalisablePrefabType.SelectionMenu, parent, worldPositionStays);
         }
+
 
         /// <summary>
         /// Instantiate an in game prefab that corresponds to the currently set language, optionally parented to the specified transform
@@ -789,13 +791,30 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="parent"></param>
         /// <param name = "worldPositionStays" > If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
         /// <returns></returns>
+        [Obsolete("Use the InstantiatePrefab method and pass a type of LocalisablePrefabType.InGame")]
         public GameObject InstantiatePrefabInGame(Transform parent = null, bool worldPositionStays = true)
         {
             return InstantiatePrefab(LocalisablePrefabType.InGame, parent, worldPositionStays);
         }
 
+
         /// <summary>
-        /// Instantiate the named prefab that corresponds to the currently set language, optionally parented to the specified transform
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="localisablePrefabType"></param>
+        /// <param name="customName"></param>
+        /// <param name="parent"></param>
+        /// <param name = "worldPositionStays" >If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.</param>
+        /// <returns></returns>
+        public GameObject InstantiatePrefab(LocalisablePrefabType localisablePrefabType, string customName = null, Transform parent = null, bool worldPositionStays = true)
+        {
+            return localisablePrefabType == GameItem.LocalisablePrefabType.Custom ? 
+                InstantiatePrefab(customName, parent, worldPositionStays) : InstantiatePrefab(localisablePrefabType, parent, worldPositionStays);
+        }
+
+
+        /// <summary>
+        /// Instantiate the custom named prefab that corresponds to the currently set language, optionally parented to the specified transform
         /// </summary>
         /// <param name="name"></param>
         /// <param name="parent"></param>
@@ -804,9 +823,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public GameObject InstantiatePrefab(string name, Transform parent = null, bool worldPositionStays = true)
         {
             var localisablePrefab = GetPrefab(name);
-            if (localisablePrefab == null) return null;
-            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
+            return localisablePrefab == null ? null : InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
         }
+
 
         /// <summary>
         /// Instantiate an instance of the specified prefab type.
@@ -818,11 +837,17 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         GameObject InstantiatePrefab(LocalisablePrefabType localisablePrefabType, Transform parent = null, bool worldPositionStays = true)
         {
             var localisablePrefab = GetPrefab(localisablePrefabType);
-            if (localisablePrefab == null) return null;
-            return InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
+            return localisablePrefab == null ? null : InstantiatePrefab(localisablePrefab, parent, worldPositionStays);
         }
 
 
+        /// <summary>
+        /// Instantiate teh passed prefab
+        /// </summary>
+        /// <param name="localisablePrefab"></param>
+        /// <param name="parent"></param>
+        /// <param name="worldPositionStays"></param>
+        /// <returns></returns>
         static GameObject InstantiatePrefab(GameObject localisablePrefab, Transform parent, bool worldPositionStays = true)
         {
             var newInstance = Instantiate(localisablePrefab);
