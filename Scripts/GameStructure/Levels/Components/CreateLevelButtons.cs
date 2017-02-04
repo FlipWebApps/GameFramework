@@ -33,6 +33,11 @@ namespace GameFramework.GameStructure.Levels.Components
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
     {
+        public CreateLevelButtons()
+        {
+            ClickUnlockedSceneToLoad = "Game";
+        }
+
         /// <summary>
         /// Returns a list of all current Character GameItems
         /// </summary>

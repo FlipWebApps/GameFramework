@@ -33,6 +33,12 @@ namespace GameFramework.GameStructure.Worlds.Components
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class CreateWorldButtons : CreateGameItemButtons<WorldButton, World>
     {
+        public CreateWorldButtons()
+        {
+            ClickUnlockedSceneToLoad = "Menu";
+        }
+
+
         /// <summary>
         /// Returns a list of all current Character GameItems
         /// </summary>
