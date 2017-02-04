@@ -20,14 +20,14 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Players.Messages;
+using GameFramework.GameStructure.Worlds.Messages;
 
-namespace GameFramework.GameStructure.Players.ObjectModel
+namespace GameFramework.GameStructure.Worlds.ObjectModel
 {
     /// <summary>
-    /// For managing an array of players inlcuding selection, unlocking
+    /// For managing an array of worlds inlcuding selection, unlocking
     /// </summary>
-    public class PlayerGameItemManager : GameItemManager<Player, GameItem>
+    public class WorldGameItemManager : GameItemManager<World, GameItem>
     {
         /// <summary>
         /// Called when the current selection changes. Override this in any base class to provide further handling such as sending out messaging.
@@ -35,9 +35,9 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// <param name="newSelection"></param>
         /// <param name="oldSelection"></param>
         /// You may want to override this in your derived classes to send custom messages.
-        public override void OnSelectedChanged(Player newSelection, Player oldSelection)
+        public override void OnSelectedChanged(World newSelection, World oldSelection)
         {
-                GameManager.SafeQueueMessage(new PlayerChangedMessage(newSelection, oldSelection));
+                GameManager.SafeQueueMessage(new WorldChangedMessage(newSelection, oldSelection));
         }
     }
 }

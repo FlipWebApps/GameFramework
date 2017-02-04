@@ -19,25 +19,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Players.Messages;
+using GameFramework.GameStructure.Characters.ObjectModel;
+using GameFramework.Messaging;
 
-namespace GameFramework.GameStructure.Players.ObjectModel
+namespace GameFramework.GameStructure.Characters.Messages
 {
     /// <summary>
-    /// For managing an array of players inlcuding selection, unlocking
+    /// A message that is generated when the character changes.
     /// </summary>
-    public class PlayerGameItemManager : GameItemManager<Player, GameItem>
+    public class CharacterChangedMessage : BaseMessage
     {
         /// <summary>
-        /// Called when the current selection changes. Override this in any base class to provide further handling such as sending out messaging.
+        /// The newly selected Character
         /// </summary>
-        /// <param name="newSelection"></param>
-        /// <param name="oldSelection"></param>
-        /// You may want to override this in your derived classes to send custom messages.
-        public override void OnSelectedChanged(Player newSelection, Player oldSelection)
+        public readonly Character NewCharacter;
+
+        /// <summary>
+        /// The previously selected Character
+        /// </summary>
+        public readonly Character OldCharacter;
+
+        public CharacterChangedMessage(Character newCharacter, Character oldCharacter)
         {
-                GameManager.SafeQueueMessage(new PlayerChangedMessage(newSelection, oldSelection));
+            NewCharacter = newCharacter;
+            OldCharacter = oldCharacter;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New Character {0}, Old Character {1}", NewCharacter, OldCharacter);
         }
     }
 }

@@ -580,7 +580,7 @@ namespace GameFramework.GameStructure
             if (AutoCreateWorlds)
             {
                 var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
-                Worlds = new GameItemManager<World, GameItem>();
+                Worlds = new WorldGameItemManager();
                 Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
                 // if we have worlds then autocreate levels for each world.
@@ -589,7 +589,7 @@ namespace GameFramework.GameStructure
                     for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
                     {
                         var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                        Worlds.Items[i].Levels = new GameItemManager<Level, GameItem>();
+                        Worlds.Items[i].Levels = new LevelGameItemManager();
                         Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
                     }
 
@@ -603,7 +603,7 @@ namespace GameFramework.GameStructure
                 if (AutoCreateLevels)
                 {
                     var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                    Levels = new GameItemManager<Level, GameItem>();
+                    Levels = new LevelGameItemManager();
                     Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
                 }
             }
@@ -611,7 +611,7 @@ namespace GameFramework.GameStructure
             // handle auto setup of characters
             if (AutoCreateCharacters)
             {
-                Characters = new GameItemManager<Character, GameItem>();
+                Characters = new CharacterGameItemManager();
                 if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
                     Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
                 else

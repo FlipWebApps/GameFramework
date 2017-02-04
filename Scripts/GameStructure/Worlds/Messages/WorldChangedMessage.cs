@@ -19,25 +19,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Players.Messages;
+using GameFramework.GameStructure.Worlds.ObjectModel;
+using GameFramework.Messaging;
 
-namespace GameFramework.GameStructure.Players.ObjectModel
+namespace GameFramework.GameStructure.Worlds.Messages
 {
     /// <summary>
-    /// For managing an array of players inlcuding selection, unlocking
+    /// A message that is generated when the world changes.
     /// </summary>
-    public class PlayerGameItemManager : GameItemManager<Player, GameItem>
+    public class WorldChangedMessage : BaseMessage
     {
         /// <summary>
-        /// Called when the current selection changes. Override this in any base class to provide further handling such as sending out messaging.
+        /// The newly selected World
         /// </summary>
-        /// <param name="newSelection"></param>
-        /// <param name="oldSelection"></param>
-        /// You may want to override this in your derived classes to send custom messages.
-        public override void OnSelectedChanged(Player newSelection, Player oldSelection)
+        public readonly World NewWorld;
+
+        /// <summary>
+        /// The previously selected World
+        /// </summary>
+        public readonly World OldWorld;
+
+        public WorldChangedMessage(World newWorld, World oldWorld)
         {
-                GameManager.SafeQueueMessage(new PlayerChangedMessage(newSelection, oldSelection));
+            NewWorld = newWorld;
+            OldWorld = oldWorld;
+        }
+
+        /// <summary>
+        /// Return a representation of the message
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("New World {0}, Old World {1}", NewWorld, OldWorld);
         }
     }
 }
