@@ -107,14 +107,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         public override void RunMethod()
         {
-            GameObject newInstance;
-            if (PrefabType == GameItem.LocalisablePrefabType.SelectionMenu)
-                newInstance = CurrentItem.InstantiatePrefabSelectionMenu(Parent == null ? transform : Parent.transform, WorldPositionStays);
-            else if (PrefabType == GameItem.LocalisablePrefabType.InGame)
-                newInstance = CurrentItem.InstantiatePrefabInGame(Parent == null ? transform : Parent.transform, WorldPositionStays);
-            else
-                newInstance = CurrentItem.InstantiatePrefab(Name, Parent == null ? transform : Parent.transform, WorldPositionStays);
-
+            var newInstance = CurrentItem.InstantiatePrefab(PrefabType, Name, Parent == null ? transform : Parent.transform, WorldPositionStays);
             Assert.IsNotNull(newInstance, string.Format("The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.", CurrentItem.IdentifierBase, CurrentItem.Number));
         }
     }
