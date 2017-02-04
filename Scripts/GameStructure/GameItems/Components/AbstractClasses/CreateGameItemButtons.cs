@@ -37,6 +37,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [Tooltip("A prefab that will be created for all GameItems.")]
         public GameObject Prefab;
 
+        /// <summary>
+        /// Override for the GameItemButtons selection mode
+        /// </summary>
+        /// How this is handled depends a bit on the exact implementation, however typically ClickThrough = go to next scene, Select = select item and remain
+        [Tooltip("Override for the GameItemButtons selection mode.")]
+        [Header("GameItemButton Overrides")]
+        public GameItemButton<TGameItem>.SelectionModeType SelectionMode;
+
+        /// <summary>
+        /// Override for the GameItemButtons name of the scene that should be loaded when this button is clicked.
+        /// </summary>
+        /// You can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.
+        [Tooltip("Override for the GameItemButtons  name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
+        public string ClickUnlockedSceneToLoad;
+
 
         /// <summary>
         /// Create and add all buttons
@@ -47,6 +62,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             {
                 var button = Prefab.GetComponent<TGameItemButton>();
                 button.Number = gameItem.Number;
+                button.SelectionMode = SelectionMode;
+                button.ClickUnlockedSceneToLoad = ClickUnlockedSceneToLoad;
 
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);
