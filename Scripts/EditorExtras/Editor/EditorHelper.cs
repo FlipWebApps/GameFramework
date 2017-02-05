@@ -18,6 +18,9 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
+
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,8 +29,9 @@ namespace GameFramework.EditorExtras.Editor
     /// <summary>
     /// Helper functions for dealing with editor windows, inspectors etc...
     /// </summary>
-    public class EditorHelper : MonoBehaviour
+    public class EditorHelper
     {
+        #region Drawing of GUI Elements
         /// <summary>
         /// Show a button trimmed to the length of the text
         /// </summary>
@@ -102,6 +106,52 @@ namespace GameFramework.EditorExtras.Editor
             GUILayout.Label(text, style, GUILayout.MaxWidth(style.CalcSize(new GUIContent(text)).x));
         }
 
+        #endregion Drawing of GUI Elements
+
+        /// <summary>
+        /// Try parsing a range string in the format 1,2,5-10,8 etc. and return a list of the expanded range.
+        /// </summary>
+        /// <param name="rangeString"></param>
+        /// <param name="expandedRange"></param>
+        /// <returns></returns>
+        public static bool TryParseRangeString(string rangeString, out List<int> expandedRange)
+        {
+            var hasError = false;
+            var tempRange = new List<int>();
+            foreach (var s in rangeString.Split(','))
+            {
+                // try and get the number
+                int num;
+                if (int.TryParse(s, out num))
+                {
+                    tempRange.Add(num);
+                }
+
+                // otherwise we might have a range so split on the range delimiter
+                else
+                {
+                    var parts = s.Split('-');
+                    int start, end;
+
+                    // now see if we can parse a start and end
+                    if (parts.Length == 2 &&
+                        int.TryParse(parts[0], out start) &&
+                        int.TryParse(parts[1], out end) &&
+                        end >= start)
+                    {
+                        for (var i = start; i <= end; i++)
+                        {
+                            tempRange.Add(i);
+                        }
+                    }
+                    else
+                        hasError = true;
+                }
+            }
+
+            expandedRange = hasError ? null : tempRange;
+            return hasError;
+        }
 
         #region GUIStyle
         /// <summary>
