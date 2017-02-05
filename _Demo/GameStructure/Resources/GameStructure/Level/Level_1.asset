@@ -27,7 +27,7 @@ MonoBehaviour:
   - LocalisablePrefabType: 4
     Name: 
     LocalisablePrefab:
-      _default: {fileID: 105892, guid: faa9a7534cfc97a4e9a6adb3fc48c557, type: 2}
+      _default: {fileID: 125858, guid: 24ce371f5d5600241a762a2e45688760, type: 2}
       _localisedObjects: []
   _localisableSprites:
   - LocalisableSpriteType: 1
