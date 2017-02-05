@@ -158,7 +158,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             }
         }
 
-
+#if BEAUTIFUL_TRANSITIONS
         IEnumerator TransitionOutIn(GameObject oldGameObject, GameObject newGameObject)
         {
             if (oldGameObject != null)
@@ -172,5 +172,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             }
             newGameObject.SetActive(true);
         }
+#endif
     }
 }
