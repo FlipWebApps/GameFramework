@@ -22,10 +22,6 @@
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using GameFramework.Localisation;
 
 namespace GameFramework.Localisation.Editor
 {
@@ -43,6 +39,14 @@ namespace GameFramework.Localisation.Editor
         //Texture2D _redTexture;
 
         Vector2 _scrollPosition = Vector2.zero;
+        Vector2 _scrollPositionKeys = Vector2.zero;
+        [SerializeField]
+        float _leftPanelWidth;
+        bool _isResizing;
+
+        [SerializeField]
+        bool _showNew;
+        string _newKey;
 
         // Add menu item for showing the window
         [MenuItem("Window/Game Framework/Localisation Editor (Alpha)", priority = 1)]
@@ -54,6 +58,15 @@ namespace GameFramework.Localisation.Editor
         }
 
 
+        public static void ShowWindowNew(string key = "")
+        {
+            //Show existing window instance. If one doesn't exist, make one.
+            var localisationEditorWindow = 
+            GetWindow<LocalisationEditorWindow>("Localisations", true);
+            localisationEditorWindow._showNew = true;
+        }
+
+
         void OnEnable()
         {
             _newIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\New.png", typeof(Texture2D)) as Texture2D;
@@ -62,8 +75,29 @@ namespace GameFramework.Localisation.Editor
             //_deleteIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Delete.png", typeof(Texture2D)) as Texture2D;
             //_redTexture = MakeColoredTexture(1, 1, new Color(1.0f, 0.0f, 0.0f, 0.1f));
             //RefreshPlayerPrefs();
+
+            EditorApplication.playmodeStateChanged += OnPlaymodeStateChanged;
         }
 
+
+
+        void OnDisable()
+        {
+            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
+        }
+
+
+
+        /// <summary>
+        /// When the playmode changes, clear the log if necessary
+        /// </summary>
+        void OnPlaymodeStateChanged()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
+                Debug.LogWarning("TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.");
+                //EditorUtility.DisplayDialog("Save", "TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.", "Yes",
+                //    "No");
+        }
 
         /// <summary>
         /// Draw the GUI
@@ -71,7 +105,7 @@ namespace GameFramework.Localisation.Editor
         void OnGUI()
         {
             DrawToolbar();
-            //if (_showNew) DrawNew();
+            if (_showNew) DrawNew();
             GUILayout.Space(5);
             DrawKeyEntries();
         }
@@ -87,19 +121,15 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.LabelField("Please support us and rate Game Framework on the asset store");
             GUILayout.Space(10);
 
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-            GUI.enabled = false;
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
             if (ButtonTrimmed("New...", _newIcon, EditorStyles.toolbarButton, "Add a new item"))
             {
-                //_newItemKey = "";
-                //_newItemValueInt = 0;
-                //_newItemValueFloat = 0;
-                //_newItemValueString = "";
-                //_newItemEncrypted = !(string.IsNullOrEmpty(_passPhrase));
-                //_showNew = true;
+                _newKey = "";
+                _showNew = true;
                 ClearFocus();
             }
 
+            GUI.enabled = false;
             if (ButtonTrimmed("Save All", _saveIcon, EditorStyles.toolbarButton, "Save modified entries"))
             {
                 Save();
@@ -115,9 +145,6 @@ namespace GameFramework.Localisation.Editor
             GUILayout.FlexibleSpace();
             GUI.enabled = true;
 
-            LocaliseText.LoadDictionary();
-            SelectedKeyIndex = EditorGUILayout.Popup(SelectedKeyIndex, LocaliseText.Localisations.Keys.ToList().ToArray());
-
             if (ButtonTrimmed("Refresh", _refreshIcon, EditorStyles.toolbarButton, "Reload prefs to reflect any changes"))
             {
                 Debug.LogWarning("Localisation Window TODO: Prompt if changes will be lost.");
@@ -128,12 +155,54 @@ namespace GameFramework.Localisation.Editor
         }
 
 
+
+
         /// <summary>
         /// Draws the new item.
         /// </summary>
         void DrawNew()
         {
+            EditorGUILayout.BeginVertical("box");
+            _newKey = EditorGUILayout.TextField(new GUIContent("Key", "A unique key for this localisation item"), _newKey);
 
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (ButtonTrimmed("Add", null, EditorStyles.miniButtonRight, "Create a new prefs item with the values entered above."))
+            {
+                EditorUtility.DisplayDialog("Message", "Doesn't do anything yet!!", "Ok");
+
+                //if (!string.IsNullOrEmpty(_newItemKey))
+                //{
+                //    PlayerPrefsEntry newPlayerPrefsEntry = null;
+                //    switch (_newItemType)
+                //    {
+                //        case SecurePlayerPrefs.ItemType.Int:
+                //            newPlayerPrefsEntry = new PlayerPrefsEntry(_newItemKey, _newItemValueInt, _newItemEncrypted);
+                //            break;
+                //        case SecurePlayerPrefs.ItemType.Float:
+                //            newPlayerPrefsEntry = new PlayerPrefsEntry(_newItemKey, _newItemValueFloat, _newItemEncrypted);
+                //            break;
+                //        case SecurePlayerPrefs.ItemType.String:
+                //            newPlayerPrefsEntry = new PlayerPrefsEntry(_newItemKey, _newItemValueString, _newItemEncrypted);
+                //            break;
+                //    }
+                //    newPlayerPrefsEntry.Save();
+                //    _playerPrefsEntries.Add(newPlayerPrefsEntry);
+                //}
+                ClearFocus();
+                _showNew = false;
+            }
+
+            if (ButtonTrimmed("Cancel", null, EditorStyles.miniButtonRight, "Close this popup without adding a new localisation item"))
+            {
+                _showNew = false;
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.EndVertical();
         }
 
 
@@ -142,8 +211,48 @@ namespace GameFramework.Localisation.Editor
         /// </summary>
         private void DrawKeyEntries()
         {
+            var normalbackgroundColor = GUI.backgroundColor;
+
+            EditorGUILayout.BeginHorizontal();
+
+            _scrollPositionKeys = EditorGUILayout.BeginScrollView(_scrollPositionKeys, GUILayout.Width(_leftPanelWidth), GUILayout.MinWidth(100));
+            var keys = LocaliseText.Localisations.Keys.ToList();
+            keys.Sort();
+            for (var i = 0; i < keys.Count; i++)
+            {
+                var k = keys[i];
+                var s = new GUIStyle();
+                s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
+                GUI.backgroundColor = SelectedKeyIndex == i ? Color.blue : normalbackgroundColor;
+                GUILayout.BeginHorizontal(s);
+                GUILayout.Label(k, GUILayout.ExpandWidth(true));
+                GUILayout.EndHorizontal();
+                if (Event.current.button == 0 && Event.current.type == EventType.MouseUp)
+                {
+                    if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+                    { 
+                        SelectedKeyIndex = i;
+                        ClearFocus();
+                        Repaint();
+                    }
+                    // Handle events here
+                }
+            }
+            GUI.backgroundColor = normalbackgroundColor;
+            EditorGUILayout.EndScrollView();
+
+            var lastrect = GUILayoutUtility.GetLastRect();
+            lastrect.x = lastrect.xMax + 5;
+            lastrect.width = 3;
+            GUILayout.Space(5);
+
+            HandleResize(lastrect);
+            GUILayout.Space(5);
+
             //var drawnLines = 0;
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, GUILayout.Width(position.width - _leftPanelWidth));
+
+            LocaliseText.LoadDictionary();
 
             var key = LocaliseText.Localisations.Keys.ToList()[SelectedKeyIndex];
             //var boldGUIStyle = new GUIStyle(EditorStyles.numberField);
@@ -170,6 +279,8 @@ namespace GameFramework.Localisation.Editor
             }
 
             EditorGUILayout.EndScrollView();
+
+            EditorGUILayout.EndHorizontal();
         }
 
 
@@ -203,6 +314,34 @@ namespace GameFramework.Localisation.Editor
         }
 
         #endregion Load
+
+
+
+        /// <summary>
+        /// Handle resize of the split messages window
+        /// </summary>
+        void HandleResize(Rect dragRect, Color? resizeAreaColour = null)
+        {
+            resizeAreaColour = resizeAreaColour ?? GUI.backgroundColor*0.5f;
+
+            GUI.DrawTexture(dragRect, MakeColoredTexture(1, 1, resizeAreaColour.Value));
+            EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
+
+            if (Event.current.type == EventType.mouseDown && dragRect.Contains(Event.current.mousePosition))
+            {
+                _isResizing = true;
+            }
+
+            if (_isResizing)
+            {
+                _leftPanelWidth = Mathf.Clamp(Event.current.mousePosition.x, 100, position.width - 100);
+                Repaint();
+            }
+
+            if (Event.current.type == EventType.MouseUp)
+                _isResizing = false;
+
+        }
 
 
         #region Editor Helper Functions
