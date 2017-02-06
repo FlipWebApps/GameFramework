@@ -191,6 +191,7 @@ namespace GameFramework.GameStructure.Levels
 
             SecondsRunning = 0f;
             IsLevelStarted = true;
+            Time.timeScale = 1.0f;
         }
 
         [Obsolete("Call StartLevel() instead.")]
@@ -285,6 +286,7 @@ namespace GameFramework.GameStructure.Levels
         {
             yield return new WaitForSeconds(delay);
             UI.Dialogs.Components.GameOver.Instance.Show(isWon);
+            Time.timeScale = 0.0f;
         }
 
 
