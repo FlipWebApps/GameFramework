@@ -751,8 +751,8 @@ namespace GameFramework.Facebook.Components
                     resultType = FacebookAppRequestMessage.ResultType.OK;
                     HasInvitedFriends = true;
 
-                    JSONValue to = jsonObject.GetArray("to");
-                    if (to != null || to.Type == JSONValueType.Array)
+                    JSONValue to = jsonObject.GetValue("to");
+                    if (to != null && to.Type == JSONValueType.Array)
                     {
                         NumberOfInvitesSent += to.Array.Length;
                         foreach (JSONValue value in to.Array)
@@ -760,6 +760,11 @@ namespace GameFramework.Facebook.Components
                             InvitedFriends.Add(value.Str);
                             Debug.Log("Value: " + value.Str);
                         }
+                    }else if (to != null && to.Type == JSONValueType.String)
+                    {
+                         NumberOfInvitesSent++;
+                        InvitedFriends.Add(to.Str);
+                        Debug.Log("Value: " + value.Str);
                     }
                 }
             }
