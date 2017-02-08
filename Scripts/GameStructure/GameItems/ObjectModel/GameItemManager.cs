@@ -128,16 +128,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// is specified then this will try and load the GameItem from the resources folder
         /// </summary>
         public virtual void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
-        { 
+        {
+            bool didLoadFromResources = false;
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
 
             for (var i = 0; i < count; i++)
             {
                 // preference is to load from resources.
-                Items[i] = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
-                if (Items[i] != null)
+                var loadedItem = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
+                if (loadedItem != null)
                 {
+                    Items[i] = loadedItem;
+                    didLoadFromResources = true;
                     Items[i].InitialiseNonScriptableObjectValues(loadFromResources: loadFromResources);
                 }
                 else { 
@@ -149,7 +152,15 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.Load()");
 
             SetupSelectedItem();
-            SetupUnlockedItems();
+
+            // if we didn't get any configuration files then unlock the selected item if it isn't already 
+            // (otherwise unlock info comes directly from the config files).
+            if (!didLoadFromResources && !Selected.IsUnlocked)
+            {
+                Selected.DefaultUnlocked = Selected.IsUnlocked = Selected.IsUnlockedAnimationShown = true;
+                Selected.UpdatePlayerPrefs();
+            }
+
             _isLoaded = true;
         }
 
@@ -184,25 +195,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
         }
 
-
-        /// <summary>
-        /// Make sure that any initial items are unlocked. 
-        /// </summary>
-        /// This includes the currently selected item and any items that have ValueTounlock set to 0.
-        void SetupUnlockedItems()
-        {
-            Assert.IsNotNull(Selected, "Ensure you have a selected item (or default selected item before calling UnlockInitialItems");
-            foreach (T item in Items)
-            {
-                // If this is the first run, the the selected item and other items with valuetoUnlock==0 might not be unlocked, 
-                // so make sure they are
-                if (item.Number == Selected.Number || (item.ValueToUnlock == 0 && !item.IsUnlocked))
-                {
-                    item.IsUnlocked = item.IsUnlockedAnimationShown = true;
-                    item.UpdatePlayerPrefs();
-                }
-            }
-        }
 
         #region Get / Set Items
 
@@ -273,27 +265,34 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #region Unlocking
 
         /// <summary>
-        /// Return a list of unlockable items whose value to unlock is less than the specified value
+        /// Return a list of coin unlockable items whose value to unlock is less than the specified value
         /// </summary>
         /// <param name="currentValue"></param>
         /// <param name="lockedOnly">Whether to return all matching unlockable items (default) or only currently locked ones</param>
         /// <returns></returns>
+        public T[] CoinUnlockableItems(int currentValue, bool lockedOnly = false)
+        {
+            return Items.Where(gameItem => !gameItem.DefaultUnlocked && gameItem.UnlockWithCoins && (!lockedOnly || !gameItem.IsUnlocked) && gameItem.ValueToUnlock <= currentValue).ToArray();
+        }
+
+        [Obsolete("Use CoinUnlockableItems instead. This method will be removed in a future version.")]
         public T[] UnlockableItems(int currentValue, bool lockedOnly = false)
         {
-            return Items.Where(gameItem => (!lockedOnly || !gameItem.IsUnlocked) && gameItem.ValueToUnlock > 0 && gameItem.ValueToUnlock <= currentValue).ToArray();
+            return CoinUnlockableItems(currentValue, lockedOnly);
         }
 
         /// <summary>
-        /// Returns the minimum value needed to unlock the item with the lowest ValueToUnlock.
+        /// Returns the minimum coins needed to unlock the item with the lowest ValueToUnlock.
         /// </summary>
         /// <returns></returns>
-        public int MinimumValueToUnlock()
+        public int MinimumCoinsToUnlock()
         {
             // Ssetup how many Coins to win to push them to get more.
             var minimumCoins = -1;
-            foreach (var gameItem in Items)
+            var coinUnlockableItems = CoinUnlockableItems(int.MaxValue, true);
+            foreach (var gameItem in coinUnlockableItems)
             {
-                if (!gameItem.IsUnlocked && (minimumCoins == -1 || gameItem.ValueToUnlock < minimumCoins))
+                if (minimumCoins == -1 || gameItem.ValueToUnlock < minimumCoins)
                 {
                     minimumCoins = gameItem.ValueToUnlock;
                 }
@@ -301,20 +300,29 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             return minimumCoins;
         }
 
+        [Obsolete("Use MinimumValueToUnlock instead. This method will be removed in a future version.")]
+        public int MinimumValueToUnlock() {
+            return MinimumCoinsToUnlock();
+        }
+
         /// <summary>
         /// How much extra is needed to unlock the item with the lowest ValueToUnlock.
         /// </summary>
-        /// <param name="currentValue"></param>
+        /// <param name="currentCoins"></param>
         /// <returns></returns>
-        public int ExtraValueNeededToUnlock(int currentValue)
+        public int ExtraCoinsNeededToUnlock(int currentCoins)
         {
-            var minimumCoins = MinimumValueToUnlock();
+            var minimumCoins = MinimumCoinsToUnlock();
             if (minimumCoins == -1) return -1;
-            minimumCoins -= currentValue; // deduct the Coins we already have.
+            minimumCoins -= currentCoins; // deduct the Coins we already have.
             if (minimumCoins < 0) minimumCoins = 0;
             return minimumCoins;
         }
 
+        public int ExtraValueNeededToUnlock(int currentValue)
+        {
+            return ExtraCoinsNeededToUnlock(currentValue);
+        }
         #endregion Unlocking
 
     }

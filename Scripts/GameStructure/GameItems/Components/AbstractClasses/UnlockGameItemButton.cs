@@ -118,8 +118,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
             var gameItems = _failedUnlockAttempts >= MaxFailedUnlocks ? 
-                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins, true) : 
-                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins);
+                GetGameItemManager().CoinUnlockableItems(GameManager.Instance.Player.Coins, true) : 
+                GetGameItemManager().CoinUnlockableItems(GameManager.Instance.Player.Coins);
 
             // There should always be an item - we should not let them unlock if there is nothing to unlock!
             if (gameItems.Length >= 0)

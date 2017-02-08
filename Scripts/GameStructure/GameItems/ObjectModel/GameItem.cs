@@ -101,22 +101,22 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Whether the current item is unlocked. 
+        /// Default unlocked status for this item. 
         /// </summary>
         /// Saved per player.
-        public bool IsUnlocked { 
+        public bool DefaultUnlocked { 
             get
             {
-                return _isUnlocked;
+                return _defaultUnlocked;
             }
             set
             {
-                _isUnlocked = value;
+                _defaultUnlocked = value;
             }
         }
         [Tooltip("Default unlocked status for this item.")]
         [SerializeField]
-        bool _isUnlocked;
+        bool _defaultUnlocked;
 
 
         /// <summary>
@@ -374,6 +374,12 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public int OldHighScore { get; set; }
 
         /// <summary>
+        /// Whether the current item is unlocked. 
+        /// </summary>
+        /// Saved per player.
+        public bool IsUnlocked { get; set; }
+
+        /// <summary>
         /// Whether an unlocked animation has been shown. 
         /// </summary>
         /// Used if a GameItem is unlocked when not being displayed so that we can still show a unlock animation to the user 
@@ -475,8 +481,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             OldHighScore = HighScore;
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
-            if (IsUnlocked) {
-                IsUnlockedAnimationShown = true;
+            if (DefaultUnlocked) {
+                IsUnlocked = IsUnlockedAnimationShown = true;
             }
             else {
                 IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;
