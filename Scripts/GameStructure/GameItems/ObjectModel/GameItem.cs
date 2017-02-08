@@ -514,7 +514,10 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             var gameItem = GameManager.LoadResource<T>(typeName + "\\" + typeName + "_" + number);
             if (gameItem != null)
+            {
+                gameItem = Instantiate(gameItem);  // create a copy so we don't overwrite values.
                 gameItem.Number = number;
+            }
             return gameItem;
         }
 
