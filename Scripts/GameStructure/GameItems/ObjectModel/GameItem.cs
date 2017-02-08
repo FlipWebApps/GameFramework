@@ -42,8 +42,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
     {
         #region Enums
         /// <summary>
-        /// Ways in which a GameItem can be unlocked
+        /// Ways in which a GameItem can be unlocked.
         /// </summary>
+        /// Custom - You handle all unlocking
+        /// Completion - Unlocking of an item is based upon the previous item being completed (mainly applies to things like levels / worlds).
+        /// Coins - Allows coin unlocking and IAP if enabled. The default (first) selected item is automatically unlocked.
         public enum UnlockModeType { Custom, Completion, Coins }
 
         /// <summary>
@@ -96,6 +99,86 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         [SerializeField]
         LocalisableText _localisableDescription;
 
+
+        /// <summary>
+        /// Whether the current item is unlocked. 
+        /// </summary>
+        /// Saved per player.
+        public bool IsUnlocked { 
+            get
+            {
+                return _isUnlocked;
+            }
+            set
+            {
+                _isUnlocked = value;
+            }
+        }
+        [Tooltip("Default unlocked status for this item.")]
+        [SerializeField]
+        bool _isUnlocked;
+
+
+        /// <summary>
+        /// Whether this item can be unlocked with coins. 
+        /// </summary>
+        /// Saved per player.
+        public bool UnlockWithCoins
+        {
+            get
+            {
+                return _unlockWithCoins;
+            }
+            set
+            {
+                _unlockWithCoins = value;
+            }
+        }
+        [Tooltip("Whether this item can be unlocked with coins.")]
+        [SerializeField]
+        bool _unlockWithCoins = true;
+
+
+        /// <summary>
+        /// Whether this item can be unlocked with payment. (Requires Unity IAP Service Enabling)
+        /// </summary>
+        /// Saved per player.
+        public bool UnlockWithPayment
+        {
+            get
+            {
+                return _unlockWithPayment;
+            }
+            set
+            {
+                _unlockWithPayment = value;
+            }
+        }
+        [Tooltip("Whether this item can be unlocked with payment through e.g. IAP. (Requires Unity IAP Service Enabling)")]
+        [SerializeField]
+        bool _unlockWithPayment = true;
+
+
+        /// <summary>
+        /// Whether this item can be unlocked based upon the previous item being completed (mainly applies to things like levels / worlds)
+        /// </summary>
+        /// Saved per player.
+        public bool UnlockWithCompletion
+        {
+            get
+            {
+                return _unlockWithCompletion;
+            }
+            set
+            {
+                _unlockWithCompletion = value;
+            }
+        }
+        [Tooltip("Whether this item can be unlocked based upon the previous item being completed (mainly applies to things like levels / worlds)")]
+        [SerializeField]
+        bool _unlockWithCompletion;
+
+
         /// <summary>
         /// A value that is needed to unlock this item.
         /// </summary>
@@ -112,7 +195,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 _valueToUnlock = value;
             }
         }
-        [Tooltip("An override for the default value needed to unlock this item.")]
+        [Tooltip("Value needed to unlock this item.")]
         [SerializeField]
         int _valueToUnlock = -1;
 
@@ -291,12 +374,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public int OldHighScore { get; set; }
 
         /// <summary>
-        /// Whether the current item is unlocked. 
-        /// </summary>
-        /// Saved per player.
-        public bool IsUnlocked { get; set; }
-
-        /// <summary>
         /// Whether an unlocked animation has been shown. 
         /// </summary>
         /// Used if a GameItem is unlocked when not being displayed so that we can still show a unlock animation to the user 
@@ -396,9 +473,18 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
-            IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
-            IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
+
+            // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
+            if (IsUnlocked) {
+                IsUnlockedAnimationShown = true;
+            }
+            else {
+                IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;
+                    // saved at global level rather than per player.
+                if (IsBought || GetSettingInt("IsU", 0) == 1)
+                    IsUnlocked = true;
+                IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
+            }
 
             if (loadFromResources)
                 LoadData();

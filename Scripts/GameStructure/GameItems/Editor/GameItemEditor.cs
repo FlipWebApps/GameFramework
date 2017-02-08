@@ -33,6 +33,10 @@ namespace GameFramework.GameStructure.GameItems.Editor
         //GameItem _gameItem;
         SerializedProperty _giNameProperty;
         SerializedProperty _giDescriptionProperty;
+        SerializedProperty _isUnlockedProperty;
+        SerializedProperty _unlockWithCoinsProperty;
+        SerializedProperty _unlockWithPaymentProperty;
+        SerializedProperty _unlockWithCompletionProperty;
         SerializedProperty _giValueToUnlockProperty;
         SerializedProperty _giLocalisablePrefabsProperty;
         SerializedProperty _giLocalisableSpritesProperty;
@@ -46,6 +50,10 @@ namespace GameFramework.GameStructure.GameItems.Editor
             // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
             _giNameProperty = serializedObject.FindProperty("_localisableName");
             _giDescriptionProperty = serializedObject.FindProperty("_localisableDescription");
+            _isUnlockedProperty = serializedObject.FindProperty("_isUnlocked");
+            _unlockWithCoinsProperty = serializedObject.FindProperty("_unlockWithCoins");
+            _unlockWithPaymentProperty = serializedObject.FindProperty("_unlockWithPayment");
+            _unlockWithCompletionProperty = serializedObject.FindProperty("_unlockWithCompletion");
             _giValueToUnlockProperty = serializedObject.FindProperty("_valueToUnlock");
             _giLocalisablePrefabsProperty = serializedObject.FindProperty("_localisablePrefabs");
             _giLocalisableSpritesProperty = serializedObject.FindProperty("_localisableSprites");
@@ -89,7 +97,21 @@ namespace GameFramework.GameStructure.GameItems.Editor
             EditorGUILayout.LabelField("Basic Properties", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_giNameProperty, new GUIContent("Name"));
             EditorGUILayout.PropertyField(_giDescriptionProperty, new GUIContent("Description"));
-            EditorGUILayout.PropertyField(_giValueToUnlockProperty);
+            EditorGUILayout.PropertyField(_isUnlockedProperty, new GUIContent("Default Unlocked"));
+            if (!_isUnlockedProperty.boolValue)
+            {
+                EditorGUI.indentLevel ++;
+                EditorGUILayout.PropertyField(_unlockWithCoinsProperty);
+                if (_unlockWithCoinsProperty.boolValue)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_giValueToUnlockProperty);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUILayout.PropertyField(_unlockWithPaymentProperty);
+                EditorGUILayout.PropertyField(_unlockWithCompletionProperty);
+                EditorGUI.indentLevel--;
+            }
             EditorGUILayout.EndVertical();
         }
 
