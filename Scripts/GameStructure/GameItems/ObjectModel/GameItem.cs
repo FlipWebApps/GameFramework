@@ -104,19 +104,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Default unlocked status for this item. 
         /// </summary>
         /// Saved per player.
-        public bool DefaultUnlocked { 
+        public bool StartUnlocked { 
             get
             {
-                return _defaultUnlocked;
+                return _startUnlocked;
             }
             set
             {
-                _defaultUnlocked = value;
+                _startUnlocked = value;
             }
         }
         [Tooltip("Default unlocked status for this item.")]
         [SerializeField]
-        bool _defaultUnlocked;
+        bool _startUnlocked;
 
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             OldHighScore = HighScore;
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
-            if (DefaultUnlocked) {
+            if (StartUnlocked) {
                 IsUnlocked = IsUnlockedAnimationShown = true;
             }
             else {

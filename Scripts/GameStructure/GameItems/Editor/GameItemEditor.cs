@@ -33,7 +33,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
         //GameItem _gameItem;
         SerializedProperty _giNameProperty;
         SerializedProperty _giDescriptionProperty;
-        SerializedProperty _defaultUnlockedProperty;
+        SerializedProperty _startUnlockedProperty;
         SerializedProperty _unlockWithCoinsProperty;
         SerializedProperty _unlockWithPaymentProperty;
         SerializedProperty _unlockWithCompletionProperty;
@@ -50,7 +50,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
             // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
             _giNameProperty = serializedObject.FindProperty("_localisableName");
             _giDescriptionProperty = serializedObject.FindProperty("_localisableDescription");
-            _defaultUnlockedProperty = serializedObject.FindProperty("_defaultUnlocked");
+            _startUnlockedProperty = serializedObject.FindProperty("_startUnlocked");
             _unlockWithCoinsProperty = serializedObject.FindProperty("_unlockWithCoins");
             _unlockWithPaymentProperty = serializedObject.FindProperty("_unlockWithPayment");
             _unlockWithCompletionProperty = serializedObject.FindProperty("_unlockWithCompletion");
@@ -97,8 +97,8 @@ namespace GameFramework.GameStructure.GameItems.Editor
             EditorGUILayout.LabelField("Basic Properties", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_giNameProperty, new GUIContent("Name"));
             EditorGUILayout.PropertyField(_giDescriptionProperty, new GUIContent("Description"));
-            EditorGUILayout.PropertyField(_defaultUnlockedProperty);
-            if (!_defaultUnlockedProperty.boolValue)
+            EditorGUILayout.PropertyField(_startUnlockedProperty);
+            if (!_startUnlockedProperty.boolValue)
             {
                 EditorGUI.indentLevel ++;
                 EditorGUILayout.PropertyField(_unlockWithCoinsProperty);

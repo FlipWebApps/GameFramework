@@ -292,7 +292,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// </summary>
         public void UpdateNeededCoins()
         {
-            var minimumCoins = GameManager.Instance.Levels.ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
+            var minimumCoins = GameManager.Instance.Levels.ExtraCoinsNeededToUnlock(GameManager.Instance.Player.Coins);
             var targetCoinsGameobject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "TargetCoins", true);
             if (targetCoinsGameobject != null)
             {

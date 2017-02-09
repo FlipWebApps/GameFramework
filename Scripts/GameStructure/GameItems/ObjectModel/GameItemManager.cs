@@ -36,6 +36,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// The different modes for unlocking items.
         /// </summary>
+        /// Placed in non generic class to avoid display issues in Unity Editor
         public enum UnlockModeType
         {
             RandomAll,
