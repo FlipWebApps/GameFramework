@@ -237,7 +237,7 @@ MonoBehaviour:
   AutoCreateLevels: 1
   NumberOfAutoCreatedLevels: 4
   LoadLevelDatafromResources: 0
-  LevelUnlockMode: 2
+  LevelUnlockMode: 0
   CoinsToUnlockLevels: 10
   AutoCreateCharacters: 0
   NumberOfAutoCreatedCharacters: 10

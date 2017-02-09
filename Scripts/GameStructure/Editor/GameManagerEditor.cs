@@ -25,6 +25,7 @@ using GameFramework.Preferences;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+#pragma warning disable 618
 
 namespace GameFramework.GameStructure.Editor
 {
@@ -223,7 +224,7 @@ namespace GameFramework.GameStructure.Editor
                 EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
                 EditorGUILayout.PropertyField(_loadWorldDatafromResources, new GUIContent("Load From Resources"));
                 EditorGUILayout.PropertyField(_worldUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadWorldDatafromResources)
+                if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins)
                     EditorGUILayout.PropertyField(_coinsToUnlockWorldsProperty);
 
                 EditorGUILayout.BeginVertical("Box");
@@ -232,7 +233,7 @@ namespace GameFramework.GameStructure.Editor
                 {
                     EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
                     EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadLevelDatafromResources)
+                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
                         EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
 
                     // level number ranges
@@ -266,7 +267,7 @@ namespace GameFramework.GameStructure.Editor
                     EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
                     EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
                     EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadLevelDatafromResources)
+                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
                         EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
                 }
                 EditorGUILayout.EndVertical();
@@ -280,7 +281,7 @@ namespace GameFramework.GameStructure.Editor
                 EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
                 EditorGUILayout.PropertyField(_loadCharacterDatafromResources, new GUIContent("Load From Resources"));
                 EditorGUILayout.PropertyField(_characterUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.CharacterUnlockMode == GameItem.UnlockModeType.Coins && !_gameManager.LoadCharacterDatafromResources)
+                if (_gameManager.CharacterUnlockMode == GameItem.UnlockModeType.Coins)
                     EditorGUILayout.PropertyField(_coinsToUnlockCharactersProperty);
             }
             EditorGUILayout.EndVertical();

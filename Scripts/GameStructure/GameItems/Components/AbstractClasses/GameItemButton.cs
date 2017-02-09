@@ -21,8 +21,8 @@
 
 #if UNITY_PURCHASING
 using GameFramework.Billing.Components;
-using GameFramework.Localisation;
 #endif
+using GameFramework.Localisation;
 using GameFramework.GameObjects;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
@@ -172,7 +172,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             if (ValueToUnlockGameObject != null)
             {
-                ValueToUnlockGameObject.SetActive(!isUnlockedAndAnimationShown && CurrentItem.ValueToUnlock != -1);
+                ValueToUnlockGameObject.SetActive(CurrentItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
                 if (ValueToUnlockAmount != null)
                     ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
@@ -233,16 +233,19 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this in a derived class.
         public virtual void ClickLocked()
         {
-#if UNITY_PURCHASING
-            DialogManager.Instance.Show(title: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Title"),
-                                        text: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text1"),
-                                        text2: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text2"),
-                                        sprite: DisplayImage.sprite,
-                                        doneCallback: BuyDialogCallback,
-                                        dialogButtons: DialogInstance.DialogButtonsType.OkCancel);
-#else
-            DialogManager.Instance.ShowInfo(textKey: CurrentItem.IdentifierBase + ".Buy.NotEnabled");
-#endif
+            if (CurrentItem.UnlockWithPayment)
+            {
+                DialogManager.Instance.Show(title: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Title"),
+                    text: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text1"),
+                    text2: CurrentItem.UnlockWithCoins ? LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text2") : null,
+                    sprite: DisplayImage.sprite,
+                    doneCallback: BuyDialogCallback,
+                    dialogButtons: DialogInstance.DialogButtonsType.OkCancel);
+            }
+            else if (CurrentItem.UnlockWithCoins)
+            {
+                DialogManager.Instance.ShowInfo(textKey: CurrentItem.IdentifierBase + ".Buy.NotEnabled");
+            }
         }
 
 
@@ -256,6 +259,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             {
 #if UNITY_PURCHASING
                 PaymentManager.Instance.BuyProductId("unlock." + CurrentItem.IdentifierBase.ToLower() + "." + CurrentItem.Number);
+#else
+                Debug.LogWarning("You need to enable the Unity IAP Service to use payments");
 #endif
             }
         }

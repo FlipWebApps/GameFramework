@@ -38,10 +38,17 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     [RequireComponent(typeof(Button))]
     public abstract class UnlockGameItemButton<T> : MonoBehaviour where T : GameItem, new()
     {
+
+        /// <summary>
+        /// The mode to use for unlocking items.
+        /// </summary>
+        [Header("Settings")]
+        [Tooltip("The mode to use for unlocking items.")]
+        public GameItemManager.UnlockModeType UnlockMode;
+
         /// <summary>
         /// A maximum number of failed unlock attmepts before we make sure to unlock something
         /// </summary>
-        [Header("Settings")]
         [Tooltip("A maximum number of failed unlock attmepts before we make sure to unlock something")]
         public int MaxFailedUnlocks = 999;
 
@@ -94,12 +101,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void Update()
         {
-            var minimumCoinsToOpenLevel = GetGameItemManager().ExtraValueNeededToUnlock(GameManager.Instance.Player.Coins);
-            var canUnlock = minimumCoinsToOpenLevel != -1 && minimumCoinsToOpenLevel == 0;
+            var canUnlock = GetGameItemManager().CanCoinUnlockNewItem(UnlockMode, GameManager.Instance.Player.Coins);
+
             _button.interactable = canUnlock;
             if (_animation != null)
                 _animation.enabled = canUnlock;
         }
+
 
 
         /// <summary>
@@ -116,15 +124,11 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null, runtimeAnimatorController: ContentAnimatorController, contentSiblingIndex: 1);
 
-            // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
-            var gameItems = _failedUnlockAttempts >= MaxFailedUnlocks ? 
-                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins, true) : 
-                GetGameItemManager().UnlockableItems(GameManager.Instance.Player.Coins);
-
             // There should always be an item - we should not let them unlock if there is nothing to unlock!
-            if (gameItems.Length >= 0)
+            var gameItem = GetGameItemManager().GetItemToCoinUnlock(UnlockMode, GameManager.Instance.Player.Coins, _failedUnlockAttempts, MaxFailedUnlocks);
+            if (gameItem != null)
             {
-                _gameItemToUnlock = gameItems[Random.Range(0, gameItems.Length)];
+                _gameItemToUnlock = gameItem;
                 _alreadyUnlocked = _gameItemToUnlock.IsUnlocked;
 
                 string textKey, text2Key;
@@ -159,6 +163,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 DialogManager.Instance.Show(text: "All items are already unlocked");
             }
         }
+
 
 
         /// <summary>
