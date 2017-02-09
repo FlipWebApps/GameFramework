@@ -25,6 +25,7 @@ using GameFramework.Preferences;
 using GameFramework.Debugging;
 using GameFramework.GameStructure.GameItems.Messages;
 using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.GameStructure.Variables.ObjectModel;
 using GameFramework.Helper;
 using GameFramework.Localisation;
 using GameFramework.Localisation.ObjectModel;
@@ -121,6 +122,28 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         [SerializeField]
         List<LocalisableSpriteEntry> _localisableSprites = new List<LocalisableSpriteEntry>();
+
+        /// <summary>
+        /// A value that is needed to unlock this item.
+        /// </summary>
+        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
+        /// -1 means that you can not unlock this item in this way.
+        public Variables.ObjectModel.Variables Variables
+        {
+            get
+            {
+                return _variables;
+            }
+            set
+            {
+                _variables = value;
+            }
+        }
+        [Tooltip("A list of custom variables for this game item.")]
+        [SerializeField]
+        Variables.ObjectModel.Variables _variables = new Variables.ObjectModel.Variables();
+
+
         #endregion Editor Parameters
 
         #region General Variables
@@ -137,6 +160,16 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// You should override this in your derived classes to return a string identifier that is a unique shortened version
         /// of IdentifierBase e.g. "L", "W".
         public virtual string IdentifierBasePrefs { get; protected set; }
+
+        /// <summary>
+        /// A prefix that will be used for preferences entries for this item that can be shared across all players. [IdentifierBasePrefs][Number].
+        /// </summary>
+        public string PrefsPrefixShared { get; protected set; }
+
+        /// <summary>
+        /// A prefix that will be used for preferences entries for this item on a per player basis. P[PlayerNumber].[IdentifierBasePrefs][Number].
+        /// </summary>
+        public string PrefsPrefixPlayer { get; protected set; }
 
         /// <summary>
         /// Returns whether this GameItem is setup and initialised.
@@ -388,6 +421,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
             Player = player ?? GameManager.Instance.Player;
 
+            PrefsPrefixShared = IdentifierBasePrefs + Number + ".";
+            PrefsPrefixPlayer = _isPlayer ? PrefsPrefixShared : Player.FullKey(PrefsPrefixShared);
+
             HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
             HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
             OldHighScoreLocalPlayers = HighScoreLocalPlayers;
@@ -399,6 +435,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;                          // saved at global level rather than per player.
             IsUnlocked = IsBought || GetSettingInt("IsU", 0) == 1;
             IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
+
+            Variables.Load(PrefsPrefixPlayer);
 
             if (loadFromResources)
                 LoadData();
@@ -588,7 +626,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (HighScoreLocalPlayers != 0)
                 PreferencesFactory.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
             if (HighScoreLocalPlayersPlayerNumber != -1)
-                PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber);	// saved at global level rather than per player.
+                PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber); // saved at global level rather than per player.
+
+            Variables.UpdatePlayerPrefs(PrefsPrefixPlayer);
         }
 
         #region Get Prefab Related

@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using System;
+using System.Text;
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEditor;
@@ -36,6 +37,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
         SerializedProperty _giValueToUnlockProperty;
         SerializedProperty _giLocalisablePrefabsProperty;
         SerializedProperty _giLocalisableSpritesProperty;
+        SerializedProperty _giVariablesProperty;
 
         Rect _prefabDropRect;
         Rect _spriteDropRect;
@@ -49,6 +51,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
             _giValueToUnlockProperty = serializedObject.FindProperty("_valueToUnlock");
             _giLocalisablePrefabsProperty = serializedObject.FindProperty("_localisablePrefabs");
             _giLocalisableSpritesProperty = serializedObject.FindProperty("_localisableSprites");
+            _giVariablesProperty = serializedObject.FindProperty("_variables");
         }
 
         public override void OnInspectorGUI()
@@ -80,6 +83,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
             DrawBasicProperties();
             DrawPrefabs();
             DrawSprites();
+            DrawVariables();
         }
 
 
@@ -254,6 +258,42 @@ namespace GameFramework.GameStructure.GameItems.Editor
             propLocalisedSprite.arraySize = 0;
         }
 
+
+        protected void DrawVariables()
+        {
+            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.LabelField(new GUIContent("Variables / Attributes (Experimental)", "Custom variables that you can access and use in your game. You can also subclass this GameItem if you want your own custom data or code."), EditorStyles.boldLabel);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(_giVariablesProperty, new GUIContent("Name"), true);
+            EditorGUI.indentLevel--;
+
+            //GUILayout.BeginHorizontal();
+            //GUILayout.FlexibleSpace();
+            //if (GUILayout.Button(new GUIContent("Add Variable"), GUILayout.ExpandWidth(false)))
+            //{
+            //    AddNewVariable();
+            //}
+            //GUILayout.FlexibleSpace();
+            //GUILayout.EndHorizontal();
+            //GUILayout.Space(2f);
+            EditorGUILayout.EndVertical();
+        }
+
+
+        void AddNewVariable()
+        {
+            Debug.Log("Doesn't do anything yet - modify in through the foldout in the inspector.");
+            //_giLocalisableSpritesProperty.arraySize++;
+            //var newElement =
+            //    _giLocalisableSpritesProperty.GetArrayElementAtIndex(_giLocalisableSpritesProperty.arraySize - 1);
+            //newElement.isExpanded = true;
+            //var propType = newElement.FindPropertyRelative("LocalisableSpriteType");
+            //propType.enumValueIndex = 0;
+            //var propName = newElement.FindPropertyRelative("Name");
+            //propName.stringValue = null;
+            //var propLocalisedSprite = newElement.FindPropertyRelative("LocalisableSprite._localisedObjects");
+            //propLocalisedSprite.arraySize = 0;
+        }
         #region Drag and Drop
         Rect DrawDropRect(string title)
         {

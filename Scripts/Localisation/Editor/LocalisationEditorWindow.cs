@@ -170,7 +170,7 @@ namespace GameFramework.Localisation.Editor
 
             if (ButtonTrimmed("Add", null, EditorStyles.miniButtonRight, "Create a new prefs item with the values entered above."))
             {
-                EditorUtility.DisplayDialog("Message", "Doesn't do anything yet!!", "Ok");
+                EditorUtility.DisplayDialog("Message", "Doesn't do anything yet - add manually to the localisation.csv text file!!", "Ok");
 
                 //if (!string.IsNullOrEmpty(_newItemKey))
                 //{

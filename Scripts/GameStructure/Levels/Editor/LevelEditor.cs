@@ -56,7 +56,7 @@ namespace GameFramework.GameStructure.Levels.Editor
 
         protected override void DrawGUI()
         {
-            EditorGUILayout.LabelField("Level Extension", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Level", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Use these settings to provide customisation for Levels.\n\nFor automatic loading instances should be in a folder 'Resources\\Level' and named 'Level_<number>'\n\nYou can create your own Level derived classes to hold custom properties and / or code", MessageType.Info);
             DrawProperties();
             DrawLevelProperties();

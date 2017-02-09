@@ -30,7 +30,7 @@ namespace GameFramework.GameStructure.Players.Editor
     {
         protected override void DrawGUI()
         {
-            EditorGUILayout.LabelField("Player Extension", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Player", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Use these settings to provide customisation for Players.\n\nFor automatic loading instances should be in a folder 'Resources\\Player' and named 'Player_<number>'\n\nYou can create your own Player derived classes to hold custom properties and / or code", MessageType.Info);
             DrawProperties();
         }
