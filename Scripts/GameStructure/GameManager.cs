@@ -40,6 +40,7 @@ using GameFramework.Messaging;
 using GameFramework.GameStructure.Game.Messages;
 using GameFramework.Preferences;
 using GameFramework.Audio.Messages;
+#pragma warning disable 618
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
@@ -177,6 +178,7 @@ namespace GameFramework.GameStructure
         /// How we plan on letting users unlock worlds.
         /// </summary>
         [Tooltip("How we plan on letting users unlock worlds.")]
+        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
         public GameItem.UnlockModeType WorldUnlockMode;
 
         /// <summary>
@@ -218,6 +220,7 @@ namespace GameFramework.GameStructure
         /// How we plan on letting users unlock levels.
         /// </summary>
         [Tooltip("How we plan on letting users unlock levels.")]
+        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
         public GameItem.UnlockModeType LevelUnlockMode;
 
         /// <summary>
@@ -250,6 +253,7 @@ namespace GameFramework.GameStructure
         /// How we plan on letting users unlock characters.
         /// </summary>
         [Tooltip("How we plan on letting users unlock characters.")]
+        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
         public GameItem.UnlockModeType CharacterUnlockMode;
 
         /// <summary>
@@ -575,6 +579,10 @@ namespace GameFramework.GameStructure
             Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
             Players = new PlayerGameItemManager();
             Players.Load(0, PlayerCount-1);
+
+            //TODO: Make Obsolete
+            if (WorldUnlockMode == GameItem.UnlockModeType.Coins || LevelUnlockMode == GameItem.UnlockModeType.Coins || CharacterUnlockMode == GameItem.UnlockModeType.Coins)
+                Debug.LogWarning("GameManager Unlock Modes are deprecated in favour of the more powerful UnlockXxx options in GameItem configuration files and will soon be removed. Change the GameManager settings to Custom to remove this warning and add / configure GameItem configuration files.");
 
             // handle auto setup of worlds and levels
             if (AutoCreateWorlds)

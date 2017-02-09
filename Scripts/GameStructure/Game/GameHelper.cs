@@ -109,8 +109,7 @@ namespace GameFramework.GameStructure.Game
             // else is a world won - world load code will automatically unlock the first level if needed.
             else if (IsCurrentLevelLastInWorld())
             {
-                if (GameManager.Instance.WorldUnlockMode == GameItem.UnlockModeType.Completion &&
-                    nextWorld != null)
+                if (nextWorld != null && nextWorld.UnlockWithCompletion)
                 {
                     nextWorld.IsUnlocked = true;
                     nextWorld.UpdatePlayerPrefs();
@@ -120,8 +119,7 @@ namespace GameFramework.GameStructure.Game
             // else is at least a level won
             else
             {
-                if (GameManager.Instance.LevelUnlockMode == GameItem.UnlockModeType.Completion &&
-                    nextLevel != null)
+                if (nextLevel != null && nextLevel.UnlockWithCompletion)
                 {
                     nextLevel.IsUnlocked = true;
                     nextLevel.UpdatePlayerPrefs();

@@ -197,7 +197,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
         [Tooltip("Value needed to unlock this item.")]
         [SerializeField]
-        int _valueToUnlock = -1;
+        int _valueToUnlock;
 
         [SerializeField]
         List<LocalisablePrefabEntry> _localisablePrefabs = new List<LocalisablePrefabEntry>();
