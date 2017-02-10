@@ -523,11 +523,9 @@ namespace GameFramework.GameStructure
                 PreferencesFactory.AutoConvertUnsecurePrefs = AutoConvertUnsecurePrefs;
             }
 
-        // Gameplay related properties
+            // Gameplay related properties
             IsUnlocked = PreferencesFactory.GetInt("IsUnlocked", 0) != 0;
-#pragma warning disable 618
             IsUserInteractionEnabled = true;
-#pragma warning restore 618
             IsSplashScreenShown = false;
             TimesGamePlayed = PreferencesFactory.GetInt("TimesGamePlayed", 0);
             TimesGamePlayed++;
