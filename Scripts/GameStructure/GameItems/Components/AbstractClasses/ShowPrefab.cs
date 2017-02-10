@@ -21,10 +21,13 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
+
+#if BEAUTIFUL_TRANSITIONS
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+#endif
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {

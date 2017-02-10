@@ -157,7 +157,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
         [Tooltip("Whether this item can be unlocked with payment through e.g. IAP. (Requires Unity IAP Service Enabling)")]
         [SerializeField]
-        bool _unlockWithPayment = true;
+        bool _unlockWithPayment;
 
 
         /// <summary>

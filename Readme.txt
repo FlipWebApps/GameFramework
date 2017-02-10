@@ -50,10 +50,13 @@ For full setup instructions visit: http://www.flipwebapps.com/game-framework/set
 
 CREDITS
 
+Many thanks to the following for their contributions and anyone else who has helped out or otherwise.
+
 ConditionalHideAttribute & PropertyDrawer - by Brecht Lecluyse (www.brechtos.com)
 ColorHSV.cs - C.J. Kimberlin (http://cjkimberlin.com)
 Portuguese and Spanish Translations - Bryan Jonson
 French Translation -  Fabrice Pilet
 Chinese Translation - luochuanyuewu
 German Translation - Lutz Becker
+Polish Translation - Marcin Budek
 GameItemExtensions - Aneroin
