@@ -106,7 +106,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #region Callbacks
 
         /// <summary>
-        /// An action called when this GameItem is Unlocked. 
+        /// An action called when a GameItem is Unlocked. 
         /// </summary>
         public Action<T> Unlocked;
 

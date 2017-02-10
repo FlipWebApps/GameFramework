@@ -18,9 +18,9 @@ MonoBehaviour:
     _isLocalised: 0
     _data: 
   _startUnlocked: 0
-  _unlockWithCoins: 1
-  _unlockWithPayment: 1
-  _unlockWithCompletion: 0
+  _unlockWithCoins: 0
+  _unlockWithPayment: 0
+  _unlockWithCompletion: 1
   _valueToUnlock: 15
   _localisablePrefabs:
   - LocalisablePrefabType: 2

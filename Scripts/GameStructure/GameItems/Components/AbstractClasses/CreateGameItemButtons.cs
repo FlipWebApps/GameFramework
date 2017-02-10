@@ -42,8 +42,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         /// How this is handled depends a bit on the exact implementation, however typically ClickThrough = go to next scene, Select = select item and remain
         [Tooltip("Override for the GameItemButtons selection mode.")]
-        [Header("GameItemButton Overrides")]
-        public GameItemButton<TGameItem>.SelectionModeType SelectionMode;
+        [Header("GameItemButton Defaults")]
+        public GameItemButton.SelectionModeType SelectionMode;
 
         /// <summary>
         /// Override for the GameItemButtons name of the scene that should be loaded when this button is clicked.
@@ -52,6 +52,17 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [Tooltip("Override for the GameItemButtons  name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
         public string ClickUnlockedSceneToLoad;
 
+        /// <summary>
+        /// Whether the user can unlock buttons directly by clicking if the GameItem has coin unlock enabled and they have enough coins.
+        /// </summary>
+        public bool ClickToUnlock
+        {
+            get { return _clickToUnlock; }
+            set { _clickToUnlock = value; }
+        }
+        [Tooltip("Whether the user can unlock buttons directly by clicking if the GameItem has coin unlock enabled and they have enough coins.")]
+        [SerializeField]
+        bool _clickToUnlock;
 
         /// <summary>
         /// Create and add all buttons
@@ -64,6 +75,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 button.Number = gameItem.Number;
                 button.SelectionMode = SelectionMode;
                 button.ClickUnlockedSceneToLoad = ClickUnlockedSceneToLoad;
+                button.ClickToUnlock = ClickToUnlock;
 
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);

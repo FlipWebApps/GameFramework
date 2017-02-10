@@ -22,6 +22,7 @@
 #if UNITY_PURCHASING
 using GameFramework.Billing.Components;
 #endif
+using System;
 using GameFramework.Localisation;
 using GameFramework.GameObjects;
 using GameFramework.GameStructure.GameItems.ObjectModel;
@@ -38,12 +39,18 @@ using GameFramework.Preferences;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
+    public abstract class GameItemButton
+    {
+        public enum SelectionModeType { ClickThrough, Select }
+    }
+
     /// <summary>
     /// Abstract Game Item button class that displays information about the linked Game Item
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class GameItemButton<T> : MonoBehaviour where T : GameItem, new()
     {
+        [Obsolete("Use GameItemButton.SelectionModeType instead. This enum will be removed in a future version.")]
         public enum SelectionModeType { ClickThrough, Select }
 
         /// <summary>
@@ -58,7 +65,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         /// How this is handled depends a bit on the exact implementation, however typically ClickThrough = go to next scene, Select = select item and remain
         [Tooltip("This items selection mode.")]
-        public SelectionModeType SelectionMode;
+        public GameItemButton.SelectionModeType SelectionMode;
 
         /// <summary>
         /// A color to use when this item is available for unlock
@@ -80,6 +87,18 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [Header("Default Handling")]
         [Tooltip("The name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
         public string ClickUnlockedSceneToLoad;
+
+        /// <summary>
+        /// Whether the user can unlock this button directly by clicking if the GameItem has coin unlock enabled and they have enough coins.
+        /// </summary>
+        public bool ClickToUnlock
+        {
+            get { return _clickToUnlock; }
+            set { _clickToUnlock = value; }
+        }
+        [Tooltip("Whether the user can unlock this button directly by clicking if the GameItem has coin unlock enabled and they have enough coins.")]
+        [SerializeField]
+        bool _clickToUnlock;
 
         /// <summary>
         /// The current item that this button corresponds to.
@@ -177,7 +196,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                     ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
-            if (SelectionMode == SelectionModeType.Select && HighlightGameObject != null)
+            if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
             {
                 HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == CurrentItem.Number);
             }
@@ -233,7 +252,23 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this in a derived class.
         public virtual void ClickLocked()
         {
-            if (CurrentItem.UnlockWithPayment)
+            if (CurrentItem.UnlockWithCoins && ClickToUnlock && CurrentItem.Coins < GameManager.Instance.Player.Coins)
+            {
+                GetGameItemManager().Unlocked(CurrentItem);
+
+#if UNITY_ANALYTICS
+                // record some analytics on the item unlocked
+                Analytics.CustomEvent(_localisationBase + ".Unlock", new Dictionary<string, object>
+                {
+                    { "number", _gameItemToUnlock.Number },
+                    { "timesplayed", GameManager.Instance.TimesGamePlayed }
+                });
+#endif
+                //update new coin count.
+                GameManager.Instance.Player.Coins -= CurrentItem.ValueToUnlock;
+                GameManager.Instance.Player.UpdatePlayerPrefs();
+            }
+            else if (CurrentItem.UnlockWithPayment)
             {
                 DialogManager.Instance.Show(title: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Title"),
                     text: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text1"),
