@@ -127,7 +127,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
             foreach (var variable in StringVariables)
             {
                 if (variable.PersistChanges)
-                    variable.Value = PreferencesFactory.GetString(prefix + variable.Tag, variable.Value, useSecurePrefs);
+                    variable.Value = PreferencesFactory.GetString(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs);
                 else
                     variable.Value = variable.DefaultValue;
             }
