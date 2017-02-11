@@ -18,9 +18,9 @@ MonoBehaviour:
     _isLocalised: 0
     _data: 
   _startUnlocked: 0
-  _unlockWithCoins: 0
-  _unlockWithPayment: 0
-  _unlockWithCompletion: 1
+  _unlockWithCoins: 1
+  _unlockWithPayment: 1
+  _unlockWithCompletion: 0
   _valueToUnlock: 15
   _localisablePrefabs:
   - LocalisablePrefabType: 2
@@ -28,7 +28,7 @@ MonoBehaviour:
     LocalisablePrefab:
       _default: {fileID: 106662, guid: f5c48fcafabdf7749b265d992cd61120, type: 2}
       _localisedObjects: []
-  - LocalisablePrefabType: 2
+  - LocalisablePrefabType: 4
     Name: 
     LocalisablePrefab:
       _default: {fileID: 106662, guid: f5c48fcafabdf7749b265d992cd61120, type: 2}
@@ -46,7 +46,21 @@ MonoBehaviour:
       _localisedObjects: []
   _variables:
     _boolVariables: []
-    _intVariables: []
+    _intVariables:
+    - _tag: 
+      _name:
+        _isLocalised: 0
+        _data: 
+      _category: 0
+      _defaultValue: 0
+      _persistChanges: 0
+    - _tag: 
+      _name:
+        _isLocalised: 0
+        _data: 
+      _category: 0
+      _defaultValue: 0
+      _persistChanges: 0
     _floatVariables: []
     _stringVariables: []
   _starTotalCount: 3

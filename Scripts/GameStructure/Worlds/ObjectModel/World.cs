@@ -35,7 +35,7 @@ namespace GameFramework.GameStructure.Worlds.ObjectModel
         /// <summary>
         /// Levels for this world
         /// </summary>
-        public GameItemManager<Level, GameItem> Levels { get; set; }
+        public LevelGameItemManager Levels { get; set; }
 
         //public int SelectedLevel;
 

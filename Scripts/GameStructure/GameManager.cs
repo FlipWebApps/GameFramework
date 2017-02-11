@@ -446,17 +446,17 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// GameItemManager containing the current Characters
         /// </summary>
-        public GameItemManager<Character, GameItem> Characters { get; set; }
+        public CharacterGameItemManager Characters { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Worlds
         /// </summary>
-        public GameItemManager<World, GameItem> Worlds { get; set; }
+        public WorldGameItemManager Worlds { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Levels
         /// </summary>
-        public GameItemManager<Level, GameItem> Levels { get; set; }
+        public LevelGameItemManager Levels { get; set; }
 
         /// <summary>
         /// GameItemManager containing the current Players
