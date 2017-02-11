@@ -22,6 +22,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Messaging;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -35,19 +36,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// abstract base for showing a prefab from the selected item including updating to a new prefab when the selection changes.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    /// <typeparam name="TMessage"></typeparam>
     public abstract class ShowPrefab<T> : MonoBehaviour where T : GameItem
     {
         /// <summary>
-        /// Whether to listen for changes and update the display when the selection changes.
+        /// What GameItem we should use for showing prefabs from.
         /// </summary>
-        public bool ReactToChanges
+        public GameItemContext GameItemContext
         {
-            get { return _reactToChanges; }
-            set { _reactToChanges = value; }
+            get { return _gameItemContext; }
+            set { _gameItemContext = value; }
         }
-        [Tooltip("If true, the parent-relative position, scale and rotation is modified such that the object keeps the same world space position, rotation and scale as before.")]
+        [Header("GameItem")]
+        [Tooltip("What GameItem we should use for showing prefabs from.")]
         [SerializeField]
-        bool _reactToChanges = true;
+        GameItemContext _gameItemContext;
 
         /// <summary>
         ///  The type of prefab to instantiate.
@@ -57,7 +60,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             get { return _prefabType; }
             set { _prefabType = value; }
         }
-        [Header("Prefab Settings")]
+        [Header("Show Settings")]
         [Tooltip("The type of prefab to instantiate.")]
         [SerializeField]
         GameItem.LocalisablePrefabType _prefabType;
@@ -107,7 +110,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected virtual void Start()
         {
             GetGameItemManager().SelectedChanged += SelectedChanged;
-            SelectedChanged(null, GetGameItemManager().Selected);
+            var gameItem = GetGameItemManager().GetReferencedGameItem(GameItemContext);
+            Assert.IsNotNull(gameItem, "A GameItem was not found. Check the GameItemContext settings refer to a valid GameItem.");
+            Show(gameItem);
         }
 
 
@@ -133,32 +138,45 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <param name="item"></param>
         protected virtual void SelectedChanged(T oldItem, T item)
         {
-            if (ReactToChanges || oldItem == null)
+            if (GameItemContext.ReactToSelectionChanges() || oldItem == null)
             {
-                GameObject _newPrefabInstance;
-                _cachedPrefabInstances.TryGetValue(item.Number, out _newPrefabInstance);
-                if (_newPrefabInstance == null)
+                Show(item);
+            }
+        }
+
+
+        /// <summary>
+        /// Show the actual prefab
+        /// </summary>
+        /// <param name="item"></param>
+        void Show(T item)
+        {
+            GameObject _newPrefabInstance;
+            _cachedPrefabInstances.TryGetValue(item.Number, out _newPrefabInstance);
+            if (_newPrefabInstance == null)
+            {
+                _newPrefabInstance = item.InstantiatePrefab(PrefabType, Name,
+                    Parent == null ? transform : Parent.transform, WorldPositionStays);
+                if (_newPrefabInstance != null)
                 {
-                    _newPrefabInstance = item.InstantiatePrefab(PrefabType, Name,
-                        Parent == null ? transform : Parent.transform, WorldPositionStays);
                     _newPrefabInstance.SetActive(false); // start inactive so we don't run transitions immediately
                     _cachedPrefabInstances.Add(item.Number, _newPrefabInstance);
                 }
+            }
 
-                Assert.IsNotNull(_newPrefabInstance,
-                    string.Format(
-                        "The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.",
-                        item.IdentifierBase, item.Number));
+            Assert.IsNotNull(_newPrefabInstance,
+                string.Format(
+                    "The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.",
+                    item.IdentifierBase, item.Number));
 
 #if BEAUTIFUL_TRANSITIONS
-                StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
+            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
 #else
-            if (_selectedPrefabInstance != null)
-                _selectedPrefabInstance.SetActive(false);
-            _newPrefabInstance.SetActive(true);
+                if (_selectedPrefabInstance != null)
+                    _selectedPrefabInstance.SetActive(false);
+                _newPrefabInstance.SetActive(true);
 #endif
-                _selectedPrefabInstance = _newPrefabInstance;
-            }
+            _selectedPrefabInstance = _newPrefabInstance;
         }
 
 #if BEAUTIFUL_TRANSITIONS
