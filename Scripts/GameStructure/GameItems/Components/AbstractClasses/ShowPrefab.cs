@@ -36,7 +36,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// abstract base for showing a prefab from the selected item including updating to a new prefab when the selection changes.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    /// <typeparam name="TMessage"></typeparam>
     public abstract class ShowPrefab<T> : MonoBehaviour where T : GameItem
     {
         /// <summary>
