@@ -69,7 +69,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         public void Awake()
         {
-            foreach (var gameItem in GetGameItems())
+            foreach (var gameItem in GetGameItems()) // GameManager.Instance.Levels
             {
                 var button = Prefab.GetComponent<TGameItemButton>();
                 button.Number = gameItem.Number;

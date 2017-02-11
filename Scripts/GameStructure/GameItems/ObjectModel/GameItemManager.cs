@@ -20,6 +20,8 @@
 //----------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -45,12 +47,35 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
     }
 
+
+    ///// <summary>
+    ///// GameItemManager interface to allow for covariant return types
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    ///// <typeparam name="TParent"></typeparam>
+    ///// <typeparam name="T2"></typeparam>
+    //public interface IGameItemManager<in T, out TResult, out TParent> where T: GameItem where TResult : GameItem where TParent : GameItem
+    //{
+    //    Action<T, T> SelectedChanged { get; set; }
+
+    //    TResult GetReferencedGameItem(GameItemReference gameItemReference);
+    //}
+
+    ///// <summary>
+    ///// GameItemManager interface to allow for covariant return types
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    ///// <typeparam name="TParent"></typeparam>
+    //public interface IGameItemManager<T> : IGameItemManager<GameItem,T, GameItem> where T : GameItem
+    //{
+    //}
+
     /// <summary>
     /// For managing an array of game items inlcuding selection, unlocking
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TParent"></typeparam>
-    public class GameItemManager<T, TParent> where T: GameItem where TParent: GameItem
+    public class GameItemManager<T, TParent> : IEnumerable<T> where T: GameItem where TParent: GameItem
     {
         /// <summary>
         /// The unlock mode that will be used
@@ -99,6 +124,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         T _selected;
 
         /// <summary>
+        /// The last gameitem returned by the enumerator.
+        /// </summary>
+        public T EnumeratorCurrent { get; set; }
+
+        /// <summary>
         /// An optional Parent item
         /// </summary>
         public TParent Parent { get; set; }
@@ -108,12 +138,12 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// An action called when a GameItem is Unlocked. 
         /// </summary>
-        public Action<T> Unlocked;
+        public Action<T> Unlocked { get; set; }
 
         /// <summary>
         /// An action called when the selection changes, passing the old and newly selected items
         /// </summary>
-        public Action<T, T> SelectedChanged;
+        public Action<T, T> SelectedChanged { get; set; }
 
         #endregion Callbacks
 
@@ -307,6 +337,29 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
+        /// Returns the correct reference GameItem
+        /// </summary>
+        /// <returns></returns>
+        public T GetReferencedGameItem(GameItemContext gameItemContext)
+        {
+            gameItemContext.GameItem = null;
+            if (gameItemContext.ContextMode == GameItemContext.ContextModeType.Selected)
+            {
+                gameItemContext.GameItem = Selected;
+            }
+            else if (gameItemContext.ContextMode == GameItemContext.ContextModeType.ByNumber)
+            {
+                gameItemContext.GameItem = GetItem(gameItemContext.Number);
+            }
+            else if (gameItemContext.ContextMode == GameItemContext.ContextModeType.FromLoop)
+            {
+                return EnumeratorCurrent;
+            }
+            return gameItemContext.GameItem as T;
+        }
+
+
+        /// <summary>
         /// Set the selected item to be the one with the specified number
         /// </summary>
         /// <param name="number"></param>
@@ -490,5 +543,31 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
         #endregion Unlocking
 
+        #region IEnumerable
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (T item in Items)
+            {
+                // Sanity check
+                if (item == null)
+                {
+                    break;
+                }
+
+                // Return the current element and then on next function call 
+                // resume from next element rather than starting all over again;
+                EnumeratorCurrent = item;
+                yield return item;
+            }
+            EnumeratorCurrent = null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion IEnumerable
     }
 }

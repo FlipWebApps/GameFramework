@@ -122,7 +122,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public void Awake()
         {
             CurrentPlayer = GameManager.Instance.Player;
-
             CurrentItem = GetGameItemManager().GetItem(Number);
             Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
 
