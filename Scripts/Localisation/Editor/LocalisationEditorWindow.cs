@@ -118,7 +118,8 @@ namespace GameFramework.Localisation.Editor
         {
             GUILayout.Space(10);
             EditorGUILayout.LabelField("NOTE: This Editor is Alpha and currently only displays localisation entries!", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("Please support us and rate Game Framework on the asset store");
+            EditorGUILayout.LabelField("For now you must add / edit manually in the Localisation.csv file for now (see online help).");
+            EditorGUILayout.LabelField("Please show your support and rate Game Framework on the asset store");
             GUILayout.Space(10);
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));

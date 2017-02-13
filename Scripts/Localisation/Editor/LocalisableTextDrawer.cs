@@ -37,13 +37,22 @@ namespace GameFramework.Localisation.Editor
             var contentPosition = EditorGUI.PrefixLabel(position, label);
             var rowPosition = new Rect(contentPosition) {height = EditorGUIUtility.singleLineHeight};
 
-            var dataPosition = new Rect(rowPosition);
-            dataPosition.xMax -= 20;
-            EditorGUI.PropertyField(dataPosition, dataProperty, GUIContent.none);
-            dataPosition.x = contentPosition.xMax - 16;
-            dataPosition.xMax = contentPosition.xMax;
+            var dataPosition = new Rect(rowPosition) {width = 16};
+            var isLocalised = isLocalisedProperty.boolValue = EditorGUI.Toggle(dataPosition, new GUIContent("", "Lets you toggle whether this is a fixed or localised test"), isLocalisedProperty.boolValue, GuiStyles.LocalisationToggleStyle);
 
-            isLocalisedProperty.boolValue = EditorGUI.Toggle(dataPosition, new GUIContent("", "Lets you toggle whether this is a fixed or localised test"), isLocalisedProperty.boolValue, GuiStyles.LocalisationToggleStyle);
+            dataPosition.x += 20;
+            dataPosition.xMax = rowPosition.xMax - (isLocalised ? 18 : 0);
+            EditorGUI.PropertyField(dataPosition, dataProperty, GUIContent.none);
+
+            if (isLocalised)
+            {
+                dataPosition.x = rowPosition.xMax - 16;
+                dataPosition.width = 16;
+                if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string")))
+                {
+                    LocalisationEditorWindow.ShowWindowNew(dataProperty.stringValue);
+                }
+            }
 
             if (isLocalisedProperty.boolValue)
             {

@@ -4,6 +4,41 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+	Game Framework Core - Improvements
+	- Demo: Updated GameStructure demo with new player material and showprefab updates
+	- Demo: Updated for new unlock modes
+	- Editor: Added EditorHelper TryAddParseRange method
+	- GameStructure: CreateGameItemButtons - added options for overriding selection mode and ClickUnlockedSceneToLoad
+	- GameStructure: Added SelectionPreview prefab type
+	- GameStructure: InstantiatePrefab[prefab type] methods made obsolete - use parameterised version instead.
+	- GameStructure: GameItemButton validation checks and highlight of selected changed from image -> gameobject
+	- GameStructure: ShowPrefab components for all GameItems for showing an associated prefab while listening for selection changes.
+	- GameStructure: GameItemManager - Added SelectNext and SelectPrevious methods + code refactor
+	- GameStructure: GameItemManager - new methods CanCoinUnlockNewItem, GetItemToCoinUnlock, CoinUnlockableItem
+	- GameStructure: GameItemManager is enumerable
+	- GameStructure: Added LevelChangedMessage, CharacterChangedMessage, WorldChangedMessage messages that are sent when the selected item is changed
+	- GameStructure: Added GameItem unlock configuration options
+	- GameStructure: Clicking a locked item shows different messages depending on GameItem unlock options
+	- GameStructure: New coin unlock modes UnlockButtons: RandomAll, RandomLocked and NextLocked
+	- GameStructure: Added ClickToUnlock option to GameItemButton and CreateGameItemButtons to allow clicking to coin unlock.
+	- GameStructure: Deprecation of GameManager unlock modes - in future this will default to unlock by completion. Use GameItem configuration files and new UnlockXxx settings instead.
+	- GameStructure: Initial configurable GameItem Variables support
+	- GameStructure: New GameItemContext that will in future allow the same components to work on selected item, item by number and more.
+	- Localisation: Added LocaliseSpriteRenderer component
+	- Localisation: Preview of localisation editor window.
+	- Localisation: Polish localisation courtesy of Marcin Budek
+	- Localisation: Initial support for adding new localisation entries in the editor (just shows the localisation window for now)
+	- Themes: Minimalise buttons support Highlight mode.
+	
+	Game Framework Core - Fixes
+	- GameStructure: Fix for PlayerChangedMessage parameters being swapped
+	- GameStructure: Clone loaded GameItem configurations so we don't update the original in editor mode.
+	- Facebook: FacebookManager fix for handing a single app request returning a string rather than an array
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Localisation: Shows usage of Localising Images
+	- Localisation: Updated tutorial to include Polish example
+
 v4.0.1
 
 	Game Framework Core - Improvements
