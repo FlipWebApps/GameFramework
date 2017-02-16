@@ -26,6 +26,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using GameFramework.Debugging;
+using GameFramework.GameObjects;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
@@ -48,35 +49,40 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
     }
 
 
-    ///// <summary>
-    ///// GameItemManager interface to allow for covariant return types
-    ///// </summary>
-    ///// <typeparam name="T"></typeparam>
-    ///// <typeparam name="TParent"></typeparam>
-    ///// <typeparam name="T2"></typeparam>
-    //public interface IGameItemManager<in T, out TResult, out TParent> where T: GameItem where TResult : GameItem where TParent : GameItem
-    //{
-    //    Action<T, T> SelectedChanged { get; set; }
+    /// <summary>
+    /// This interface is needed as Unity (5.3 to ...) doesn't properly support covariant generic interfaces. This interface will be deprecated when 
+    /// Unity supports this so use the other methods if at all possible.
+    /// </summary>
+    public interface IBaseGameItemManager
+    {
+        /// <summary>
+        /// The currently selected item
+        /// </summary>
+        /// The selected item number is persisted and loaded next time this GameItemManager is created.
+        GameItem BaseSelected { get; set; }
 
-    //    TResult GetReferencedGameItem(GameItemReference gameItemReference);
-    //}
+        /// <summary>
+        /// The last gameitem returned by the enumerator.
+        /// </summary>
+        GameItem BaseEnumeratorCurrent { get; }
 
-    ///// <summary>
-    ///// GameItemManager interface to allow for covariant return types
-    ///// </summary>
-    ///// <typeparam name="T"></typeparam>
-    ///// <typeparam name="TParent"></typeparam>
-    //public interface IGameItemManager<T> : IGameItemManager<GameItem,T, GameItem> where T : GameItem
-    //{
-    //}
+        /// <summary>
+        /// Get the item with the specified number
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>A GameItem or null</returns>
+        GameItem BaseGetItem(int number);
+    }
 
     /// <summary>
     /// For managing an array of game items inlcuding selection, unlocking
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TParent"></typeparam>
-    public class GameItemManager<T, TParent> : IEnumerable<T> where T: GameItem where TParent: GameItem
+    public class GameItemManager<T, TParent> : IEnumerable<T>, IBaseGameItemManager where T: GameItem where TParent: GameItem
     {
+        public T GetEnumeratorCurrent() {  return null; }
+
         /// <summary>
         /// The unlock mode that will be used
         /// </summary>
@@ -126,7 +132,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// The last gameitem returned by the enumerator.
         /// </summary>
-        public T EnumeratorCurrent { get; set; }
+        public T EnumeratorCurrent { get; protected set; }
 
         /// <summary>
         /// An optional Parent item
@@ -333,29 +339,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             var i = GetItemIndex(number);
             if (i == -1) return null;
             return i > 0 ? Items[i - 1] : null;
-        }
-
-
-        /// <summary>
-        /// Returns the correct reference GameItem
-        /// </summary>
-        /// <returns></returns>
-        public T GetReferencedGameItem(GameItemContext gameItemContext)
-        {
-            gameItemContext.GameItem = null;
-            if (gameItemContext.ContextMode == GameItemContext.ContextModeType.Selected)
-            {
-                gameItemContext.GameItem = Selected;
-            }
-            else if (gameItemContext.ContextMode == GameItemContext.ContextModeType.ByNumber)
-            {
-                gameItemContext.GameItem = GetItem(gameItemContext.Number);
-            }
-            else if (gameItemContext.ContextMode == GameItemContext.ContextModeType.FromLoop)
-            {
-                return EnumeratorCurrent;
-            }
-            return gameItemContext.GameItem as T;
         }
 
 
@@ -569,5 +552,22 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
 
         #endregion IEnumerable
+
+        #region IBaseGameItemManager
+        public GameItem BaseSelected {
+            get { return Selected;  }
+            set { Selected = (T)value; }
+        }
+
+        public GameItem BaseEnumeratorCurrent
+        {
+            get { return EnumeratorCurrent; }
+        }
+
+        public GameItem BaseGetItem(int number)
+        {
+            return GetItem(number);
+        }
+        #endregion IBaseGameItemManager
     }
 }

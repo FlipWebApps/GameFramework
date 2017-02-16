@@ -34,12 +34,12 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
     public class CreateGenericGameItemButtons : CreateGameItemButtons<GenericGameItemButton, GenericGameItem>
     {
         /// <summary>
-        /// Returns a list of all current GenericGameItem GameItems
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override GameItem[] GetGameItems()
+        protected override GameItemManager<GenericGameItem, GameItem> GetGameItemManager()
         {
-            return GenericGameItemManager.Instance.GenericGameItems.Items;
+            return GenericGameItemManager.Instance.GenericGameItems;
         }
     }
 }

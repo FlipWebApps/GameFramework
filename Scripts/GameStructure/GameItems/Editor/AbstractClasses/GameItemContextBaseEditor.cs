@@ -19,33 +19,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
-using UnityEngine;
+using UnityEditor;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
-    /// <summary>
-    /// Creates instances of all Level GameItems
-    /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
+    public abstract class GameItemContextBaseEditor : UnityEditor.Editor
     {
-        public CreateLevelButtons()
+        SerializedProperty _contextProperty;
+
+        public virtual void OnEnable()
         {
-            ClickUnlockedSceneToLoad = "Game";
+            _contextProperty = serializedObject.FindProperty("_context");
         }
 
-        /// <summary>
-        /// Return a GameItemManager that this works upon.
-        /// </summary>
-        /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        public override void OnInspectorGUI()
         {
-            return GameManager.Instance.Levels;
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_contextProperty);
+            serializedObject.ApplyModifiedProperties();
         }
-
     }
 }

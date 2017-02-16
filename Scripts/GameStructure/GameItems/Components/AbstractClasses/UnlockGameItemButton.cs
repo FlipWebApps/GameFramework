@@ -149,7 +149,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 // save updated counter for later.
                 GameManager.Instance.Player.SetSetting(_localisationBase + ".FailedUnlockAttempts", _failedUnlockAttempts);
                 GameManager.Instance.Player.UpdatePlayerPrefs();
-                var unlockWindowSprite = _gameItemToUnlock.GetSpriteUnlockWindow();
+                var unlockWindowSprite = _gameItemToUnlock.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
                 dialogInstance.Show(titleKey: _localisationBase + ".Unlock.Title",
                     textKey: textKey,
                     text2Key: text2Key,

@@ -21,6 +21,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
@@ -37,14 +38,14 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// Selected - The referenced GameItem is the selected one
         /// ByNumber - The referenced GameItem is selected based upon number.
-        /// FromLoop - The referenced GameItem is taken from a parent loop.
-        /// Reference - The referenced GameItem is taken from a seperate referenced component.
+        /// FromLoop - The referenced GameItem is taken from a parent loop enumerating GameItemManager - note will only be available for reference in the Awake method.
+        /// Reference - The referenced GameItem is taken from a seperate referenced GameItemContext component.
         public enum ContextModeType
         {
             Selected,
             ByNumber,
             FromLoop,
-            //Reference }
+            Reference
         }
 
 
@@ -93,29 +94,46 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// If ContextMode is Selected then whether to listen for changes and update the display when the selection changes.
         /// </summary>
+        [Obsolete("The assumption is that if using selected then you will always want to react to changes!")]
         public bool ReactToChanges
         {
             get { return _reactToChanges; }
             set { _reactToChanges = value; }
         }
-        [Tooltip("If reference mode is Selected then whether to listen for changes and update the display when the selection changes.")]
+        [Tooltip("If ContextMode is Selected then whether to listen for changes and update the display when the selection changes.")]
         [SerializeField]
         bool _reactToChanges = true;
+
+
+        /// <summary>
+        /// If ContextMode is Referenced then the referenced GameItemContext component.
+        /// </summary>
+        public Components.AbstractClasses.GameItemContextBase ReferencedGameItemContextBase
+        {
+            get { return _referencedGameItemContextBase; }
+            set { _referencedGameItemContextBase = value; }
+        }
+        [Tooltip("If ContextMode is Referenced then the referenced GameItemContext component.")]
+        [SerializeField]
+        Components.AbstractClasses.GameItemContextBase _referencedGameItemContextBase;
 
         #endregion Editor Parameters
 
         /// <summary>
-        /// The referenced GameItem
-        /// </summary>
-        public GameItem GameItem { get; set; }
-
-        /// <summary>
-        /// Returns whether ReferenceMode is Selected and we are reacting to changes
+        /// Method for getting the context mode taking into consideration following of references
         /// </summary>
         /// <returns></returns>
-        public bool ReactToSelectionChanges()
+        public ContextModeType GetReferencedContextMode()
         {
-            return ContextMode == ContextModeType.Selected && ReactToChanges;
+            if (ContextMode == ContextModeType.Reference)
+            {
+                Assert.IsNotNull(ReferencedGameItemContextBase, "If you are using a GameItemContext of Reference then ensure that the ReferencedGameItem is setup.");
+                return ReferencedGameItemContextBase.Context.GetReferencedContextMode();
+            }
+            else
+            {
+                return ContextMode;
+            }
         }
     }
 }

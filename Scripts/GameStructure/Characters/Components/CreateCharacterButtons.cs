@@ -34,12 +34,12 @@ namespace GameFramework.GameStructure.Characters.Components
     public class CreateCharacterButtons : CreateGameItemButtons<CharacterButton, Character>
     {
         /// <summary>
-        /// Returns a list of all current Character GameItems
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override GameItem[] GetGameItems()
+        protected override GameItemManager<Character, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Characters.Items;
+            return GameManager.Instance.Characters;
         }
     }
 }

@@ -19,33 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
-using UnityEngine;
+using GameFramework.GameStructure.GameItems.Editor.AbstractClasses;
+using GameFramework.GameStructure.Levels.Components;
+using UnityEditor;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Levels.Editor
 {
-    /// <summary>
-    /// Creates instances of all Level GameItems
-    /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
+    [CustomEditor(typeof (LevelGameItemContext))]
+    public class LevelGameItemContextEditor : GameItemContextBaseEditor
     {
-        public CreateLevelButtons()
-        {
-            ClickUnlockedSceneToLoad = "Game";
-        }
-
-        /// <summary>
-        /// Return a GameItemManager that this works upon.
-        /// </summary>
-        /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
-        {
-            return GameManager.Instance.Levels;
-        }
-
     }
 }

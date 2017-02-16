@@ -69,7 +69,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         public void Awake()
         {
-            foreach (var gameItem in GetGameItems()) // GameManager.Instance.Levels
+            foreach (var gameItem in GetGameItemManager())
             {
                 var button = Prefab.GetComponent<TGameItemButton>();
                 button.Number = gameItem.Number;
@@ -84,9 +84,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
 
         /// <summary>
-        /// Implement this in your derived class to return an array of GameItems to create buttons for
+        /// Implement this method to return a GameItemManager that contains the GameItems that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected abstract GameItem[] GetGameItems();
+        protected abstract GameItemManager<TGameItem, GameItem> GetGameItemManager();
     }
 }

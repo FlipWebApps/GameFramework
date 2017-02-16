@@ -21,31 +21,24 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Creates instances of all Level GameItems
+    /// Create an instance of the specified prefab
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class CreateLevelButtons : CreateGameItemButtons<LevelButton, Level>
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldGameItemContext")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
+    public class WorldGameItemContext : GameItemContextBase
     {
-        public CreateLevelButtons()
-        {
-            ClickUnlockedSceneToLoad = "Game";
-        }
-
         /// <summary>
-        /// Return a GameItemManager that this works upon.
+        /// Returns the current World IBaseGameItemManager
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
-            return GameManager.Instance.Levels;
+            return GameManager.Instance.IsInitialised ? GameManager.Instance.Worlds : null;
         }
-
     }
 }

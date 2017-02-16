@@ -175,7 +175,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             if (DisplayImage != null)
             {
-                var selectionMenuSprite = CurrentItem.GetSpriteSelectionMenu();
+                var selectionMenuSprite = CurrentItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
                 DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
             }
 

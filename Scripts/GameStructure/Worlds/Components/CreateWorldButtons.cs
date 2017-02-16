@@ -38,14 +38,13 @@ namespace GameFramework.GameStructure.Worlds.Components
             ClickUnlockedSceneToLoad = "Menu";
         }
 
-
         /// <summary>
-        /// Returns a list of all current Character GameItems
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override GameItem[] GetGameItems()
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Worlds.Items;
+            return GameManager.Instance.Worlds;
         }
     }
 }

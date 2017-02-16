@@ -46,21 +46,7 @@ MonoBehaviour:
       _localisedObjects: []
   _variables:
     _boolVariables: []
-    _intVariables:
-    - _tag: 
-      _name:
-        _isLocalised: 0
-        _data: 
-      _category: 0
-      _defaultValue: 0
-      _persistChanges: 0
-    - _tag: 
-      _name:
-        _isLocalised: 0
-        _data: 
-      _category: 0
-      _defaultValue: 0
-      _persistChanges: 0
+    _intVariables: []
     _floatVariables: []
     _stringVariables: []
   _starTotalCount: 3

@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEditor;
 using UnityEngine;
@@ -36,21 +35,30 @@ namespace GameFramework.GameStructure.GameItems.Editor
             var contextModeProperty = property.FindPropertyRelative("_contextMode");
 
             var rowPosition = new Rect(position) { height = EditorGUIUtility.singleLineHeight };
-            EditorGUI.PropertyField(rowPosition, contextModeProperty, new GUIContent("Context", "The context that we are working within for determining what GameItem to use."));
-            if (contextModeProperty.enumValueIndex == 0)
-            {
-                EditorGUI.indentLevel++;
-                rowPosition.y += _propertyRowHeight;
-                var reactToChangesProperty = property.FindPropertyRelative("_reactToChanges");
-                EditorGUI.PropertyField(rowPosition, reactToChangesProperty);
-                EditorGUI.indentLevel--;
-            }
-            else if (contextModeProperty.enumValueIndex == 1)
+            EditorGUI.PropertyField(rowPosition, contextModeProperty, new GUIContent("GameItem Context", "The context that we are working within for determining what GameItem to use."));
+            //if (contextModeProperty.enumValueIndex == 0)
+            //{
+            //    EditorGUI.indentLevel++;
+            //    rowPosition.y += _propertyRowHeight;
+            //    var reactToChangesProperty = property.FindPropertyRelative("_reactToChanges");
+            //    EditorGUI.PropertyField(rowPosition, reactToChangesProperty);
+            //    EditorGUI.indentLevel--;
+            //}
+            //else 
+            if (contextModeProperty.enumValueIndex == 1)
             {
                 EditorGUI.indentLevel++;
                 rowPosition.y += _propertyRowHeight;
                 var numberProperty = property.FindPropertyRelative("_number");
                 EditorGUI.PropertyField(rowPosition, numberProperty);
+                EditorGUI.indentLevel--;
+            }
+            else if (contextModeProperty.enumValueIndex == 3)
+            {
+                EditorGUI.indentLevel++;
+                rowPosition.y += _propertyRowHeight;
+                var referencedProperty = property.FindPropertyRelative("_referencedGameItemContextBase");
+                EditorGUI.PropertyField(rowPosition, referencedProperty, new GUIContent("Referenced Context"));
                 EditorGUI.indentLevel--;
             }
         }
@@ -59,9 +67,10 @@ namespace GameFramework.GameStructure.GameItems.Editor
         {
             var height = _propertyRowHeight;
             var contextModeProperty = property.FindPropertyRelative("_contextMode");
-            if (contextModeProperty.enumValueIndex == 0 || contextModeProperty.enumValueIndex == 1)
+//            if (contextModeProperty.enumValueIndex == 0 || contextModeProperty.enumValueIndex == 1 || contextModeProperty.enumValueIndex == 3)
+            if (contextModeProperty.enumValueIndex == 1 || contextModeProperty.enumValueIndex == 3)
             {
-                height += _propertyRowHeight;
+                    height += _propertyRowHeight;
             }
 
             return height;
