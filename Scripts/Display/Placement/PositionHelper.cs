@@ -29,6 +29,7 @@ namespace GameFramework.Display.Placement
     public class PositionHelper : MonoBehaviour
     {
         public static Plane XzPlane = new Plane(Vector3.up, Vector3.zero);
+        public static Plane XyPlane = new Plane(Vector3.forward, Vector3.zero);
 
         /// <summary>
         /// Return the position of a given Vector3 on the X / Z plane where the y position is 0
