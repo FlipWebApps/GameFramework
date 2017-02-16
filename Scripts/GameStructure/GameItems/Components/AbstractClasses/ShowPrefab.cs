@@ -36,21 +36,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// abstract base for showing a prefab from the selected item including updating to a new prefab when the selection changes.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class ShowPrefab<T> : MonoBehaviour where T : GameItem
+    public abstract class ShowPrefab<T> : GameItemContextBaseRunnable<T> where T : GameItem
     {
-        /// <summary>
-        /// What GameItem we should use for showing prefabs from.
-        /// </summary>
-        public GameItemContext GameItemContext
-        {
-            get { return _gameItemContext; }
-            set { _gameItemContext = value; }
-        }
-        [Header("GameItem")]
-        [Tooltip("What GameItem we should use for showing prefabs from.")]
-        [SerializeField]
-        GameItemContext _gameItemContext;
-
         /// <summary>
         ///  The type of prefab to instantiate.
         /// </summary>
@@ -103,70 +90,30 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         readonly Dictionary<int, GameObject> _cachedPrefabInstances = new Dictionary<int, GameObject>();
         GameObject _selectedPrefabInstance;
 
-        /// <summary>
-        /// Setup
-        /// </summary>
-        protected virtual void Start()
-        {
-            GetGameItemManager().SelectedChanged += SelectedChanged;
-            var gameItem = GetGameItemManager().GetReferencedGameItem(GameItemContext);
-            Assert.IsNotNull(gameItem, "A GameItem was not found. Check the GameItemContext settings refer to a valid GameItem.");
-            Show(gameItem);
-        }
-
-
-        /// <summary>
-        /// Destroy
-        /// </summary>
-        protected virtual void OnDestroy()
-        {
-            GetGameItemManager().SelectedChanged -= SelectedChanged;
-        }
-
-        /// <summary>
-        /// Implement this method to return a GameItemManager that contains the GameItems that this works upon.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract GameItemManager<T, GameItem> GetGameItemManager();
-
-
-        /// <summary>
-        /// Called when the selection changes.
-        /// </summary>
-        /// <param name="oldItem"></param>
-        /// <param name="item"></param>
-        protected virtual void SelectedChanged(T oldItem, T item)
-        {
-            if (GameItemContext.ReactToSelectionChanges() || oldItem == null)
-            {
-                Show(item);
-            }
-        }
-
 
         /// <summary>
         /// Show the actual prefab
         /// </summary>
         /// <param name="item"></param>
-        void Show(T item)
+        public override void RunMethod(T gameItem, bool isStart = true)
         {
             GameObject _newPrefabInstance;
-            _cachedPrefabInstances.TryGetValue(item.Number, out _newPrefabInstance);
+            _cachedPrefabInstances.TryGetValue(gameItem.Number, out _newPrefabInstance);
             if (_newPrefabInstance == null)
             {
-                _newPrefabInstance = item.InstantiatePrefab(PrefabType, Name,
+                _newPrefabInstance = gameItem.InstantiatePrefab(PrefabType, Name,
                     Parent == null ? transform : Parent.transform, WorldPositionStays);
                 if (_newPrefabInstance != null)
                 {
                     _newPrefabInstance.SetActive(false); // start inactive so we don't run transitions immediately
-                    _cachedPrefabInstances.Add(item.Number, _newPrefabInstance);
+                    _cachedPrefabInstances.Add(gameItem.Number, _newPrefabInstance);
                 }
             }
 
             Assert.IsNotNull(_newPrefabInstance,
                 string.Format(
                     "The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.",
-                    item.IdentifierBase, item.Number));
+                    gameItem.IdentifierBase, gameItem.Number));
 
 #if BEAUTIFUL_TRANSITIONS
             StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));

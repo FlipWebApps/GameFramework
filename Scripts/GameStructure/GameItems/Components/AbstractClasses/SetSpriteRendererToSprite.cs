@@ -21,7 +21,6 @@
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
@@ -30,57 +29,15 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
     [RequireComponent(typeof (SpriteRenderer))]
-    public abstract class SetSpriteRendererToSprite<T> : MonoBehaviour where T : GameItem
+    public abstract class SetSpriteRendererToSprite<T> : SetSprite<SpriteRenderer, T> where T : GameItem
     {
         /// <summary>
-        ///  The type of sprite to set
-        /// </summary>
-        public GameItem.LocalisableSpriteType SpriteType
-        {
-            get { return _spriteType; }
-            set { _spriteType = value; }
-        }
-        [Tooltip("The type of sprite to set.")]
-        [SerializeField]
-        GameItem.LocalisableSpriteType _spriteType;
-
-        /// <summary>
-        /// For custom sprite types the name of the sprite to set.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set { _name  = value; }
-        }
-        [Tooltip("For custom sprite types the name of the sprite to set.")]
-        [SerializeField]
-        string _name;
-
-        /// <summary>
-        /// Setup sprite
-        /// </summary>
-        void Awake()
-        {
-            var spriteComponent = GetComponent<SpriteRenderer>();
-            var currentItem = GetCurrentItem();
-            Assert.IsNotNull(currentItem, "No Selected item is available.");
-
-            Sprite sprite;
-            if (SpriteType == GameItem.LocalisableSpriteType.SelectionMenu)
-                sprite = currentItem.GetSpriteSelectionMenu();
-            else if (SpriteType == GameItem.LocalisableSpriteType.InGame)
-                sprite = currentItem.GetSpriteInGame();
-            else
-                sprite = currentItem.GetSprite(Name);
-            Assert.IsNotNull(sprite, "The Sprite you are trying to instantiate is not setup. Please add it to the target GameItem.");
-
-            spriteComponent.sprite = sprite;
-        }
-
-        /// <summary>
-        /// Return the current GameItem that should be used for looking up the sprite.
+        /// Assigns the sprite to the target component.
         /// </summary>
         /// <returns></returns>
-        protected abstract T GetCurrentItem();
+        protected override void AssignSprite(SpriteRenderer component, Sprite sprite)
+        {
+            component.sprite = sprite;
+        }
     }
 }

@@ -19,53 +19,33 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System.Collections;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
-using UnityEngine.Assertions;
+
+#if BEAUTIFUL_TRANSITIONS
+using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+#endif
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// Set a sprite to the specified target
+    /// Enabled or a disabled a gameobject based upon a condition.
     /// </summary>
-    /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
-    /// <typeparam name="TC">Component type to target</typeparam>
-    public abstract class SetSprite<TC, T> : GameItemContextBaseRunnable<T> where TC : Component where T : GameItem
+    public abstract class GameItemContextEnableDisableGameObject<T> : GameItemContextBaseRunnable<T> where T : GameItem
     {
         /// <summary>
-        ///  The type of sprite to set
+        /// GameObject to show if the specified GameItem is selected
         /// </summary>
-        public GameItem.LocalisableSpriteType SpriteType
-        {
-            get { return _spriteType; }
-            set { _spriteType = value; }
-        }
-        [Tooltip("The type of sprite to set.")]
-        [SerializeField]
-        GameItem.LocalisableSpriteType _spriteType;
+        [Header("Enable")]
+        [Tooltip("GameObject to show if the specified GameItem is selected")]
+        public GameObject ConditionMetGameObject;
 
         /// <summary>
-        /// For custom sprite types the name of the sprite to set.
+        /// GameObject to show if the specified GameItem is not selected
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set { _name  = value; }
-        }
-        [Tooltip("For custom sprite types the name of the sprite to set.")]
-        [SerializeField]
-        string _name;
-
-        TC _component;
-
-        /// <summary>
-        /// Setup
-        /// </summary>
-        protected override void Awake()
-        {
-            base.Awake();
-            _component = GetComponent<TC>();
-        }
+        [Tooltip("GameObject to show if the specified GameItem is not selected")]
+        public GameObject ConditionNotMetGameObject;
 
 
         /// <summary>
@@ -75,16 +55,40 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <param name="isStart"></param>
         public override void RunMethod(T gameItem, bool isStart = true)
         {
-            var sprite = gameItem.GetSprite(SpriteType, Name);
-            Assert.IsNotNull(sprite, string.Format("The Sprite you are trying to instantiate is not setup. Please add it to  the target GameItem {0}_{1}.", gameItem.IdentifierBase, gameItem.Number));
-            AssignSprite(_component, sprite);
+            var isConditionMet = IsConditionMet(gameItem);
+
+//#if BEAUTIFUL_TRANSITIONS
+//            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
+//#else
+            if (ConditionMetGameObject != null)
+                ConditionMetGameObject.SetActive(isConditionMet);
+            if (ConditionNotMetGameObject != null)
+                ConditionNotMetGameObject.SetActive(!isConditionMet);
+//#endif
         }
 
 
         /// <summary>
-        /// Assigns the sprite to the target component.
+        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
-        protected abstract void AssignSprite(TC component, Sprite sprite);
+        public abstract bool IsConditionMet(T gameItem);
+
+
+#if BEAUTIFUL_TRANSITIONS
+        IEnumerator TransitionOutIn(GameObject oldGameObject, GameObject newGameObject)
+        {
+            if (oldGameObject != null)
+            {
+                if (TransitionHelper.ContainsTransition(oldGameObject))
+                {
+                    var transitions = TransitionHelper.TransitionOut(oldGameObject);
+                    yield return new WaitForSeconds(TransitionHelper.GetTransitionOutTime(transitions));
+                }
+                oldGameObject.SetActive(false);
+            }
+            newGameObject.SetActive(true);
+        }
+#endif
     }
 }

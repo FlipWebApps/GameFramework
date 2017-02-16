@@ -25,19 +25,22 @@ using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
-    public abstract class SetSpriteEditor : UnityEditor.Editor
+    public abstract class SetSpriteEditor : GameItemContextBaseEditor
     {
         SerializedProperty _spriteTypeProperty;
         SerializedProperty _nameProperty;
 
-        void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             _spriteTypeProperty = serializedObject.FindProperty("_spriteType");
             _nameProperty = serializedObject.FindProperty("_name");
         }
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(_spriteTypeProperty);

@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
 using UnityEngine;
 
@@ -33,12 +34,12 @@ namespace GameFramework.GameStructure.Players.Components
     public class SetImageToPlayerSprite : SetImageToSprite<Player>
     {
         /// <summary>
-        /// Returns the current GameItem
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override Player GetCurrentItem()
+        protected override GameItemManager<Player, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Players.Selected;
+            return GameManager.Instance.Players;
         }
     }
 }

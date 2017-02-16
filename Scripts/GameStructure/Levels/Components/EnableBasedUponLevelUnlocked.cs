@@ -21,25 +21,26 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
+using GameFramework.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Enable or a Disable a gameobject based upon whether a specified Level is unlocked.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set SpriteRenderer To World Sprite")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class SetSpriteRendererToWorldSprite : SetSpriteRendererToSprite<World>
+    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    [AddComponentMenu("Game Framework/GameStructure/Levels/EnableBasedUponUnlockedLevel")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
+    public class EnableBasedUponLevelUnlocked : EnableBasedUponUnlocked<Level>
     {
         /// <summary>
         /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<World, GameItem> GetGameItemManager()
+        protected override GameItemManager<Level, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Worlds;
+            return GameManager.Instance.Levels;
         }
     }
 }

@@ -19,27 +19,55 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
-using UnityEngine;
 
-namespace GameFramework.GameStructure.Worlds.Components
+
+namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// abstract base for enabling or a disabling a gameobject based upon whether a specified GameItem is unlocked.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set SpriteRenderer To World Sprite")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class SetSpriteRendererToWorldSprite : SetSpriteRendererToSprite<World>
+    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    public abstract class EnableBasedUponUnlocked<T> : GameItemContextEnableDisableGameObject<T> where T : GameItem
     {
         /// <summary>
-        /// Return a GameItemManager that this works upon.
+        /// Setup
+        /// </summary>
+        protected override void Start()
+        {
+            base.Start();
+            GetGameItemManager().Unlocked += Unlocked;
+        }
+
+
+        /// <summary>
+        /// Destroy
+        /// </summary>
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GetGameItemManager().Unlocked -= Unlocked;
+        }
+
+
+        /// <summary>
+        /// Called when a GameItem is unlocked.
+        /// </summary>
+        /// <param name="gameItem"></param>
+        void Unlocked(T gameItem)
+        {
+            if (gameItem.Number == GameItem.Number)
+                RunMethod(gameItem, false);
+        }
+
+
+        /// <summary>
+        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<World, GameItem> GetGameItemManager()
+        public override bool IsConditionMet(T gameItem)
         {
-            return GameManager.Instance.Worlds;
+            return gameItem.IsUnlocked;
         }
     }
 }

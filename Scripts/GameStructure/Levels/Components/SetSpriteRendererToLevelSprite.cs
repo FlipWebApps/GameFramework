@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.ObjectModel;
 using UnityEngine;
 
@@ -33,12 +34,12 @@ namespace GameFramework.GameStructure.Levels.Components
     public class SetSpriteRendererToLevelSprite : SetSpriteRendererToSprite<Level>
     {
         /// <summary>
-        /// Returns the current GameItem
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override Level GetCurrentItem()
+        protected override GameItemManager<Level, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Levels.Selected;
+            return GameManager.Instance.Levels;
         }
     }
 }

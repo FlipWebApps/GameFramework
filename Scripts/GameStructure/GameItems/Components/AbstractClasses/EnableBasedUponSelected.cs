@@ -20,71 +20,57 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using UnityEngine;
-using UnityEngine.Assertions;
+
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// Set a sprite to the specified target
+    /// abstract base for enabling or a disabling a gameobject based upon whether a specified GameItem is selected.
     /// </summary>
-    /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
-    /// <typeparam name="TC">Component type to target</typeparam>
-    public abstract class SetSprite<TC, T> : GameItemContextBaseRunnable<T> where TC : Component where T : GameItem
+    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    public abstract class EnableBasedUponSelected<T> : GameItemContextEnableDisableGameObject<T> where T : GameItem
     {
         /// <summary>
-        ///  The type of sprite to set
+        /// Default to ByNumber as that is perhaps the most common scenario here.
         /// </summary>
-        public GameItem.LocalisableSpriteType SpriteType
+        protected EnableBasedUponSelected()
         {
-            get { return _spriteType; }
-            set { _spriteType = value; }
+            Context.ContextMode = ObjectModel.GameItemContext.ContextModeType.ByNumber;
         }
-        [Tooltip("The type of sprite to set.")]
-        [SerializeField]
-        GameItem.LocalisableSpriteType _spriteType;
 
-        /// <summary>
-        /// For custom sprite types the name of the sprite to set.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set { _name  = value; }
-        }
-        [Tooltip("For custom sprite types the name of the sprite to set.")]
-        [SerializeField]
-        string _name;
-
-        TC _component;
 
         /// <summary>
         /// Setup
         /// </summary>
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
-            _component = GetComponent<TC>();
+            base.Start();
+            // add selection changed handler always, but not multiple times.
+            if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
+                GetGameItemManager().SelectedChanged += SelectedChanged;
         }
 
 
         /// <summary>
-        /// Called by the base class from start and optionally if the selection chages.
+        /// Destroy
         /// </summary>
-        /// <param name="gameItem"></param>
-        /// <param name="isStart"></param>
-        public override void RunMethod(T gameItem, bool isStart = true)
+        protected override void OnDestroy()
         {
-            var sprite = gameItem.GetSprite(SpriteType, Name);
-            Assert.IsNotNull(sprite, string.Format("The Sprite you are trying to instantiate is not setup. Please add it to  the target GameItem {0}_{1}.", gameItem.IdentifierBase, gameItem.Number));
-            AssignSprite(_component, sprite);
+            base.OnDestroy();
+            // add selection changed handler always, but not multiple times.
+            if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
+                GetGameItemManager().SelectedChanged += SelectedChanged;
         }
 
-
+        
         /// <summary>
-        /// Assigns the sprite to the target component.
+        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
-        protected abstract void AssignSprite(TC component, Sprite sprite);
+        public override bool IsConditionMet(T gameItem)
+        {
+            // don't use gameItem as that may be the 
+            return GetGameItem<T>().Number == GetGameItemManager().Selected.Number;
+        }
     }
 }

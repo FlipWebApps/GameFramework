@@ -25,7 +25,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
     public abstract class ShowPrefabEditor : UnityEditor.Editor
     {
-        SerializedProperty _gameItemReferenceProperty;
+        SerializedProperty _contextProperty;
         SerializedProperty _prefabTypeProperty;
         SerializedProperty _nameProperty;
         SerializedProperty _parentProperty;
@@ -33,7 +33,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 
         public void OnEnable()
         {
-            _gameItemReferenceProperty = serializedObject.FindProperty("_gameItemContext");
+            _contextProperty = serializedObject.FindProperty("_context");
             _prefabTypeProperty = serializedObject.FindProperty("_prefabType");
             _nameProperty = serializedObject.FindProperty("_name");
             _parentProperty = serializedObject.FindProperty("_parent");
@@ -44,7 +44,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_gameItemReferenceProperty);
+            EditorGUILayout.PropertyField(_contextProperty);
             EditorGUILayout.PropertyField(_prefabTypeProperty);
             if (_prefabTypeProperty.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(_nameProperty);

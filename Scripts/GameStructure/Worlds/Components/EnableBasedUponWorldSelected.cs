@@ -27,11 +27,12 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Enable or a Disable a gameobject based upon whether a specified World is selected.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Set SpriteRenderer To World Sprite")]
+    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/EnableBasedUponSelectedWorld")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class SetSpriteRendererToWorldSprite : SetSpriteRendererToSprite<World>
+    public class EnableBasedUponWorldSelected : EnableBasedUponSelected<World>
     {
         /// <summary>
         /// Return a GameItemManager that this works upon.

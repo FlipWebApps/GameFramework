@@ -21,6 +21,7 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.Characters.ObjectModel;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Characters.Components
@@ -33,12 +34,12 @@ namespace GameFramework.GameStructure.Characters.Components
     public class SetImageToCharacterSprite : SetImageToSprite<Character>
     {
         /// <summary>
-        /// Returns the current GameItem
+        /// Return a GameItemManager that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override Character GetCurrentItem()
+        protected override GameItemManager<Character, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Characters.Selected;
+            return GameManager.Instance.Characters;
         }
     }
 }
