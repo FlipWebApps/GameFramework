@@ -388,7 +388,7 @@ namespace GameFramework.GameStructure.Colliders
 
 #if PRO_POOLING
             if (!string.IsNullOrEmpty(triggerData.AddPooledItem))
-                ProPooling.PoolManager.Instance.GetFromPool(triggerData.AddPooledItem, transform);
+                ProPooling.PoolManager.Instance.GetFromPool(triggerData.AddPooledItem, transform.position, Quaternion.identity);
 #endif
 
             if (triggerData.AudioClip != null)
