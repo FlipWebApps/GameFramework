@@ -992,6 +992,119 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
         #endregion Instantiate Prefab Related
 
+        #region Sprite Obsolete
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.SelectionMenu")]
+        public Sprite GetSpriteSelectionMenu()
+        {
+            return GetSpriteByType(LocalisableSpriteType.SelectionMenu);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.SelectionMenu")]
+        public Sprite GetSpriteSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get a selection menu sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.SelectionMenu")]
+        public Sprite GetSpriteSelectionMenu(string language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.InGame")]
+        public Sprite GetSpriteInGame()
+        {
+            return GetSpriteByType(LocalisableSpriteType.InGame);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.InGame")]
+        public Sprite GetSpriteInGame(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an in game sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.InGame")]
+        public Sprite GetSpriteInGame(string language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.InGame, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the currently set language
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.UnlockWindow")]
+        public Sprite GetSpriteUnlockWindow()
+        {
+            return GetSpriteByType(LocalisableSpriteType.UnlockWindow);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that correspondsto the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.UnlockWindow")]
+        public Sprite GetSpriteUnlockWindow(SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Get an unlock window sprite that corresponds to the specified language
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        [Obsolete("Use the GetSprite method and pass a type of LocalisableSpriteType.UnlockWindow")]
+        public Sprite GetSpriteUnlockWindow(string language, bool fallbackToDefault = true)
+        {
+            return GetSpriteByType(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
+        }
+        #endregion Sprite Obsolete
+
         #region Sprite Related
 
         /// <summary>
@@ -999,7 +1112,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Sprite GetSprite(string name)
+        public Sprite GetSpriteByName(string name)
         {
             var localisableSprite = GetLocalisableSprite(name);
             return localisableSprite == null ? null : localisableSprite.GetSprite();
@@ -1013,7 +1126,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="language"></param>
         /// <param name="fallbackToDefault"></param>
         /// <returns></returns>
-        public Sprite GetSprite(string name, SystemLanguage language, bool fallbackToDefault = true)
+        public Sprite GetSpriteByName(string name, SystemLanguage language, bool fallbackToDefault = true)
         {
             var localisableSprite = GetLocalisableSprite(name);
             return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
@@ -1027,7 +1140,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="language"></param>
         /// <param name="fallbackToDefault"></param>
         /// <returns></returns>
-        public Sprite GetSprite(string name, string language, bool fallbackToDefault = true)
+        public Sprite GetSpriteByName(string name, string language, bool fallbackToDefault = true)
         {
             var localisableSprite = GetLocalisableSprite(name);
             return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
@@ -1035,111 +1148,10 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Get a selection menu sprite that corresponds to the currently set language
-        /// </summary>
-        /// <returns></returns>
-        public Sprite GetSpriteSelectionMenu()
-        {
-            return GetSprite(LocalisableSpriteType.SelectionMenu);
-        }
-
-
-        /// <summary>
-        /// Get a selection menu sprite that correspondsto the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteSelectionMenu(SystemLanguage language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
-        }
-
-
-        /// <summary>
-        /// Get a selection menu sprite that corresponds to the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteSelectionMenu(string language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.SelectionMenu, language, fallbackToDefault);
-        }
-
-
-        /// <summary>
-        /// Get an in game sprite that corresponds to the currently set language
-        /// </summary>
-        /// <returns></returns>
-        public Sprite GetSpriteInGame()
-        {
-            return GetSprite(LocalisableSpriteType.InGame);
-        }
-
-
-        /// <summary>
-        /// Get an in game sprite that correspondsto the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteInGame(SystemLanguage language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
-        }
-
-
-        /// <summary>
-        /// Get an in game sprite that corresponds to the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteInGame(string language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.InGame, language, fallbackToDefault);
-        }
-
-
-        /// <summary>
-        /// Get an unlock window sprite that corresponds to the currently set language
-        /// </summary>
-        /// <returns></returns>
-        public Sprite GetSpriteUnlockWindow()
-        {
-            return GetSprite(LocalisableSpriteType.UnlockWindow);
-        }
-
-
-        /// <summary>
-        /// Get an unlock window sprite that correspondsto the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteUnlockWindow(SystemLanguage language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
-        }
-
-
-        /// <summary>
-        /// Get an unlock window sprite that corresponds to the specified language
-        /// </summary>
-        /// <param name="language"></param>
-        /// <param name="fallbackToDefault"></param>
-        /// <returns></returns>
-        public Sprite GetSpriteUnlockWindow(string language, bool fallbackToDefault = true)
-        {
-            return GetSprite(LocalisableSpriteType.UnlockWindow, language, fallbackToDefault);
-        }
-
-        /// <summary>
         /// Get a sprite with the given type that corresponds to the currently set language
         /// </summary>
         /// <returns></returns>
-        Sprite GetSprite(LocalisableSpriteType spriteType)
+        public Sprite GetSpriteByType(LocalisableSpriteType spriteType)
         {
             var localisableSprite = GetLocalisableSprite(spriteType);
             return localisableSprite == null ? null : localisableSprite.GetSprite();
@@ -1153,7 +1165,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="language"></param>
         /// <param name="fallbackToDefault"></param>
         /// <returns></returns>
-        Sprite GetSprite(LocalisableSpriteType spriteType, SystemLanguage language, bool fallbackToDefault = true)
+        public Sprite GetSpriteByType(LocalisableSpriteType spriteType, SystemLanguage language, bool fallbackToDefault = true)
         {
             var localisableSprite = GetLocalisableSprite(spriteType);
             return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
@@ -1167,10 +1179,54 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="language"></param>
         /// <param name="fallbackToDefault"></param>
         /// <returns></returns>
-        Sprite GetSprite(LocalisableSpriteType spriteType, string language, bool fallbackToDefault = true)
+        public Sprite GetSpriteByType(LocalisableSpriteType spriteType, string language, bool fallbackToDefault = true)
         {
             var localisableSprite = GetLocalisableSprite(spriteType);
             return localisableSprite == null ? null : localisableSprite.GetSprite(language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="customName"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(LocalisableSpriteType spriteType, string customName)
+        {
+            return spriteType == GameItem.LocalisableSpriteType.Custom ? GetSpriteByName(customName) : GetSpriteByType(spriteType);
+        }
+
+
+        /// <summary>
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="customName"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(LocalisableSpriteType spriteType, string customName, SystemLanguage language, bool fallbackToDefault = true)
+        {
+            return spriteType == GameItem.LocalisableSpriteType.Custom
+                ? GetSpriteByName(customName, language, fallbackToDefault)
+                : GetSpriteByType(spriteType, language, fallbackToDefault);
+        }
+
+
+        /// <summary>
+        /// Instantiate an instance of the specified prefab type.
+        /// </summary>
+        /// <param name="spriteType"></param>
+        /// <param name="customName"></param>
+        /// <param name="language"></param>
+        /// <param name="fallbackToDefault"></param>
+        /// <returns></returns>
+        public Sprite GetSprite(LocalisableSpriteType spriteType, string customName, string language, bool fallbackToDefault = true)
+        {
+            return spriteType == GameItem.LocalisableSpriteType.Custom
+                ? GetSpriteByName(customName, language, fallbackToDefault)
+                : GetSpriteByType(spriteType, language, fallbackToDefault);
         }
 
 
