@@ -87,7 +87,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the second star or -1 if no target")]
         [SerializeField]
-        float _star2Target = 10;
+        float _star2Target = 15;
 
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the third star or -1 if no target")]
         [SerializeField]
-        float _star3Target = 10;
+        float _star3Target = 20;
 
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         }
         [Tooltip("The target for getting the fourth star or -1 if no target")]
         [SerializeField]
-        float _star4Target = 10;
+        float _star4Target = 25;
 
 
         /// <summary>
