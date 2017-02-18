@@ -19,6 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.GenericGameItems.ObjectModel;
 using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -32,25 +35,16 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/Show GenericGameItem Info")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
-    public class ShowGenericGameItemInfo : MonoBehaviour
+    public class ShowGenericGameItemInfo : ShowGameItemInfo<GenericGameItem>
     {
         /// <summary>
-        /// A localisation key or text string to use to dissplay. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// Returns the current GenericGameItems GameItem
         /// </summary>
-        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
-        public string Key;
-
-        void Awake()
+        /// <returns></returns>
+        protected override GameItemManager<GenericGameItem, GameItem> GetGameItemManager()
         {
-            Assert.IsNotNull(GenericGameItemManager.Instance.GenericGameItems, "GenericGameItems are not setup when referenced from ShowGenericGameItemInfo");
-
-            var genericGameItem = GenericGameItemManager.Instance.GenericGameItems.Selected;
-            if (genericGameItem != null)
-            {
-                var textComponent = GetComponent<Text>();
-                var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                textComponent.text = string.Format(text, genericGameItem.Number, genericGameItem.Name, genericGameItem.Description);
-            }
+            Assert.IsNotNull(GenericGameItemManager.Instance.GenericGameItems, "GenericGameItemss are not setup when referenced from ShowGenericGameItemsInfo");
+            return GenericGameItemManager.Instance.GenericGameItems;
         }
     }
 }

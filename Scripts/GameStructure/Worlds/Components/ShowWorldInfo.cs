@@ -19,7 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Localisation;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -32,25 +34,16 @@ namespace GameFramework.GameStructure.Worlds.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Worlds/ShowWorldInfo")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class ShowWorldInfo : MonoBehaviour
+    public class ShowWorldInfo : ShowGameItemInfo<World>
     {
         /// <summary>
-        /// A localisation key or text string to use to dissplay. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// Returns the current World GameItem
         /// </summary>
-        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
-        public string Key;
-
-        void Awake()
+        /// <returns></returns>
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
             Assert.IsNotNull(GameManager.Instance.Worlds, "Worlds are not setup when referenced from ShowWorldInfo");
-
-            var world = GameManager.Instance.Worlds.Selected;
-            if (world != null)
-            {
-                var textComponent = GetComponent<Text>();
-                var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                textComponent.text = string.Format(text, world.Number, world.Name, world.Description);
-            }
+            return GameManager.Instance.Worlds;
         }
     }
 }
