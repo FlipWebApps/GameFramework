@@ -65,12 +65,12 @@ namespace GameFramework.GameFramework.Editor {
             EditorGUILayout.HelpBox("The below assets all add extra features to Game Framework. If you have an asset installed you can enable it to make use of additional features.", MessageType.None);
             EditorGUILayout.Space();
 
-            GUILayout.Label("First Party", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("First Party", EditorStyles.boldLabel);
             ShowAsset("Beautiful Transitions", "BEAUTIFUL_TRANSITIONS", "https://www.assetstore.unity3d.com/#!/content/56442?aid=1011lGnE", "Simply and easily create beautiful transitions for your UI elements, gameobjects , cameras or scenes. Included as part of the Game Framework - Extras bundle.\n\nEnable for automatic use of scene and gameobject transitions.", "Asset Store", @"Assets\FlipWebApps\BeautifulTransitions", _beautifulTransitionsIcon, true);
             ShowAsset("Prefs Editor (Secured)", "PREFS_EDITOR", "https://www.assetstore.unity3d.com/#!/content/61908?aid=1011lGnE", "Full editor for viewing, editing and managing your PlayerPrefs. Included as part of the Game Framework - Extras bundle.\n\nEnable for optional use of secured player preferences to prevent cheating.", "Asset Store", @"Assets\FlipWebApps\PrefsEditor", _prefsEditorIcon, true);
             ShowAsset("Pro Pooling", "PRO_POOLING", "https://www.assetstore.unity3d.com/#!/content/59286?aid=1011lGnE", "Powerful gameobject and prefab pooling. Included as part of the Game Framework - Extras bundle.\n\nAdds Gameobject pooling and performance improvements", "Asset Store", @"Assets\FlipWebApps\ProPooling", _proPoolingIcon, true);
 
-            GUILayout.Label("Third Party", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("Third Party", EditorStyles.boldLabel);
             ShowAsset("Facebook", "FACEBOOK_SDK", "https://developers.facebook.com/docs/unity/", "Facebook support for WebGL, Android and iOS.\n\nEnables Facebook support components and functionality in GameFramework", "Download", @"Assets\FacebookSDK", _facebookIcon, false);
             ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
             ShowAsset("PlayMaker", "PLAYMAKER", "https://www.assetstore.unity3d.com/#!/content/368?aid=1011lGnE", "PlayMaker actions to combine the power of Game Framework and PlayMaker.\n\nThis integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.\n\nNOTE: Game Framework PlayMaker Extensions is an early alpha - please get in contact so we can extend it with the functionality that you need!", "Asset Store (Play Maker)", @"Assets\PlayMaker", _playMakerIcon, true);
@@ -95,7 +95,7 @@ namespace GameFramework.GameFramework.Editor {
                 PlayerSettingsHelper.RemoveScriptingDefineAllTargets(defineName);
             }
             GUI.enabled = true;
-            GUILayout.Label(assetName, new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label(assetName, new GUIStyle(EditorStyles.boldLabel) { padding = new RectOffset(5, 5, 5, 5), margin = new RectOffset(0, 0, 0, 0) });
             GUILayout.FlexibleSpace();
             if (EditorHelper.LinkButton(urlName, true))
                 Application.OpenURL(url);
