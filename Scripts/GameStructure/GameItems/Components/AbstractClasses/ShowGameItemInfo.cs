@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.Localisation;
 using GameFramework.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -35,15 +34,15 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     public abstract class ShowGameItemInfo<T> : GameItemContextBaseRunnable<T> where T : GameItem
     {
         /// <summary>
-        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// DEPRECATED: Use the localisable text field below
         /// </summary>
         [Tooltip("DEPRECATED: Use the localisable text field below")]
         public string Key;
 
         /// <summary>
-        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description, {3} - Value to Unlock
         /// </summary>
-        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
+        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description\n{3} - Value to Unlock")]
         public LocalisableText Text;
 
         Text _textComponent;
@@ -71,7 +70,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             if (GameItem != null)
             {
-                _textComponent.text = Text.FormatValue(GameItem.Number, GameItem.Name, GameItem.Description);
+                _textComponent.text = Text.FormatValue(GameItem.Number, GameItem.Name, GameItem.Description, GameItem.ValueToUnlock);
             }
         }
     }
