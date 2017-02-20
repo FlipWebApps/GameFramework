@@ -25,7 +25,7 @@ using UnityEngine;
 namespace GameFramework.Billing.Components
 {
     /// <summary>
-    /// Enabled or a disabled a gameobject based upon whether the facebook SDK is installed
+    /// Enabled or a disabled a gameobject based upon whether billing is enabled through the editor services window
     /// </summary>
     [AddComponentMenu("Game Framework/Billing/EnableIfBillingEnabled")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

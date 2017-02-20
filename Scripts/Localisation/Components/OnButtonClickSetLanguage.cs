@@ -25,10 +25,9 @@ using UnityEngine;
 namespace GameFramework.Localisation.Components
 {
     /// <summary>
-    /// Show the settings dialog
-    /// 
-    /// This automatically hooks up the button onClick listener
+    /// Sets localisation to use the specified language when a button is clicked
     /// </summary>
+    /// This automatically hooks up the button onClick listener
     [AddComponentMenu("Game Framework/Localisation/OnButtonClickSetLanguage")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class OnButtonClickSetLanguage : OnButtonClick

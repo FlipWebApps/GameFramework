@@ -25,7 +25,7 @@ using UnityEngine;
 namespace GameFramework.Debugging.Components
 {
     /// <summary>
-    /// A simple dummy game loop that will allow you to test the structure and interfaces in your game.
+    /// A simple dummy game loop with win and lose buttons that will allow you to test the structure and interfaces in your game.
     /// </summary>
     /// This component works with some of the GameStructure functionality and gives an on screen meny 
     /// where you can set whether the game is won or lost. It requires that you have a LevelManager added 

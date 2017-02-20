@@ -25,7 +25,7 @@ using UnityEngine;
 namespace GameFramework.Display.Other.Components
 {
     /// <summary>
-    /// Simple level of detail script that enables different gameobjects based upon the distance from the camera
+    /// Simple level of detail component that enables different gameobjects based upon the distance from the camera to help improve performance.
     /// </summary>
     /// You can use this script to improve the performance of your games by replacing distant objects with 
     /// lower detail models. Select the gameobjects to use for the different distance thresholds. They will 

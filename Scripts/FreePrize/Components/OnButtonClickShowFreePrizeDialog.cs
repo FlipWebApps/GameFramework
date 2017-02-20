@@ -27,9 +27,8 @@ namespace GameFramework.FreePrize.Components
 {
     /// <summary>
     /// Show the free prize dialog when the button is clicked.
-    /// 
-    /// This automatically hooks up the button onClick listener
     /// </summary>
+    /// This automatically hooks up the button onClick listener
     [AddComponentMenu("Game Framework/FreePrize/OnButtonClickShowFreePrizeDialog")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class OnButtonClickShowFreePrizeDialog : OnButtonClick

@@ -32,7 +32,7 @@ using GameFramework.Preferences;
 namespace GameFramework.FreePrize.Components
 {
     /// <summary>
-    /// Manager class for handling the Free Prize status and configuration
+    /// Manager class for handling the Free Prize status and configuration. Add this to a persistant gameobject in your scene if you are using Free Prize functionality
     /// </summary>
     [AddComponentMenu("Game Framework/FreePrize/FreePrizeManager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

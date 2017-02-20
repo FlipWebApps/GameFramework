@@ -24,7 +24,7 @@ using UnityEngine;
 namespace GameFramework.Display.Particles.Components
 {
     /// <summary>
-    /// Provides a callback for creating a new particle system.
+    /// Provides a callback for creating a new particle system that you can hook up to event handlers.
     /// </summary>
     [AddComponentMenu("Game Framework/Display/Particles/ParticlePlayer")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

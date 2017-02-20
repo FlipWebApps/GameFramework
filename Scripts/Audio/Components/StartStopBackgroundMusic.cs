@@ -26,7 +26,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.Audio.Components
 {
     /// <summary>
-    /// Start or stop the global background music when this component is enabled / disabled
+    /// Automatically start or stop the global background music.
     /// </summary>
     /// You can use this component to automatically start or stop background music that is configured on
     /// the GameManager. By using this component on different scenes you can control things such as cross scene 

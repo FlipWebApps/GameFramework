@@ -29,7 +29,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.Audio.Components
 {
     /// <summary>
-    /// Copy the global effect volume to the attached Audio Source
+    /// Copy the global effect volume to an attached Audio Source
     /// </summary>
     /// The global effect volume is stored on the GameManager component and can be adjusted through the provided
     /// in game settings window. This component will copy the users preference and automatically set the attached

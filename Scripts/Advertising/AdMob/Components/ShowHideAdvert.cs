@@ -24,7 +24,7 @@ using UnityEngine;
 namespace GameFramework.Advertising.AdMob.Components
 {
     /// <summary>
-    /// Component to automatically show or hide an advert. 
+    /// Automatically show or hide an advert. 
     /// </summary>
     /// 
     /// The advert will be shown when this components Start method is called.
