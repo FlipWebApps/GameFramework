@@ -37,9 +37,11 @@ namespace GameFramework.Localisation.Editor
 
         string _searchString;
 
+        [System.NonSerialized]
         List<string> _categories = new List<string>();
         int _selectedCategory;
 
+        [System.NonSerialized]
         ComponentHelp[] _componentHelps =
         {
             new ComponentHelp("SetAnimatorStartValues", "Set a list of start values on an Animator.", typeof(Animation.Components.SetAnimatorStartValues), "Animation"),
@@ -118,12 +120,6 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("DialogManager", "Provides dialog creation, display and management functionality.", typeof(UI.Dialogs.Components.DialogManager), "UI", "Dialog"),
             new ComponentHelp("GameOver", "Provides the basis for a game over dialog.", typeof(UI.Dialogs.Components.GameOver), "UI", "Dialog", "GameStructure"),
             new ComponentHelp("OnButtonClickPauseLevel", "Pauses a level when an attached button is clicked.", typeof(UI.Dialogs.Components.OnButtonClickPauseLevel), "UI", "Dialog", "GameStructure"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog", "GameStructure"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog"),
-            new ComponentHelp("DialogCallbackShowButtons", "", typeof(UI.Dialogs.Components.DialogCallbackShowButtons), "UI", "Dialog"),
             new ComponentHelp("GradientText", "Provides a gradient effect for UI elements", typeof(UI.Other.Components.GradientText), "UI"),
             new ComponentHelp("ScrollRectEnsureVisible", "Provides support for scrolling a scrollrect to ensure that a specified item is displayed.", typeof(UI.Other.Components.ScrollRectEnsureVisible), "UI"),
             new ComponentHelp("TimeRemaining", "Provides a up / down counter based upon either a specific time target or that specified by the current Level", typeof(UI.Other.Components.TimeRemaining), "UI", "GameStructure"),
@@ -241,7 +237,6 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndVertical();
         }
 
-        [System.Serializable]
         public class ComponentHelp
         {
             public string Name;

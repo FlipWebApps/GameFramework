@@ -28,7 +28,7 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Pauses a level when the button is clicked.
+    /// Pauses a level when an attached button is clicked.
     /// </summary>
     /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
