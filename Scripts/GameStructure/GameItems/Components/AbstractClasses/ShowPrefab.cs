@@ -116,7 +116,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                     GameItem.IdentifierBase, GameItem.Number));
 
 #if BEAUTIFUL_TRANSITIONS
-            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
+            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, newPrefabInstance));
 #else
                 if (_selectedPrefabInstance != null)
                     _selectedPrefabInstance.SetActive(false);
