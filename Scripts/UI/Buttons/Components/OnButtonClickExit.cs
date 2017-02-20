@@ -25,7 +25,7 @@ using UnityEngine.UI;
 
 namespace GameFramework.UI.Buttons.Components {
     /// <summary>
-    /// Quit the game when clicked
+    /// Quit the game when an attached button is clicked.
     /// </summary>
     /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]

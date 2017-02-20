@@ -28,6 +28,9 @@ using UnityEngine.Assertions;
 
 namespace GameFramework.UI.Other.Components
 {
+    /// <summary>
+    /// Provides a up / down counter based upon either a specific time target or that specified by the current Level
+    /// </summary>
     [AddComponentMenu("Game Framework/UI/Other/TimeRemaining")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]
     public class TimeRemaining : MonoBehaviour

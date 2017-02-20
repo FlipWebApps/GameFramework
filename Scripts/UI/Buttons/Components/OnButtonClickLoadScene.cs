@@ -27,7 +27,7 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Buttons.Components
 {
     /// <summary>
-    /// Load the specified scene when the button is clicked.
+    /// Load the specified scene when an attached button is clicked.
     /// </summary>
     /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]

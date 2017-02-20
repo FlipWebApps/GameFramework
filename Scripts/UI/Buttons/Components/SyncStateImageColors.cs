@@ -27,7 +27,9 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Buttons.Components
 {
     /// <summary>
-    /// Syncronises UI Image colors agains changing button states
+    /// Syncronises UI Image colors agains changing button states. This can be used where you want button 
+    /// state changes to be reflected across multiple images such as when you have more complex buttons 
+    /// composed of multiple or child images.
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Buttons/SyncStateImageColors")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/")]

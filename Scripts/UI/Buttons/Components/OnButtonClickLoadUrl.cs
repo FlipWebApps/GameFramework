@@ -26,7 +26,7 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Buttons.Components
 {
     /// <summary>
-    /// When a button is clicked then load the specificed Url
+    /// When an attached button is clicked then load the specificed Url
     /// </summary>
     /// This automatically hooks up the button onClick listener
     [RequireComponent(typeof(Button))]
