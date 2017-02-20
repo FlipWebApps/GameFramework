@@ -26,10 +26,14 @@ namespace GameFramework.EditorExtras.Editor
     /// <summary>
     /// Helper functions for dealing with editor windows, inspectors etc...
     /// </summary>
-    public class GuiStyles
+    public static class GuiStyles
     {
         static readonly Texture2D _earthIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Editor\Earth.png", typeof(Texture2D)) as Texture2D;
         static readonly Texture2D _earthIconBW = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Editor\EarthBW.png", typeof(Texture2D)) as Texture2D;
+
+        public static readonly GUIStyle ToolbarSearchField = "ToolbarSeachTextField";
+        public static readonly GUIStyle ToolbarSearchFieldCancel = "ToolbarSeachCancelButton";
+        public static readonly GUIStyle ToolbarSearchFieldCancelEmpty = "ToolbarSeachCancelButtonEmpty";
 
         #region GUI Styles
 

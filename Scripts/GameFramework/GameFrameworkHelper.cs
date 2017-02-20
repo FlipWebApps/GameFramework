@@ -43,6 +43,11 @@ namespace GameFramework.GameFramework
             Application.OpenURL("http://www.flipwebapps.com/game-framework/");
         }
 
+        public static void ShowAPIDocumentation()
+        {
+            Application.OpenURL("http://www.flipwebapps.com/documentation/api/game-framework/index.html");
+        }
+
         public static void ShowSupportForum()
         {
             Application.OpenURL("http://www.flipwebapps.com/forum/");

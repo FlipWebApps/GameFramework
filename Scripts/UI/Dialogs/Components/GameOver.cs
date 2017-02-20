@@ -46,7 +46,7 @@ using UnityEngine.Analytics;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Base class for a game over dialog.
+    /// Provides the basis for a game over dialog.
     /// </summary>
     [RequireComponent(typeof(DialogInstance))]
     [AddComponentMenu("Game Framework/UI/Dialogs/GameOver")]
