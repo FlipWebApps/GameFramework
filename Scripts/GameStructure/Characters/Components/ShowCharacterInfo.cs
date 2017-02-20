@@ -19,7 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Localisation;
+using GameFramework.GameStructure.Characters.ObjectModel;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -32,25 +34,16 @@ namespace GameFramework.GameStructure.Characters.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/ShowCharacterInfo")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
-    public class ShowCharacterInfo : MonoBehaviour
+    public class ShowCharacterInfo : ShowGameItemInfo<Character>
     {
         /// <summary>
-        /// A localisation key or text string to use to dissplay. You can include the values:{0} - Number, {1} - Name, {2} - Description
+        /// Returns the current Character GameItem
         /// </summary>
-        [Tooltip("A localisation key or text string to use to dissplay. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
-        public string Key;
-
-        void Awake()
+        /// <returns></returns>
+        protected override GameItemManager<Character, GameItem> GetGameItemManager()
         {
             Assert.IsNotNull(GameManager.Instance.Characters, "Characters are not setup when referenced from ShowCharacterInfo");
-
-            var character = GameManager.Instance.Characters.Selected;
-            if (character != null)
-            {
-                var textComponent = GetComponent<Text>();
-                var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-                textComponent.text = string.Format(text, character.Number, character.Name, character.Description);
-            }
+            return GameManager.Instance.Characters;
         }
     }
 }

@@ -65,7 +65,7 @@ namespace GameFramework.EditorExtras.Editor
 
                 _dropAreaStyle = new GUIStyle(GUI.skin.box)
                 {
-                    normal = {background = MakeColoredTexture(new Color(1f, 1f, 1f, 0.6f))},
+                    normal = { background = EditorGUIUtility.isProSkin ? MakeColoredTexture(new Color(1f, 1f, 1f, 0.2f)) : MakeColoredTexture(new Color(1f, 1f, 1f, 0.6f)) },
                     alignment = TextAnchor.MiddleCenter,
                     fontSize = 14
                 };
@@ -82,7 +82,7 @@ namespace GameFramework.EditorExtras.Editor
 
                 _boxLightStyle = new GUIStyle(GUI.skin.box)
                 {
-                    normal = { background = MakeColoredTexture(new Color(1f, 1f, 1f, 0.6f)) },
+                    normal = { background = EditorGUIUtility.isProSkin ? MakeColoredTexture(new Color(0.5f, 0.5f, 0.5f, 0.2f)) : MakeColoredTexture(new Color(1f, 1f, 1f, 0.4f)) },
                 };
                 return _boxLightStyle;
             }
@@ -97,7 +97,7 @@ namespace GameFramework.EditorExtras.Editor
 
                 _borderlessButtonStyle = new GUIStyle(GUI.skin.button)
                 {
-                    normal = { background = MakeColoredTexture(new Color(1f, 1f, 1f, 0.4f)) },
+                    normal = { background = EditorGUIUtility.isProSkin ? MakeColoredTexture(new Color(1f, 1f, 1f, 0.2f)) : MakeColoredTexture(new Color(.8f, .8f, .8f, 0.4f)) },
                     padding = new RectOffset(0, 0, 0, 0),
                     fontSize = 10
                 };

@@ -19,8 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Localisation;
+using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Players.ObjectModel;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace GameFramework.GameStructure.Players.Components
@@ -31,22 +34,16 @@ namespace GameFramework.GameStructure.Players.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowPlayerInfo")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
-    public class ShowPlayerInfo : MonoBehaviour
+    public class ShowPlayerInfo : ShowGameItemInfo<Player>
     {
         /// <summary>
-        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description
+        /// Returns the current Player GameItem
         /// </summary>
-        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description")]
-        public string Key;
-
-        void Awake()
+        /// <returns></returns>
+        protected override GameItemManager<Player, GameItem> GetGameItemManager()
         {
-            var player = GameManager.Instance.Player;
-            if (player == null) return;
-
-            var textComponent = GetComponent<Text>();
-            var text = LocaliseText.Exists(Key) ? LocaliseText.Get(Key) : Key;
-            textComponent.text = string.Format(text, player.Number, player.Name, player.Description);
+            Assert.IsNotNull(GameManager.Instance.Players, "Players are not setup when referenced from ShowPlayerInfo");
+            return GameManager.Instance.Players;
         }
     }
 }

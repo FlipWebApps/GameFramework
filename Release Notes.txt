@@ -4,6 +4,28 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.1.1
+
+	Game Framework Core - Improvements
+	- Display: Added Xy Plane to Position Helper
+	- GameStructure: Added GameItemContext object and components for setting context of other components to operate within.
+	- GameStructure: GameItemManager is IEnumerable (use now by CreateGameItemButtons components) and exposes EnumeratorCurrent for use with GameItemContext
+	- GameStructure: Added EnableBasedUponSelected and EnableBasedUponUnlocked components
+	- GameStructure: SetImageToSprite and SetSpriteRendererToSprite now use GameItemContext - Verify settings on old instances of these components!
+	- GameStructure: Some GetSprite methods made obsolete to allow for easier expansion.
+	- GameStructure: Different defaults for Level StarTargets
+	
+	Game Framework Core - Fixes
+	- GameStructure: Pooled items added from colliders don't use collider transform incase that is disabled.
+	- GameFramework: Diverse aesthetic improvements when using Unity Pro Skin.
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- 2DInfinateRunner: Updates to work with new unlock modes.
+	- Getting Started Tutorial: Updates to work with new unlock modes.
+	- Getting Started Tutorial: Added Part 9
+
+v4.1
+
 	Game Framework Core - Improvements
 	- Demo: Updated GameStructure demo with new player material and showprefab updates
 	- Demo: Updated for new unlock modes

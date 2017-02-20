@@ -19,31 +19,59 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
     /// Show information about the currently selected level
     /// </summary>
     [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelInfo")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class ShowLevelInfo : ShowGameItemInfo<Level>
+    public abstract class ShowGameItemInfo<T> : GameItemContextBaseRunnable<T> where T : GameItem
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// DEPRECATED: Use the localisable text field below
         /// </summary>
-        /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        [Tooltip("DEPRECATED: Use the localisable text field below")]
+        public string Key;
+
+        /// <summary>
+        /// A localisation key or text string to use to display. You can include the values: {0} - Number, {1} - Name, {2} - Description, {3} - Value to Unlock
+        /// </summary>
+        [Tooltip("A localisation key or text string to use to display. You can include the values:\n{0} - Number\n{1} - Name\n{2} - Description\n{3} - Value to Unlock")]
+        public LocalisableText Text;
+
+        Text _textComponent;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            if (!string.IsNullOrEmpty(Key))
+            {
+                Debug.LogWarning("The Key property on the ShowXxxInfo component on " + gameObject.name + " is deprecated and will be removed. Copy the value over to the Text property instead and set Key to empty.");
+                Text.Data = Key;
+            }
+
+            _textComponent = GetComponent<Text>();
+        }
+
+        /// <summary>
+        /// You should implement this method which is called from start and optionally if the selection chages.
+        /// </summary>
+        /// <param name="gameItem"></param>
+        /// <param name="isStart"></param>
+        public override void RunMethod(T gameItem, bool isStart = true)
         {
             Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelInfo");
-            return GameManager.Instance.Levels;
+
+            if (GameItem != null)
+            {
+                _textComponent.text = Text.FormatValue(GameItem.Number, GameItem.Name, GameItem.Description, GameItem.ValueToUnlock);
+            }
         }
     }
 }

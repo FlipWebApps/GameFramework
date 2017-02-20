@@ -66,9 +66,8 @@ namespace GameFramework.EditorExtras.Editor
         /// <param name="url"></param>
         public static bool LinkButton(string text, bool restrictWidth = false, params GUILayoutOption[] options)
         {
-            var style = GUI.skin.label;
-            style.richText = true;
-            text = string.Format("<color=#0000FF>{0}</color>", text);
+            var style = EditorStyles.whiteLabel;
+            style.normal.textColor = new Color(0.25f, 0.5f, 0.9f, 1f);
 
             bool wasClicked;
             if (restrictWidth)

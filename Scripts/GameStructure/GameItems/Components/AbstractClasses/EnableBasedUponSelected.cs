@@ -59,7 +59,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             base.OnDestroy();
             // add selection changed handler always, but not multiple times.
             if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
-                GetGameItemManager().SelectedChanged += SelectedChanged;
+                GetGameItemManager().SelectedChanged -= SelectedChanged;
         }
 
         

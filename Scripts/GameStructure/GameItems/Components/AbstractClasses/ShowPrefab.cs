@@ -97,32 +97,32 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <param name="item"></param>
         public override void RunMethod(T gameItem, bool isStart = true)
         {
-            GameObject _newPrefabInstance;
-            _cachedPrefabInstances.TryGetValue(gameItem.Number, out _newPrefabInstance);
-            if (_newPrefabInstance == null)
+            GameObject newPrefabInstance;
+            _cachedPrefabInstances.TryGetValue(GameItem.Number, out newPrefabInstance);
+            if (newPrefabInstance == null)
             {
-                _newPrefabInstance = gameItem.InstantiatePrefab(PrefabType, Name,
+                newPrefabInstance = GameItem.InstantiatePrefab(PrefabType, Name,
                     Parent == null ? transform : Parent.transform, WorldPositionStays);
-                if (_newPrefabInstance != null)
+                if (newPrefabInstance != null)
                 {
-                    _newPrefabInstance.SetActive(false); // start inactive so we don't run transitions immediately
-                    _cachedPrefabInstances.Add(gameItem.Number, _newPrefabInstance);
+                    newPrefabInstance.SetActive(false); // start inactive so we don't run transitions immediately
+                    _cachedPrefabInstances.Add(GameItem.Number, newPrefabInstance);
                 }
             }
 
-            Assert.IsNotNull(_newPrefabInstance,
+            Assert.IsNotNull(newPrefabInstance,
                 string.Format(
                     "The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.",
-                    gameItem.IdentifierBase, gameItem.Number));
+                    GameItem.IdentifierBase, GameItem.Number));
 
 #if BEAUTIFUL_TRANSITIONS
             StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
 #else
                 if (_selectedPrefabInstance != null)
                     _selectedPrefabInstance.SetActive(false);
-                _newPrefabInstance.SetActive(true);
+                newPrefabInstance.SetActive(true);
 #endif
-            _selectedPrefabInstance = _newPrefabInstance;
+            _selectedPrefabInstance = newPrefabInstance;
         }
 
 #if BEAUTIFUL_TRANSITIONS

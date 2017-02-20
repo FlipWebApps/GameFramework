@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Debugging;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -76,7 +77,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public override void RunMethod(T gameItem, bool isStart = true)
         {
             var sprite = gameItem.GetSprite(SpriteType, Name);
-            Assert.IsNotNull(sprite, string.Format("The Sprite you are trying to instantiate is not setup. Please add it to  the target GameItem {0}_{1}.", gameItem.IdentifierBase, gameItem.Number));
+            // if not set then for legacy reasons we fallback to the default sprite loaded from resources.
+            if (sprite == null)
+            {
+                sprite = GameItem.Sprite;
+                MyDebug.Log(string.Format("The Sprite you are trying to instantiate is not setup. Please add it to the target GameItem {0}_{1} or put a default sprint in the resources folder.", gameItem.IdentifierBase, gameItem.Number));
+            }
+            Assert.IsNotNull(sprite, string.Format("The Sprite you are trying to instantiate is not setup. Please add it to the target GameItem {0}_{1} or put a default sprint in the resources folder.", gameItem.IdentifierBase, gameItem.Number));
             AssignSprite(_component, sprite);
         }
 
