@@ -20,16 +20,17 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure;
+using GameFramework.Input.Components.AbstractClasses;
 using UnityEngine;
 
 namespace GameFramework.Input.Components
 {
     /// <summary>
-    /// DEPRECATED: Loads the specified scene when the escape key or android back button is pressed
+    /// Loads the given level when a mouse button is pressed or the screen is tapped
     /// </summary>
-    [AddComponentMenu("Game Framework/Input/OnEscapeLoadLevel (Deprecated)")]
+    [AddComponentMenu("Game Framework/Input/OnMouseClickOrTapLoadScene")]
     [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
-    public class OnEscapeLoadLevel : MonoBehaviour
+    public class OnMouseClickOrTapLoadScene : OnMouseClickOrTap
     {
         /// <summary>
         /// Name of the Scene to load
@@ -37,15 +38,8 @@ namespace GameFramework.Input.Components
         [Tooltip("Name of the Scene to load")]
         public string SceneName;
 
-        void Awake()
-        {
-            Debug.LogWarning("OnEscapeLoadLevel is deprecated and will be removed. Replace it with OnEscapeLoadScene");
-        }
-
-        void Update()
-        {
-            if (!UnityEngine.Input.GetKeyDown(KeyCode.Escape)) return;
-
+        public override void RunMethod() {
+            // if we got here then load the new scene
             GameManager.LoadSceneWithTransitions(SceneName);
         }
     }

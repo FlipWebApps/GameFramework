@@ -26,9 +26,9 @@ using UnityEngine;
 namespace GameFramework.Input.Components
 {
     /// <summary>
-    /// Loads the given level when a mouse button is pressed or the screen is tapped
+    /// DEPRECATED: Loads the given level when a mouse button is pressed or the screen is tapped
     /// </summary>
-    [AddComponentMenu("Game Framework/Input/OnMouseClickOrTapLoadLevel")]
+    [AddComponentMenu("Game Framework/Input/OnMouseClickOrTapLoadLevel (Deprecated)")]
     [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
     public class OnMouseClickOrTapLoadLevel : OnMouseClickOrTap
     {
@@ -37,6 +37,11 @@ namespace GameFramework.Input.Components
         /// </summary>
         [Tooltip("Name of the Scene to load")]
         public string SceneName;
+
+        void Awake()
+        {
+            Debug.LogWarning("OnMouseClickOrTapLoadLevel is deprecated and will be removed. Replace it with OnMouseClickOrTapLoadScene");
+        }
 
         public override void RunMethod() {
             // if we got here then load the new scene

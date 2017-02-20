@@ -25,22 +25,17 @@ using UnityEngine;
 namespace GameFramework.Input.Components
 {
     /// <summary>
-    /// DEPRECATED: Loads the specified scene when the escape key or android back button is pressed
+    /// Loads the specified scene when the escape key or android back button is pressed
     /// </summary>
-    [AddComponentMenu("Game Framework/Input/OnEscapeLoadLevel (Deprecated)")]
+    [AddComponentMenu("Game Framework/Input/OnEscapeLoadScene")]
     [HelpURL("http://www.flipwebapps.com/game-framework/input/")]
-    public class OnEscapeLoadLevel : MonoBehaviour
+    public class OnEscapeLoadScene : MonoBehaviour
     {
         /// <summary>
         /// Name of the Scene to load
         /// </summary>
         [Tooltip("Name of the Scene to load")]
         public string SceneName;
-
-        void Awake()
-        {
-            Debug.LogWarning("OnEscapeLoadLevel is deprecated and will be removed. Replace it with OnEscapeLoadScene");
-        }
 
         void Update()
         {
