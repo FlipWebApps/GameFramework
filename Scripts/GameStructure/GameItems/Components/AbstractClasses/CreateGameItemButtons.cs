@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Debugging;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
@@ -69,17 +70,32 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         public void Awake()
         {
+            var button = Prefab.GetComponent<TGameItemButton>();
+#if UNITY_EDITOR
+            // prefab values will get overwritten if running in editor mode so save and restore.
+            var oldContext = button.Context.ContextMode;
+            var oldSelectionMode = button.SelectionMode;
+            var oldScene = button.ClickUnlockedSceneToLoad;
+            var oldClickToUnlock = button.ClickToUnlock;
+#endif
+            button.Context.ContextMode = GameItemContext.ContextModeType.FromLoop;
+            button.SelectionMode = SelectionMode;
+            button.ClickUnlockedSceneToLoad = ClickUnlockedSceneToLoad;
+            button.ClickToUnlock = ClickToUnlock;
+
             foreach (var gameItem in GetGameItemManager())
             {
-                var button = Prefab.GetComponent<TGameItemButton>();
-                button.Number = gameItem.Number;
-                button.SelectionMode = SelectionMode;
-                button.ClickUnlockedSceneToLoad = ClickUnlockedSceneToLoad;
-                button.ClickToUnlock = ClickToUnlock;
-
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);
             }
+
+#if UNITY_EDITOR
+            // prefab values will get overwritten if running in editor mode so save and restore.
+            button.Context.ContextMode = oldContext;
+            button.SelectionMode = oldSelectionMode;
+            button.ClickUnlockedSceneToLoad = oldScene;
+            button.ClickToUnlock = oldClickToUnlock;
+#endif
         }
 
 

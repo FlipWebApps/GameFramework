@@ -92,15 +92,16 @@ namespace GameFramework.GameStructure.Levels.Components
         {
             base.SetupDisplay();
 
-            GameObjectHelper.SafeSetActive(StarsWonGameObject, CurrentItem.IsUnlocked);
-            GameObjectHelper.SafeSetActive(Star1WonGameObject, CurrentItem.IsStarWon(1));
-            GameObjectHelper.SafeSetActive(Star1NotWonGameObject, !CurrentItem.IsStarWon(1));
-            GameObjectHelper.SafeSetActive(Star2WonGameObject, CurrentItem.IsStarWon(2));
-            GameObjectHelper.SafeSetActive(Star2NotWonGameObject, !CurrentItem.IsStarWon(2));
-            GameObjectHelper.SafeSetActive(Star3WonGameObject, CurrentItem.IsStarWon(3));
-            GameObjectHelper.SafeSetActive(Star3NotWonGameObject, !CurrentItem.IsStarWon(3));
-            GameObjectHelper.SafeSetActive(Star4WonGameObject, CurrentItem.IsStarWon(4));
-            GameObjectHelper.SafeSetActive(Star4NotWonGameObject, !CurrentItem.IsStarWon(4));
+            var level = GetGameItem<Level>();
+            GameObjectHelper.SafeSetActive(StarsWonGameObject, level.IsUnlocked);
+            GameObjectHelper.SafeSetActive(Star1WonGameObject, level.IsStarWon(1));
+            GameObjectHelper.SafeSetActive(Star1NotWonGameObject, !level.IsStarWon(1));
+            GameObjectHelper.SafeSetActive(Star2WonGameObject, level.IsStarWon(2));
+            GameObjectHelper.SafeSetActive(Star2NotWonGameObject, !level.IsStarWon(2));
+            GameObjectHelper.SafeSetActive(Star3WonGameObject, level.IsStarWon(3));
+            GameObjectHelper.SafeSetActive(Star3NotWonGameObject, !level.IsStarWon(3));
+            GameObjectHelper.SafeSetActive(Star4WonGameObject, level.IsStarWon(4));
+            GameObjectHelper.SafeSetActive(Star4NotWonGameObject, !level.IsStarWon(4));
         }
 
 

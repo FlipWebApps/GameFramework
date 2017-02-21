@@ -23,6 +23,7 @@
 using GameFramework.Billing.Components;
 #endif
 using System;
+using GameFramework.Debugging;
 using GameFramework.Localisation;
 using GameFramework.GameObjects;
 using GameFramework.GameStructure.GameItems.ObjectModel;
@@ -48,16 +49,17 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// Abstract Game Item button class that displays information about the linked Game Item
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class GameItemButton<T> : MonoBehaviour where T : GameItem, new()
+    public abstract class GameItemButton<T> : GameItemContextBaseRunnable<T> where T : GameItem, new()
     {
         [Obsolete("Use GameItemButton.SelectionModeType instead. This enum will be removed in a future version.")]
         public enum SelectionModeType { ClickThrough, Select }
 
         /// <summary>
-        /// Identifier that represents the GameItem this button corresponds to.
+        /// DEPRECATED: Use GameItem Context instead.
         /// </summary>
         [Header("General")]
         [Tooltip("Identifier that represents the GameItem this button corresponds to.")]
+        [Obsolete("DEPRECATED: Use GameItem Context instead")]
         public int Number;
 
         /// <summary>
@@ -103,6 +105,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// The current item that this button corresponds to.
         /// </summary>
+        [Obsolete("DEPRECATED: Use GameItem or GetGameItem<T>() instead")]
         public T CurrentItem { get; set; }
 
         protected Player CurrentPlayer;
@@ -119,11 +122,10 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// Setup and get various references for later use
         /// </summary>
-        public void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             CurrentPlayer = GameManager.Instance.Player;
-            CurrentItem = GetGameItemManager().GetItem(Number);
-            Assert.IsNotNull(CurrentItem, "Could not find the specified GameItem for GameItemButton with Number " + Number);
 
             // Get some references for UI button type buttons
             HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
@@ -138,12 +140,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 button.onClick.AddListener(OnClick);
         }
 
-        public void Start()
+        protected override void Start()
         {
+            base.Start();
+
+#pragma warning disable 618
+            if (Number != 0)
+#pragma warning restore 618
+                MyDebug.LogWarning("<GameItem>Button Number field is replaced by GameItem Context and will be removed. On any <GameItem>Button component, please set General->Number to 0 on any gameobjects / prefabs and set GameItem context accordingly to remove this warning. Note: Create<GameItem>Buttons will automatically use a mode of FromLoop. GameObject: " + gameObject.name);
+
+            Assert.IsNotNull(GameItem, "Could not find the specified GameItem for GameItemButton " + gameObject.name);
+
             SetupDisplay();
 
             // show unlock animation if it isn't already shown.
-            if (CurrentItem.IsUnlocked && CurrentItem.IsUnlockedAnimationShown == false)
+            if (GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown == false)
                 Unlock();
 
             // add event and message listeners.
@@ -154,13 +165,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             GameManager.SafeRemoveListener<LocalisationChangedMessage>(OnLocalisationChanged);
             GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
 
             GetGameItemManager().SelectedChanged -= SelectedChanged;
             GetGameItemManager().Unlocked -= UnlockIfGameItemMatches;
+        }
+
+
+        public override void RunMethod(bool isStart = true)
+        {
+            SetupDisplay();
         }
 
         /// <summary>
@@ -169,7 +188,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this in a child class, however in most cases you will need to call this base instance also.
         public virtual void SetupDisplay()
         {
-            var isUnlockedAndAnimationShown = CurrentItem.IsUnlocked && CurrentItem.IsUnlockedAnimationShown;
+            var isUnlockedAndAnimationShown = GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown;
 
             UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
 
@@ -184,39 +203,35 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             if (HighScoreGameObject != null)
             {
-                HighScoreGameObject.SetActive(CurrentItem.IsUnlocked);
-                UIHelper.SetTextOnChildGameObject(HighScoreGameObject, "HighScoreText", CurrentItem.HighScore.ToString(), true);
+                HighScoreGameObject.SetActive(GameItem.IsUnlocked);
+                UIHelper.SetTextOnChildGameObject(HighScoreGameObject, "HighScoreText", GameItem.HighScore.ToString(), true);
             }
 
             if (ValueToUnlockGameObject != null)
             {
-                ValueToUnlockGameObject.SetActive(CurrentItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
+                ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
                 if (ValueToUnlockAmount != null)
                     ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
             if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
             {
-                HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == CurrentItem.Number);
+                HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == GameItem.Number);
             }
         }
 
-        /// <summary>
-        /// Return a GameItemsMaanger that holds the GameItem that we are displaying.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract GameItemManager<T, GameItem> GetGameItemManager();
 
-        void SelectedChanged(T oldItem, T item)
-        {
-            if ((oldItem != null && oldItem.Number == Number) ||
-                (item != null && item.Number == Number))
-                SetupDisplay();
-        }
+        //void SelectedChanged(T oldItem, T item)
+        //{
+        //    if ((oldItem != null && oldItem.Number == Number) ||
+        //        (item != null && item.Number == Number))
+        //        SetupDisplay();
+        //}
+
 
         void OnClick()
         {
-            if (CurrentItem.IsUnlocked)
+            if (GameItem.IsUnlocked)
             {
                 ClickUnlocked();
             }
@@ -234,12 +249,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this in a derived class.
         public virtual void ClickUnlocked()
         {
-            GetGameItemManager().Selected = CurrentItem;
+            GetGameItemManager().Selected = GetGameItem<T>();
             PreferencesFactory.Save();
 
             if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
             {
-                GameManager.LoadSceneWithTransitions(string.Format(ClickUnlockedSceneToLoad, CurrentItem.Number));
+                GameManager.LoadSceneWithTransitions(string.Format(ClickUnlockedSceneToLoad, GameItem.Number));
             }
         }
 
@@ -251,9 +266,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this in a derived class.
         public virtual void ClickLocked()
         {
-            if (CurrentItem.UnlockWithCoins && ClickToUnlock && CurrentItem.Coins < GameManager.Instance.Player.Coins)
+            if (GameItem.UnlockWithCoins && ClickToUnlock && GameItem.Coins < GameManager.Instance.Player.Coins)
             {
-                GetGameItemManager().Unlocked(CurrentItem);
+                GetGameItemManager().Unlocked(GetGameItem<T>());
 
 #if UNITY_ANALYTICS
                 // record some analytics on the item unlocked
@@ -264,21 +279,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 });
 #endif
                 //update new coin count.
-                GameManager.Instance.Player.Coins -= CurrentItem.ValueToUnlock;
+                GameManager.Instance.Player.Coins -= GameItem.ValueToUnlock;
                 GameManager.Instance.Player.UpdatePlayerPrefs();
             }
-            else if (CurrentItem.UnlockWithPayment)
+            else if (GameItem.UnlockWithPayment)
             {
-                DialogManager.Instance.Show(title: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Title"),
-                    text: LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text1"),
-                    text2: CurrentItem.UnlockWithCoins ? LocaliseText.Get(CurrentItem.IdentifierBase + ".Buy.Text2") : null,
-                    sprite: DisplayImage.sprite,
+                DialogManager.Instance.Show(title: LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Title"),
+                    text: LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Text1"),
+                    text2: GameItem.UnlockWithCoins ? LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Text2") : null,
+                    sprite: GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow) ?? GameItem.Sprite,
                     doneCallback: BuyDialogCallback,
                     dialogButtons: DialogInstance.DialogButtonsType.OkCancel);
             }
-            else if (CurrentItem.UnlockWithCoins)
+            else if (GameItem.UnlockWithCoins)
             {
-                DialogManager.Instance.ShowInfo(textKey: CurrentItem.IdentifierBase + ".Buy.NotEnabled");
+                DialogManager.Instance.ShowInfo(textKey: GameItem.IdentifierBase + ".Buy.NotEnabled");
             }
         }
 
@@ -302,14 +317,14 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
         protected void UnlockIfNumberMatches(int number)
         {
-            if (number == Number)
+            if (number == GameItem.Number)
                 Unlock();
         }
 
    
         protected void UnlockIfGameItemMatches(T gameItem)
         {
-            if (gameItem.Number == Number)
+            if (gameItem.Number == GameItem.Number)
                 Unlock();
         }
 
@@ -320,12 +335,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// You may override this method to provide your own custom handling.
         public virtual void Unlock()
         {
-            CurrentItem.IsUnlocked = true;
-            CurrentItem.IsUnlockedAnimationShown = true;
-            CurrentItem.UpdatePlayerPrefs();
+            GameItem.IsUnlocked = true;
+            GameItem.IsUnlockedAnimationShown = true;
+            GameItem.UpdatePlayerPrefs();
             PreferencesFactory.Save();
 
-            Animator animator = GetComponent<Animator>();
+            var animator = GetComponent<Animator>();
             if (animator != null)
                 animator.SetTrigger("Unlock");
             else 
@@ -344,7 +359,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             var playerCoinsChangedMessage = message as PlayerCoinsChangedMessage;
             if (ValueToUnlockAmount != null)
             {
-                ValueToUnlockAmount.color = playerCoinsChangedMessage.NewCoins >= CurrentItem.ValueToUnlock ? CoinColorCanUnlock : CoinColorCantUnlock;
+                ValueToUnlockAmount.color = playerCoinsChangedMessage.NewCoins >= GameItem.ValueToUnlock ? CoinColorCanUnlock : CoinColorCantUnlock;
                 return true;
             }
             return false;
@@ -361,6 +376,5 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             SetupDisplay();
             return true;
         }
-
     }
 }
