@@ -190,12 +190,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var isUnlockedAndAnimationShown = GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown;
 
-            UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
+            UIHelper.SetTextOnChildGameObject(gameObject, "Name", GameItem.Name, true);
 
             if (DisplayImage != null)
             {
-                var selectionMenuSprite = CurrentItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
-                DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
+                var selectionMenuSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
+                DisplayImage.sprite = selectionMenuSprite ?? GameItem.Sprite;
             }
 
             if (LockGameObject != null)
@@ -211,7 +211,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             {
                 ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
                 if (ValueToUnlockAmount != null)
-                    ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
+                    ValueToUnlockAmount.text = "x" + GameItem.ValueToUnlock.ToString();
             }
 
             if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
