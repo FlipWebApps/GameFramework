@@ -62,9 +62,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// You should implement this method which is called from start and optionally if the selection chages.
         /// </summary>
-        /// <param name="gameItem"></param>
         /// <param name="isStart"></param>
-        public override void RunMethod(T gameItem, bool isStart = true)
+        public override void RunMethod(bool isStart = true)
         {
             Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelInfo");
 

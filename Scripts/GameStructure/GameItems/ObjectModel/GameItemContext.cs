@@ -127,6 +127,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             if (ContextMode == ContextModeType.Reference)
             {
+                if (ReferencedGameItemContextBase == null && !Application.isPlaying) return ContextModeType.Reference;
                 Assert.IsNotNull(ReferencedGameItemContextBase, "If you are using a GameItemContext of Reference then ensure that the ReferencedGameItem is setup.");
                 return ReferencedGameItemContextBase.Context.GetReferencedContextMode();
             }

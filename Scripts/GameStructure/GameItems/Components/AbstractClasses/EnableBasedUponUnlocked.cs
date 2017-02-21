@@ -57,7 +57,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         void Unlocked(T gameItem)
         {
             if (gameItem.Number == GameItem.Number)
-                RunMethod(gameItem, false);
+                RunMethod(false);
         }
 
 

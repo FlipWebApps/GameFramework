@@ -95,7 +95,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// Show the actual prefab
         /// </summary>
         /// <param name="item"></param>
-        public override void RunMethod(T gameItem, bool isStart = true)
+        public override void RunMethod(bool isStart = true)
         {
             GameObject newPrefabInstance;
             _cachedPrefabInstances.TryGetValue(GameItem.Number, out newPrefabInstance);

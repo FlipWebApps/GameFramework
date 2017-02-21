@@ -31,74 +31,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class GameItemContextBaseRunnable<T> : GameItemContextBase where T : GameItem
     {
-        ///// <summary>
-        ///// What GameItem we should use for showing prefabs from.
-        ///// </summary>
-        //public ObjectModel.GameItemContext Context
-        //{
-        //    get { return _context; }
-        //    set { _context = value; }
-        //}
-        //[Tooltip("Context that other GameItemContext's can reference.")]
-        //[SerializeField]
-        //ObjectModel.GameItemContext _context = new ObjectModel.GameItemContext();
-
-
-        //protected GameItem GameItem
-        //{
-        //    get
-        //    {
-        //        if (Context.ContextMode == ObjectModel.GameItemContext.ContextModeType.Selected)
-        //        {
-        //            // always get new reference incase selection has changed.
-        //            var gameItemManager = GetGameItemManager();
-        //            Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of Selected you should only access GameItem in Start or later if no script execution order is setup.\nGameobject: " + gameObject.name);
-        //            GameItem = gameItemManager.Selected;
-        //        }
-        //        else if (Context.ContextMode == ObjectModel.GameItemContext.ContextModeType.ByNumber && _gameItem == null)
-        //        {
-        //            var gameItemManager = GetGameItemManager();
-        //            Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of ByNumber GetGameItem() should only be called in Start or later if no script execution order is setup.\nGameobject: " + gameObject.name);
-        //            GameItem = gameItemManager.GetItem(Context.Number);
-        //            Assert.IsNotNull(_gameItem, "Could not find a GameItem with number " + Context.Number + " on gameobject: " + gameObject.name);
-        //        }
-        //        else if (Context.ContextMode == ObjectModel.GameItemContext.ContextModeType.FromLoop && _gameItem == null)
-        //        {
-        //            var gameItemManager = GetGameItemManager();
-        //            Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-        //            GameItem = GetGameItemManager().EnumeratorCurrent;
-        //            Assert.IsNotNull(_gameItem, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-        //        }
-        //        else if (Context.ContextMode == ObjectModel.GameItemContext.ContextModeType.Reference && _gameItem == null)
-        //        {
-        //            Assert.IsNotNull(Context.ReferencedGameItemContext, "When using a GameItemContext reference mode of Reference ensure that you specify a valid reference.");
-        //            GameItem = Context.ReferencedGameItemContext.GameItem as T;
-        //            Assert.IsNotNull(_gameItem, "When using a GameItemContext reference mode of Reference ensure that you are referencing a context of the same GameItem type (e.g. a Level can't reference a Character.");
-        //        }
-        //        return _gameItem;
-        //    }
-        //    set
-        //    {
-        //        _gameItem = value;
-        //    }
-        //}
-        //GameItem _gameItem;
-
-
-        //protected virtual void Awake()
-        //{
-        //    // FromLoop we need to do in awake so ensure this is setup here, others types we can defer to Start or first use to try and ensure other components
-        //    // such as GameItemManagers are setup.
-        //    if (Context.ContextMode == ObjectModel.GameItemContext.ContextModeType.FromLoop && GameItem == null)
-        //    {
-        //        var gameItemManager = GetGameItemManager();
-        //        Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-        //        Assert.IsNotNull(gameItemManager.EnumeratorCurrent, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-        //        GameItem = GetGameItemManager().EnumeratorCurrent;
-        //    }
-        //}
-
-
         /// <summary>
         /// Setup
         /// </summary>
@@ -144,15 +76,14 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <param name="item"></param>
         protected virtual void SelectedChanged(T oldItem, T item)
         {
-            RunMethod(item, false);
+            RunMethod(false);
         }
 
 
         /// <summary>
         /// You should implement this method which is called from start and optionally if the selection chages.
         /// </summary>
-        /// <param name="gameItem"></param>
         /// <param name="isStart"></param>
-        public abstract void RunMethod(T gameItem, bool isStart = true);
+        public abstract void RunMethod(bool isStart = true);
     }
 }

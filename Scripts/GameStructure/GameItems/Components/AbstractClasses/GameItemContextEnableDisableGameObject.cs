@@ -53,9 +53,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         /// <param name="gameItem"></param>
         /// <param name="isStart"></param>
-        public override void RunMethod(T gameItem, bool isStart = true)
+        public override void RunMethod(bool isStart = true)
         {
-            var isConditionMet = IsConditionMet(gameItem);
+            var isConditionMet = IsConditionMet(GetGameItem<T>());
 
 //#if BEAUTIFUL_TRANSITIONS
 //            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
