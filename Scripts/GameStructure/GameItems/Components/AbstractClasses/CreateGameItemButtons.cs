@@ -83,7 +83,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             button.ClickUnlockedSceneToLoad = ClickUnlockedSceneToLoad;
             button.ClickToUnlock = ClickToUnlock;
 
+#pragma warning disable 0168
             foreach (var gameItem in GetGameItemManager())
+#pragma warning restore 0168
             {
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);

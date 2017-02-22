@@ -34,6 +34,11 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
     public class UnlockGenericGameItemButton : UnlockGameItemButton<GenericGameItem>
     {
         /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public UnlockGenericGameItemButton() : base("GenericGameItem") { }
+
+        /// <summary>
         /// Returns the GameItemsMaager that holds GenericGameItems
         /// </summary>
         /// <returns></returns>

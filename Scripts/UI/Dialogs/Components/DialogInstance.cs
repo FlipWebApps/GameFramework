@@ -28,6 +28,7 @@ using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
 using GameFramework.Display.Other;
 using GameFramework.GameObjects;
 using GameFramework.Localisation;
+using GameFramework.Localisation.ObjectModel;
 using GameFramework.UI.Other;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -197,6 +198,26 @@ namespace GameFramework.UI.Dialogs.Components
         }
 
 
+        ///// <summary>
+        ///// Show the dialog instance substituting in passed values and running any transitions.
+        ///// </summary>
+        ///// <param name="title"></param>
+        ///// <param name="text"></param>
+        ///// <param name="text2"></param>
+        ///// <param name="sprite"></param>
+        ///// <param name="doneCallback"></param>
+        ///// <param name="destroyOnClose"></param>
+        ///// <param name="dialogButtons"></param>
+        //public void Show(LocalisableText title, LocalisableText text, LocalisableText text2 = null, Sprite sprite = null,
+        //    Action<DialogInstance> doneCallback = null, bool destroyOnClose = true,
+        //    DialogButtonsType dialogButtons = DialogButtonsType.Custom)
+        //{
+        //    var tTitle = title == null ? null : title.GetValue();
+        //    var tText = title == null ? null : text.GetValue();
+        //    var tText2 = title == null ? null : text2.GetValue();
+        //    Show(title: tTitle, text: tText, text2: tText2, sprite: sprite, doneCallback: doneCallback, destroyOnClose: destroyOnClose, dialogButtons: dialogButtons);
+        //}
+
         /// <summary>
         /// Show the dialog instance substituting in passed values and running any transitions.
         /// </summary>
@@ -278,6 +299,8 @@ namespace GameFramework.UI.Dialogs.Components
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
                     break;
                 case DialogButtonsType.YesNo:
+                    Assert.IsNotNull(GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true), "If using YesNo buttons, ensure the Dialog has a GameObject named YesButton");
+                    Assert.IsNotNull(GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true), "If using YesNo buttons, ensure the Dialog has a GameObject named NoButton");                    ;
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true).SetActive(true);
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true).SetActive(true);
                     break;

@@ -51,33 +51,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             get
             {
-                if (Context.ContextMode == GameItemContext.ContextModeType.Selected)
-                {
-                    // always get new reference incase selection has changed.
-                    var gameItemManager = GetIBaseGameItemManager();
-                    Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of Selected you should only access GameItem in Start or later if no script execution order is setup.\nGameobject: " + gameObject.name);
-                    GameItem = gameItemManager.BaseSelected;
-                }
-                else if (Context.ContextMode == GameItemContext.ContextModeType.ByNumber && _gameItem == null)
-                {
-                    var gameItemManager = GetIBaseGameItemManager();
-                    Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of ByNumber GetGameItem() should only be called in Start or later if no script execution order is setup.\nGameobject: " + gameObject.name);
-                    GameItem = gameItemManager.BaseGetItem(Context.Number);
-                    Assert.IsNotNull(_gameItem, "Could not find a GameItem with number " + Context.Number + " on gameobject: " + gameObject.name);
-                }
-                else if (Context.ContextMode == GameItemContext.ContextModeType.FromLoop && _gameItem == null)
-                {
-                    var gameItemManager = GetIBaseGameItemManager();
-                    Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-                    GameItem = GetIBaseGameItemManager().BaseEnumeratorCurrent;
-                    Assert.IsNotNull(_gameItem, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-                }
-                else if (Context.ContextMode == GameItemContext.ContextModeType.Reference && _gameItem == null)
-                {
-                    Assert.IsNotNull(Context.ReferencedGameItemContextBase, "When using a GameItemContext reference mode of Reference ensure that you specify a valid reference.\nGameobject: " + gameObject.name);
-                    GameItem = Context.ReferencedGameItemContextBase.GameItem;
-                    Assert.IsNotNull(_gameItem, "When using a GameItemContext reference mode of Reference ensure that you are referencing a context of the same GameItem type (e.g. a Level can't reference a Character.\nGameobject: " + gameObject.name);
-                }
+                // refresh if needed
+                if (Context.ContextMode == GameItemContext.ContextModeType.Selected || _gameItem == null)
+                    GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), gameObject.name);
                 return _gameItem;
             }
             private set
@@ -96,12 +72,10 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// If you override Awake be sure to call this base method.
         protected virtual void Awake()
         {
-            if (Context.ContextMode == GameItemContext.ContextModeType.FromLoop && GameItem == null)
+            // FromLoop is a special case that must be called from Awake to obtain the enumerator reference set before an item is instantiated.
+            if (Context.ContextMode == GameItemContext.ContextModeType.FromLoop && _gameItem == null)
             {
-                var gameItemManager = GetIBaseGameItemManager();
-                Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-                Assert.IsNotNull(gameItemManager.BaseEnumeratorCurrent, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObject.name);
-                GameItem = GetIBaseGameItemManager().BaseEnumeratorCurrent;
+                GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), gameObject.name);
             }
         }
 
@@ -114,7 +88,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
 
         /// <summary>
-        /// Returns a reference to the GameItem that this Context represents cast to type T
+        /// Returns a reference to the GameItem that this context represents cast to type T
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

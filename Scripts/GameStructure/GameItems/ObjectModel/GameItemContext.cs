@@ -136,5 +136,45 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 return ContextMode;
             }
         }
+
+
+        /// <summary>
+        /// Given a GameItemContext determines the gameItem that is being referred to.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="iBaseGameItemManager"></param>
+        /// <param name="gameObjectName"></param>
+        /// <returns></returns>
+        public static GameItem GetGameItemFromContextReference(GameItemContext context, IBaseGameItemManager iBaseGameItemManager, string gameObjectName = "")
+        {
+            if (context.ContextMode == GameItemContext.ContextModeType.Selected)
+            {
+                // always get new reference incase selection has changed.
+                var gameItemManager = iBaseGameItemManager;
+                Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of Selected you should only access GameItem in Start or later if no script execution order is setup.\nGameobject: " + gameObjectName);
+                return gameItemManager.BaseSelected;
+            }
+            else if (context.ContextMode == GameItemContext.ContextModeType.ByNumber)
+            {
+                var gameItemManager = iBaseGameItemManager;
+                Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of ByNumber GetGameItem() should only be called in Start or later if no script execution order is setup.\nGameobject: " + gameObjectName);
+                Assert.IsNotNull(gameItemManager.BaseGetItem(context.Number), "Could not find a GameItem with number " + context.Number + " on gameobject: " + gameObjectName);
+                return gameItemManager.BaseGetItem(context.Number);
+            }
+            else if (context.ContextMode == GameItemContext.ContextModeType.FromLoop)
+            {
+                var gameItemManager = iBaseGameItemManager;
+                Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObjectName);
+                Assert.IsNotNull(gameItemManager.BaseEnumeratorCurrent, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObjectName);
+                return gameItemManager.BaseEnumeratorCurrent;
+            }
+            else if (context.ContextMode == GameItemContext.ContextModeType.Reference)
+            {
+                Assert.IsNotNull(context.ReferencedGameItemContextBase, "When using a GameItemContext reference mode of Reference ensure that you specify a valid reference.\nGameobject: " + gameObjectName);
+                Assert.IsNotNull(context.ReferencedGameItemContextBase.GameItem, "When using a GameItemContext reference mode of Reference ensure that you are referencing a context of the same GameItem type (e.g. a Level can't reference a Character.\nGameobject: " + gameObjectName);
+                return context.ReferencedGameItemContextBase.GameItem;
+            }
+            return null;
+        }
     }
 }

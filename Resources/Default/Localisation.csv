@@ -166,6 +166,8 @@ Dziękujemy za wsparcie."
 "Level.Buy.Text2","You can also collect coins to unlock","Du kan også samle mynter for å låse opp","Você pode coletar moedas para desbloquear","Puede recoger las monedas para desbloquear","Vous pouvez collecter des pièces pour déverrouiller","你也可以搜集更多金币来解锁","Du kannst auch Münzen sammeln um freizuschalten","Możesz także uzbierać monety aby odblokować"
 "Level.Buy.NotEnabled","Collect coins to unlock this level","Få flere mynter for å låse opp denne levelen","Colete moedas para desbloquear esta fase","Recoger las monedas para desbloquear esta etapa","Accumulez des pièces pour débloquer ce niveau","搜集金币来解锁此关卡","Sammel Münzen um dieses Level freizuschalten.","Zbierz monety aby odblokować ten poziom"
 "Level.Unlock","Unlock","Lås opp","Desbloquear","desbloquear","Débloquer","解锁","Freischalten","Odblokuj"
+"Level.Unlock.Confirm.Title","UNLOCK LEVEL","Lås opp level. ","Desbloquear fase","desbloquear fase","Débloquez le niveau","解锁关卡","LEVEL FREISCHALTEN","ODBLOKUJ POZIOM"
+"Level.Unlock.Confirm.Text1","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?","Unlock this level for {2} coins?"
 "Level.Unlock.Title","UNLOCK LEVEL","Lås opp level. ","Desbloquear fase","desbloquear fase","Débloquez le niveau","解锁关卡","LEVEL FREISCHALTEN","ODBLOKUJ POZIOM"
 "Level.Unlock.New.Text1","Congratulations!
 New level Unlocked","Gratulerer!
@@ -189,6 +191,8 @@ Poziom jest już odblokowany."
 "World.Buy.Text1","Purchase this world?","Vil du kjøpe denne verden? ","Comprar mundo?","Compra mundo?","Acheter ce monde ?","购买这个世界?","Willst du diese Welt kaufen?","Chcesz kupić ten etap?"
 "World.Buy.Text2","You can also collect coins to unlock","Du kan også samle mynter for å låse opp","Você pode coletar moedas para desbloquear","Puede recoger las monedas para desbloquear","Vous pouvez collecter des pièces pour déverrouiller","你也可以搜集更多金币来解锁","Du kannst auch Münzen sammeln um freizuschalten","Możesz także uzbierać monety aby odblokować"
 "World.Buy.NotEnabled","Collect coins to unlock this world","Få flere mynter for å låse opp denne verden","Colete moedas para desbloquear este mundo","Recoger las monedas para desbloquear este mundo","Collectez des pièces pour déverrouiller ce monde.","搜集金币来解锁这个世界","Sammel Münzen um diese Welt freizuschalten.","Zbierz monety aby odblokować ten etap"
+"World.Unlock.Confirm.Title","UNLOCK WORLD","Lås opp verden. ","DESBLOQUEAR MUNDO","DESBLOQUEAR EL MUNDO","Déverrouillez les mondes","解锁世界","WELT FREISCHALTEN","ODBLOKUJ ETAP"
+"World.Unlock.Confirm.Text1","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?","Unlock this world for {2} coins?"
 "World.Unlock","Unlock","Lås opp","Desbloquear","descubrir","Déverrouillez.","解锁","Freischalten","Odblokuj"
 "World.Unlock.Title","UNLOCK WORLD","Lås opp verden. ","DESBLOQUEAR MUNDO","DESBLOQUEAR EL MUNDO","Déverrouillez les mondes","解锁世界","WELT FREISCHALTEN","ODBLOKUJ ETAP"
 "World.Unlock.New.Text1","Congratulations!
@@ -214,6 +218,8 @@ Etap jest już odblokowany."
 "Character.Buy.Text2","You can also collect coins to unlock","Du kan også samle mynter for å låse opp","Você pode coletar moedas para desbloquear","Puede recoger las monedas para desbloquear","Vous pouvez collecter des pièces pour déverrouiller","你也可以搜集更多金币来解锁","Du kannst auch Münzen sammeln um freizuschalten","Możesz także uzbierać monety aby odblokować"
 "Character.Buy.NotEnabled","Collect coins to unlock this character","Få flere mynter for å låse opp denne karakteren","Colete moedas para desbloquear este personagem.","Recoger las monedas para desbloquear este personaje.","Collectez des pièces pour déverrouiller ce personnage.","搜集金币来解锁这个角色","Sammel Münzen um den Character freizuschalten.","Zbierz monety aby odblokować tę postać"
 "Character.Unlock","Unlock","Lås opp","Desbloquear","descubrir","Débloquez","解锁","Freischalten","Odblokuj"
+"Character.Unlock.Confirm.Title","UNLOCK CHARACTER","Lås opp karakteren. ","DESBLOQUEAR PERSONAGEM","CARÁCTER DE DESBLOQUEO","DEBLOQUEZ LES PERSONNAGES","解锁角色","CHARACTER freigeschaltet!","ODBLOKUJ POSTAĆ"
+"Character.Unlock.Confirm.Text1","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?","Unlock this character for {2} coins?"
 "Character.Unlock.Title","UNLOCK CHARACTER","Lås opp karakteren. ","DESBLOQUEAR PERSONAGEM","CARÁCTER DE DESBLOQUEO","DEBLOQUEZ LES PERSONNAGES","解锁角色","CHARACTER freigeschaltet!","ODBLOKUJ POSTAĆ"
 "Character.Unlock.New.Text1","Congratulations!
 New character Unlocked","Gratulerer!

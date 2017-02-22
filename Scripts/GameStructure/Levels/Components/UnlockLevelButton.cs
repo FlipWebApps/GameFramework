@@ -34,6 +34,11 @@ namespace GameFramework.GameStructure.Levels.Components
     public class UnlockLevelButton : UnlockGameItemButton<Level>
     {
         /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public UnlockLevelButton() : base("Level") { }
+
+        /// <summary>
         /// Returns the GameItemManager that holds Levels
         /// </summary>
         /// <returns></returns>

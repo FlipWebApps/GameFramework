@@ -38,7 +38,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             if (Context.GetReferencedContextMode() == ObjectModel.GameItemContext.ContextModeType.Selected)
                 GetGameItemManager().SelectedChanged += SelectedChanged;
-            RunMethod(GameItem as T);
+            RunMethod(true);
         }
 
 

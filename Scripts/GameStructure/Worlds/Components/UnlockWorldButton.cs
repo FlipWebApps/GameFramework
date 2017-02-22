@@ -34,7 +34,12 @@ namespace GameFramework.GameStructure.Worlds.Components
     public class UnlockWorldButton : UnlockGameItemButton<World>
     {
         /// <summary>
-        /// Returns the GameItemsMaager that holds Characters
+        /// Pass static parametres to base class.
+        /// </summary>
+        public UnlockWorldButton() : base("World") { }
+
+        /// <summary>
+        /// Returns the GameItemsMaager that holds Worlds
         /// </summary>
         /// <returns></returns>
         protected override GameItemManager<World, GameItem> GetGameItemManager()

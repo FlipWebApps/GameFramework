@@ -44,7 +44,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             RandomAll,
             RandomLocked,
-            NextLocked
+            NextLocked,
+            GameItem
         }
     }
 

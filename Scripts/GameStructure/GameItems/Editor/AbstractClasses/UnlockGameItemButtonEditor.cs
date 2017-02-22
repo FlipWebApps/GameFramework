@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Localisation.ObjectModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,18 +28,58 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
     public abstract class UnlockGameItemButtonEditor : UnityEditor.Editor
     {
         SerializedProperty _unlockModeProperty;
+        SerializedProperty _contextNumberProperty;
+        SerializedProperty _contextReferenceProperty;
         SerializedProperty _maxFailedUnlocksProperty;
-        SerializedProperty _contentPrefabProperty;
-        SerializedProperty _contentAnimatorControllerProperty;
-        SerializedProperty _contentShowsButtonsProperty;
+
+        SerializedProperty _showConfirmWindowProperty;
+        SerializedProperty _confirmTitleTextProperty;
+        SerializedProperty _confirmText1Property;
+        SerializedProperty _confirmText2Property;
+        SerializedProperty _confirmDialogSpriteTypeProperty;
+        SerializedProperty _confirmDialogSpriteProperty;
+        SerializedProperty _confirmContentPrefabProperty;
+        SerializedProperty _confirmContentAnimatorControllerProperty;
+        SerializedProperty _confirmContentShowsButtonsProperty;
+
+        SerializedProperty _showUnlockWindowProperty;
+        SerializedProperty _unlockTitleTextProperty;
+        SerializedProperty _unlockedText1Property;
+        SerializedProperty _unlockedText2Property;
+        SerializedProperty _alreadyUnlockedText1Property;
+        SerializedProperty _alreadyUnlockedText2Property;
+        SerializedProperty _unlockContentPrefabProperty;
+        SerializedProperty _unlockContentAnimatorControllerProperty;
+        SerializedProperty _unlockContentShowsButtonsProperty;
 
         public void OnEnable()
         {
             _unlockModeProperty = serializedObject.FindProperty("UnlockMode");
             _maxFailedUnlocksProperty = serializedObject.FindProperty("MaxFailedUnlocks");
-            _contentPrefabProperty = serializedObject.FindProperty("ContentPrefab");
-            _contentAnimatorControllerProperty = serializedObject.FindProperty("ContentAnimatorController");
-            _contentShowsButtonsProperty = serializedObject.FindProperty("ContentShowsButtons");
+
+            _showConfirmWindowProperty = serializedObject.FindProperty("ShowConfirmWindow");
+            _confirmTitleTextProperty = serializedObject.FindProperty("ConfirmTitleText");
+            _confirmText1Property = serializedObject.FindProperty("ConfirmText1");
+            _confirmText2Property = serializedObject.FindProperty("ConfirmText2");
+            _confirmDialogSpriteTypeProperty = serializedObject.FindProperty("ConfirmDialogSpriteType");
+            _confirmDialogSpriteProperty = serializedObject.FindProperty("ConfirmDialogSprite");
+            _confirmContentPrefabProperty = serializedObject.FindProperty("ConfirmContentPrefab");
+            _confirmContentAnimatorControllerProperty = serializedObject.FindProperty("ConfirmContentAnimatorController");
+            _confirmContentShowsButtonsProperty = serializedObject.FindProperty("ConfirmContentShowsButtons");
+
+            _showUnlockWindowProperty = serializedObject.FindProperty("ShowUnlockWindow");
+            _unlockTitleTextProperty = serializedObject.FindProperty("UnlockTitleText");
+            _unlockedText1Property = serializedObject.FindProperty("UnlockedText1");
+            _unlockedText2Property = serializedObject.FindProperty("UnlockedText2");
+            _alreadyUnlockedText1Property = serializedObject.FindProperty("AlreadyUnlockedText1");
+            _alreadyUnlockedText2Property = serializedObject.FindProperty("AlreadyUnlockedText2");
+            _unlockContentPrefabProperty = serializedObject.FindProperty("UnlockContentPrefab");
+            _unlockContentAnimatorControllerProperty = serializedObject.FindProperty("UnlockContentAnimatorController");
+            _unlockContentShowsButtonsProperty = serializedObject.FindProperty("UnlockContentShowsButtons");
+
+            var contextProperty = serializedObject.FindProperty("_context");
+            _contextNumberProperty = contextProperty.FindPropertyRelative("_number");
+            _contextReferenceProperty = contextProperty.FindPropertyRelative("_referencedGameItemContextBase");
         }
 
         public override void OnInspectorGUI()
@@ -46,11 +87,46 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(_unlockModeProperty);
+            EditorGUI.indentLevel++;
             if (_unlockModeProperty.enumValueIndex == 0)
                 EditorGUILayout.PropertyField(_maxFailedUnlocksProperty);
-            EditorGUILayout.PropertyField(_contentPrefabProperty);
-            EditorGUILayout.PropertyField(_contentAnimatorControllerProperty);
-            EditorGUILayout.PropertyField(_contentShowsButtonsProperty);
+            if (_unlockModeProperty.enumValueIndex == 4)    // ByNumber
+                EditorGUILayout.PropertyField(_contextNumberProperty);
+            if (_unlockModeProperty.enumValueIndex == 6)    // Reference
+                EditorGUILayout.PropertyField(_contextReferenceProperty);
+            EditorGUI.indentLevel--;
+            EditorGUILayout.PropertyField(_showConfirmWindowProperty);
+            if (_showConfirmWindowProperty.boolValue)
+            {
+                EditorGUILayout.PropertyField(_confirmTitleTextProperty, new GUIContent("Title", _confirmTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_confirmText1Property, new GUIContent("Text 1", _confirmText1Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmText2Property, new GUIContent("Text 2", _confirmText2Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty, new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
+                if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUILayout.PropertyField(_confirmContentPrefabProperty, new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
+                EditorGUILayout.PropertyField(_confirmContentAnimatorControllerProperty, new GUIContent("Content Animation", _confirmContentAnimatorControllerProperty.tooltip));
+                EditorGUILayout.PropertyField(_confirmContentShowsButtonsProperty, new GUIContent("Content Shows Buttons", _confirmContentShowsButtonsProperty.tooltip));
+            }
+            EditorGUILayout.PropertyField(_showUnlockWindowProperty);
+            if (_showUnlockWindowProperty.boolValue)
+            {
+                EditorGUILayout.PropertyField(_unlockTitleTextProperty, new GUIContent("Title", _unlockTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_unlockedText1Property);
+                EditorGUILayout.PropertyField(_unlockedText2Property);
+                if (_unlockModeProperty.enumValueIndex == 0)
+                {
+                    EditorGUILayout.PropertyField(_alreadyUnlockedText1Property);
+                    EditorGUILayout.PropertyField(_alreadyUnlockedText2Property);
+                }
+                EditorGUILayout.PropertyField(_unlockContentPrefabProperty, new GUIContent("Content Prefab", _unlockContentPrefabProperty.tooltip));
+                EditorGUILayout.PropertyField(_unlockContentAnimatorControllerProperty, new GUIContent("Content Animation", _unlockContentAnimatorControllerProperty.tooltip));
+                EditorGUILayout.PropertyField(_unlockContentShowsButtonsProperty, new GUIContent("Content Shows Buttons", _unlockContentShowsButtonsProperty.tooltip));
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

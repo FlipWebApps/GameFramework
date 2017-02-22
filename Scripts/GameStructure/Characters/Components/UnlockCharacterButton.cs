@@ -34,6 +34,11 @@ namespace GameFramework.GameStructure.Characters.Components
     public class UnlockCharacterButton : UnlockGameItemButton<Character>
     {
         /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public UnlockCharacterButton() : base("Character") { }
+
+        /// <summary>
         /// Returns the GameItemManager that holds Characters
         /// </summary>
         /// <returns></returns>
