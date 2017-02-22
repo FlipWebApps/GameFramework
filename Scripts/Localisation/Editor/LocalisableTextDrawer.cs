@@ -37,6 +37,10 @@ namespace GameFramework.Localisation.Editor
             var contentPosition = EditorGUI.PrefixLabel(position, label);
             var rowPosition = new Rect(contentPosition) {height = EditorGUIUtility.singleLineHeight};
 
+            // Don't make child fields indented
+            var indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
             var dataPosition = new Rect(rowPosition) {width = 16};
             var isLocalised = isLocalisedProperty.boolValue = EditorGUI.Toggle(dataPosition, new GUIContent("", "Lets you toggle whether this is a fixed or localised test"), isLocalisedProperty.boolValue, GuiStyles.LocalisationToggleStyle);
 
@@ -60,7 +64,10 @@ namespace GameFramework.Localisation.Editor
                 var localisedText = LocaliseText.Exists(dataProperty.stringValue) ? LocaliseText.Get(dataProperty.stringValue) : "<Key not found in localisation file>";
                 EditorGUI.LabelField(rowPosition, localisedText);
             }
-            //EditorGUI.indentLevel += 1;
+
+            // Set indent back to what it was
+            EditorGUI.indentLevel = indent;
+
             EditorGUI.EndProperty();
         }
 
