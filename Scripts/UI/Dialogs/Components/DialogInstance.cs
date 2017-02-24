@@ -32,6 +32,8 @@ using GameFramework.Localisation.ObjectModel;
 using GameFramework.UI.Other;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace GameFramework.UI.Dialogs.Components
 {
@@ -67,7 +69,8 @@ namespace GameFramework.UI.Dialogs.Components
             Ok,
             OkCancel,
             Cancel,
-            YesNo
+            YesNo,
+            Text
         }
 
         #endregion enums
@@ -231,10 +234,11 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="doneCallback"></param>
         /// <param name="destroyOnClose"></param>
         /// <param name="dialogButtons"></param>
+        /// <param name="buttonText"></param>
         public void Show(string title = null, string titleKey = null, string text = null, string textKey = null,
             string text2 = null, string text2Key = null, Sprite sprite = null,
             Action<DialogInstance> doneCallback = null, bool destroyOnClose = true,
-            DialogButtonsType dialogButtons = DialogButtonsType.Custom)
+            DialogButtonsType dialogButtons = DialogButtonsType.Custom, LocalisableText[] buttonText = null)
         {
             GameObject childGameObject;
 
@@ -303,6 +307,25 @@ namespace GameFramework.UI.Dialogs.Components
                     Assert.IsNotNull(GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true), "If using YesNo buttons, ensure the Dialog has a GameObject named NoButton");                    ;
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true).SetActive(true);
                     GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true).SetActive(true);
+                    break;
+                case DialogButtonsType.Text:
+                    var templateButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "TextButton", true);
+                    Assert.IsNotNull(templateButton, "If using Text buttons, ensure the Dialog has a GameObject named TextButton that is a template for text buttons"); ;
+                    Assert.IsNotNull(buttonText, "If using Text buttons, ensure you pass a valid array of localisable texts into the show method.");
+                    var counter = 0;
+                    foreach (var localisableText in buttonText)
+                    {
+                        var button = Instantiate(templateButton);
+                        var textComponent = button.GetComponentInChildren<Text>(true);
+                        Assert.IsNotNull(textComponent, "If using Text buttons, ensure you the TextButton gameobject or one of it's children contains a Text component."); ;
+                        textComponent.text = localisableText.GetValue();
+                        button.transform.SetParent(templateButton.transform.parent);
+                        button.transform.localScale = Vector3.one;
+                        button.SetActive(true);
+                        var counter1 = counter;
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneCustom(counter1));
+                        counter++;
+                    }
                     break;
             }
 
