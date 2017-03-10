@@ -21,6 +21,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -107,6 +108,7 @@ namespace GameFramework.EditorExtras.Editor
 
         #endregion Drawing of GUI Elements
 
+        #region string processing
         /// <summary>
         /// Try parsing a range string in the format 1,2,5-10,8 etc. and return a list of the expanded range.
         /// </summary>
@@ -151,6 +153,27 @@ namespace GameFramework.EditorExtras.Editor
             expandedRange = hasError ? null : tempRange;
             return hasError;
         }
+
+
+        /// <summary>
+        /// Helper method to split a camel case string with spaces
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string SplitCamelCase(string s)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in s)
+            {
+                if (char.IsUpper(c) && sb.Length > 0)
+                    sb.Append(' ');
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
+
+        #endregion string processing
+
 
         #region GUIStyle
         /// <summary>
