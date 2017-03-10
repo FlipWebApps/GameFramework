@@ -160,7 +160,7 @@ namespace GameFramework.EditorExtras.Editor
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static string SplitCamelCase(string s)
+        public static string PrettyPrintCamelCase(string s)
         {
             var sb = new StringBuilder();
             foreach (var c in s)
