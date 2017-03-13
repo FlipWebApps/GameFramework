@@ -872,6 +872,33 @@ namespace GameFramework.GameStructure
         }
 
         /// <summary>
+        /// Shortcut and safe method for adding a listener without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// As GameManager can be destroyed before other components when you shut down your game, it is important to 
+        /// <param name="messageType"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static bool SafeAddListener(Type messageType, Messenger.MessageListenerDelegate handler)
+        {
+            if (!IsActive || Messenger == null) return false;
+            Messenger.AddListener(messageType, handler);
+            return true;
+        }
+
+        /// <summary>
+        /// Shortcut and safe method for removing a listener without needing to test whether a gamemanager is setup.
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static bool SafeRemoveListener(Type messageType, Messenger.MessageListenerDelegate handler)
+        {
+            if (!IsActive || Messenger == null) return false;
+            Messenger.RemoveListener(messageType, handler);
+            return true;
+        }
+
+        /// <summary>
         /// Shortcut and safe method for queueing messages without needing to test whether a gamemanager is setup.
         /// </summary>
         /// <param name="msg"></param>

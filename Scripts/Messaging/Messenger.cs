@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
@@ -79,13 +80,12 @@ namespace GameFramework.Messaging
         /// <summary>
         /// Add a listener for the specified message type. Be sure to call RemoveListener when you are done.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="messageType">Type of the message to add a listener for</param>
         /// <param name="handler"></param>
         /// <returns></returns>
-        public void AddListener<T>(MessageListenerDelegate handler) where T: BaseMessage
+        public void AddListener(Type messageType, MessageListenerDelegate handler)
         {
-            var messageType = typeof(T);
-            string messageName = messageType.Name;
+            var messageName = messageType.Name;
             if (!_listeners.ContainsKey(messageName))
             {
                 _listeners.Add(messageName, new List<MessageListenerDelegate>());
@@ -102,13 +102,12 @@ namespace GameFramework.Messaging
         /// <summary>
         /// Remove the listener from the specified message type.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="messageType"></param>
         /// <param name="handler"></param>
         /// <returns></returns>
-        public void RemoveListener<T>(MessageListenerDelegate handler) where T : BaseMessage
+        public void RemoveListener(Type messageType, MessageListenerDelegate handler)
         {
-            var messageType = typeof(T);
-            string messageName = messageType.Name;
+            var messageName = messageType.Name;
             Assert.IsTrue(_listeners.ContainsKey(messageName), "You are trying to remove a handler that a message type that isn't registered for " + messageName);
 
             List<MessageListenerDelegate> listenerList = _listeners[messageName];
@@ -116,6 +115,32 @@ namespace GameFramework.Messaging
             listenerList.Remove(handler);
 
             MessageLogHandler.AddLogEntry(LogEntryType.RemoveListener, messageName);
+        }
+
+
+        /// <summary>
+        /// Add a listener for the specified message type. Be sure to call RemoveListener when you are done.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public void AddListener<T>(MessageListenerDelegate handler) where T : BaseMessage
+        {
+            var messageType = typeof(T);
+            AddListener(messageType, handler);
+        }
+
+
+        /// <summary>
+        /// Remove the listener from the specified message type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public void RemoveListener<T>(MessageListenerDelegate handler) where T : BaseMessage
+        {
+            var messageType = typeof(T);
+            RemoveListener(messageType, handler);
         }
 
         #endregion Listener Registration
