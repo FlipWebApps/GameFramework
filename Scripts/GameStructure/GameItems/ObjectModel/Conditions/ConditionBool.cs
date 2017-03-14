@@ -19,58 +19,43 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Debugging;
-using GameFramework.GameStructure.GameItems.ObjectModel;
+using System;
+using UnityEngine;
 
-
-namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
     /// <summary>
-    /// abstract base for enabling or a disabling a gameobject based upon whether a specified GameItem is unlocked.
+    /// Class that holds information about a gameitem bool condition.
     /// </summary>
-    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class EnableBasedUponUnlocked<T> : GameItemContextConditionallyEnable<T> where T : GameItem
+    [Serializable]
+    public abstract class ConditionBool : Condition
     {
-        /// <summary>
-        /// Setup
-        /// </summary>
-        protected override void Start()
+        public enum ConditionTypeBool
         {
-            MyDebug.LogWarning(
-                "EnableBasedUponXxxUnlocked Components are deprecated and will be removed. Please replace with the more generic EnableBasedUponXxx components instead.");
-            base.Start();
-            GetGameItemManager().Unlocked += Unlocked;
+            IsFalse,
+            IsTrue,
         }
 
+        #region Variables
 
         /// <summary>
-        /// Destroy
+        /// The type of the condition for boolean types.
         /// </summary>
-        protected override void OnDestroy()
+        public bool BoolValue
         {
-            base.OnDestroy();
-            GetGameItemManager().Unlocked -= Unlocked;
+            get
+            {
+                return _conditionBool == ConditionTypeBool.IsTrue;
+            }
+            set
+            {
+                _conditionBool = value? ConditionTypeBool.IsTrue : ConditionTypeBool.IsFalse;
+            }
         }
+        [Tooltip("The type of the condition for boolean types.")]
+        [SerializeField]
+        ConditionTypeBool _conditionBool;
 
-
-        /// <summary>
-        /// Called when a GameItem is unlocked.
-        /// </summary>
-        /// <param name="gameItem"></param>
-        void Unlocked(T gameItem)
-        {
-            if (gameItem.Number == GameItem.Number)
-                RunMethod(false);
-        }
-
-
-        /// <summary>
-        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
-        /// </summary>
-        /// <returns></returns>
-        public override bool IsConditionMet(T gameItem)
-        {
-            return gameItem.IsUnlocked;
-        }
+        #endregion Variables
     }
 }

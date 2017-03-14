@@ -19,58 +19,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Debugging;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-
-
-namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
+namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
     /// <summary>
-    /// abstract base for enabling or a disabling a gameobject based upon whether a specified GameItem is unlocked.
+    /// Class that holds information about a gameitem condition.
     /// </summary>
-    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class EnableBasedUponUnlocked<T> : GameItemContextConditionallyEnable<T> where T : GameItem
+    [System.Serializable]
+    public class Score : ConditionNumber<int>
     {
         /// <summary>
-        /// Setup
-        /// </summary>
-        protected override void Start()
-        {
-            MyDebug.LogWarning(
-                "EnableBasedUponXxxUnlocked Components are deprecated and will be removed. Please replace with the more generic EnableBasedUponXxx components instead.");
-            base.Start();
-            GetGameItemManager().Unlocked += Unlocked;
-        }
-
-
-        /// <summary>
-        /// Destroy
-        /// </summary>
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            GetGameItemManager().Unlocked -= Unlocked;
-        }
-
-
-        /// <summary>
-        /// Called when a GameItem is unlocked.
-        /// </summary>
-        /// <param name="gameItem"></param>
-        void Unlocked(T gameItem)
-        {
-            if (gameItem.Number == GameItem.Number)
-                RunMethod(false);
-        }
-
-
-        /// <summary>
-        /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
+        /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool IsConditionMet(T gameItem)
+        public override bool EvaluateCondition(GameItem gameItem)
         {
-            return gameItem.IsUnlocked;
+            return EvaluateNumber(gameItem.Score);
+        }
+
+        /// <summary>
+        /// Returns whether this condition can process the specified GameItem / GameItem derived class
+        /// </summary>
+        /// <returns></returns>
+        public override bool CanProcessGameItem(GameItem gameItem)
+        {
+            return true; // works for all GameItems
         }
     }
 }

@@ -19,36 +19,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Debugging;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-
+using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
+using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// abstract base for enabling or a disabling a gameobject based upon whether a specified GameItem is selected.
+    /// abstract base for enabling or a disabling a gameobject based upon the settings of a specific Level.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
-    public abstract class EnableBasedUponSelected<T> : GameItemContextConditionallyEnable<T> where T : GameItem
+    public abstract class EnableBasedUponGameItem<T> : GameItemContextConditionallyEnable<T> where T : GameItem
     {
-        /// <summary>
-        /// Default to ByNumber as that is perhaps the most common scenario here.
-        /// </summary>
-        protected EnableBasedUponSelected()
-        {
-            Context.ContextMode = ObjectModel.GameItemContext.ContextModeType.ByNumber;
-        }
-
+        [Header("Conditions")]
+        public ConditionReference[] ConditionReferences = new ConditionReference[0];
 
         /// <summary>
         /// Setup
         /// </summary>
         protected override void Start()
         {
-            MyDebug.LogWarning(
-                "EnableBasedUponXxxSelected Components are deprecated and will be removed. Please replace with the more generic EnableBasedUponXxx components instead.");
             base.Start();
-            // add selection changed handler always, but not multiple times.
+            //GetGameItemManager().Unlocked += Unlocked;
+            //GameManager.SafeAddListener<PlayerCoinsChangedMessage>(EvaluateConditionChanges);
+            // add selection changed handler always, but not multiple times. This is needed for the Selected Condition
             if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
                 GetGameItemManager().SelectedChanged += SelectedChanged;
         }
@@ -60,20 +54,67 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            // add selection changed handler always, but not multiple times.
+            //GetGameItemManager().Unlocked -= Unlocked;
+            //GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(EvaluateConditionChanges);
+            // add selection changed handler always, but not multiple times.. This is needed for the Selected Condition
             if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
                 GetGameItemManager().SelectedChanged -= SelectedChanged;
         }
 
-        
+
+        /// <summary>
+        /// Called when a GameItem is unlocked.
+        /// </summary>
+        /// <param name="gameItem"></param>
+        void Unlocked(T gameItem)
+        {
+            if (gameItem.Number == GameItem.Number)
+                RunMethod(false);
+        }
+
+        /// <summary>
+        /// NOTE: This is an update for now but will probalby move to messaging in the future for performance
+        /// </summary>
+        void Update()
+        {
+            RunMethod(false);
+        }
+
+        /// <summary>
+        /// Do nothing for now - handled by Update method. Remove if moving to messaging.
+        /// </summary>
+        /// <param name="oldItem"></param>
+        /// <param name="item"></param>
+        protected override void SelectedChanged(T oldItem, T item)
+        {
+        }
+
+        /// <summary>
+        /// Called when a message is received that indicates a possible condition change.
+        /// </summary>
+        /// <param name="message"></param>
+        //bool EvaluateConditionChanges(BaseMessage message)
+        //{
+        //    RunMethod(false);
+        //    return true;
+        //}
+
+
         /// <summary>
         /// Implement this to return whether to show the condition met gameobject (true) or the condition not met one (false)
         /// </summary>
         /// <returns></returns>
         public override bool IsConditionMet(T gameItem)
         {
-            // don't use gameItem as that may be the 
-            return GetGameItem<T>().Number == GetGameItemManager().Selected.Number;
+            var conditionsAreAllTrue = true;
+            foreach (var conditionReference in ConditionReferences)
+            {
+                if (conditionReference.Condition is Selected)
+                    conditionsAreAllTrue &= (GetGameItem<T>().Number == GetGameItemManager().Selected.Number) == (conditionReference.Condition as Selected).BoolValue;
+                else
+                    conditionsAreAllTrue &= conditionReference.Condition.EvaluateCondition(GameItem);
+            }
+            return conditionsAreAllTrue;
         }
     }
 }

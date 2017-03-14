@@ -22,6 +22,8 @@
 using System.Collections;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 #if BEAUTIFUL_TRANSITIONS
 using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
@@ -29,15 +31,26 @@ using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
+    public class GameItemContextConditionallyEnable
+    {
+        public enum EnableModeType { GameObject, Button }
+    }
+
     /// <summary>
     /// Enabled or a disabled a gameobject based upon a condition.
     /// </summary>
-    public abstract class GameItemContextEnableDisableGameObject<T> : GameItemContextBaseRunnable<T> where T : GameItem
+    public abstract class GameItemContextConditionallyEnable<T> : GameItemContextBaseRunnable<T> where T : GameItem
     {
+        /// <summary>
+        /// The enable mode. Either changing interactivity of an attached button or swapping between gameobjects 
+        /// </summary>
+        [Header("Enable")]
+        [Tooltip("The enable mode. Either changing interactivity of an attached button or swapping between gameobjects")]
+        public GameItemContextConditionallyEnable.EnableModeType EnableMode;
+
         /// <summary>
         /// GameObject to show if the specified GameItem is selected
         /// </summary>
-        [Header("Enable")]
         [Tooltip("GameObject to show if the specified GameItem is selected")]
         public GameObject ConditionMetGameObject;
 
@@ -47,9 +60,20 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [Tooltip("GameObject to show if the specified GameItem is not selected")]
         public GameObject ConditionNotMetGameObject;
 
+        Button _button;
 
         /// <summary>
-        /// Called by the base class from start and optionally if the selection chages.
+        /// Setup
+        /// </summary>
+        protected override void Awake()
+        {
+            _button = GetComponent<Button>();
+
+            base.Awake();
+        }
+
+        /// <summary>
+        /// Called by the base class from start and optionally if a condition might have changed.
         /// </summary>
         /// <param name="gameItem"></param>
         /// <param name="isStart"></param>
@@ -57,13 +81,22 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var isConditionMet = IsConditionMet(GetGameItem<T>());
 
-//#if BEAUTIFUL_TRANSITIONS
-//            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
-//#else
-            if (ConditionMetGameObject != null)
-                ConditionMetGameObject.SetActive(isConditionMet);
-            if (ConditionNotMetGameObject != null)
-                ConditionNotMetGameObject.SetActive(!isConditionMet);
+            if (EnableMode == GameItemContextConditionallyEnable.EnableModeType.Button)
+            {
+                Assert.IsNotNull(_button,
+                    "If you have an enable mode of button then ensure that the component is added to a GameObject that has a UI button.");
+                _button.interactable = isConditionMet;
+            }
+            else
+            {
+                //#if BEAUTIFUL_TRANSITIONS
+                //            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
+                //#else
+                if (ConditionMetGameObject != null)
+                    ConditionMetGameObject.SetActive(isConditionMet);
+                if (ConditionNotMetGameObject != null)
+                    ConditionNotMetGameObject.SetActive(!isConditionMet);
+            }
 //#endif
         }
 
