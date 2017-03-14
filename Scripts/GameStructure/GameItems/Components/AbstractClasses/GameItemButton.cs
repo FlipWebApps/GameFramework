@@ -36,6 +36,7 @@ using UnityEngine.UI;
 using GameFramework.GameStructure.Players.Messages;
 using GameFramework.Messaging;
 using GameFramework.Localisation.Messages;
+using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
@@ -70,6 +71,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public GameItemButton.SelectionModeType SelectionMode;
 
         /// <summary>
+        /// The name of the scene that should be loaded when this button is clicked.
+        /// </summary>
+        /// You can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.
+        [Tooltip("The name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
+        public string ClickUnlockedSceneToLoad;
+
+        /// <summary>
         /// A color to use when this item is available for unlock
         /// </summary>
         [Header("Unlocking")]
@@ -83,24 +91,333 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public Color CoinColorCantUnlock = Color.white;
 
         /// <summary>
-        /// The name of the scene that should be loaded when this button is clicked.
-        /// </summary>
-        /// You can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.
-        [Header("Default Handling")]
-        [Tooltip("The name of the scene that should be loaded when this button is clicked.\n\nYou can add the format parameter{0} to substitute in the current gameitems number to allow for different scenes for each gameitem.")]
-        public string ClickUnlockedSceneToLoad;
-
-        /// <summary>
-        /// Whether the user can unlock this button directly by clicking if the GameItem has coin unlock enabled and they have enough coins.
+        /// Whether the user can unlock this button directly by clicking (only applicable if the GameItem has coin unlock enabled and they have enough coins).
         /// </summary>
         public bool ClickToUnlock
         {
             get { return _clickToUnlock; }
             set { _clickToUnlock = value; }
         }
-        [Tooltip("Whether the user can unlock this button directly by clicking if the GameItem has coin unlock enabled and they have enough coins.")]
+        [Tooltip("Whether the user can unlock this button directly by clicking (only applicable if the GameItem has coin unlock enabled and they have enough coins).")]
         [SerializeField]
         bool _clickToUnlock;
+
+        /// <summary>
+        /// Whether the user can buy this button directly by clicking (only applicable if the GameItem has Unlock With Payment enabled and they have enough coins).
+        /// </summary>
+        public bool ClickToBuy
+        {
+            get { return _clickToBuy; }
+            set { _clickToBuy = value; }
+        }
+        [Tooltip("Whether the user can buy this button directly by clicking (only applicable if the GameItem has Unlock With Payment and they have enough coins).")]
+        [SerializeField]
+        bool _clickToBuy = true;
+
+
+        /// <summary>
+        /// The localisation / text to use for the title of the BuyUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the BuyUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyOrUnlockTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the BuyUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the BuyUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyOrUnlockText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the BuyUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the BuyUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyOrUnlockText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType BuyOrUnlockDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite BuyOrUnlockDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject BuyOrUnlockContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController BuyOrUnlockContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool BuyOrUnlockContentShowsButtons;
+
+
+        /// <summary>
+        /// The localisation / text to use for the title of the BuyCantUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the BuyCantUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyCantUnlockTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the BuyCantUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the BuyCantUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyCantUnlockText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the BuyCantUnlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the BuyCantUnlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyCantUnlockText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType BuyCantUnlockDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite BuyCantUnlockDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject BuyCantUnlockContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController BuyCantUnlockContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool BuyCantUnlockContentShowsButtons;
+
+        /// <summary>
+        /// Whether the Buy window should be shown first to confirm they want to buy.
+        /// </summary>
+        [Tooltip("Whether the Buy window should be shown first to confirm they want to buy.")]
+        public bool ShowBuyWindow;
+
+        /// <summary>
+        /// The localisation / text to use for the title of the buy window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the Buy window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the buy window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the Buy window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the buy window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the Buy window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText BuyText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType BuyDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite BuyDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject BuyContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController BuyContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool BuyContentShowsButtons;
+
+        /// <summary>
+        /// Whether the confirmation window should be shown first to confirm they want to unlock.
+        /// </summary>
+        [Tooltip("Whether the confirmation window should be shown first to confirm they want to unlock.")]
+        public bool ShowConfirmWindow;
+
+        /// <summary>
+        /// The localisation / text to use for the title of the confirmation window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the confirmation window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText ConfirmTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the confirmation window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the confirmation window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText ConfirmText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the confirmation window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the confirmation window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText ConfirmText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType ConfirmDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite ConfirmDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject ConfirmContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController ConfirmContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool ConfirmContentShowsButtons;
+
+
+        /// <summary>
+        /// Whether the unlock window should be shown.
+        /// </summary>
+        [Tooltip("The type of unlock window that we should.")]
+        public bool ShowUnlockWindow = true;
+
+        /// <summary>
+        /// The localisation / text to use for the title of the unlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the unlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText UnlockTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the unlock window when a new item is unlocked. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the unlock window when a new item is unlocked. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText UnlockText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the unlock window when a new item is unlocked. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary text of the unlock window when a new item is unlocked. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText UnlockText2;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject UnlockContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController UnlockContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool UnlockContentShowsButtons;
+
+        /// <summary>
+        /// Whether the not enough coins window should be shown if they don't have enough coins to unlock this item.
+        /// </summary>
+        [Tooltip("Whether the not enough coins window should be shown first if they don't have enough coins to unlock this item.")]
+        public bool ShowNotEnoughCoinsWindow = true;
+
+        /// <summary>
+        /// The localisation / text to use for the title of the not enough coins window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the not enough coins window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText NotEnoughCoinsTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the not enough coins window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the not enough coins window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText NotEnoughCoinsText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the not enough coins window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the not enough coins window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText NotEnoughCoinsText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType NotEnoughCoinsDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite NotEnoughCoinsDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject NotEnoughCoinsContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController NotEnoughCoinsContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool NotEnoughCoinsContentShowsButtons;
+
+
 
         /// <summary>
         /// The current item that this button corresponds to.
@@ -110,7 +427,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
         protected Player CurrentPlayer;
 
-        protected Image DisplayImage { get; set; }
+        //protected Image DisplayImage { get; set; }
         protected Text ValueToUnlockAmount;
         protected GameObject HighlightGameObject;
         protected GameObject LockGameObject;
@@ -118,6 +435,41 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected GameObject ValueToUnlockGameObject;
 
         protected bool LoadSpriteFromResources;
+
+        string _localisationBase;
+
+        /// <summary>
+        /// Setup default values
+        /// </summary>
+        protected GameItemButton(string localisationBase)
+        {
+            _localisationBase = localisationBase;
+            BuyOrUnlockTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
+            BuyOrUnlockText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".BuyOrUnlock.Text1" };
+            BuyOrUnlockDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+
+            BuyCantUnlockTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Buy.Title" };
+            BuyCantUnlockText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Buy.Text1" };
+            BuyCantUnlockText2 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Buy.Text2" };
+            BuyCantUnlockDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+
+            BuyTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Buy.Title" };
+            BuyText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Buy.Text1" };
+            BuyDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+
+            ConfirmTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
+            ConfirmText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Confirm.Text1" };
+            ConfirmText2 = LocalisableText.CreateNonLocalised();
+            ConfirmDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+
+            UnlockTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
+            UnlockText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.New.Text1" };
+            UnlockText2 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.New.Text2" };
+
+            NotEnoughCoinsTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
+            NotEnoughCoinsText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.NotEnoughCoins" };
+            NotEnoughCoinsDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+        }
 
         /// <summary>
         /// Setup and get various references for later use
@@ -129,7 +481,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             // Get some references for UI button type buttons
             HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
-            DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
+            //DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
             LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
             HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
             ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
@@ -145,7 +497,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             base.Start();
 
 #pragma warning disable 618
-            if (Number != 0)
+            if (Number != 0 && Context.ContextMode != GameItemContext.ContextModeType.FromLoop)
 #pragma warning restore 618
                 MyDebug.LogWarning("<GameItem>Button Number field is replaced by GameItem Context and will be removed. On any <GameItem>Button component, please set General->Number to 0 on any gameobjects / prefabs and set GameItem context accordingly to remove this warning. Note: Create<GameItem>Buttons will automatically use a mode of FromLoop. GameObject: " + gameObject.name);
 
@@ -190,13 +542,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var isUnlockedAndAnimationShown = GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown;
 
-            UIHelper.SetTextOnChildGameObject(gameObject, "Name", GameItem.Name, true);
+            //UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
 
-            if (DisplayImage != null)
-            {
-                var selectionMenuSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
-                DisplayImage.sprite = selectionMenuSprite ?? GameItem.Sprite;
-            }
+            //if (DisplayImage != null)
+            //{
+            //    var selectionMenuSprite = CurrentItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
+            //    DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
+            //}
 
             if (LockGameObject != null)
                 LockGameObject.SetActive(!isUnlockedAndAnimationShown);
@@ -210,8 +562,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             if (ValueToUnlockGameObject != null)
             {
                 ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
-                if (ValueToUnlockAmount != null)
-                    ValueToUnlockAmount.text = "x" + GameItem.ValueToUnlock.ToString();
+                //if (ValueToUnlockAmount != null)
+                //    ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
             if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
@@ -252,49 +604,174 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GetGameItemManager().Selected = GetGameItem<T>();
             PreferencesFactory.Save();
 
-            if (!string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
+            if (SelectionMode == GameItemButton.SelectionModeType.ClickThrough && !string.IsNullOrEmpty(ClickUnlockedSceneToLoad))
             {
                 GameManager.LoadSceneWithTransitions(string.Format(ClickUnlockedSceneToLoad, GameItem.Number));
             }
         }
 
+        #region Unlocking
 
         /// <summary>
-        /// Called when a locked button is clicked
+        /// Called when a locked button is clicked and handles display of any dialogs plus unlocking / IAP
         /// </summary>
-        /// The default implementation initiates IAP if enabled or shows a dialog otherwise.
-        /// You may override this in a derived class.
         public virtual void ClickLocked()
         {
-            if (GameItem.UnlockWithCoins && ClickToUnlock && GameItem.Coins < GameManager.Instance.Player.Coins)
+            if (SelectionMode == GameItemButton.SelectionModeType.Select)
             {
-                GetGameItemManager().Unlocked(GetGameItem<T>());
+                GetGameItemManager().Selected = GetGameItem<T>();
+                PreferencesFactory.Save();
+            }
 
-#if UNITY_ANALYTICS
-                // record some analytics on the item unlocked
-                Analytics.CustomEvent(_localisationBase + ".Unlock", new Dictionary<string, object>
+            if (ClickToUnlock && GameItem.UnlockWithCoins && ClickToBuy && GameItem.UnlockWithPayment)
+            {
+                if (GameManager.Instance.Player.Coins >= GameItem.ValueToUnlock)
+                    DisplayBuyOrUnlockDialog();
+                else
+                    DisplayBuyCantUnlockDialog();
+            }
+            else if (ClickToBuy && GameItem.UnlockWithPayment)
+            {
+                if (ShowBuyWindow)
+                    DisplayBuyDialog();
+                else
+                    BuyGameItemButton<T>.ProcessBuy(GameItem);
+            }
+            else if (ClickToUnlock && GameItem.UnlockWithCoins)
+            {
+                if (GameManager.Instance.Player.Coins >= GameItem.ValueToUnlock)
                 {
-                    { "number", _gameItemToUnlock.Number },
-                    { "timesplayed", GameManager.Instance.TimesGamePlayed }
-                });
-#endif
-                //update new coin count.
-                GameManager.Instance.Player.Coins -= GameItem.ValueToUnlock;
-                GameManager.Instance.Player.UpdatePlayerPrefs();
+                    if (ShowConfirmWindow)
+                        DisplayConfirmUnlockDialog();
+                    else if (ShowUnlockWindow)
+                        DisplayUnlockDialog();
+                    else
+                        ProcessUnlock();
+                }
+                else
+                {
+                    if (ShowNotEnoughCoinsWindow)
+                    {
+                        DisplayNotEnoughCoinsDialog();
+                    }
+                }
             }
-            else if (GameItem.UnlockWithPayment)
+        }
+
+
+        /// <summary>
+        /// Display the buy or unlock dialog window
+        /// </summary>
+        void DisplayBuyOrUnlockDialog()
+        {
+            var dialogInstance = DialogManager.Instance.Create(null, null, BuyOrUnlockContentPrefab, null, runtimeAnimatorController: BuyOrUnlockContentAnimatorController, contentSiblingIndex: 1);
+            dialogInstance.Show(title: BuyOrUnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                text: ValueOrNull(BuyOrUnlockText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2: ValueOrNull(BuyOrUnlockText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                sprite: DialogSpriteToUse(BuyOrUnlockDialogSpriteType, BuyOrUnlockDialogSprite),
+                doneCallback: BuyOrUnlockDialogCallback,
+                dialogButtons:
+                    BuyOrUnlockContentShowsButtons
+                        ? DialogInstance.DialogButtonsType.Custom
+                        : DialogInstance.DialogButtonsType.Text,
+                buttonText: new[] { LocalisableText.CreateLocalised("Button.Cancel"), LocalisableText.CreateLocalised("Button.Unlock"), LocalisableText.CreateLocalised("Button.Buy") });
+        }
+
+
+        /// <summary>
+        /// Display the buy not enough coins dialog window
+        /// </summary>
+        void DisplayBuyCantUnlockDialog()
+        {
+            var dialogInstance = DialogManager.Instance.Create(null, null, BuyCantUnlockContentPrefab, null, runtimeAnimatorController: BuyCantUnlockContentAnimatorController, contentSiblingIndex: 1);
+            dialogInstance.Show(title: BuyCantUnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                text: ValueOrNull(BuyCantUnlockText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2: ValueOrNull(BuyCantUnlockText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                sprite: DialogSpriteToUse(BuyCantUnlockDialogSpriteType, BuyCantUnlockDialogSprite),
+                doneCallback: BuyDialogCallback,
+                dialogButtons:
+                    BuyCantUnlockContentShowsButtons
+                        ? DialogInstance.DialogButtonsType.Custom
+                        : DialogInstance.DialogButtonsType.OkCancel);
+        }
+
+
+        /// <summary>
+        /// Display the buy dialog window
+        /// </summary>
+        void DisplayBuyDialog()
+        {
+            DialogManager.Instance.Show(title: BuyTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+               text: ValueOrNull(BuyText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+               text2: ValueOrNull(BuyText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+               sprite: GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow) ?? GameItem.Sprite,
+               doneCallback: BuyDialogCallback,
+               dialogButtons: DialogInstance.DialogButtonsType.OkCancel);
+        }
+
+
+        /// <summary>
+        /// Display the confirm unlock window
+        /// </summary>
+        void DisplayConfirmUnlockDialog()
+        {
+            var dialogInstance = DialogManager.Instance.Create(null, null, ConfirmContentPrefab, null, runtimeAnimatorController: ConfirmContentAnimatorController, contentSiblingIndex: 1);
+            dialogInstance.Show(title: ConfirmTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                text: ValueOrNull(ConfirmText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2: ValueOrNull(ConfirmText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                sprite: DialogSpriteToUse(ConfirmDialogSpriteType, ConfirmDialogSprite),
+                doneCallback: ConfirmDialogCallback,
+                dialogButtons:
+                    ConfirmContentShowsButtons
+                        ? DialogInstance.DialogButtonsType.Custom
+                        : DialogInstance.DialogButtonsType.OkCancel);
+        }
+
+
+        /// <summary>
+        /// Display the unlock dialog window
+        /// </summary>
+        void DisplayUnlockDialog()
+        {
+            var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
+            var unlockWindowSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
+            dialogInstance.Show(title: UnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                text: ValueOrNull(UnlockText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2: ValueOrNull(UnlockText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                sprite: unlockWindowSprite ?? GameItem.Sprite,
+                doneCallback: UnlockedDialogCallback,
+                dialogButtons: UnlockContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
+        }
+
+        /// <summary>
+        /// Display the not enough coins to unlock window
+        /// </summary>
+        void DisplayNotEnoughCoinsDialog()
+        {
+            var dialogInstance = DialogManager.Instance.Create(null, null, NotEnoughCoinsContentPrefab, null, runtimeAnimatorController: NotEnoughCoinsContentAnimatorController, contentSiblingIndex: 1);
+            dialogInstance.Show(titleKey: NotEnoughCoinsTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                textKey: ValueOrNull(NotEnoughCoinsText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2Key: ValueOrNull(NotEnoughCoinsText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                sprite: DialogSpriteToUse(NotEnoughCoinsDialogSpriteType, NotEnoughCoinsDialogSprite),
+                dialogButtons: NotEnoughCoinsContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
+        }
+
+
+        /// <summary>
+        /// Callback when the buy or unlock dialog completes
+        /// </summary>
+        /// <param name="dialogInstance"></param>
+        void BuyOrUnlockDialogCallback(DialogInstance dialogInstance)
+        {
+            if (dialogInstance.DialogResultCustom == 1)
             {
-                DialogManager.Instance.Show(title: LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Title"),
-                    text: LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Text1"),
-                    text2: GameItem.UnlockWithCoins ? LocaliseText.Get(GameItem.IdentifierBase + ".Buy.Text2") : null,
-                    sprite: GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow) ?? GameItem.Sprite,
-                    doneCallback: BuyDialogCallback,
-                    dialogButtons: DialogInstance.DialogButtonsType.OkCancel);
+                if (ShowUnlockWindow)
+                    DisplayUnlockDialog();
+                else
+                    ProcessUnlock();
             }
-            else if (GameItem.UnlockWithCoins)
-            {
-                DialogManager.Instance.ShowInfo(textKey: GameItem.IdentifierBase + ".Buy.NotEnabled");
-            }
+            else if (dialogInstance.DialogResultCustom == 2)
+                BuyGameItemButton<T>.ProcessBuy(GameItem);
         }
 
 
@@ -306,12 +783,55 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             if (dialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
             {
-#if UNITY_PURCHASING
-                PaymentManager.Instance.BuyProductId("unlock." + CurrentItem.IdentifierBase.ToLower() + "." + CurrentItem.Number);
-#else
-                Debug.LogWarning("You need to enable the Unity IAP Service to use payments");
-#endif
+                BuyGameItemButton<T>.ProcessBuy(GameItem);
             }
+        }
+
+
+        /// <summary>
+        /// Callback when the confirm dialog completes
+        /// </summary>
+        /// <param name="dialogInstance"></param>
+        void ConfirmDialogCallback(DialogInstance dialogInstance)
+        {
+            if (dialogInstance.DialogResult == DialogInstance.DialogResultType.Ok)
+            {
+                if (ShowUnlockWindow)
+                    DisplayUnlockDialog();
+                else
+                    ProcessUnlock();
+            }
+        }
+
+
+        /// <summary>
+        /// Callback when the dialog completes
+        /// </summary>
+        /// <param name="dialogInstance"></param>
+        void UnlockedDialogCallback(DialogInstance dialogInstance)
+        {
+            ProcessUnlock();
+        }
+
+
+        /// <summary>
+        /// Process the actual unlocking of an item.
+        /// </summary>
+        void ProcessUnlock()
+        {
+            GetGameItemManager().Unlocked(GetGameItem<T>());
+
+#if UNITY_ANALYTICS
+    // record some analytics on the item unlocked
+                //Analytics.CustomEvent(_localisationBase + ".Unlock", new Dictionary<string, object>
+                //{
+                //    { "number", _gameItemToUnlock.Number },
+                //    { "timesplayed", GameManager.Instance.TimesGamePlayed }
+                //});
+#endif
+            //update new coin count.
+            GameManager.Instance.Player.Coins -= GameItem.ValueToUnlock;
+            GameManager.Instance.Player.UpdatePlayerPrefs();
         }
 
 
@@ -340,13 +860,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GameItem.UpdatePlayerPrefs();
             PreferencesFactory.Save();
 
-            var animator = GetComponent<Animator>();
+            Animator animator = GetComponent<Animator>();
             if (animator != null)
                 animator.SetTrigger("Unlock");
             else 
                 SetupDisplay();
         }
-
+        #endregion Unlocking
 
         /// <summary>
         /// This method is triggered when a the players coins are changed and updates the coin to unlock color.
@@ -376,5 +896,24 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             SetupDisplay();
             return true;
         }
+
+        #region Helper Methods
+        static string ValueOrNull(string value)
+        {
+            return string.IsNullOrEmpty(value) ? null : value;
+        }
+
+
+        Sprite DialogSpriteToUse(UnlockGameItemButton.DialogSpriteType spriteType, LocalisableSprite localisableSprite)
+        {
+            Sprite sprite = null;
+            if (spriteType == UnlockGameItemButton.DialogSpriteType.FromGameItem)
+                sprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow) ??
+                    GameItem.Sprite;
+            else if (spriteType == UnlockGameItemButton.DialogSpriteType.Custom)
+                sprite = localisableSprite.GetSprite();
+            return sprite;
+        }
+        #endregion
     }
 }

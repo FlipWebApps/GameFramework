@@ -35,6 +35,10 @@ namespace GameFramework.GameStructure.Characters.Components
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class CharacterButton : GameItemButton<Character>
     {
+        /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public CharacterButton() : base("Character") { }
 
         public new void Awake()
         {

@@ -19,69 +19,35 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Billing.Messages;
+using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
-using UnityEngine;
 using GameFramework.Messaging;
-using GameFramework.Billing.Messages;
+using UnityEngine;
 
-namespace GameFramework.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// World Details Button
+    /// Player Details Button
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldButton")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class WorldButton : GameItemButton<World>
+    [AddComponentMenu("Game Framework/GameStructure/Players/PlayerButton")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Players/")]
+    public class PlayerButton : GameItemButton<Player>
     {
         /// <summary>
         /// Pass static parametres to base class.
         /// </summary>
-        public WorldButton() : base("World") { }
+        public PlayerButton() : base("Player") { }
 
-        public new void Awake()
-        {
-            base.Awake();
-            GameManager.SafeAddListener<WorldPurchasedMessage>(WorldPurchasedHandler);
-        }
-
-        protected new void OnDestroy()
-        {
-            GameManager.SafeRemoveListener<WorldPurchasedMessage>(WorldPurchasedHandler);
-            base.OnDestroy();
-        }
 
         /// <summary>
-        /// Handler for World purchase messages
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        bool WorldPurchasedHandler(BaseMessage message)
-        {
-            var worldPurchasedMessage = message as WorldPurchasedMessage;
-            UnlockIfNumberMatches(worldPurchasedMessage.WorldNumber);
-            return true;
-        }
-
-        /// <summary>
-        /// Returns the GameItemManager that holds Worlds
+        /// Returns the GameItemManager that holds Players
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<World, GameItem> GetGameItemManager()
+        protected override GameItemManager<Player, GameItem> GetGameItemManager()
         {
-            return GameManager.Instance.Worlds;
+            return GameManager.Instance.Players;
         }
-
-
-        /// <summary>
-        /// Override for ClickUnlocked that sets the active Levels from the world
-        /// </summary>
-        public override void ClickUnlocked()
-        {
-            GameManager.Instance.Levels = CurrentItem.Levels;
-            base.ClickUnlocked();
-        }
-
     }
 }

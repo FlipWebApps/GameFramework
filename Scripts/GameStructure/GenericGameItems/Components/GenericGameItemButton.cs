@@ -35,6 +35,10 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GenericGameItemButton : GameItemButton<GenericGameItem>
     {
+        /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public GenericGameItemButton() : base("GenericGameItem") { }
 
         public new void Awake()
         {

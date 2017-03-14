@@ -49,6 +49,11 @@ namespace GameFramework.GameStructure.Levels.Components
         protected GameObject Star4WonGameObject;
         protected GameObject Star4NotWonGameObject;
 
+        /// <summary>
+        /// Pass static parametres to base class.
+        /// </summary>
+        public LevelButton() : base("Level") { }
+
         public new void Awake()
         {
             StarsWonGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "StarsWon", true);
