@@ -427,7 +427,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
         protected Player CurrentPlayer;
 
-        //protected Image DisplayImage { get; set; }
+        protected Image DisplayImage { get; set; }
         protected Text ValueToUnlockAmount;
         protected GameObject HighlightGameObject;
         protected GameObject LockGameObject;
@@ -481,7 +481,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             // Get some references for UI button type buttons
             HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
-            //DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
+            DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
             LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
             HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
             ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
@@ -542,13 +542,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var isUnlockedAndAnimationShown = GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown;
 
-            //UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
+            UIHelper.SetTextOnChildGameObject(gameObject, "Name", CurrentItem.Name, true);
 
-            //if (DisplayImage != null)
-            //{
-            //    var selectionMenuSprite = CurrentItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
-            //    DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
-            //}
+            if (DisplayImage != null)
+            {
+                var selectionMenuSprite = CurrentItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
+                DisplayImage.sprite = selectionMenuSprite ?? CurrentItem.Sprite;
+            }
 
             if (LockGameObject != null)
                 LockGameObject.SetActive(!isUnlockedAndAnimationShown);
@@ -562,8 +562,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             if (ValueToUnlockGameObject != null)
             {
                 ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
-                //if (ValueToUnlockAmount != null)
-                //    ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
+                if (ValueToUnlockAmount != null)
+                    ValueToUnlockAmount.text = "x" + CurrentItem.ValueToUnlock.ToString();
             }
 
             if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
