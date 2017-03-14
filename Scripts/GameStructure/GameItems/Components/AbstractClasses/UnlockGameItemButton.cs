@@ -61,17 +61,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             FromGameItem,
             Custom
         }
-
-        ///// <summary>
-        ///// The different types of confirmation windows we can show when unlocking items.
-        ///// </summary>
-        ///// Placed in non generic class to avoid display issues in Unity Editor
-        //public enum UnlockWindowType
-        //{
-        //    None,
-        //    Unlocked,
-        //    Confirm
-        //}
     }
 
     /// <summary>
@@ -85,7 +74,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// The mode to use for unlocking items.
         /// </summary>
-        [Header("Settings")]
         [Tooltip("The mode to use for unlocking items.")]
         public UnlockGameItemButton.UnlockModeType UnlockMode;
 
@@ -98,7 +86,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// Whether the confirmation window should be shown first to confirm they want to unlock.
         /// </summary>
-        [Header("Confirmation Window")]
+        [Header("Feedback")]
         [Tooltip("Whether the confirmation window should be shown first to confirm they want to unlock.")]
         public bool ShowConfirmWindow;
 
@@ -153,7 +141,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// Whether the unlock window should be shown.
         /// </summary>
-        [Header("Unlock Window")]
         [Tooltip("The type of unlock window that we should.")]
         public bool ShowUnlockWindow = true;
 
@@ -225,10 +212,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected UnlockGameItemButton(string localisationBase)
         {
             _localisationBase = localisationBase;
-            ConfirmTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Confirm.Title" };
+
+            ConfirmTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
             ConfirmText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Confirm.Text1" };
             ConfirmText2 = LocalisableText.CreateNonLocalised();
             ConfirmDialogSpriteType = UnlockGameItemButton.DialogSpriteType.FromGameItem;
+
             UnlockTitleText = new LocalisableText {IsLocalised = true, Data = _localisationBase + ".Unlock.Title"};
             UnlockedText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.New.Text1" };
             UnlockedText2 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.New.Text2" };
@@ -257,7 +246,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
             _animation = GetComponent<UnityEngine.Animation>();
 
-            _localisationBase = GetGameItemManager().TypeName;
             _failedUnlockAttempts = GameManager.Instance.Player.GetSettingInt(_localisationBase + ".FailedUnlockAttempts", 0);
 
             // Sanity checking
@@ -398,7 +386,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayUnlockWindow()
         {
-            var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
             LocalisableText textKey, text2Key;
             if (!_alreadyUnlocked)
             {
@@ -418,6 +405,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GameManager.Instance.Player.SetSetting(_localisationBase + ".FailedUnlockAttempts", _failedUnlockAttempts);
             GameManager.Instance.Player.UpdatePlayerPrefs();
             var unlockWindowSprite = _gameItemToUnlock.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
+
+            var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(titleKey: UnlockTitleText.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock),
                 textKey: ValueOrNull(textKey.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
                 text2Key: ValueOrNull(text2Key.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
