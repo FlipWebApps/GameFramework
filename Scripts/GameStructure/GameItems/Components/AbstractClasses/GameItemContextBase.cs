@@ -52,7 +52,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             get
             {
                 // refresh if needed
-                if (Context.ContextMode == GameItemContext.ContextModeType.Selected || _gameItem == null)
+                if (Context.ContextMode == GameItemContext.ContextModeType.Selected || Context.ContextMode == GameItemContext.ContextModeType.Reference || _gameItem == null)
                     GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), gameObject.name);
                 return _gameItem;
             }
