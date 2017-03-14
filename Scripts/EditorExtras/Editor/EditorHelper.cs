@@ -160,8 +160,13 @@ namespace GameFramework.EditorExtras.Editor
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static string PrettyPrintCamelCase(string s)
+        public static string PrettyPrintCamelCase(string s, string prefixToStrip = null, string postfixToStrip = null)
         {
+            if (prefixToStrip != null && s.StartsWith(prefixToStrip))
+                s = s.Substring(prefixToStrip.Length);
+            if (postfixToStrip != null && s.EndsWith(postfixToStrip))
+                s = s.Remove(s.Length - postfixToStrip.Length);
+
             var sb = new StringBuilder();
             foreach (var c in s)
             {
