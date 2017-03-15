@@ -25,24 +25,15 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
     /// Class that holds information about a gameitem condition.
     /// </summary>
     [System.Serializable]
-    public class Unlocked : ConditionBool
+    public class Unlocked : ConditionBuiltIn
     {
         /// <summary>
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(GameItem gameItem)
+        public static bool EvaluateCondition(GameItem gameItem, bool boolValue)
         {
-            return gameItem.IsUnlocked == BoolValue;
-        }
-
-        /// <summary>
-        /// Returns whether this condition can process the specified GameItem / GameItem derived class
-        /// </summary>
-        /// <returns></returns>
-        public override bool CanProcessGameItem(GameItem gameItem)
-        {
-            return true; // works for all GameItems
+            return gameItem.IsUnlocked == boolValue;
         }
     }
 }

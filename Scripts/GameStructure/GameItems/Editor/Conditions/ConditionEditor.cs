@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.GameItems.Editor.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
 using UnityEditor;
 using UnityEngine;
@@ -35,7 +36,6 @@ namespace GameFramework.GameStructure.GameItems.Editor.Conditions
         public int index;
 
         Condition _condition;
-        protected const float RemoveButtonWidth = 30f;
 
         void OnEnable()
         {
@@ -66,7 +66,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.Conditions
             // Draw custom GUI
             DrawGUI();
 
-            if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
+            if (GUILayout.Button("-", GUILayout.Width(EnableBasedUponGameItemEditor.RemoveButtonWidth)))
             {
                 ParentCollectionProperty.serializedObject.Update();
                 ParentCollectionProperty.DeleteArrayElementAtIndex(index);

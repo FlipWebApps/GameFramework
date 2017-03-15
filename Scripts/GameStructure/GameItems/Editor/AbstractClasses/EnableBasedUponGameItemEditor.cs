@@ -26,12 +26,16 @@ using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
 using GameFramework.GameStructure.GameItems.Editor.Conditions;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.Components;
 using UnityEditor;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
+    public abstract class EnableBasedUponGameItemEditor
+    {
+        public const float RemoveButtonWidth = 30f;
+    }
+
     public abstract class EnableBasedUponGameItemEditor<T> : UnityEditor.Editor where T : GameItem, new()
     {
         SerializedProperty _contextProperty;
@@ -45,9 +49,22 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         // types and associated names for all conditions
         Type[] _conditionTypes;
         string[] _conditionTypeNames;
+        bool[] _conditionIsBuiltIn;
 
         protected ConditionEditor[] subEditors;         // Array of Editors nested within this Editor.
 
+        readonly string[] _boolOptions = { "False", "True" };
+        readonly Dictionary<string, string> _classTooltipMapping = new Dictionary<string, string>
+        {
+            { "CanUnlockWithCoins", "Whether this GameItem can be unlocked by coins" },
+            { "CanUnlockWithCompletion", "Whether this GameItem can be unlocked by completion" },
+            { "CanUnlockWithPayment", "Whether this GameItem can be unlocked by payment" },
+            { "Coins", "Compare the GameItems coins with a specified value" },
+            { "PlayerHasCoinsToUnlock", "Whether the current player can unlock this GameItem (combine if needed with Unlocked condition)" },
+            { "Score", "Compare the GameItems score with a specified value" },
+            { "Selected", "Whether this GameItem is selected" },
+            { "Unlocked", "Whether this GameItem is unlocked" }
+        };
 
         public void OnEnable()
         {
@@ -89,12 +106,52 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             }
             //EditorGUILayout.PropertyField(_conditionsProperty, true);
 
-            // Display all the sub editors - use for rather than foreach loop in case of deletion.
+            // Display all the builtin / sub editors - use for rather than a foreach loop in case of deletion.
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(new GUIContent("Conditions", "The different conditions that this component should react to."), EditorStyles.boldLabel);
             for (var i = 0; i < subEditors.Length; i++)
             {
-                subEditors[i].OnInspectorGUI();
+                if (subEditors[i] == null)
+                {
+                    // draw built in editor 
+                    EditorGUILayout.BeginHorizontal(GUI.skin.box);
+
+                    var conditionReference = _conditionsProperty.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PrefixLabel(new GUIContent(EditorHelper.PrettyPrintCamelCase(_gameItemEditor.ConditionReferences[i].ClassName), _classTooltipMapping[_gameItemEditor.ConditionReferences[i].ClassName]));
+                    switch (_gameItemEditor.ConditionReferences[i].ClassName) {
+                        case "CanUnlockWithCoins":
+                        case "CanUnlockWithCompletion":
+                        case "CanUnlockWithPayment":
+                        case "PlayerHasCoinsToUnlock":
+                        case "Selected":
+                        case "Unlocked":
+                            var conditionBoolProperty = conditionReference.FindPropertyRelative("_boolValue");
+                            conditionBoolProperty.boolValue = EditorGUILayout.Popup(conditionBoolProperty.boolValue ? 1 : 0, _boolOptions, GUILayout.ExpandWidth(true)) == 1;
+                            break;
+                        case "Coins":
+                        case "Score":
+                            var comparisonProperty = conditionReference.FindPropertyRelative("_comparison");
+                            var conditionIntProperty = conditionReference.FindPropertyRelative("_intValue");
+                            EditorGUILayout.PropertyField(comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                            EditorGUILayout.PropertyField(conditionIntProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                            break;
+                        default:
+                            Debug.LogError("Unknown built in type : " + _gameItemEditor.ConditionReferences[i].ClassName);
+                            break;
+                    }
+                    if (GUILayout.Button("-", GUILayout.Width(EnableBasedUponGameItemEditor.RemoveButtonWidth)))
+                    {
+                        _conditionsProperty.DeleteArrayElementAtIndex(i);
+                        break;
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+                else
+                {
+                    // draw custom editor
+                    subEditors[i].OnInspectorGUI();
+                }
             }
 
             //            if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Plus More", "Add to list"), EditorStyles.miniButton))
@@ -103,7 +160,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 var menu = new GenericMenu();
                 for (var i = 0; i < _conditionTypes.Length; i++)
                 {
-                    menu.AddItem(new GUIContent(_conditionTypeNames[i]), false, AddConditionMenuHandler,
+                    menu.AddItem(new GUIContent(_conditionTypeNames[i]), false, AddCondition,
                         _conditionTypes[i]);
                 }
                 menu.ShowAsContext();
@@ -113,7 +170,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         }
 
 
-        void AddConditionMenuHandler(object target)
+        void AddCondition(object target)
         {
             var type = (Type)target;
 
@@ -121,6 +178,14 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             var newElement = _conditionsProperty.GetArrayElementAtIndex(_conditionsProperty.arraySize - 1);
             var propName = newElement.FindPropertyRelative("_className");
             propName.stringValue = type.Name;
+            var propUseScriptableObject = newElement.FindPropertyRelative("_useScriptableObject");
+            for (var i = 0; i < _conditionTypes.Length; i++)
+            {
+                if (_conditionTypes[i] == type)
+                {
+                    propUseScriptableObject.boolValue = !_conditionIsBuiltIn[i];
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -146,11 +211,17 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             // Populate the array and setup each Editor.
             for (var i = 0; i < subEditors.Length; i++)
             {
-                subEditors[i] = CreateEditor(_gameItemEditor.ConditionReferences[i].Condition) as ConditionEditor;
-                subEditors[i].ParentCollectionProperty = _conditionsProperty;
-                subEditors[i].DataProperty = _conditionsProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_data"); ;
-                //subEditors[i].ParentTarget = serializedObject;
-                subEditors[i].index = i;
+                if (_gameItemEditor.ConditionReferences[i].UseScriptableObject)
+                {
+                    subEditors[i] =
+                        CreateEditor(_gameItemEditor.ConditionReferences[i].ScriptableObject) as ConditionEditor;
+                    subEditors[i].ParentCollectionProperty = _conditionsProperty;
+                    subEditors[i].DataProperty =
+                        _conditionsProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_data");
+                    ;
+                    //subEditors[i].ParentTarget = serializedObject;
+                    subEditors[i].index = i;
+                }
             }
         }
 
@@ -162,7 +233,8 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             if (subEditors == null) return;
             for (var i = 0; i < subEditors.Length; i++)
             {
-                DestroyImmediate(subEditors[i]);
+                if (subEditors[i] != null)
+                    DestroyImmediate(subEditors[i]);
             }
             // Null the array so it's GCed.
             subEditors = null;
@@ -193,13 +265,18 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             // Get the names of all the types and add those that can process instances of the GameItem this editor represents.
             var gameItemInstance = CreateInstance<T>();
             var conditionTypeNameList = new List<string>();
+            var conditionIsBuiltInList = new List<bool>();
             foreach (var type in _conditionTypes)
             {
                 var conditionInstance = (Condition)CreateInstance(type.Name);
                 if (conditionInstance.CanProcessGameItem(gameItemInstance))
+                {
                     conditionTypeNameList.Add(EditorHelper.PrettyPrintCamelCase(type.Name));
+                    conditionIsBuiltInList.Add(conditionInstance.IsBuiltIn());
+                }
             } 
             _conditionTypeNames = conditionTypeNameList.ToArray();
+            _conditionIsBuiltIn = conditionIsBuiltInList.ToArray();
         }
 
     }

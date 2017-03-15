@@ -21,19 +21,42 @@
 
 using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
 using UnityEditor;
+using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Editor.Conditions
 {
-    [CustomEditor(typeof(Unlocked))]
-    public class UnlockedEditor : ConditionBoolEditor
+    [CustomEditor(typeof(CustomConditionExample))]
+    public class CustomConditionExampleEditor : ConditionEditor
     {
+        SerializedProperty _customValueProperty;
+
+        /// <summary>
+        /// Get a reference to properties
+        /// </summary>
+        protected override void Init()
+        {
+            _customValueProperty = serializedObject.FindProperty("CustomValue");
+        }
+
+        /// <summary>
+        /// Draw the Editor GUI
+        /// </summary>
+        protected override void DrawGUI()
+        {
+            EditorGUILayout.PrefixLabel(new GUIContent(GetLabel(), GetTooltip()));
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.PropertyField(_customValueProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+            EditorGUILayout.LabelField(GUIContent.none, new GUIContent("This is an example Custom Condition"), GUILayout.ExpandWidth(true));
+            EditorGUILayout.EndVertical();
+        }
+
         /// <summary>
         /// A custom tooltip for the editor
         /// </summary>
         /// <returns></returns>
         protected override string GetTooltip()
         {
-            return "Whether this GameItem is unlocked";
+            return "This is an example custom condition that you can use as a basis for adding your own conditions.";
         }
     }
 }

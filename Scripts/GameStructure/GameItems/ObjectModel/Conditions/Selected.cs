@@ -19,30 +19,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using UnityEngine;
+
 namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
     /// <summary>
     /// Class that holds information about a gameitem condition.
     /// </summary>
     [System.Serializable]
-    public class Selected : ConditionBool
+    public class Selected : ConditionBuiltIn
     {
         /// <summary>
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(GameItem gameItem)
+        public static bool EvaluateCondition(GameItem gameItem, bool boolValue)
         {
-            return false; // See temporary hack in calling classes that allow access to the correct GameItemManager
-        }
+            Debug.LogError("EvaluateCondition is not implemented for Selected type and should never be called!");
 
-        /// <summary>
-        /// Returns whether this condition can process the specified GameItem / GameItem derived class
-        /// </summary>
-        /// <returns></returns>
-        public override bool CanProcessGameItem(GameItem gameItem)
-        {
-            return true; // works for all GameItems
+            return false; // See temporary hack in calling classes that allow access to the correct GameItemManager
         }
     }
 }

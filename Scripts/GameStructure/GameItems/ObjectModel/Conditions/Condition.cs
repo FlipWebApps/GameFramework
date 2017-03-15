@@ -40,6 +40,18 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
         /// Returns whether this condition can process the specified GameItem / GameItem derived class
         /// </summary>
         /// <returns></returns>
-        public abstract bool CanProcessGameItem(GameItem gameItem);
+        public virtual bool CanProcessGameItem(GameItem gameItem)
+        {
+            return true; // works for all GameItems
+        }
+
+        /// <summary>
+        /// Returns whether this condition is built in or extensible using scriptable objects
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsBuiltIn()
+        {
+            return false;
+        }
     }
 }

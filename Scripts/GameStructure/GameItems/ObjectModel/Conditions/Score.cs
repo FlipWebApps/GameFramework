@@ -25,24 +25,15 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
     /// Class that holds information about a gameitem condition.
     /// </summary>
     [System.Serializable]
-    public class Score : ConditionNumber<int>
+    public class Score : ConditionBuiltIn
     {
         /// <summary>
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(GameItem gameItem)
+        public static bool EvaluateCondition(GameItem gameItem, ConditionReference.ComparisonTypeNumber comparison, int value)
         {
-            return EvaluateNumber(gameItem.Score);
-        }
-
-        /// <summary>
-        /// Returns whether this condition can process the specified GameItem / GameItem derived class
-        /// </summary>
-        /// <returns></returns>
-        public override bool CanProcessGameItem(GameItem gameItem)
-        {
-            return true; // works for all GameItems
+            return ConditionReference.EvaluateNumber(gameItem.Score, comparison, value);
         }
     }
 }

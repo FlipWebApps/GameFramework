@@ -19,21 +19,47 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
-using UnityEditor;
+using GameFramework.Debugging;
 
-namespace GameFramework.GameStructure.GameItems.Editor.Conditions
+namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
-    [CustomEditor(typeof(CanUnlockWithPayment))]
-    public class CanUnlockWithPaymentEditor : ConditionBoolEditor
+    /// <summary>
+    /// Example class that shows how to add your own custom condition classes.
+    /// </summary>
+    [System.Serializable]
+    public class CustomConditionExample : Condition
     {
+        bool _errorShown;
+
         /// <summary>
-        /// A custom tooltip for the editor
+        /// A string value that can be exposed through the editor and used by your own code as part of the comparison.
+        /// </summary>
+        public string CustomValue;
+
+        /// <summary>
+        /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        protected override string GetTooltip()
+        public override bool EvaluateCondition(GameItem gameItem)
         {
-            return "Whether this GameItem can be unlocked by payment";
+            if (_errorShown) return false;
+            _errorShown = true;
+            MyDebug.LogWarning("TheCustomExample condition is for demonstration purposes only to show how to add your own conditions. Do not use this in custom code.");
+
+            // Here you would have your own custom condition test.
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether this condition can process the specified GameItem / GameItem derived class
+        /// </summary>
+        /// <returns></returns>
+        public override bool CanProcessGameItem(GameItem gameItem)
+        {
+            // Here you would optionally test the type of gameItem if this requires GameItems of a specific type.
+
+            return true; // works for all GameItems
         }
     }
 }

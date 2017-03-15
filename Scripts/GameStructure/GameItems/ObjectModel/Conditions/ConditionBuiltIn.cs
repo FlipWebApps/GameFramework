@@ -19,27 +19,37 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using UnityEditor;
+using System;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.GameItems.Editor.Conditions
+namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
-    public abstract class ConditionNumberEditor : ConditionEditor
+    /// <summary>
+    /// Class that holds information about a gameitem condition.
+    /// </summary>
+    [Serializable]
+    public abstract class ConditionBuiltIn : Condition
     {
-        SerializedProperty _comparisonProperty;
-        SerializedProperty _valueProperty;
+        bool _errorShown;
 
-        protected override void Init()
+        /// <summary>
+        /// Evaluate the current condition
+        /// </summary>
+        /// <returns></returns>
+        public override bool EvaluateCondition(GameItem gameItem)
         {
-            _comparisonProperty = serializedObject.FindProperty("_comparison");
-            _valueProperty = serializedObject.FindProperty("_value");
+            if (_errorShown) return false;
+            _errorShown = true;
+            throw new System.NotImplementedException("EvaluateCondition is not implemented for built in types and should be removed. Call the static method instead");
         }
 
-        protected override void DrawGUI()
+        /// <summary>
+        /// Returns whether this condition is built in or extensible using scriptable objects
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsBuiltIn()
         {
-            EditorGUILayout.PrefixLabel(new GUIContent(GetLabel(), GetTooltip()));
-            EditorGUILayout.PropertyField(_comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
-            EditorGUILayout.PropertyField(_valueProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+            return true;
         }
     }
 }
