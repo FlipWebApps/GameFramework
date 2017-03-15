@@ -40,8 +40,9 @@ namespace GameFramework.Helper
     public class ScriptableObjectContainer<T> : ISerializationCallbackReceiver where T : ScriptableObject
     {
         #region Variables
+
         /// <summary>
-        /// The class name of the condition.
+        /// The class name of the ScriptableObject that this contains.
         /// </summary>
         public string ClassName
         {
@@ -51,8 +52,9 @@ namespace GameFramework.Helper
         [SerializeField]
         string _className;
 
+
         /// <summary>
-        /// The data associated with this condition
+        /// Data to use for (de)serialising the scriptable object.
         /// </summary>
         public string Data
         {
@@ -61,34 +63,57 @@ namespace GameFramework.Helper
         }
         [SerializeField]
         string _data;
+
+
+        /// <summary>
+        /// Whether to use a scriptableobject and the associated processing.
+        /// </summary>
+        /// In certain cases you may want to implement a subclass of this directly without the extensability that 
+        /// the ScriptableObject container reference provides override this in such cases to return false. If this is false
+        /// then you may use the ClassName and Data fields for your own purposes.
+        public virtual bool UseScriptableObject
+        {
+            get { return _useScriptableObject; }
+            set { _useScriptableObject = value; }
+        }
+        [SerializeField]
+        bool _useScriptableObject = true;
+        
         #endregion Variables
 
-        public T Condition
+
+        /// <summary>
+        /// A reference to the contained scriptableobject
+        /// </summary>
+        public T ScriptableObject
         {
             get
             {
-                if (_condition == null)
+                if (_scriptableObject == null && UseScriptableObject)
                 {
                     if (!string.IsNullOrEmpty(ClassName))
                     {
-                        _condition = ScriptableObject.CreateInstance(ClassName) as T;
-                        if (_condition != null && !string.IsNullOrEmpty(Data))
-                            JsonUtility.FromJsonOverwrite(Data, _condition);
+                        _scriptableObject = UnityEngine.ScriptableObject.CreateInstance(ClassName) as T;
+                        if (_scriptableObject != null && !string.IsNullOrEmpty(Data))
+                            JsonUtility.FromJsonOverwrite(Data, _scriptableObject);
                     }
                 }
-                return _condition;
+                return _scriptableObject;
             }
-            set { _condition = value; }
+            set { _scriptableObject = value; }
         }
+        T _scriptableObject;
 
-        T _condition;
+        #region ISerializationCallbackReceiver
 
         public void OnBeforeSerialize()
         {
-            if (_condition != null)
-                Data = JsonUtility.ToJson(Condition);
+            if (_scriptableObject != null)
+                Data = JsonUtility.ToJson(ScriptableObject);
         }
 
         public void OnAfterDeserialize() { }
+
+        #endregion ISerializationCallbackReceiver
     }
 }
