@@ -166,8 +166,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                                 conditionReference.Comparison, conditionReference.IntValue);
                             break;
                         case BuiltInConditions.Selected:
-                            // special case for now due to needing gamemanager to get selected item.
-                            conditionsAreAllTrue &= (GetGameItem<T>().Number == GetGameItemManager().Selected.Number) == conditionReference.BoolValue;
+                            conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
+                                GetGameItemManager().Selected, conditionReference.BoolValue);
                             break;
                         case BuiltInConditions.Unlocked:
                             conditionsAreAllTrue &= ObjectModel.Conditions.Unlocked.EvaluateCondition(GameItem,

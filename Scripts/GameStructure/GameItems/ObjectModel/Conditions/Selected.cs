@@ -33,11 +33,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public static bool EvaluateCondition(GameItem gameItem, bool boolValue)
+        public static bool EvaluateCondition(GameItem gameItem, GameItem selected, bool boolValue)
         {
-            Debug.LogError("EvaluateCondition is not implemented for Selected type and should never be called!");
-
-            return false; // See temporary hack in calling classes that allow access to the correct GameItemManager
+            return (gameItem.Number == selected.Number) == boolValue;
         }
     }
 }
