@@ -85,6 +85,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         {
             serializedObject.Update();
 
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_unlockModeProperty);
             EditorGUI.indentLevel++;
             if (_unlockModeProperty.enumValueIndex == 0)
@@ -94,29 +95,29 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             if (_unlockModeProperty.enumValueIndex == 6)    // Reference
                 EditorGUILayout.PropertyField(_contextReferenceProperty);
             EditorGUI.indentLevel--;
+
             EditorGUILayout.PropertyField(_showConfirmWindowProperty);
             if (_showConfirmWindowProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
-                EditorGUI.indentLevel++;
-                _showConfirmWindowProperty.isExpanded = EditorGUILayout.Foldout(_showConfirmWindowProperty.isExpanded, "Configuration");
-                if (_showConfirmWindowProperty.isExpanded)
+                EditorGUILayout.PropertyField(_confirmTitleTextProperty,
+                    new GUIContent("Title", _confirmTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_confirmText1Property,
+                    new GUIContent("Text 1", _confirmText1Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmText2Property,
+                    new GUIContent("Text 2", _confirmText2Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
+                    new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
+                if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
                 {
-
-                    EditorGUILayout.PropertyField(_confirmTitleTextProperty,
-                        new GUIContent("Title", _confirmTitleTextProperty.tooltip));
-                    EditorGUILayout.PropertyField(_confirmText1Property,
-                        new GUIContent("Text 1", _confirmText1Property.tooltip));
-                    EditorGUILayout.PropertyField(_confirmText2Property,
-                        new GUIContent("Text 2", _confirmText2Property.tooltip));
-                    EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
-                        new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
-                    if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
-                    {
-                        EditorGUI.indentLevel++;
-                        EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
-                        EditorGUI.indentLevel--;
-                    }
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUI.indentLevel++;
+                _confirmContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_confirmContentPrefabProperty.isExpanded, "Advanced");
+                if (_confirmContentPrefabProperty.isExpanded)
+                {
                     EditorGUILayout.PropertyField(_confirmContentPrefabProperty,
                         new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
                     EditorGUILayout.PropertyField(_confirmContentAnimatorControllerProperty,
@@ -132,21 +133,24 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             if (_showUnlockWindowProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
-                EditorGUI.indentLevel++;
-                _showUnlockWindowProperty.isExpanded = EditorGUILayout.Foldout(_showUnlockWindowProperty.isExpanded, "Configuration");
-                if (_showUnlockWindowProperty.isExpanded)
+                EditorGUILayout.PropertyField(_unlockTitleTextProperty, new GUIContent("Title", _unlockTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_unlockedText1Property);
+                EditorGUILayout.PropertyField(_unlockedText2Property);
+                if (_unlockModeProperty.enumValueIndex == 0)
                 {
-                    EditorGUILayout.PropertyField(_unlockTitleTextProperty, new GUIContent("Title", _unlockTitleTextProperty.tooltip));
-                    EditorGUILayout.PropertyField(_unlockedText1Property);
-                    EditorGUILayout.PropertyField(_unlockedText2Property);
-                    if (_unlockModeProperty.enumValueIndex == 0)
-                    {
-                        EditorGUILayout.PropertyField(_alreadyUnlockedText1Property);
-                        EditorGUILayout.PropertyField(_alreadyUnlockedText2Property);
-                    }
-                    EditorGUILayout.PropertyField(_unlockContentPrefabProperty, new GUIContent("Content Prefab", _unlockContentPrefabProperty.tooltip));
-                    EditorGUILayout.PropertyField(_unlockContentAnimatorControllerProperty, new GUIContent("Content Animation", _unlockContentAnimatorControllerProperty.tooltip));
-                    EditorGUILayout.PropertyField(_unlockContentShowsButtonsProperty, new GUIContent("Content Shows Buttons", _unlockContentShowsButtonsProperty.tooltip));
+                    EditorGUILayout.PropertyField(_alreadyUnlockedText1Property);
+                    EditorGUILayout.PropertyField(_alreadyUnlockedText2Property);
+                }
+                EditorGUI.indentLevel++;
+                _unlockContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_unlockContentPrefabProperty.isExpanded, "Advanced");
+                if (_unlockContentPrefabProperty.isExpanded)
+                {
+                    EditorGUILayout.PropertyField(_unlockContentPrefabProperty,
+                        new GUIContent("Content Prefab", _unlockContentPrefabProperty.tooltip));
+                    EditorGUILayout.PropertyField(_unlockContentAnimatorControllerProperty,
+                        new GUIContent("Content Animation", _unlockContentAnimatorControllerProperty.tooltip));
+                    EditorGUILayout.PropertyField(_unlockContentShowsButtonsProperty,
+                        new GUIContent("Content Shows Buttons", _unlockContentShowsButtonsProperty.tooltip));
                 }
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;

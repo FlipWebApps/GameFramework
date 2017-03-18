@@ -57,33 +57,33 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         {
             serializedObject.Update();
 
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_contextProperty);
 
             EditorGUILayout.PropertyField(_showConfirmWindowProperty);
             if (_showConfirmWindowProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
-                EditorGUI.indentLevel++;
-                _showConfirmWindowProperty.isExpanded = EditorGUILayout.Foldout(_showConfirmWindowProperty.isExpanded, "Configuration");
-                if (_showConfirmWindowProperty.isExpanded)
+                EditorGUILayout.PropertyField(_confirmTitleTextProperty,
+                    new GUIContent("Title", _confirmTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_confirmText1Property,
+                    new GUIContent("Text 1", _confirmText1Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmText2Property,
+                    new GUIContent("Text 2", _confirmText2Property.tooltip));
+                EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
+                    new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
+                if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
                 {
-
-                    EditorGUILayout.PropertyField(_confirmTitleTextProperty,
-                        new GUIContent("Title", _confirmTitleTextProperty.tooltip));
-                    EditorGUILayout.PropertyField(_confirmText1Property,
-                        new GUIContent("Text 1", _confirmText1Property.tooltip));
-                    EditorGUILayout.PropertyField(_confirmText2Property,
-                        new GUIContent("Text 2", _confirmText2Property.tooltip));
-                    EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
-                        new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
-                    if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
-                    {
-                        EditorGUI.indentLevel++;
-                        EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
-                        EditorGUI.indentLevel--;
-                    }
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUI.indentLevel++;
+                _confirmContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_confirmContentPrefabProperty.isExpanded, "Advanced");
+                if (_confirmContentPrefabProperty.isExpanded)
+                {
                     EditorGUILayout.PropertyField(_confirmContentPrefabProperty,
-                        new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
+                    new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
                     EditorGUILayout.PropertyField(_confirmContentAnimatorControllerProperty,
                         new GUIContent("Content Animation", _confirmContentAnimatorControllerProperty.tooltip));
                     EditorGUILayout.PropertyField(_confirmContentShowsButtonsProperty,
