@@ -20,12 +20,14 @@
 //----------------------------------------------
 
 using GameFramework.Debugging;
+using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
     /// <summary>
     /// Example class that shows how to add your own custom condition classes.
     /// </summary>
+    [CreateAssetMenu(fileName = "CustomConditionExample", menuName = "Game Framework/Custom Condition Example")]
     [System.Serializable]
     public class CustomConditionExample : Condition
     {
@@ -44,7 +46,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
         {
             if (_errorShown) return false;
             _errorShown = true;
-            MyDebug.LogWarning("TheCustomExample condition is for demonstration purposes only to show how to add your own conditions. Do not use this in custom code.");
+            MyDebug.LogWarning("TheCustomExample condition is for demonstration purposes only to show how to add your own custom conditions. Do not use this in custom code.");
 
             // Here you would have your own custom condition test.
 

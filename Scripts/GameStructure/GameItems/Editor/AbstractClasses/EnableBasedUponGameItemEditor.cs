@@ -20,11 +20,8 @@
 //----------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
-using GameFramework.GameStructure.GameItems.Editor.Conditions;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEditor;
 using UnityEngine;
@@ -46,24 +43,20 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 
         EnableBasedUponGameItem<T> _gameItemEditor;
 
-        // types and associated names for all conditions
-        Type[] _conditionTypes;
-        string[] _conditionTypeNames;
-        bool[] _conditionIsBuiltIn;
-
-        protected ConditionEditor[] subEditors;         // Array of Editors nested within this Editor.
-
         readonly string[] _boolOptions = { "False", "True" };
-        readonly Dictionary<string, string> _classTooltipMapping = new Dictionary<string, string>
-        {
-            { "CanUnlockWithCoins", "Whether this GameItem can be unlocked by coins" },
-            { "CanUnlockWithCompletion", "Whether this GameItem can be unlocked by completion" },
-            { "CanUnlockWithPayment", "Whether this GameItem can be unlocked by payment" },
-            { "Coins", "Compare the GameItems coins with a specified value" },
-            { "PlayerHasCoinsToUnlock", "Whether the current player can unlock this GameItem (combine if needed with Unlocked condition)" },
-            { "Score", "Compare the GameItems score with a specified value" },
-            { "Selected", "Whether this GameItem is selected" },
-            { "Unlocked", "Whether this GameItem is unlocked" }
+
+        readonly string[] _conditionNames = Enum.GetNames(typeof(EnableBasedUponGameItem<T>.ConditionTypes));
+        readonly int[] _conditionValues = (int[])Enum.GetValues(typeof(EnableBasedUponGameItem<T>.ConditionTypes));
+        readonly string[] _conditionTooltips = {
+            "Whether this GameItem can be unlocked by coins",
+            "Whether this GameItem can be unlocked by completion",
+            "Whether this GameItem can be unlocked by payment",
+            "Compare the GameItems coins with a specified value",
+            "Whether the current player can unlock this GameItem (combine if needed with Unlocked condition)",
+            "Compare the GameItems score with a specified value",
+            "Whether this GameItem is selected",
+            "Whether this GameItem is unlocked",
+            "A custom Condition that you should add a reference to"
         };
 
         public void OnEnable()
@@ -75,24 +68,11 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             _conditionMetGameObjectProperty = serializedObject.FindProperty("ConditionMetGameObject");
             _conditionNotMetGameObjectProperty = serializedObject.FindProperty("ConditionNotMetGameObject");
             _conditionsProperty = serializedObject.FindProperty("ConditionReferences");
-
-            // If new editors are required create them.
-            CheckAndCreateSubEditors();
-
-            FindConditions();
-        }
-
-        protected void OnDisable()
-        {
-            CleanupSubEditors();
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
-            // If new editors are required create them.
-            CheckAndCreateSubEditors();
 
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_contextProperty);
@@ -106,62 +86,59 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             }
             //EditorGUILayout.PropertyField(_conditionsProperty, true);
 
-            // Display all the builtin / sub editors - use for rather than a foreach loop in case of deletion.
+            // Display all items - use a for loop rather than a foreach loop in case of deletion.
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(new GUIContent("Conditions", "The different conditions that this component should react to."), EditorStyles.boldLabel);
-            for (var i = 0; i < subEditors.Length; i++)
+            for (var i = 0; i < _gameItemEditor.ConditionReferences.Length; i++)
             {
-                if (subEditors[i] == null)
-                {
-                    // draw built in editor 
-                    EditorGUILayout.BeginHorizontal(GUI.skin.box);
+                // draw built in editor 
+                EditorGUILayout.BeginHorizontal(GUI.skin.box);
 
-                    var conditionReference = _conditionsProperty.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PrefixLabel(new GUIContent(EditorHelper.PrettyPrintCamelCase(_gameItemEditor.ConditionReferences[i].ClassName), _classTooltipMapping[_gameItemEditor.ConditionReferences[i].ClassName]));
-                    switch (_gameItemEditor.ConditionReferences[i].ClassName) {
-                        case "CanUnlockWithCoins":
-                        case "CanUnlockWithCompletion":
-                        case "CanUnlockWithPayment":
-                        case "PlayerHasCoinsToUnlock":
-                        case "Selected":
-                        case "Unlocked":
-                            var conditionBoolProperty = conditionReference.FindPropertyRelative("_boolValue");
-                            conditionBoolProperty.boolValue = EditorGUILayout.Popup(conditionBoolProperty.boolValue ? 1 : 0, _boolOptions, GUILayout.ExpandWidth(true)) == 1;
-                            break;
-                        case "Coins":
-                        case "Score":
-                            var comparisonProperty = conditionReference.FindPropertyRelative("_comparison");
-                            var conditionIntProperty = conditionReference.FindPropertyRelative("_intValue");
-                            EditorGUILayout.PropertyField(comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
-                            EditorGUILayout.PropertyField(conditionIntProperty, GUIContent.none, GUILayout.ExpandWidth(true));
-                            break;
-                        default:
-                            Debug.LogError("Unknown built in type : " + _gameItemEditor.ConditionReferences[i].ClassName);
-                            break;
-                    }
-                    if (GUILayout.Button("-", GUILayout.Width(EnableBasedUponGameItemEditor.RemoveButtonWidth)))
-                    {
-                        _conditionsProperty.DeleteArrayElementAtIndex(i);
+                var conditionReference = _conditionsProperty.GetArrayElementAtIndex(i);
+                var conditionType = (EnableBasedUponGameItem<T>.ConditionTypes)_gameItemEditor.ConditionReferences[i].Identifier;
+                EditorGUILayout.PrefixLabel(new GUIContent(EditorHelper.PrettyPrintCamelCase(_conditionNames[(int)conditionType]), _conditionTooltips[(int)conditionType]));
+                switch (conditionType) {
+                    case EnableBasedUponGameItem<T>.ConditionTypes.CanUnlockWithCoins:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.CanUnlockWithCompletion:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.CanUnlockWithPayment:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.PlayerHasCoinsToUnlock:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Selected:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Unlocked:
+                        var conditionBoolProperty = conditionReference.FindPropertyRelative("_boolValue");
+                        conditionBoolProperty.boolValue = EditorGUILayout.Popup(conditionBoolProperty.boolValue ? 1 : 0, _boolOptions, GUILayout.ExpandWidth(true)) == 1;
                         break;
-                    }
-
-                    EditorGUILayout.EndHorizontal();
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Coins:
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Score:
+                        var comparisonProperty = conditionReference.FindPropertyRelative("_comparison");
+                        var conditionIntProperty = conditionReference.FindPropertyRelative("_intValue");
+                        EditorGUILayout.PropertyField(comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.PropertyField(conditionIntProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        break;
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Custom:
+                        var scriptableObjectProperty = conditionReference.FindPropertyRelative("_scriptableObject");
+                        EditorGUILayout.PropertyField(scriptableObjectProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        break;
+                    default:
+                        Debug.LogError("Unknown built in type : " + _gameItemEditor.ConditionReferences[i].Identifier);
+                        break;
                 }
-                else
+                if (GUILayout.Button("-", GUILayout.Width(EnableBasedUponGameItemEditor.RemoveButtonWidth)))
                 {
-                    // draw custom editor
-                    subEditors[i].OnInspectorGUI();
+                    _conditionsProperty.DeleteArrayElementAtIndex(i);
+                    break;
                 }
+
+                EditorGUILayout.EndHorizontal();
             }
 
             //            if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Plus More", "Add to list"), EditorStyles.miniButton))
             if (GUILayout.Button(new GUIContent("Add", "Add a new condition to the list"), EditorStyles.miniButton))
             {
                 var menu = new GenericMenu();
-                for (var i = 0; i < _conditionTypes.Length; i++)
+                for (var i = 0; i < _conditionNames.Length; i++)
                 {
-                    menu.AddItem(new GUIContent(_conditionTypeNames[i]), false, AddCondition,
-                        _conditionTypes[i]);
+                    menu.AddItem(new GUIContent(_conditionNames[i]), false, AddCondition,
+                        _conditionValues[i]);
                 }
                 menu.ShowAsContext();
             }
@@ -170,114 +147,21 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         }
 
 
-        void AddCondition(object target)
+        void AddCondition(object conditionValue)
         {
-            var type = (Type)target;
+            var conditionType = (EnableBasedUponGameItem<T>.ConditionTypes)conditionValue;
 
             _conditionsProperty.arraySize++;
             var newElement = _conditionsProperty.GetArrayElementAtIndex(_conditionsProperty.arraySize - 1);
-            var propName = newElement.FindPropertyRelative("_className");
-            propName.stringValue = type.Name;
+            var propName = newElement.FindPropertyRelative("_identifier");
+            propName.intValue = (int)conditionType;
             var propUseScriptableObject = newElement.FindPropertyRelative("_useScriptableObject");
-            for (var i = 0; i < _conditionTypes.Length; i++)
+            if (conditionType == EnableBasedUponGameItem<T>.ConditionTypes.Custom)
             {
-                if (_conditionTypes[i] == type)
-                {
-                    propUseScriptableObject.boolValue = !_conditionIsBuiltIn[i];
-                }
+                propUseScriptableObject.boolValue = true;
             }
 
             serializedObject.ApplyModifiedProperties();
         }
-
-
-        #region SubEditors
-
-        /// <summary>
-        /// In case of changes create sub editors
-        /// </summary>
-        protected void CheckAndCreateSubEditors()
-        {
-            // If there are the correct number of subEditors then do nothing.
-            if (subEditors != null && subEditors.Length == _gameItemEditor.ConditionReferences.Length)
-                return;
-
-            // Otherwise get rid of the editors.
-            CleanupSubEditors();
-
-            // Create an array of the subEditor type that is the right length for the targets.
-            subEditors = new ConditionEditor[_gameItemEditor.ConditionReferences.Length];
-
-            // Populate the array and setup each Editor.
-            for (var i = 0; i < subEditors.Length; i++)
-            {
-                if (_gameItemEditor.ConditionReferences[i].UseScriptableObject)
-                {
-                    subEditors[i] =
-                        CreateEditor(_gameItemEditor.ConditionReferences[i].ScriptableObject) as ConditionEditor;
-                    subEditors[i].ParentCollectionProperty = _conditionsProperty;
-                    subEditors[i].DataProperty =
-                        _conditionsProperty.GetArrayElementAtIndex(i).FindPropertyRelative("_data");
-                    ;
-                    //subEditors[i].ParentTarget = serializedObject;
-                    subEditors[i].index = i;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Destroy all subeditors
-        /// </summary>
-        void CleanupSubEditors()
-        {
-            if (subEditors == null) return;
-            for (var i = 0; i < subEditors.Length; i++)
-            {
-                if (subEditors[i] != null)
-                    DestroyImmediate(subEditors[i]);
-            }
-            // Null the array so it's GCed.
-            subEditors = null;
-        }
-
-        #endregion SubEditors
-
-
-        /// <summary>
-        /// This method will use reflection for finding all conditions and add them to the list dynamically.
-        /// </summary>
-        void FindConditions()
-        {
-            var conditionType = typeof(Condition);
-
-            // Go through all the types in the Assembly and find non abstract subclasses
-            var conditionSubTypeList = new List<Type>();
-            var allTypes = conditionType.Assembly.GetTypes();
-            foreach (var type in allTypes)
-            {
-                if (type.IsSubclassOf(conditionType) && !type.IsAbstract)
-                {
-                    conditionSubTypeList.Add(type);
-                }
-            }
-            _conditionTypes = conditionSubTypeList.ToArray();
-
-            // Get the names of all the types and add those that can process instances of the GameItem this editor represents.
-            var gameItemInstance = CreateInstance<T>();
-            var conditionTypeNameList = new List<string>();
-            var conditionIsBuiltInList = new List<bool>();
-            foreach (var type in _conditionTypes)
-            {
-                var conditionInstance = (Condition)CreateInstance(type.Name);
-                if (conditionInstance.CanProcessGameItem(gameItemInstance))
-                {
-                    conditionTypeNameList.Add(EditorHelper.PrettyPrintCamelCase(type.Name));
-                    conditionIsBuiltInList.Add(conditionInstance.IsBuiltIn());
-                }
-            } 
-            _conditionTypeNames = conditionTypeNameList.ToArray();
-            _conditionIsBuiltIn = conditionIsBuiltInList.ToArray();
-        }
-
     }
 }

@@ -27,50 +27,16 @@ namespace GameFramework.Helper
     /// <summary>
     /// Container class to allow for arrays of multiple scriptable objects that derive from a common base class.
     /// </summary>
-    /// Due to Unity serialisation limitations, the only way we can reference and save an array of potentially different items that 
-    /// inherit from a single base class is to use scriptable objects. These themselves have a limitation that it we want dynamically 
-    /// setup such a collection that references ScriptableObjects then we can't then create a prefab of the gameobject as all 
-    /// scriptable object references in a prefab must be to external assets or they will become null when part of a prefab (at least
-    /// verified to be the case upto Unity 5.5).
-    /// This class gives a workaround where you can create an array of a non generic derived class of ScriptableObjectContainer.
-    /// By specifying a class name of a ScriptableObject that inherits from the generic parameter along with JSON data that represents 
-    /// the serialised version of the Scriptable Objects data you can then achieve the affect of having an array of different classes
-    /// that derive from a single base class that are automatically serialised and deserialised correctly.
+    /// The Identier and UseScriptableObject parameters can additionally be used to allow for the use of built in types.
     [Serializable]
-    public class ScriptableObjectContainer<T> : ISerializationCallbackReceiver where T : ScriptableObject
+    public class ScriptableObjectContainer<T> where T : ScriptableObject
     {
         #region Variables
 
-        /// <summary>
-        /// The class name of the ScriptableObject that this contains.
-        /// </summary>
-        public string ClassName
-        {
-            get { return _className; }
-            set { _className = value; }
-        }
-        [SerializeField]
-        string _className;
-
 
         /// <summary>
-        /// Data to use for (de)serialising the scriptable object.
+        /// Whether the ScriptableObject reference is in use
         /// </summary>
-        public string Data
-        {
-            get { return _data; }
-            set { _data = value; }
-        }
-        [SerializeField]
-        string _data;
-
-
-        /// <summary>
-        /// Whether to use a scriptableobject and the associated processing.
-        /// </summary>
-        /// In certain cases you may want to implement a subclass of this directly without the extensability that 
-        /// the ScriptableObject container reference provides override this in such cases to return false. If this is false
-        /// then you may use the ClassName and Data fields for your own purposes.
         public virtual bool UseScriptableObject
         {
             get { return _useScriptableObject; }
@@ -78,42 +44,20 @@ namespace GameFramework.Helper
         }
         [SerializeField]
         bool _useScriptableObject = true;
-        
-        #endregion Variables
 
 
         /// <summary>
-        /// A reference to the contained scriptableobject
+        /// A reference to a scriptableobject
         /// </summary>
         public T ScriptableObject
         {
-            get
-            {
-                if (_scriptableObject == null && UseScriptableObject)
-                {
-                    if (!string.IsNullOrEmpty(ClassName))
-                    {
-                        _scriptableObject = UnityEngine.ScriptableObject.CreateInstance(ClassName) as T;
-                        if (_scriptableObject != null && !string.IsNullOrEmpty(Data))
-                            JsonUtility.FromJsonOverwrite(Data, _scriptableObject);
-                    }
-                }
-                return _scriptableObject;
-            }
+            get { return _scriptableObject; }
             set { _scriptableObject = value; }
         }
+        [SerializeField]
         T _scriptableObject;
 
-        #region ISerializationCallbackReceiver
+        #endregion Variables
 
-        public void OnBeforeSerialize()
-        {
-            if (_scriptableObject != null)
-                Data = JsonUtility.ToJson(ScriptableObject);
-        }
-
-        public void OnAfterDeserialize() { }
-
-        #endregion ISerializationCallbackReceiver
     }
 }

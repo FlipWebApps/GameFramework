@@ -20,8 +20,10 @@
 //----------------------------------------------
 
 using System.Collections.Generic;
+using GameFramework.GameStructure.GameItems.Messages;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
+using GameFramework.Messaging;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
@@ -32,31 +34,13 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class EnableBasedUponGameItem<T> : GameItemContextConditionallyEnable<T> where T : GameItem
     {
-        public enum BuiltInConditions { CanUnlockWithCoins, CanUnlockWithCompletion, CanUnlockWithPayment, Coins, PlayerHasCoinsToUnlock, Score, Selected, Unlocked }
-        public static readonly Dictionary<string, BuiltInConditions> ClassIdMapping = new Dictionary<string, BuiltInConditions>
-        {
-            { "CanUnlockWithCoins", BuiltInConditions.CanUnlockWithCoins },
-            { "CanUnlockWithCompletion", BuiltInConditions.CanUnlockWithCompletion },
-            { "CanUnlockWithPayment", BuiltInConditions.CanUnlockWithPayment },
-            { "Coins", BuiltInConditions.Coins },
-            { "PlayerHasCoinsToUnlock", BuiltInConditions.PlayerHasCoinsToUnlock },
-            { "Score", BuiltInConditions.Score },
-            { "Selected", BuiltInConditions.Selected },
-            { "Unlocked", BuiltInConditions.Unlocked },
-        };
+        // NOTE: don't change the order of the below as this is recorded - add to the end and sort
+        public enum ConditionTypes { CanUnlockWithCoins, CanUnlockWithCompletion, CanUnlockWithPayment, Coins, PlayerHasCoinsToUnlock, Score, Selected, Unlocked, Custom }
 
         [Header("Conditions")]
         public ConditionReference[] ConditionReferences = new ConditionReference[0];
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            // convert strings to id for performance
-            foreach (var conditionReference in ConditionReferences)
-                if (!conditionReference.UseScriptableObject)
-                    conditionReference.Id = (int)ClassIdMapping[conditionReference.ClassName];
-        }
+        public System.Type[] ListeningMessageTypes;
 
         /// <summary>
         /// Setup
@@ -64,11 +48,17 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected override void Start()
         {
             base.Start();
+            ListeningMessageTypes = new [] {typeof (UpdateMessage)};    // Until properly implemented
+            //TODO: Get types from conditions, don't add duplicates
+            foreach (var type in ListeningMessageTypes)
+                GameManager.SafeAddListener(type, EvaluateConditionChanges);
+
             //GetGameItemManager().Unlocked += Unlocked;
             //GameManager.SafeAddListener<PlayerCoinsChangedMessage>(EvaluateConditionChanges);
+
             // add selection changed handler always, but not multiple times. This is needed for the Selected Condition
-            if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
-                GetGameItemManager().SelectedChanged += SelectedChanged;
+            //if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
+            //    GetGameItemManager().SelectedChanged += SelectedChanged;
         }
 
 
@@ -78,11 +68,16 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
+            foreach (var type in ListeningMessageTypes)
+                GameManager.SafeRemoveListener(type, EvaluateConditionChanges);
+
             //GetGameItemManager().Unlocked -= Unlocked;
             //GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(EvaluateConditionChanges);
+
             // add selection changed handler always, but not multiple times.. This is needed for the Selected Condition
-            if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
-                GetGameItemManager().SelectedChanged -= SelectedChanged;
+            //if (Context.GetReferencedContextMode() != ObjectModel.GameItemContext.ContextModeType.Selected)
+            //    GetGameItemManager().SelectedChanged -= SelectedChanged;
         }
 
 
@@ -90,19 +85,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// Called when a GameItem is unlocked.
         /// </summary>
         /// <param name="gameItem"></param>
-        void Unlocked(T gameItem)
-        {
-            if (gameItem.Number == GameItem.Number)
-                RunMethod(false);
-        }
+        //void Unlocked(T gameItem)
+        //{
+        //    if (gameItem.Number == GameItem.Number)
+        //        RunMethod(false);
+        //}
+
 
         /// <summary>
         /// NOTE: This is an update for now but will probalby move to messaging in the future for performance
         /// </summary>
-        void Update()
-        {
-            RunMethod(false);
-        }
+        //void Update()
+        //{
+        //    RunMethod(false);
+        //}
+
 
         /// <summary>
         /// Do nothing for now - handled by Update method. Remove if moving to messaging.
@@ -113,15 +110,16 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
         }
 
+
         /// <summary>
         /// Called when a message is received that indicates a possible condition change.
         /// </summary>
         /// <param name="message"></param>
-        //bool EvaluateConditionChanges(BaseMessage message)
-        //{
-        //    RunMethod(false);
-        //    return true;
-        //}
+        bool EvaluateConditionChanges(BaseMessage message)
+        {
+            RunMethod(false);
+            return true;
+        }
 
 
         /// <summary>
@@ -133,51 +131,45 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             var conditionsAreAllTrue = true;
             foreach (var conditionReference in ConditionReferences)
             {
-                if (conditionReference.UseScriptableObject)
+                switch ((ConditionTypes)conditionReference.Identifier)
                 {
-                    conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
+                    case ConditionTypes.CanUnlockWithCoins:
+                        conditionsAreAllTrue &= CanUnlockWithCoins.EvaluateCondition(GameItem,
+                            conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.CanUnlockWithCompletion:
+                        conditionsAreAllTrue &= CanUnlockWithCompletion.EvaluateCondition(GameItem,
+                            conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.CanUnlockWithPayment:
+                        conditionsAreAllTrue &= CanUnlockWithPayment.EvaluateCondition(GameItem,
+                            conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.Coins:
+                        conditionsAreAllTrue &= Coins.EvaluateCondition(GameItem,
+                            conditionReference.Comparison, conditionReference.IntValue);
+                        break;
+                    case ConditionTypes.PlayerHasCoinsToUnlock:
+                        conditionsAreAllTrue &= PlayerHasCoinsToUnlock.EvaluateCondition(GameItem,
+                            conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.Score:
+                        conditionsAreAllTrue &= Score.EvaluateCondition(GameItem,
+                            conditionReference.Comparison, conditionReference.IntValue);
+                        break;
+                    case ConditionTypes.Selected:
+                        conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
+                            GetGameItemManager().Selected, conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.Unlocked:
+                        conditionsAreAllTrue &= ObjectModel.Conditions.Unlocked.EvaluateCondition(GameItem,
+                            conditionReference.BoolValue);
+                        break;
+                    case ConditionTypes.Custom:
+                        if (conditionReference.UseScriptableObject)
+                            conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
+                        break;
                 }
-                else
-                {
-                    switch ((BuiltInConditions)conditionReference.Id)
-                    {
-                        case BuiltInConditions.CanUnlockWithCoins:
-                            conditionsAreAllTrue &= CanUnlockWithCoins.EvaluateCondition(GameItem,
-                                conditionReference.BoolValue);
-                            break;
-                        case BuiltInConditions.CanUnlockWithCompletion:
-                            conditionsAreAllTrue &= CanUnlockWithCompletion.EvaluateCondition(GameItem,
-                                conditionReference.BoolValue);
-                            break;
-                        case BuiltInConditions.CanUnlockWithPayment:
-                            conditionsAreAllTrue &= CanUnlockWithPayment.EvaluateCondition(GameItem,
-                                conditionReference.BoolValue);
-                            break;
-                        case BuiltInConditions.Coins:
-                            conditionsAreAllTrue &= Coins.EvaluateCondition(GameItem,
-                                conditionReference.Comparison, conditionReference.IntValue);
-                            break;
-                        case BuiltInConditions.PlayerHasCoinsToUnlock:
-                            conditionsAreAllTrue &= PlayerHasCoinsToUnlock.EvaluateCondition(GameItem,
-                                conditionReference.BoolValue);
-                            break;
-                        case BuiltInConditions.Score:
-                            conditionsAreAllTrue &= Score.EvaluateCondition(GameItem,
-                                conditionReference.Comparison, conditionReference.IntValue);
-                            break;
-                        case BuiltInConditions.Selected:
-                            conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
-                                GetGameItemManager().Selected, conditionReference.BoolValue);
-                            break;
-                        case BuiltInConditions.Unlocked:
-                            conditionsAreAllTrue &= ObjectModel.Conditions.Unlocked.EvaluateCondition(GameItem,
-                                conditionReference.BoolValue);
-                            break;
-                    }
-                }
-                //if (conditionReference.ScriptableObject is Selected)
-                //    conditionsAreAllTrue &= (GetGameItem<T>().Number == GetGameItemManager().Selected.Number) == (conditionReference.ScriptableObject as Selected).BoolValue;
-                //else
             }
             return conditionsAreAllTrue;
         }

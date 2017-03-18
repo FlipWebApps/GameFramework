@@ -41,12 +41,20 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
             NotEqual
         }
 
-        /// <summary>
-        /// An identifier determined from class name to make it quicker to reference built in conditions.
-        /// </summary>
-        public int Id { get; set; }
 
         #region Built in variables
+
+        /// <summary>
+        /// An identifier that can be used for e.g. referencing a built in type or category.
+        /// </summary>
+        public int Identifier
+        {
+            get { return _identifier; }
+            set { _identifier = value; }
+        }
+        [SerializeField]
+        int _identifier;
+
 
         /// <summary>
         /// The type of the condition for boolean types.

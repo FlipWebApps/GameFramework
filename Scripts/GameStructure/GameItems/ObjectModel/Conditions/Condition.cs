@@ -20,7 +20,9 @@
 //----------------------------------------------
 
 using System;
+using GameFramework.GameStructure.GameItems.Messages;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
@@ -36,6 +38,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
         /// <returns></returns>
         public abstract bool EvaluateCondition(GameItem gameItem);
 
+
         /// <summary>
         /// Returns whether this condition can process the specified GameItem / GameItem derived class
         /// </summary>
@@ -44,6 +47,18 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
         {
             return true; // works for all GameItems
         }
+
+
+        /// <summary>
+        /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
+        /// </summary>
+        /// The base implementation returns UpdateMessage so that this will be evaluated every frame.
+        /// <returns></returns>
+        public virtual Type[] GetTriggerMessages()
+        {
+            return new [] {typeof(UpdateMessage)};
+        }
+
 
         /// <summary>
         /// Returns whether this condition is built in or extensible using scriptable objects
