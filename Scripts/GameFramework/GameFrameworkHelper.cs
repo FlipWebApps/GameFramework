@@ -79,5 +79,10 @@ namespace GameFramework.GameFramework
         {
             Application.OpenURL("https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE");
         }
+
+        public static void ShowAssetStorePagePrefsEditor()
+        {
+            Application.OpenURL("https://www.assetstore.unity3d.com/#!/content/61908?aid=1011lGnE");
+        }
     }
 }

@@ -20,13 +20,8 @@
 //----------------------------------------------
 
 using GameFramework.Billing;
-using GameFramework.EditorExtras;
 using GameFramework.FreePrize.Components;
 using GameFramework.GameStructure;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -84,7 +79,7 @@ namespace GameFramework.Debugging.Components.Editor {
         {
             // preferences
             GUILayout.Label("Preferences", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
-            EditorGUILayout.HelpBox("Manage preference (PlayerPrefs)", MessageType.None);
+            EditorGUILayout.HelpBox("Manage preference (PlayerPrefs). For more control and information enable Prefs Editor from the integrations window (Window Menu | Game Framework).", MessageType.None);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
             {
@@ -92,10 +87,17 @@ namespace GameFramework.Debugging.Components.Editor {
                 PlayerPrefs.Save();
                 Debug.Log("Player prefs deleted. Note: Some gameobjects might hold values and write these out after this call!");
             }
-            if (GUILayout.Button("List Preferences to Console", GUILayout.Width(200)))
+
+            if (GUILayout.Button("Show Prefs Editor", GUILayout.Width(150)))
             {
-                WriteWindowsPreferences();
+#if PREFS_EDITOR
+                PrefsEditor.Editor.PrefsEditorWindow.ShowWindow();
+#else
+                if (EditorUtility.DisplayDialog("Prefs Editor", "Prefs Editor is a seperate asset for displaying and managing preferences with optional encryption.\n\nPrefs Editor is available for purchase seperately or included free as a part of the Game Framework Extras Bundle", "More Information...", "Cancel"))
+                    GameFramework.GameFrameworkHelper.ShowAssetStorePagePrefsEditor();
+#endif
             }
+            GUI.enabled = true;
             GUILayout.EndHorizontal();
         }
 
@@ -511,88 +513,5 @@ namespace GameFramework.Debugging.Components.Editor {
             }
         }
 
-
-        /// <summary>
-        /// Call the appropriate function for writing out the preferences.
-        /// </summary>
-        void WritePreferences()
-        {
-            if (Application.platform == RuntimePlatform.WindowsEditor)
-            {
-                WriteWindowsPreferences();
-            }
-            else if (Application.platform == RuntimePlatform.OSXEditor)
-            {
-                WriteOSXPreferences();
-            }
-            else
-            {
-                Debug.Log("This currently only works on Windows and Mac.");
-            }
-        }
-
-
-        /// <summary>
-        /// On Windows, PlayerPrefs are stored in the registry under HKCU\Software\[company name]\[product name] key, where 
-        /// company and product names are the names set up in Project Settings. (http://docs.unity3d.com/ScriptReference/PlayerPrefs.html)
-        /// </summary>
-        void WriteWindowsPreferences()
-        {
-            var prefsKeyStore = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
-            var prefsKeyNames = prefsKeyStore.GetValueNames();
-            prefsKeyNames.ToList().Sort();
-            var output = new StringBuilder();
-            foreach (var prefsKey in prefsKeyNames)
-            {
-                OutputPrefsValue(output, prefsKey);
-            }
-            Debug.Log(output.ToString());
-        }
-
-
-        /// <summary>
-        /// On Mac OS X PlayerPrefs are stored in ~/Library/Preferences folder, in a file named unity.[company name].[product name].plist, 
-        /// where company and product names are the names set up in Project Settings. The same .plist file is used for both Projects run 
-        /// in the Editor and standalone players. (http://docs.unity3d.com/ScriptReference/PlayerPrefs.html)
-        /// </summary>
-        void WriteOSXPreferences()
-        {
-            var prefsPath = "~/Library/Preferences/unity." + PlayerSettings.companyName + "." + PlayerSettings.productName + ".plist";
-
-            if (File.Exists(prefsPath))
-            {
-                var prefsPlist = (Dictionary<string, object>)Plist.readPlist(prefsPath);
-                var output = new StringBuilder();
-                foreach (var prefsKey in prefsPlist.Keys)
-                {
-                    OutputPrefsValue(output, prefsKey);
-                }
-                Debug.Log(output.ToString());
-            }
-            else
-            {
-                Debug.Log("OSX Prefs file not found '" + prefsPath + "'");
-            }
-        }
-
-        private static void OutputPrefsValue(StringBuilder output, string prefsKey)
-        {
-            var keyName = prefsKey.Substring(0, prefsKey.LastIndexOf("_"));
-            var stringValue = PlayerPrefs.GetString(keyName, "DUMMY STRING");
-            if (stringValue != "DUMMY STRING")
-                output.AppendFormat("{0} (string): {1}\n", keyName, stringValue);
-            else
-            {
-                var intValue = PlayerPrefs.GetInt(keyName, int.MinValue + 10);
-                if (intValue != int.MinValue + 10)
-                    output.AppendFormat("{0} (int): {1}\n", keyName, intValue);
-                else
-                {
-                    var floatValue = PlayerPrefs.GetFloat(keyName, float.MinValue + 10);
-                    if (floatValue != float.MinValue + 10)
-                        output.AppendFormat("{0} (float): {1}\n", keyName, floatValue);
-                }
-            }
-        }
     }
 }
