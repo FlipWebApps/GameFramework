@@ -40,6 +40,8 @@ using GameFramework.Messaging;
 using GameFramework.GameStructure.Game.Messages;
 using GameFramework.Preferences;
 using GameFramework.Audio.Messages;
+using GameFramework.GameStructure.GameItems.Messages;
+
 #pragma warning disable 618
 
 #if BEAUTIFUL_TRANSITIONS
@@ -641,7 +643,8 @@ namespace GameFramework.GameStructure
         /// </summary>
         void Update()
         {
-            // process messages.
+            // queue update message and then process all messages.
+            _messenger.QueueMessage(new UpdateMessage());
             _messenger.ProcessQueue();
         }
 

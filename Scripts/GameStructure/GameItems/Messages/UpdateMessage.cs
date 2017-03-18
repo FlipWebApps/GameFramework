@@ -19,39 +19,19 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Diagnostics;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Messaging;
 
-namespace GameFramework.Messaging
+namespace GameFramework.GameStructure.GameItems.Messages
 {
     /// <summary>
-    /// A base class that should be used and inherited for all messages that we send through the 
-    /// messaging system.
+    /// A message that is send during the Update phase by GameManager.
     /// </summary>
-    public class BaseMessage
+    public class UpdateMessage : BaseMessage
     {
-        public enum SendModeType { SendToAll, SendToFirst }
-
-        public string Name;
-        public SendModeType SendMode;
-
-#if UNITY_EDITOR
-        public bool DontShowInEditorLogInternal;         // only needed for editor mode.
-#endif
-
-        public BaseMessage() {
-            Name = GetType().Name;
-            SendMode = SendModeType.SendToAll;
-        }
-
-
-        /// <summary>
-        /// Hide this message so that it isn't displayed in the editor logs. (Editor only method)
-        /// </summary>
-        /// Use this method rather than setting the property so that it will be easily compiled out in non editor mode.
-        [Conditional("UNITY_EDITOR")]
-        public void DontShowInEditorLog()
+        public UpdateMessage()
         {
-            DontShowInEditorLogInternal = true;
+            DontShowInEditorLog();
         }
     }
 }

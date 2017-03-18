@@ -157,14 +157,13 @@ namespace GameFramework.Messaging
             // if no listeners then just return.
             if (!_listeners.ContainsKey(msg.Name))
             {
-                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "No listeners are setup. Discarding message!");
+                AddSendLogEntry(msg, "No listeners are setup. Discarding message!");
                 return false;
             }
 
             _messageQueue.Enqueue(msg);
             return true;
         }
-
 
         /// <summary>
         /// Immediately send the specified message to all listeners.
@@ -175,7 +174,7 @@ namespace GameFramework.Messaging
         {
             if (!_listeners.ContainsKey(msg.Name))
             {
-                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "No listeners are setup. Discarding message!");
+                AddSendLogEntry(msg, "No listeners are setup. Discarding message!");
                 return false;
             }
 
@@ -186,12 +185,20 @@ namespace GameFramework.Messaging
 
                 if (msg.SendMode == BaseMessage.SendModeType.SendToFirst && sent)
                 {
-                    MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "Sent to first listener.");
+                    AddSendLogEntry(msg, "Sent to first listener.");
                     return true;
                 }
             }
-            MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), "Sent to " + listenerList.Count + " listeners.");
+            AddSendLogEntry(msg, "Sent to " + listenerList.Count + " listeners.");
             return true;
+        }
+
+        static void AddSendLogEntry(BaseMessage msg, string message)
+        {
+#if UNITY_EDITOR
+            if (!msg.DontShowInEditorLogInternal)
+                MessageLogHandler.AddLogEntry(LogEntryType.Send, msg.Name, msg.ToString(), message);
+#endif
         }
 
         #endregion Adding Messages and Sending
