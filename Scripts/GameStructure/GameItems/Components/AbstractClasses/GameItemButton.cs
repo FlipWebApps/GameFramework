@@ -64,6 +64,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public int Number;
 
         /// <summary>
+        /// Whether to use the legacy display mode where values are set based upon hardcoded gameobject names (in the future this more will be deprecated).
+        /// </summary>
+        [Tooltip("Whether to use the legacy display mode where values are set based upon hardcoded gameobject names (in the future this more will be deprecated).")]
+        public bool LegacyDisplayMode = true;
+
+        /// <summary>
         /// This items selection mode
         /// </summary>
         /// How this is handled depends a bit on the exact implementation, however typically ClickThrough = go to next scene, Select = select item and remain
@@ -80,7 +86,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// A color to use when this item is available for unlock
         /// </summary>
-        [Header("Unlocking")]
         [Tooltip("A color to use when this item is available for unlock")]
         public Color CoinColorCanUnlock = Color.green;
 
@@ -480,13 +485,18 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             CurrentPlayer = GameManager.Instance.Player;
 
             // Get some references for UI button type buttons
-            HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
-            DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
-            LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
-            HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
-            ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
-            if (ValueToUnlockGameObject != null)
-                ValueToUnlockAmount = GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(ValueToUnlockGameObject, "ValueToUnlockAmount", true);
+            if (LegacyDisplayMode)
+            {
+                HighlightGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Highlight", true);
+                DisplayImage = GameObjectHelper.GetChildComponentOnNamedGameObject<Image>(gameObject, "Sprite", true);
+                LockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "Lock", true);
+                HighScoreGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "HighScore", true);
+                ValueToUnlockGameObject = GameObjectHelper.GetChildNamedGameObject(gameObject, "ValueToUnlock", true);
+                if (ValueToUnlockGameObject != null)
+                    ValueToUnlockAmount =
+                        GameObjectHelper.GetChildComponentOnNamedGameObject<Text>(ValueToUnlockGameObject,
+                            "ValueToUnlockAmount", true);
+            }
             var button = gameObject.GetComponent<Button>();
             if (button != null)
                 button.onClick.AddListener(OnClick);
@@ -514,7 +524,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GetGameItemManager().SelectedChanged += SelectedChanged;
 
             GameManager.SafeAddListener<LocalisationChangedMessage>(OnLocalisationChanged);
-            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
+            if (LegacyDisplayMode)
+                GameManager.SafeAddListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
         }
 
         protected override void OnDestroy()
@@ -522,7 +533,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             base.OnDestroy();
 
             GameManager.SafeRemoveListener<LocalisationChangedMessage>(OnLocalisationChanged);
-            GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
+            if (LegacyDisplayMode)
+                GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(OnPlayerCoinsChanged);
 
             GetGameItemManager().SelectedChanged -= SelectedChanged;
             GetGameItemManager().Unlocked -= UnlockIfGameItemMatches;
@@ -542,33 +554,37 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             var isUnlockedAndAnimationShown = GameItem.IsUnlocked && GameItem.IsUnlockedAnimationShown;
 
-            UIHelper.SetTextOnChildGameObject(gameObject, "Name", GameItem.Name, true);
-
-            if (DisplayImage != null)
+            if (LegacyDisplayMode)
             {
-                var selectionMenuSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
-                DisplayImage.sprite = selectionMenuSprite ?? GameItem.Sprite;
-            }
+                UIHelper.SetTextOnChildGameObject(gameObject, "Name", GameItem.Name, true);
 
-            if (LockGameObject != null)
-                LockGameObject.SetActive(!isUnlockedAndAnimationShown);
+                if (DisplayImage != null)
+                {
+                    var selectionMenuSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.SelectionMenu);
+                    DisplayImage.sprite = selectionMenuSprite ?? GameItem.Sprite;
+                }
 
-            if (HighScoreGameObject != null)
-            {
-                HighScoreGameObject.SetActive(GameItem.IsUnlocked);
-                UIHelper.SetTextOnChildGameObject(HighScoreGameObject, "HighScoreText", GameItem.HighScore.ToString(), true);
-            }
+                if (LockGameObject != null)
+                    LockGameObject.SetActive(!isUnlockedAndAnimationShown);
 
-            if (ValueToUnlockGameObject != null)
-            {
-                ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
-                if (ValueToUnlockAmount != null)
-                    ValueToUnlockAmount.text = "x" + GameItem.ValueToUnlock.ToString();
-            }
+                if (HighScoreGameObject != null)
+                {
+                    HighScoreGameObject.SetActive(GameItem.IsUnlocked);
+                    UIHelper.SetTextOnChildGameObject(HighScoreGameObject, "HighScoreText",
+                        GameItem.HighScore.ToString(), true);
+                }
 
-            if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
-            {
-                HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == GameItem.Number);
+                if (ValueToUnlockGameObject != null)
+                {
+                    ValueToUnlockGameObject.SetActive(GameItem.UnlockWithCoins && !isUnlockedAndAnimationShown);
+                    if (ValueToUnlockAmount != null)
+                        ValueToUnlockAmount.text = "x" + GameItem.ValueToUnlock.ToString();
+                }
+
+                if (SelectionMode == GameItemButton.SelectionModeType.Select && HighlightGameObject != null)
+                {
+                    HighlightGameObject.SetActive(GetGameItemManager().Selected.Number == GameItem.Number);
+                }
             }
         }
 
