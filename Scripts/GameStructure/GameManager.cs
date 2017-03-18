@@ -585,10 +585,12 @@ namespace GameFramework.GameStructure
                 Debug.LogWarning("GameManager Unlock Modes are deprecated in favour of the more powerful UnlockXxx options in GameItem configuration files and will soon be removed. Change the GameManager settings to Custom to remove this warning and add / configure GameItem configuration files.");
 
             // handle auto setup of worlds and levels
+            Worlds = new WorldGameItemManager();
+            Levels = new LevelGameItemManager();
+            Characters = new CharacterGameItemManager();
             if (AutoCreateWorlds)
             {
                 var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
-                Worlds = new WorldGameItemManager();
                 Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
 
                 // if we have worlds then autocreate levels for each world.
@@ -611,7 +613,6 @@ namespace GameFramework.GameStructure
                 if (AutoCreateLevels)
                 {
                     var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                    Levels = new LevelGameItemManager();
                     Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
                 }
             }
@@ -619,7 +620,6 @@ namespace GameFramework.GameStructure
             // handle auto setup of characters
             if (AutoCreateCharacters)
             {
-                Characters = new CharacterGameItemManager();
                 if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
                     Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
                 else

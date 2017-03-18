@@ -152,6 +152,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 // always get new reference incase selection has changed.
                 var gameItemManager = iBaseGameItemManager;
                 Assert.IsNotNull(gameItemManager, "GameItemManager not found. Verify that you have one setup and that the execution order is correct. Also with a mode of Selected you should only access GameItem in Start or later if no script execution order is setup.\nGameobject: " + gameObjectName);
+                Assert.IsNotNull(gameItemManager.BaseSelected, "Selected item not found. Have you setup GameItems? \nGameobject: " + gameObjectName);
                 return gameItemManager.BaseSelected;
             }
             else if (context.ContextMode == GameItemContext.ContextModeType.ByNumber)

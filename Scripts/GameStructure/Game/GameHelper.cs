@@ -37,7 +37,7 @@ namespace GameFramework.GameStructure.Game
         /// <returns></returns>
         public static bool IsUsingWorlds()
         {
-            return GameManager.Instance.Worlds != null;
+            return GameManager.Instance.Worlds.Items.Length != 0;
         }
 
         /// <summary>

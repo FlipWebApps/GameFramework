@@ -165,6 +165,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             MyDebug.Log(TypeNameFull + ": Constructor");
             Parent = parent;
+            Items = new T[0];
 
             // get the base key to use for any general settings for this item. If parent object we place it on that to avoid conflict if we have multiple instances of this
             _baseKey = parent == null ? "" : Parent.FullKey("");
