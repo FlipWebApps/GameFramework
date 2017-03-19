@@ -220,7 +220,7 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.BeginVertical("Box");
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(componentHelp.Name, new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label(componentHelp.Name, EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             GUI.enabled = Selection.activeGameObject != null;
             if (EditorHelper.LinkButton("Add Component", true))
