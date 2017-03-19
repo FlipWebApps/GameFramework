@@ -1537,15 +1537,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1774582236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 165bcd738eabbec499e5191c58156f0c, type: 3}
+  m_Script: {fileID: 11500000, guid: f60c80e136919ce49bcdc106e0646ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   BlockingGameObjects:
   - {fileID: 1701275553}
   - {fileID: 550584469}
   - {fileID: 1483196922}
-  - {fileID: 1503452864}
   - {fileID: 2031969323}
+  - {fileID: 1503452864}
   SceneName: Menu
 --- !u!114 &1774582240
 MonoBehaviour:
@@ -1586,7 +1586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee073cf6fe007043bd8daa41d51857f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Count: 0
   UiCamera: {fileID: 0}
   DialogPrefabOverrides:
   - Path: GeneralMessage

@@ -1,0 +1,19 @@
+Models used under Attribution-ShareAlike CC BY-SA license by darken33
+
+https://www.blender-models.com/model-downloads/space/id/fly-or-die-3-3d-models/
+
+"These are the 3D models of my latest Space Shooter game "Fly Or Die 3" for Android, Android Cardboard, Winows, Linux and WevGL.
+
+Contents :
+
+- 3 asteroid types
+
+- an UFO
+
+- a Bomber
+
+- an Interceptor
+
+- the player Spacecraft
+
+For more information on this game please visit : http://darken33.net/wp/index.php/2016/07/12/fly-or-die-3-a-simple-3d-space-shooter-game/"
