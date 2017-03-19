@@ -78,7 +78,7 @@ namespace GameFramework.Debugging.Components.Editor {
         void PreferencesMenuOptions()
         {
             // preferences
-            GUILayout.Label("Preferences", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("Preferences", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Manage preference (PlayerPrefs). For more control and information enable Prefs Editor from the integrations window (Window Menu | Game Framework).", MessageType.None);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
@@ -104,7 +104,7 @@ namespace GameFramework.Debugging.Components.Editor {
         void IAPMenuOptions()
         {
             // preferences
-            GUILayout.Label("In App Purchase Simulation", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("In App Purchase Simulation", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Simulate a purchase by entering a product id, either your own or a built in one (unlockgame, unlock.world.xx, unlock.level.xx, unlock.characher.xx)", MessageType.None);
             GUILayout.BeginHorizontal();
             _productId = EditorGUILayout.TextField("Product Id: ", _productId, GUILayout.Width(300));
@@ -120,7 +120,7 @@ namespace GameFramework.Debugging.Components.Editor {
         private void PlayerMenuOptions()
         {
             // player
-            GUILayout.Label("Player", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("Player", EditorStyles.boldLabel);
             // lives
             GUILayout.BeginHorizontal();
             var playerLives = GameManager.IsActive ? " (" + GameManager.Instance.Player.Lives + ")" : "";
@@ -232,7 +232,7 @@ namespace GameFramework.Debugging.Components.Editor {
 
         private void WorldMenuOptions()
         {
-            GUILayout.Label("World", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("World", EditorStyles.boldLabel);
             // general
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current Worlds", GUILayout.Width(100));
@@ -286,7 +286,7 @@ namespace GameFramework.Debugging.Components.Editor {
                 return;
             }
 
-            GUILayout.Label("Level", new GUIStyle() { fontStyle = FontStyle.Bold, padding = new RectOffset(5, 5, 5, 5) });
+            GUILayout.Label("Level", EditorStyles.boldLabel);
             // general
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current Levels", GUILayout.Width(100));
