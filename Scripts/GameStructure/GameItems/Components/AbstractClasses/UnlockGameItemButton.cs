@@ -84,6 +84,61 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public int MaxFailedUnlocks = 999;
 
         /// <summary>
+        /// Whether the button should be disabled when we can't unlock anything.
+        /// </summary>
+        [Header("Input")]
+        [Tooltip("Whether the button should be disabled when we can't unlock anything.")]
+        public bool DisableIfCanNotUnlock = true;
+
+        /// <summary>
+        /// The localisation / text to use for the title of the can't unlock window. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the title of the can't unlock window. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText CanNotUnlockTitleText;
+
+        /// <summary>
+        /// The localisation / text to use for the main text of the can't unlock window when trying to unlock an item. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the main text of the can't unlock window when trying to unlock an item. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText CanNotUnlockText1;
+
+        /// <summary>
+        /// The localisation / text to use for the secondary text of the can't unlock window when trying to unlock an item. You can include the values: {0} - Name, {1} - Description, {2} - Value to Unlock
+        /// </summary>
+        [Tooltip("The localisation / text to use for the secondary  text of the can't unlock window when trying to unlock an item. You can include the values:\n{0} - Name\n{1} - Description\n{2} - Value to Unlock")]
+        public LocalisableText CanNotUnlockText2;
+
+        /// <summary>
+        /// The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below
+        /// </summary>
+        [Tooltip("The type of sprite that should be shown in the window. For a setting of GameItem this will use the UnlockWindow sprite type from the GameItem configuration. For more advanced customisation options use the content Prefab option below")]
+        public UnlockGameItemButton.DialogSpriteType CanNotUnlockDialogSpriteType;
+
+        /// <summary>
+        /// A custom sprite that should be used for this dialog
+        /// </summary>
+        [Tooltip("A custom sprite that should be used for this dialog")]
+        public LocalisableSprite CanNotUnlockDialogSprite;
+
+        /// <summary>
+        /// A optional prefab that will be inserted into the created dialog for a customised display
+        /// </summary>
+        [Tooltip("A optional prefab that will be inserted into the created dialog for a customised display")]
+        public GameObject CanNotUnlockContentPrefab;
+
+        /// <summary>
+        /// An optional animation controller that can be used for animating the dialog
+        /// </summary>
+        [Tooltip("An optional animation controller that can be used for animating the dialog")]
+        public RuntimeAnimatorController CanNotUnlockContentAnimatorController;
+
+        /// <summary>
+        /// If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually
+        /// </summary>
+        [Tooltip("If animating the dialog you may not want the action buttons displayed straight away. Check this it you will enable them through the animator or manually")]
+        public bool CanNotUnlockContentShowsButtons;
+
+        /// <summary>
         /// Whether the confirmation window should be shown first to confirm they want to unlock.
         /// </summary>
         [Header("Feedback")]
@@ -213,6 +268,11 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             _localisationBase = localisationBase;
 
+            CanNotUnlockTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
+            CanNotUnlockText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.NotEnoughCoins" };
+            CanNotUnlockText2 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Existing.Text2"};
+            CanNotUnlockDialogSpriteType = UnlockGameItemButton.DialogSpriteType.None;
+            
             ConfirmTitleText = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Title" };
             ConfirmText1 = new LocalisableText { IsLocalised = true, Data = _localisationBase + ".Unlock.Confirm.Text1" };
             ConfirmText2 = LocalisableText.CreateNonLocalised();
@@ -230,7 +290,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         protected override void Awake()
         {
-            // sync mode over to Context - 
+            // sync mode over to Context
             if (UnlockMode == UnlockGameItemButton.UnlockModeType.ByNumber)
                 Context.ContextMode = GameItemContext.ContextModeType.ByNumber;
             else if (UnlockMode == UnlockGameItemButton.UnlockModeType.Selected)
@@ -259,13 +319,25 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void Update()
         {
-            var canUnlock = ConvertToGameItemManagerUnlockMode(UnlockMode) == GameItemManager.UnlockModeType.GameItem ?
-                GameManager.Instance.Player.Coins >= GameItem.ValueToUnlock && !GameItem.IsUnlocked : 
-                GetGameItemManager().CanCoinUnlockNewItem(ConvertToGameItemManagerUnlockMode(UnlockMode), GameManager.Instance.Player.Coins);
-
+            var canUnlock = false;
+            if (!DisableIfCanNotUnlock)
+            {
+                // if there are no more items available to unlock disable anyway, otherwise enabled for trying.
+                canUnlock = GetGameItemManager().HasMoreLockedCoinUnlockableItems();
+            }
+            else
+            {
+                // otherwise base enable state on whether we can try unlocking
+                canUnlock = ConvertToGameItemManagerUnlockMode(UnlockMode) ==
+                                GameItemManager.UnlockModeType.GameItem
+                    ? GameManager.Instance.Player.Coins >= GameItem.ValueToUnlock && !GameItem.IsUnlocked
+                    : GetGameItemManager()
+                        .CanTryCoinUnlocking(ConvertToGameItemManagerUnlockMode(UnlockMode),
+                            GameManager.Instance.Player.Coins);
+            }
             _button.interactable = canUnlock;
             if (_animation != null)
-                _animation.enabled = canUnlock;
+                _animation.enabled = _button.interactable;
         }
 
 
@@ -305,10 +377,10 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         public void Unlock()
         {
-            // There should always be an item - we should not let them unlock if there is nothing to unlock - that is bad practice!
+            // Check if we have enough coins to actually unlock an item to try unlocking.
             var gameItem = ConvertToGameItemManagerUnlockMode(UnlockMode) == GameItemManager.UnlockModeType.GameItem ?
                 GetGameItem<T>() :
-                GetGameItemManager().GetItemToCoinUnlock(ConvertToGameItemManagerUnlockMode(UnlockMode), GameManager.Instance.Player.Coins, _failedUnlockAttempts, MaxFailedUnlocks);
+                GetGameItemManager().GetItemToTryCoinUnlocking(ConvertToGameItemManagerUnlockMode(UnlockMode), GameManager.Instance.Player.Coins, _failedUnlockAttempts, MaxFailedUnlocks);
             if (gameItem != null)
             {
                 _gameItemToUnlock = gameItem;
@@ -326,13 +398,35 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 {
                     ProcessUnlock();
                 }
-
             }
             else
             {
-                // Note: this should never happen in a well designed solution hence we don't localise!
-                DialogManager.Instance.Show(text: "All items are already unlocked");
+                DisplayCanNotUnlockWindow();
             }
+        }
+
+
+        /// <summary>
+        /// Display the can't unlock window
+        /// </summary>
+        void DisplayCanNotUnlockWindow()
+        {
+            Sprite sprite = null;
+            if (CanNotUnlockDialogSpriteType == UnlockGameItemButton.DialogSpriteType.FromGameItem)
+                sprite = _gameItemToUnlock.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow) ??
+                    _gameItemToUnlock.Sprite;
+            else if (CanNotUnlockDialogSpriteType == UnlockGameItemButton.DialogSpriteType.Custom)
+                sprite = CanNotUnlockDialogSprite.GetSprite();
+
+            var dialogInstance = DialogManager.Instance.Create(null, null, CanNotUnlockContentPrefab, null, runtimeAnimatorController: CanNotUnlockContentAnimatorController, contentSiblingIndex: 1);
+            dialogInstance.Show(title: CanNotUnlockTitleText.GetValue(),
+                text: ValueOrNull(CanNotUnlockText1.GetValue()),
+                text2: ValueOrNull(CanNotUnlockText2.GetValue()),
+                sprite: sprite,
+                dialogButtons:
+                    CanNotUnlockContentShowsButtons
+                        ? DialogInstance.DialogButtonsType.Custom
+                        : DialogInstance.DialogButtonsType.Ok);
         }
 
 
@@ -407,9 +501,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             var unlockWindowSprite = _gameItemToUnlock.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
 
             var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
-            dialogInstance.Show(titleKey: UnlockTitleText.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock),
-                textKey: ValueOrNull(textKey.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
-                text2Key: ValueOrNull(text2Key.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
+            dialogInstance.Show(title: UnlockTitleText.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock),
+                text: ValueOrNull(textKey.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
+                text2: ValueOrNull(text2Key.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
                 sprite: unlockWindowSprite ?? _gameItemToUnlock.Sprite,
                 doneCallback: UnlockedWindowCallback,
                 dialogButtons: UnlockContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);

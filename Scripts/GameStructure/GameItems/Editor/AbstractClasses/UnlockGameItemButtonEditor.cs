@@ -31,6 +31,16 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         SerializedProperty _contextReferenceProperty;
         SerializedProperty _maxFailedUnlocksProperty;
 
+        SerializedProperty _disableIfCanNotUnlockProperty;
+        SerializedProperty _canNotUnlockTitleTextProperty;
+        SerializedProperty _canNotUnlockText1Property;
+        SerializedProperty _canNotUnlockText2Property;
+        SerializedProperty _canNotUnlockDialogSpriteTypeProperty;
+        SerializedProperty _canNotUnlockDialogSpriteProperty;
+        SerializedProperty _canNotUnlockContentPrefabProperty;
+        SerializedProperty _canNotUnlockContentAnimatorControllerProperty;
+        SerializedProperty _canNotUnlockContentShowsButtonsProperty;
+
         SerializedProperty _showConfirmWindowProperty;
         SerializedProperty _confirmTitleTextProperty;
         SerializedProperty _confirmText1Property;
@@ -55,6 +65,16 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         {
             _unlockModeProperty = serializedObject.FindProperty("UnlockMode");
             _maxFailedUnlocksProperty = serializedObject.FindProperty("MaxFailedUnlocks");
+
+            _disableIfCanNotUnlockProperty = serializedObject.FindProperty("DisableIfCanNotUnlock");
+            _canNotUnlockTitleTextProperty = serializedObject.FindProperty("CanNotUnlockTitleText");
+            _canNotUnlockText1Property = serializedObject.FindProperty("CanNotUnlockText1");
+            _canNotUnlockText2Property = serializedObject.FindProperty("CanNotUnlockText2");
+            _canNotUnlockDialogSpriteTypeProperty = serializedObject.FindProperty("CanNotUnlockDialogSpriteType");
+            _canNotUnlockDialogSpriteProperty = serializedObject.FindProperty("CanNotUnlockDialogSprite");
+            _canNotUnlockContentPrefabProperty = serializedObject.FindProperty("CanNotUnlockContentPrefab");
+            _canNotUnlockContentAnimatorControllerProperty = serializedObject.FindProperty("CanNotUnlockContentAnimatorController");
+            _canNotUnlockContentShowsButtonsProperty = serializedObject.FindProperty("CanNotUnlockContentShowsButtons");
 
             _showConfirmWindowProperty = serializedObject.FindProperty("ShowConfirmWindow");
             _confirmTitleTextProperty = serializedObject.FindProperty("ConfirmTitleText");
@@ -86,6 +106,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             serializedObject.Update();
 
             EditorGUILayout.Space();
+            var oldUnlockMode = _unlockModeProperty.enumValueIndex;
             EditorGUILayout.PropertyField(_unlockModeProperty);
             EditorGUI.indentLevel++;
             if (_unlockModeProperty.enumValueIndex == 0)
@@ -96,6 +117,41 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 EditorGUILayout.PropertyField(_contextReferenceProperty);
             EditorGUI.indentLevel--;
 
+            EditorGUILayout.PropertyField(_disableIfCanNotUnlockProperty);
+            if (!_disableIfCanNotUnlockProperty.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.LabelField("Can't Unlock Window", EditorStyles.boldLabel);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_canNotUnlockTitleTextProperty,
+                    new GUIContent("Title", _canNotUnlockTitleTextProperty.tooltip));
+                EditorGUILayout.PropertyField(_canNotUnlockText1Property,
+                    new GUIContent("Text 1", _canNotUnlockText1Property.tooltip));
+                EditorGUILayout.PropertyField(_canNotUnlockText2Property,
+                    new GUIContent("Text 2", _canNotUnlockText2Property.tooltip));
+                EditorGUILayout.PropertyField(_canNotUnlockDialogSpriteTypeProperty,
+                    new GUIContent("Image", _canNotUnlockDialogSpriteTypeProperty.tooltip));
+                if (_canNotUnlockDialogSpriteTypeProperty.enumValueIndex == 2)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_canNotUnlockDialogSpriteProperty, GUIContent.none);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUI.indentLevel++;
+                _canNotUnlockContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_canNotUnlockContentPrefabProperty.isExpanded, "Advanced");
+                if (_canNotUnlockContentPrefabProperty.isExpanded)
+                {
+                    EditorGUILayout.PropertyField(_canNotUnlockContentPrefabProperty,
+                        new GUIContent("Content Prefab", _canNotUnlockContentPrefabProperty.tooltip));
+                    EditorGUILayout.PropertyField(_canNotUnlockContentAnimatorControllerProperty,
+                        new GUIContent("Content Animation", _canNotUnlockContentAnimatorControllerProperty.tooltip));
+                    EditorGUILayout.PropertyField(_canNotUnlockContentShowsButtonsProperty,
+                        new GUIContent("Content Shows Buttons", _canNotUnlockContentShowsButtonsProperty.tooltip));
+                }
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+            }
             EditorGUILayout.PropertyField(_showConfirmWindowProperty);
             if (_showConfirmWindowProperty.boolValue)
             {

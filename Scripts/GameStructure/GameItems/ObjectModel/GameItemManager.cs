@@ -182,7 +182,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         public virtual void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
         {
-            bool didLoadFromResources = false;
+            var didLoadFromResources = false;
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
 
@@ -391,30 +391,39 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #region Unlocking
 
         /// <summary>
-        /// Return a list of coin unlockable items whose value to unlock is less than the specified value
+        /// Return a list of GameItems that can be unlocked with coins and whose value to unlock is less than the specified value
         /// </summary>
-        /// <param name="currentValue"></param>
+        /// <param name="currentValue">An optional value where only items with a value to unlock below this should be considered.</param>
         /// <param name="lockedOnly">Whether to return all matching unlockable items (default) or only currently locked ones</param>
         /// <returns></returns>
-        public T[] CoinUnlockableItems(int currentValue, bool lockedOnly = false)
+        public T[] CoinUnlockableItems(int currentValue = int.MaxValue, bool lockedOnly = true)
         {
             return Items.Where(gameItem => !gameItem.StartUnlocked && gameItem.UnlockWithCoins && (!lockedOnly || !gameItem.IsUnlocked) && gameItem.ValueToUnlock <= currentValue).ToArray();
         }
 
         /// <summary>
-        /// Return the first coin unlockable item whose value to unlock is less than the specified value
+        /// Return the first coin unlockable item that is not already unlocked
         /// </summary>
-        /// <param name="currentValue"></param>
+        /// <param name="currentValue">An optional value where only items with a value to unlock below this should be considered.</param>
         /// <param name="lockedOnly">Whether to return all matching unlockable items (default) or only currently locked ones</param>
         /// <returns></returns>
-        public T CoinUnlockableItem(int currentValue = int.MaxValue)
+        public T FirstCoinUnlockableItem(int currentValue = int.MaxValue, bool lockedOnly = true)
         {
-            foreach (var item in Items)
+            foreach (var gameItem in Items)
             {
-                if (!item.IsUnlocked && item.UnlockWithCoins && item.ValueToUnlock <= currentValue)
-                    return item;
+                if (!gameItem.StartUnlocked && gameItem.UnlockWithCoins && (!lockedOnly || !gameItem.IsUnlocked) && gameItem.ValueToUnlock <= currentValue)
+                    return gameItem;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Return whether there are more items that are locked that are coin unlockable.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasMoreLockedCoinUnlockableItems()
+        {
+            return FirstCoinUnlockableItem() != null;
         }
 
         [Obsolete("Use CoinUnlockableItems instead. This method will be removed in a future version.")]
@@ -424,14 +433,14 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         }
 
         /// <summary>
-        /// Returns the minimum coins needed to unlock the item with the lowest ValueToUnlock.
+        /// Returns the minimum coins needed to unlock the locked, coin unlockable item with the lowest ValueToUnlock
         /// </summary>
         /// <returns></returns>
-        public int MinimumCoinsToUnlock()
+        public int MinimumCoinsNeededToUnlock()
         {
             // Setup how many Coins to win to push them to get more.
             var minimumCoins = -1;
-            var coinUnlockableItems = CoinUnlockableItems(int.MaxValue, true);
+            var coinUnlockableItems = CoinUnlockableItems();
             foreach (var gameItem in coinUnlockableItems)
             {
                 if (minimumCoins == -1 || gameItem.ValueToUnlock < minimumCoins)
@@ -442,19 +451,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             return minimumCoins;
         }
 
-        [Obsolete("Use MinimumValueToUnlock instead. This method will be removed in a future version.")]
+        [Obsolete("Use MinimumCoinsNeededToUnlock instead. This method will be removed in a future version.")]
         public int MinimumValueToUnlock() {
-            return MinimumCoinsToUnlock();
+            return MinimumCoinsNeededToUnlock();
         }
 
         /// <summary>
-        /// How much extra is needed to unlock the item with the lowest ValueToUnlock.
+        /// How much extra is needed to unlock the locked, coin unlockable item with the lowest ValueToUnlock.
         /// </summary>
         /// <param name="currentValue"></param>
         /// <returns></returns>
         public int ExtraCoinsNeededToUnlock(int currentValue)
         {
-            var minimumCoins = MinimumCoinsToUnlock();
+            var minimumCoins = MinimumCoinsNeededToUnlock();
             if (minimumCoins == -1) return -1;
             minimumCoins -= currentValue; // deduct the Coins we already have.
             if (minimumCoins < 0) minimumCoins = 0;
@@ -469,24 +478,32 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Returns whether 
+        /// Returns whether we can try unlocking a new item. 
         /// </summary>
+        /// Note that with certain modes such as RandomAll when we try unlocking we might not actually unlock an item.
         /// <param name="unlockMode"></param>
         /// <param name="coins"></param>
         /// <returns></returns>
-        public bool CanCoinUnlockNewItem(GameItemManager.UnlockModeType unlockMode, int coins)
+        public bool CanTryCoinUnlocking(GameItemManager.UnlockModeType unlockMode, int coins)
         {
             var canUnlock = false;
-            if (unlockMode == GameItemManager.UnlockModeType.RandomAll || unlockMode == GameItemManager.UnlockModeType.RandomLocked)
+            switch (unlockMode)
             {
-                var extraCoinsNeeded = ExtraCoinsNeededToUnlock(coins);
-                canUnlock = extraCoinsNeeded != -1 && extraCoinsNeeded == 0;
-            }
-            else if (unlockMode == GameItemManager.UnlockModeType.NextLocked)
-            {
-                var gameItem = CoinUnlockableItem(coins);
-                if (gameItem != null)
-                    canUnlock = coins >= gameItem.ValueToUnlock;
+                case GameItemManager.UnlockModeType.RandomAll:
+                case GameItemManager.UnlockModeType.RandomLocked:
+                    // can try unlocking if we have aenough coins to unlock a locked item
+                    var extraCoinsNeeded = ExtraCoinsNeededToUnlock(coins);
+                    canUnlock = extraCoinsNeeded != -1 && extraCoinsNeeded == 0;
+                    break;
+                case GameItemManager.UnlockModeType.NextLocked:
+                    // can try unlocking if we have enough coins to unlock the next item
+                    var gameItem = FirstCoinUnlockableItem();
+                    if (gameItem != null)
+                        canUnlock = coins >= gameItem.ValueToUnlock;
+                    break;
+                default:
+                    MyDebug.LogWarning("Unhandled unlock mode in CanCoinUnlockNewItem.");
+                    break;
             }
 
             return canUnlock;
@@ -494,34 +511,35 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Get an item that we can try unlocking based upon the specified coin unlock mode
+        /// Get an item that we can try unlocking based upon the specified coin unlock mode returning null if there is no item
+        /// that we can unlock
         /// </summary>
         /// <param name="unlockMode"></param>
         /// <param name="coins"></param>
         /// <param name="failedUnlockAttempts"></param>
-        /// <param name="maxFailedUnlocks"></param>
+        /// <param name="maxFailedUnlocks">If using RandomAll mode then the maximum number of failed unlock attempts before they will be definately unlock an item - used to stop them waiting too long before they unlock.</param>
         /// <returns></returns>
-        public T GetItemToCoinUnlock(GameItemManager.UnlockModeType unlockMode, int coins, int failedUnlockAttempts = 0, int maxFailedUnlocks = 0)
+        public T GetItemToTryCoinUnlocking(GameItemManager.UnlockModeType unlockMode, int coins, int failedUnlockAttempts = 0, int maxFailedUnlocks = 0)
         {
             T gameItem = null;
-            if (unlockMode == GameItemManager.UnlockModeType.RandomAll)
-            {
-                // If failed unlock attempts is greater then max then unlock one of the locked items so they don't get fed up.
-                var gameItems = failedUnlockAttempts >= maxFailedUnlocks
-                    ? CoinUnlockableItems(coins, true)
-                    : CoinUnlockableItems(coins);
-                if (gameItems.Length >= 0)
-                    gameItem = gameItems[Random.Range(0, gameItems.Length)];
-            }
-            else if (unlockMode == GameItemManager.UnlockModeType.RandomLocked)
-            {
-                var gameItems = CoinUnlockableItems(coins, true);
-                if (gameItems.Length >= 0)
-                    gameItem = gameItems[Random.Range(0, gameItems.Length)];
-            }
-            else if (unlockMode == GameItemManager.UnlockModeType.NextLocked)
-            {
-                gameItem = CoinUnlockableItem(coins);
+            switch (unlockMode) {
+                case GameItemManager.UnlockModeType.RandomAll:
+                case GameItemManager.UnlockModeType.RandomLocked:
+                    // If RandomAll mode and not reached max failed unlocks then include items already unlocked.
+                    var gameItems = CoinUnlockableItems(coins,
+                        unlockMode == GameItemManager.UnlockModeType.RandomLocked ||
+                         failedUnlockAttempts >= maxFailedUnlocks);
+                    if (gameItems.Length > 0)
+                        gameItem = gameItems[Random.Range(0, gameItems.Length - 1)];
+                    break;
+                case GameItemManager.UnlockModeType.NextLocked:
+                    gameItem = FirstCoinUnlockableItem();
+                    if (gameItem != null && gameItem.ValueToUnlock > coins)
+                        gameItem = null;
+                    break;
+                default:
+                    MyDebug.LogWarning("Unhandled unlock mode in CanCoinUnlockNewItem.");
+                    break;
             }
 
             return gameItem;
