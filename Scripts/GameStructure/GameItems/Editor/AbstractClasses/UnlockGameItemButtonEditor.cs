@@ -106,7 +106,6 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             serializedObject.Update();
 
             EditorGUILayout.Space();
-            var oldUnlockMode = _unlockModeProperty.enumValueIndex;
             EditorGUILayout.PropertyField(_unlockModeProperty);
             EditorGUI.indentLevel++;
             if (_unlockModeProperty.enumValueIndex == 0)

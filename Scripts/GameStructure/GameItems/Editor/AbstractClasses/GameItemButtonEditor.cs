@@ -185,7 +185,9 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 EditorGUILayout.PropertyField(_coinColorCanUnlockProperty);
                 EditorGUILayout.PropertyField(_coinColorCantUnlockProperty);
             }
+
             EditorGUILayout.PropertyField(_clickToBuyProperty);
+            EditorGUILayout.PropertyField(_clickToUnlockProperty);
             if (_clickToBuyProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
@@ -226,12 +228,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                         }
                         EditorGUI.indentLevel--;
                     }
-                    EditorGUI.indentLevel--;
-                }
 
-                if (_clickToUnlockProperty.boolValue)
-                {
-                    EditorGUI.indentLevel++;
                     _buyCantUnlockTitleTextProperty.isExpanded =
                         EditorGUILayout.Foldout(_buyCantUnlockTitleTextProperty.isExpanded, "Buy Can't Unlock Window Configuration");
                     if (_buyCantUnlockTitleTextProperty.isExpanded)
@@ -267,93 +264,101 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                     EditorGUI.indentLevel--;
                 }
 
-                EditorGUILayout.PropertyField(_showBuyWindowProperty);
-                if (_showBuyWindowProperty.boolValue)
+                if (!_clickToUnlockProperty.boolValue)
                 {
-                    EditorGUI.indentLevel++;
-                    EditorGUI.indentLevel++;
-                    _showBuyWindowProperty.isExpanded =
-                        EditorGUILayout.Foldout(_showBuyWindowProperty.isExpanded, "Configuration");
-                    if (_showBuyWindowProperty.isExpanded)
+                    EditorGUILayout.PropertyField(_showBuyWindowProperty);
+                    if (_showBuyWindowProperty.boolValue)
                     {
-
-                        EditorGUILayout.PropertyField(_buyTitleTextProperty,
-                            new GUIContent("Title", _buyTitleTextProperty.tooltip));
-                        EditorGUILayout.PropertyField(_buyText1Property,
-                            new GUIContent("Text 1", _buyText1Property.tooltip));
-                        EditorGUILayout.PropertyField(_buyText2Property,
-                            new GUIContent("Text 2", _buyText2Property.tooltip));
-                        EditorGUILayout.PropertyField(_buyDialogSpriteTypeProperty,
-                            new GUIContent("Image", _buyDialogSpriteTypeProperty.tooltip));
-                        if (_buyDialogSpriteTypeProperty.enumValueIndex == 2)
+                        EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel++;
+                        _showBuyWindowProperty.isExpanded =
+                            EditorGUILayout.Foldout(_showBuyWindowProperty.isExpanded, "Configuration");
+                        if (_showBuyWindowProperty.isExpanded)
                         {
+
+                            EditorGUILayout.PropertyField(_buyTitleTextProperty,
+                                new GUIContent("Title", _buyTitleTextProperty.tooltip));
+                            EditorGUILayout.PropertyField(_buyText1Property,
+                                new GUIContent("Text 1", _buyText1Property.tooltip));
+                            EditorGUILayout.PropertyField(_buyText2Property,
+                                new GUIContent("Text 2", _buyText2Property.tooltip));
+                            EditorGUILayout.PropertyField(_buyDialogSpriteTypeProperty,
+                                new GUIContent("Image", _buyDialogSpriteTypeProperty.tooltip));
+                            if (_buyDialogSpriteTypeProperty.enumValueIndex == 2)
+                            {
+                                EditorGUI.indentLevel++;
+                                EditorGUILayout.PropertyField(_buyDialogSpriteProperty, GUIContent.none);
+                                EditorGUI.indentLevel--;
+                            }
                             EditorGUI.indentLevel++;
-                            EditorGUILayout.PropertyField(_buyDialogSpriteProperty, GUIContent.none);
+                            _buyContentPrefabProperty.isExpanded =
+                                EditorGUILayout.Foldout(_buyContentPrefabProperty.isExpanded, "Advanced");
+                            if (_buyContentPrefabProperty.isExpanded)
+                            {
+                                EditorGUILayout.PropertyField(_buyContentPrefabProperty,
+                                    new GUIContent("Content Prefab", _buyContentPrefabProperty.tooltip));
+                                EditorGUILayout.PropertyField(_buyContentAnimatorControllerProperty,
+                                    new GUIContent("Content Animation", _buyContentAnimatorControllerProperty.tooltip));
+                                EditorGUILayout.PropertyField(_buyContentShowsButtonsProperty,
+                                    new GUIContent("Content Shows Buttons", _buyContentShowsButtonsProperty.tooltip));
+                            }
                             EditorGUI.indentLevel--;
                         }
-                        EditorGUI.indentLevel++;
-                        _buyContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_buyContentPrefabProperty.isExpanded, "Advanced");
-                        if (_buyContentPrefabProperty.isExpanded)
-                        {
-                            EditorGUILayout.PropertyField(_buyContentPrefabProperty,
-                                new GUIContent("Content Prefab", _buyContentPrefabProperty.tooltip));
-                            EditorGUILayout.PropertyField(_buyContentAnimatorControllerProperty,
-                                new GUIContent("Content Animation", _buyContentAnimatorControllerProperty.tooltip));
-                            EditorGUILayout.PropertyField(_buyContentShowsButtonsProperty,
-                                new GUIContent("Content Shows Buttons", _buyContentShowsButtonsProperty.tooltip));
-                        }
+                        EditorGUI.indentLevel--;
                         EditorGUI.indentLevel--;
                     }
-                    EditorGUI.indentLevel--;
-                    EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;
             }
 
-            EditorGUILayout.PropertyField(_clickToUnlockProperty);
             if (_clickToUnlockProperty.boolValue)
             {
                 EditorGUI.indentLevel++;
 
-                EditorGUILayout.PropertyField(_showConfirmWindowProperty);
-                if (_showConfirmWindowProperty.boolValue)
+                if (!_clickToBuyProperty.boolValue)
                 {
-                    EditorGUI.indentLevel++;
-                    EditorGUI.indentLevel++;
-                    _showConfirmWindowProperty.isExpanded =
-                        EditorGUILayout.Foldout(_showConfirmWindowProperty.isExpanded, "Configuration");
-                    if (_showConfirmWindowProperty.isExpanded)
+                    EditorGUILayout.PropertyField(_showConfirmWindowProperty);
+                    if (_showConfirmWindowProperty.boolValue)
                     {
-
-                        EditorGUILayout.PropertyField(_confirmTitleTextProperty,
-                            new GUIContent("Title", _confirmTitleTextProperty.tooltip));
-                        EditorGUILayout.PropertyField(_confirmText1Property,
-                            new GUIContent("Text 1", _confirmText1Property.tooltip));
-                        EditorGUILayout.PropertyField(_confirmText2Property,
-                            new GUIContent("Text 2", _confirmText2Property.tooltip));
-                        EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
-                            new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
-                        if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
+                        EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel++;
+                        _showConfirmWindowProperty.isExpanded =
+                            EditorGUILayout.Foldout(_showConfirmWindowProperty.isExpanded, "Configuration");
+                        if (_showConfirmWindowProperty.isExpanded)
                         {
+
+                            EditorGUILayout.PropertyField(_confirmTitleTextProperty,
+                                new GUIContent("Title", _confirmTitleTextProperty.tooltip));
+                            EditorGUILayout.PropertyField(_confirmText1Property,
+                                new GUIContent("Text 1", _confirmText1Property.tooltip));
+                            EditorGUILayout.PropertyField(_confirmText2Property,
+                                new GUIContent("Text 2", _confirmText2Property.tooltip));
+                            EditorGUILayout.PropertyField(_confirmDialogSpriteTypeProperty,
+                                new GUIContent("Image", _confirmDialogSpriteTypeProperty.tooltip));
+                            if (_confirmDialogSpriteTypeProperty.enumValueIndex == 2)
+                            {
+                                EditorGUI.indentLevel++;
+                                EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
+                                EditorGUI.indentLevel--;
+                            }
                             EditorGUI.indentLevel++;
-                            EditorGUILayout.PropertyField(_confirmDialogSpriteProperty, GUIContent.none);
+                            _confirmContentPrefabProperty.isExpanded =
+                                EditorGUILayout.Foldout(_confirmContentPrefabProperty.isExpanded, "Advanced");
+                            if (_confirmContentPrefabProperty.isExpanded)
+                            {
+                                EditorGUILayout.PropertyField(_confirmContentPrefabProperty,
+                                    new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
+                                EditorGUILayout.PropertyField(_confirmContentAnimatorControllerProperty,
+                                    new GUIContent("Content Animation",
+                                        _confirmContentAnimatorControllerProperty.tooltip));
+                                EditorGUILayout.PropertyField(_confirmContentShowsButtonsProperty,
+                                    new GUIContent("Content Shows Buttons", _confirmContentShowsButtonsProperty.tooltip));
+                            }
                             EditorGUI.indentLevel--;
                         }
-                        EditorGUI.indentLevel++;
-                        _confirmContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_confirmContentPrefabProperty.isExpanded, "Advanced");
-                        if (_confirmContentPrefabProperty.isExpanded)
-                        {
-                            EditorGUILayout.PropertyField(_confirmContentPrefabProperty,
-                                new GUIContent("Content Prefab", _confirmContentPrefabProperty.tooltip));
-                            EditorGUILayout.PropertyField(_confirmContentAnimatorControllerProperty,
-                                new GUIContent("Content Animation", _confirmContentAnimatorControllerProperty.tooltip));
-                            EditorGUILayout.PropertyField(_confirmContentShowsButtonsProperty,
-                                new GUIContent("Content Shows Buttons", _confirmContentShowsButtonsProperty.tooltip));
-                        }
+                        EditorGUI.indentLevel--;
                         EditorGUI.indentLevel--;
                     }
-                    EditorGUI.indentLevel--;
-                    EditorGUI.indentLevel--;
                 }
 
                 EditorGUILayout.PropertyField(_showUnlockWindowProperty);
@@ -388,43 +393,50 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                     EditorGUI.indentLevel--;
                 }
 
-                EditorGUILayout.PropertyField(_showNotEnoughCoinsWindowProperty);
-                if (_showNotEnoughCoinsWindowProperty.boolValue)
+                if (!_clickToBuyProperty.boolValue)
                 {
-                    EditorGUI.indentLevel++;
-                    EditorGUI.indentLevel++;
-                    _showNotEnoughCoinsWindowProperty.isExpanded = EditorGUILayout.Foldout(
-                        _showNotEnoughCoinsWindowProperty.isExpanded, "Configuration");
-                    if (_showNotEnoughCoinsWindowProperty.isExpanded)
+
+                    EditorGUILayout.PropertyField(_showNotEnoughCoinsWindowProperty);
+                    if (_showNotEnoughCoinsWindowProperty.boolValue)
                     {
-                        EditorGUILayout.PropertyField(_notEnoughCoinsTitleTextProperty,
-                            new GUIContent("Title", _notEnoughCoinsTitleTextProperty.tooltip));
-                        EditorGUILayout.PropertyField(_notEnoughCoinsText1Property,
-                            new GUIContent("Text 1", _notEnoughCoinsText1Property.tooltip));
-                        EditorGUILayout.PropertyField(_notEnoughCoinsText2Property,
-                            new GUIContent("Text 1", _notEnoughCoinsText2Property.tooltip));
-                        EditorGUILayout.PropertyField(_notEnoughCoinsDialogSpriteTypeProperty,
-                            new GUIContent("Image", _notEnoughCoinsDialogSpriteTypeProperty.tooltip));
-                        if (_notEnoughCoinsDialogSpriteTypeProperty.enumValueIndex == 2)
+                        EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel++;
+                        _showNotEnoughCoinsWindowProperty.isExpanded = EditorGUILayout.Foldout(
+                            _showNotEnoughCoinsWindowProperty.isExpanded, "Configuration");
+                        if (_showNotEnoughCoinsWindowProperty.isExpanded)
                         {
-                            EditorGUI.indentLevel++;
-                            EditorGUILayout.PropertyField(_notEnoughCoinsDialogSpriteProperty, GUIContent.none);
+                            EditorGUILayout.PropertyField(_notEnoughCoinsTitleTextProperty,
+                                new GUIContent("Title", _notEnoughCoinsTitleTextProperty.tooltip));
+                            EditorGUILayout.PropertyField(_notEnoughCoinsText1Property,
+                                new GUIContent("Text 1", _notEnoughCoinsText1Property.tooltip));
+                            EditorGUILayout.PropertyField(_notEnoughCoinsText2Property,
+                                new GUIContent("Text 1", _notEnoughCoinsText2Property.tooltip));
+                            EditorGUILayout.PropertyField(_notEnoughCoinsDialogSpriteTypeProperty,
+                                new GUIContent("Image", _notEnoughCoinsDialogSpriteTypeProperty.tooltip));
+                            if (_notEnoughCoinsDialogSpriteTypeProperty.enumValueIndex == 2)
+                            {
+                                EditorGUI.indentLevel++;
+                                EditorGUILayout.PropertyField(_notEnoughCoinsDialogSpriteProperty, GUIContent.none);
+                                EditorGUI.indentLevel--;
+                            }
+                            _notEnoughCoinsContentPrefabProperty.isExpanded =
+                                EditorGUILayout.Foldout(_notEnoughCoinsContentPrefabProperty.isExpanded, "Advanced");
+                            if (_notEnoughCoinsContentPrefabProperty.isExpanded)
+                            {
+                                EditorGUILayout.PropertyField(_notEnoughCoinsContentPrefabProperty,
+                                    new GUIContent("Content Prefab", _notEnoughCoinsContentPrefabProperty.tooltip));
+                                EditorGUILayout.PropertyField(_notEnoughCoinsContentAnimatorControllerProperty,
+                                    new GUIContent("Content Animation",
+                                        _notEnoughCoinsContentAnimatorControllerProperty.tooltip));
+                                EditorGUILayout.PropertyField(_notEnoughCoinsContentShowsButtonsProperty,
+                                    new GUIContent("Content Shows Buttons",
+                                        _notEnoughCoinsContentShowsButtonsProperty.tooltip));
+                            }
                             EditorGUI.indentLevel--;
                         }
-                        _notEnoughCoinsContentPrefabProperty.isExpanded = EditorGUILayout.Foldout(_notEnoughCoinsContentPrefabProperty.isExpanded, "Advanced");
-                        if (_notEnoughCoinsContentPrefabProperty.isExpanded)
-                        {
-                            EditorGUILayout.PropertyField(_notEnoughCoinsContentPrefabProperty,
-                                new GUIContent("Content Prefab", _notEnoughCoinsContentPrefabProperty.tooltip));
-                            EditorGUILayout.PropertyField(_notEnoughCoinsContentAnimatorControllerProperty,
-                                new GUIContent("Content Animation", _notEnoughCoinsContentAnimatorControllerProperty.tooltip));
-                            EditorGUILayout.PropertyField(_notEnoughCoinsContentShowsButtonsProperty,
-                                new GUIContent("Content Shows Buttons", _notEnoughCoinsContentShowsButtonsProperty.tooltip));
-                        }
+                        EditorGUI.indentLevel--;
                         EditorGUI.indentLevel--;
                     }
-                    EditorGUI.indentLevel--;
-                    EditorGUI.indentLevel--;
                 }
 
                 EditorGUI.indentLevel++;

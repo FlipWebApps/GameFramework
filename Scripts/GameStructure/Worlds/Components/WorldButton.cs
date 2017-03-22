@@ -79,7 +79,7 @@ namespace GameFramework.GameStructure.Worlds.Components
         /// </summary>
         public override void ClickUnlocked()
         {
-            GameManager.Instance.Levels = CurrentItem.Levels;
+            GameManager.Instance.Levels = GetGameItem<World>().Levels;
             base.ClickUnlocked();
         }
 
