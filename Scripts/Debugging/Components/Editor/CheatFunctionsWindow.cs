@@ -93,7 +93,7 @@ namespace GameFramework.Debugging.Components.Editor {
 #if PREFS_EDITOR
                 PrefsEditor.Editor.PrefsEditorWindow.ShowWindow();
 #else
-                if (EditorUtility.DisplayDialog("Prefs Editor", "Prefs Editor is a seperate asset for displaying and managing preferences with optional encryption.\n\nPrefs Editor is available for purchase seperately or included free as a part of the Game Framework Extras Bundle", "More Information...", "Cancel"))
+                if (EditorUtility.DisplayDialog("Prefs Editor", "Prefs Editor is a seperate asset for displaying and managing preferences with optional encryption.\n\nPrefs Editor is available for purchase seperately or included free as a part of the Game Framework Extras Bundle.\n\nIf you already have this installed then enable Prefs Editor integration in the Window -> GameFramework -> Integrations window.", "More Information...", "Cancel"))
                     GameFramework.GameFrameworkHelper.ShowAssetStorePagePrefsEditor();
 #endif
             }
