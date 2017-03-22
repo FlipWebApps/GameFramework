@@ -783,12 +783,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6084dd38cc5418e4b9873e4de3d37bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Number: 10
+  _context:
+    _contextMode: 0
+    _number: 0
+    _reactToChanges: 1
+    _referencedGameItemContextBase: {fileID: 0}
+  Number: 0
+  LegacyDisplayMode: 1
   SelectionMode: 0
-  CoinColorCheckInterval: 1
+  ClickUnlockedSceneToLoad: Game
   CoinColorCanUnlock: {r: 0, g: 1, b: 0, a: 1}
   CoinColorCantUnlock: {r: 1, g: 1, b: 1, a: 1}
-  ClickUnlockedSceneToLoad: Game
+  _clickToUnlock: 0
+  _clickToBuy: 1
+  BuyOrUnlockTitleText:
+    _isLocalised: 1
+    _data: Level.Unlock.Title
+  BuyOrUnlockText1:
+    _isLocalised: 1
+    _data: Level.BuyOrUnlock.Text1
+  BuyOrUnlockText2:
+    _isLocalised: 0
+    _data: 
+  BuyOrUnlockDialogSpriteType: 1
+  BuyOrUnlockDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyOrUnlockContentPrefab: {fileID: 0}
+  BuyOrUnlockContentAnimatorController: {fileID: 0}
+  BuyOrUnlockContentShowsButtons: 0
+  BuyCantUnlockTitleText:
+    _isLocalised: 1
+    _data: Level.Buy.Title
+  BuyCantUnlockText1:
+    _isLocalised: 1
+    _data: Level.Buy.Text1
+  BuyCantUnlockText2:
+    _isLocalised: 1
+    _data: Level.Buy.Text2
+  BuyCantUnlockDialogSpriteType: 1
+  BuyCantUnlockDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyCantUnlockContentPrefab: {fileID: 0}
+  BuyCantUnlockContentAnimatorController: {fileID: 0}
+  BuyCantUnlockContentShowsButtons: 0
+  ShowBuyWindow: 0
+  BuyTitleText:
+    _isLocalised: 1
+    _data: Level.Buy.Title
+  BuyText1:
+    _isLocalised: 1
+    _data: Level.Buy.Text1
+  BuyText2:
+    _isLocalised: 0
+    _data: 
+  BuyDialogSpriteType: 1
+  BuyDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyContentPrefab: {fileID: 0}
+  BuyContentAnimatorController: {fileID: 0}
+  BuyContentShowsButtons: 0
+  ShowConfirmWindow: 0
+  ConfirmTitleText:
+    _isLocalised: 1
+    _data: Level.Unlock.Title
+  ConfirmText1:
+    _isLocalised: 1
+    _data: Level.Unlock.Confirm.Text1
+  ConfirmText2:
+    _isLocalised: 0
+    _data: 
+  ConfirmDialogSpriteType: 1
+  ConfirmDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  ConfirmContentPrefab: {fileID: 0}
+  ConfirmContentAnimatorController: {fileID: 0}
+  ConfirmContentShowsButtons: 0
+  ShowUnlockWindow: 1
+  UnlockTitleText:
+    _isLocalised: 1
+    _data: Level.Unlock.Title
+  UnlockText1:
+    _isLocalised: 1
+    _data: Level.Unlock.New.Text1
+  UnlockText2:
+    _isLocalised: 1
+    _data: Level.Unlock.New.Text2
+  UnlockContentPrefab: {fileID: 0}
+  UnlockContentAnimatorController: {fileID: 0}
+  UnlockContentShowsButtons: 0
+  ShowNotEnoughCoinsWindow: 1
+  NotEnoughCoinsTitleText:
+    _isLocalised: 1
+    _data: Level.Unlock.Title
+  NotEnoughCoinsText1:
+    _isLocalised: 1
+    _data: Level.Unlock.NotEnoughCoins
+  NotEnoughCoinsText2:
+    _isLocalised: 0
+    _data: 
+  NotEnoughCoinsDialogSpriteType: 1
+  NotEnoughCoinsDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  NotEnoughCoinsContentPrefab: {fileID: 0}
+  NotEnoughCoinsContentAnimatorController: {fileID: 0}
+  NotEnoughCoinsContentShowsButtons: 0
 --- !u!198 &19870142
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -2706,7 +2809,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: Number
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Controller
