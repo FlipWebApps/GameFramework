@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d92fc846dbaf584ca9f5e7366161224, type: 3}
+  m_Name: Level_2
+  m_EditorClassIdentifier: 
+  _localisableName:
+    _isLocalised: 1
+    _data: 
+  _localisableDescription:
+    _isLocalised: 0
+    _data: 
+  _startUnlocked: 0
+  _unlockWithCoins: 1
+  _unlockWithPayment: 1
+  _unlockWithCompletion: 0
+  _valueToUnlock: 5
+  _localisablePrefabs:
+  - LocalisablePrefabType: 2
+    Name: 
+    LocalisablePrefab:
+      _default: {fileID: 106596, guid: 6a9df550b6f94a343befdeb33ec876e4, type: 2}
+      _localisedObjects: []
+  - LocalisablePrefabType: 4
+    Name: 
+    LocalisablePrefab:
+      _default: {fileID: 106596, guid: 6a9df550b6f94a343befdeb33ec876e4, type: 2}
+      _localisedObjects: []
+  _localisableSprites:
+  - LocalisableSpriteType: 1
+    Name: 
+    LocalisableSprite:
+      _default: {fileID: 21300000, guid: 8c525e32e546590488f887e2ab7e11ee, type: 3}
+      _localisedObjects: []
+  - LocalisableSpriteType: 3
+    Name: 
+    LocalisableSprite:
+      _default: {fileID: 21300000, guid: 8c525e32e546590488f887e2ab7e11ee, type: 3}
+      _localisedObjects: []
+  _variables:
+    _boolVariables: []
+    _intVariables: []
+    _floatVariables: []
+    _stringVariables: []
+  _starTotalCount: 3
+  _star1Target: 2
+  _star2Target: 4
+  _star3Target: 6
+  _star4Target: 0
+  _timeTarget: 20
+  _scoreTarget: 0
+  _coinTarget: 6
