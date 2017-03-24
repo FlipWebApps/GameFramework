@@ -4,6 +4,49 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.2
+
+	Game Framework Core - Improvements
+	- Debugging: CheatFunctions editor improved for Unity Dark Skin
+	- Demo: Added character selection scene
+	- Dialogs: DialogInstance support for an arbitrary number of text buttons.
+	- Display: Removed deprecated LOD component. Use LevelOfDetail instead.
+	- EditorExtras: Added SplitCamelCase method for pretty printing of strings.
+	- GameFramework: Added Component Help window for information about and ease of adding components.
+	- GameStructure: Added EnableBasedUponXxx components with selectable conditions for setting enable / disable criteria.
+	- GameStructure: Added UpdateMessage that is sent every frame by GameManager
+	- GameStructure: BuyGameItem button added
+	- GameStructure: GameItemButton uses GameItemContext
+	- GameStructure: GameItemButton selection buttons allow for enabling clicking to unlock / buy locked items
+	- GameStructure: GameItemButton selection buttons allow for configuring all dialogs
+	- GameStructure: GameItemButton option to use legacy display mode (will be deprecated in the future) or new setup with context based components.
+	- GameStructure: GameItemContextBaseRunnable RunMethod removed first parameter - reference base.GameItem instead.
+	- GameStructure: GameItemsManager - renamed several methods relating to unlocking for consistency..
+	- GameStructure: Levels, Worlds and Characters in GameManager are always initialised but with empty Items array
+	- GameStructure: ShowXxxInfo components rewritten to use Context
+	- GameStructure: ShowXxxInfo components now use LocalisableText
+	- GameStructure: ShowXxxInfo components support a new parameter {3} - Value to unlock
+	- GameStructure: SetSprite will fallback to a default sprite if there isn't one setup for the specific type.
+	- GameStructure: Added some test scenes for GameItem buttons and unlocking
+	- GameStructure: UnlockGameItemButton improvements and new configuration options
+	- GameStructure: UnlockGameItemButton -. updated localisation texts and options
+	- GameStructure: UnlockGameItemButton - added DisableIfCanNotUnlock option if you want to let users click even when they can't unlock and prompt them to collect coins.
+	- Helper: ScriptableObjectContainer added UseScriptableObject flag incase you don't want to use scriptable objects
+	- Input: Deprecated OnMouseClickOrTapLoadLevel & OnEscapeLoadLevel - Use more appropriately named OnMouseClickOrTapLoadScene & OnEscapeLoadScene instead.
+	- Messaging: Methods to add / remove listener directly by message Type.
+	- Messaging: Added options for indicating a message shouldn't be shown in the editor log
+	- Themes: Corrected Minimalist character button by removing stars
+	- Themes: Added Text buttons to default General Message prefab
+		
+	Game Framework Core - Fixes
+	- GameStructure: Fix for incorrect removal of event handler in EnableBasedUponSelected
+	- GameStructure: ShowXxxPrefab fix for possible display of selected rather than specified prefab
+	- GameStructure: Fix for getting an old context when using a reference to another context of type selected.
+	- Localisation: Fix for LocalisableTextDrawer not showing correctly when indented.
+	
+	Game Framework Extras (Extras Bundle) - Improvements
+	- Themes: Added text button options to all themed GeneralMessage windows.
+
 v4.1.1
 
 	Game Framework Core - Improvements
