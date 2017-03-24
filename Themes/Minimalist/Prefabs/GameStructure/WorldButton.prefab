@@ -201,7 +201,6 @@ GameObject:
   - 224: {fileID: 22447268}
   - 222: {fileID: 22253714}
   - 114: {fileID: 11418428}
-  - 114: {fileID: 11426192}
   m_Layer: 5
   m_Name: ValueToUnlockAmount
   m_TagString: Untagged
@@ -406,7 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9647059, g: 0.9490196, b: 0.8509804, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -417,7 +416,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 3
@@ -427,20 +426,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: x 100
---- !u!114 &11426192
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.39607844, g: 0.3647059, b: 0.3647059, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!114 &11427994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -719,11 +704,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d70ad3d2a077b45b893a251da15064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _context:
+    _contextMode: 0
+    _number: 0
+    _reactToChanges: 1
+    _referencedGameItemContextBase: {fileID: 0}
   Number: 0
+  LegacyDisplayMode: 1
   SelectionMode: 0
+  ClickUnlockedSceneToLoad: 
   CoinColorCanUnlock: {r: 0, g: 1, b: 0, a: 1}
   CoinColorCantUnlock: {r: 1, g: 1, b: 1, a: 1}
-  ClickUnlockedSceneToLoad: 
+  _clickToUnlock: 0
+  _clickToBuy: 1
+  BuyOrUnlockTitleText:
+    _isLocalised: 1
+    _data: World.Unlock.Title
+  BuyOrUnlockText1:
+    _isLocalised: 1
+    _data: World.BuyOrUnlock.Text1
+  BuyOrUnlockText2:
+    _isLocalised: 0
+    _data: 
+  BuyOrUnlockDialogSpriteType: 1
+  BuyOrUnlockDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyOrUnlockContentPrefab: {fileID: 0}
+  BuyOrUnlockContentAnimatorController: {fileID: 0}
+  BuyOrUnlockContentShowsButtons: 0
+  BuyCantUnlockTitleText:
+    _isLocalised: 1
+    _data: World.Buy.Title
+  BuyCantUnlockText1:
+    _isLocalised: 1
+    _data: World.Buy.Text1
+  BuyCantUnlockText2:
+    _isLocalised: 1
+    _data: World.Buy.Text2
+  BuyCantUnlockDialogSpriteType: 1
+  BuyCantUnlockDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyCantUnlockContentPrefab: {fileID: 0}
+  BuyCantUnlockContentAnimatorController: {fileID: 0}
+  BuyCantUnlockContentShowsButtons: 0
+  ShowBuyWindow: 0
+  BuyTitleText:
+    _isLocalised: 1
+    _data: World.Buy.Title
+  BuyText1:
+    _isLocalised: 1
+    _data: World.Buy.Text1
+  BuyText2:
+    _isLocalised: 0
+    _data: 
+  BuyDialogSpriteType: 1
+  BuyDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  BuyContentPrefab: {fileID: 0}
+  BuyContentAnimatorController: {fileID: 0}
+  BuyContentShowsButtons: 0
+  ShowConfirmWindow: 0
+  ConfirmTitleText:
+    _isLocalised: 1
+    _data: World.Unlock.Title
+  ConfirmText1:
+    _isLocalised: 1
+    _data: World.Unlock.Confirm.Text1
+  ConfirmText2:
+    _isLocalised: 0
+    _data: 
+  ConfirmDialogSpriteType: 1
+  ConfirmDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  ConfirmContentPrefab: {fileID: 0}
+  ConfirmContentAnimatorController: {fileID: 0}
+  ConfirmContentShowsButtons: 0
+  ShowUnlockWindow: 1
+  UnlockTitleText:
+    _isLocalised: 1
+    _data: World.Unlock.Title
+  UnlockText1:
+    _isLocalised: 1
+    _data: World.Unlock.New.Text1
+  UnlockText2:
+    _isLocalised: 1
+    _data: World.Unlock.New.Text2
+  UnlockContentPrefab: {fileID: 0}
+  UnlockContentAnimatorController: {fileID: 0}
+  UnlockContentShowsButtons: 0
+  ShowNotEnoughCoinsWindow: 1
+  NotEnoughCoinsTitleText:
+    _isLocalised: 1
+    _data: World.Unlock.Title
+  NotEnoughCoinsText1:
+    _isLocalised: 1
+    _data: World.Unlock.NotEnoughCoins
+  NotEnoughCoinsText2:
+    _isLocalised: 0
+    _data: 
+  NotEnoughCoinsDialogSpriteType: 1
+  NotEnoughCoinsDialogSprite:
+    _default: {fileID: 0}
+    _localisedObjects: []
+  NotEnoughCoinsContentPrefab: {fileID: 0}
+  NotEnoughCoinsContentAnimatorController: {fileID: 0}
+  NotEnoughCoinsContentShowsButtons: 0
 --- !u!114 &11463184
 MonoBehaviour:
   m_ObjectHideFlags: 1
