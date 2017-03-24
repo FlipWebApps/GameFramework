@@ -26,12 +26,12 @@ MonoBehaviour:
   - LocalisablePrefabType: 4
     Name: 
     LocalisablePrefab:
-      _default: {fileID: 147404, guid: dc2344e1495f01146bd3d75d307a0688, type: 2}
+      _default: {fileID: 108782, guid: 598800b7608e2c64997f1c014d822840, type: 2}
       _localisedObjects: []
   - LocalisablePrefabType: 2
     Name: 
     LocalisablePrefab:
-      _default: {fileID: 147404, guid: dc2344e1495f01146bd3d75d307a0688, type: 2}
+      _default: {fileID: 108782, guid: 598800b7608e2c64997f1c014d822840, type: 2}
       _localisedObjects: []
   _localisableSprites:
   - LocalisableSpriteType: 1

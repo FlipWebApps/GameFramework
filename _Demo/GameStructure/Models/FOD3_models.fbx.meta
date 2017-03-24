@@ -1,0 +1,183 @@
+fileFormatVersion: 2
+guid: 10b985644788f504d921976c16e18d3f
+timeCreated: 1490363437
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Bomber
+    100002: Canons
+    100004: Cockpit
+    100006: Cockpit.001
+    100008: Cockpit.002
+    100010: Cockpit.003
+    100012: //RootNode
+    100014: Fuel
+    100016: Fuel.001
+    100018: Gun
+    100020: Interceptor
+    100022: Leds
+    100024: Ovni
+    100026: Player
+    100028: Reactor
+    100030: Reactor.001
+    100032: Ring
+    100034: Socle
+    100036: Tubular
+    100038: Tubular.001
+    100040: Wing
+    100042: Wings
+    100044: Wings.001
+    400000: Bomber
+    400002: Canons
+    400004: Cockpit
+    400006: Cockpit.001
+    400008: Cockpit.002
+    400010: Cockpit.003
+    400012: //RootNode
+    400014: Fuel
+    400016: Fuel.001
+    400018: Gun
+    400020: Interceptor
+    400022: Leds
+    400024: Ovni
+    400026: Player
+    400028: Reactor
+    400030: Reactor.001
+    400032: Ring
+    400034: Socle
+    400036: Tubular
+    400038: Tubular.001
+    400040: Wing
+    400042: Wings
+    400044: Wings.001
+    2300000: Bomber
+    2300002: Canons
+    2300004: Cockpit
+    2300006: Cockpit.001
+    2300008: Cockpit.002
+    2300010: Cockpit.003
+    2300012: Fuel
+    2300014: Fuel.001
+    2300016: Gun
+    2300018: Interceptor
+    2300020: Leds
+    2300022: Ovni
+    2300024: Player
+    2300026: Reactor
+    2300028: Reactor.001
+    2300030: Ring
+    2300032: Socle
+    2300034: Tubular
+    2300036: Tubular.001
+    2300038: Wing
+    2300040: Wings
+    2300042: Wings.001
+    3300000: Bomber
+    3300002: Canons
+    3300004: Cockpit
+    3300006: Cockpit.001
+    3300008: Cockpit.002
+    3300010: Cockpit.003
+    3300012: Fuel
+    3300014: Fuel.001
+    3300016: Gun
+    3300018: Interceptor
+    3300020: Leds
+    3300022: Ovni
+    3300024: Player
+    3300026: Reactor
+    3300028: Reactor.001
+    3300030: Ring
+    3300032: Socle
+    3300034: Tubular
+    3300036: Tubular.001
+    3300038: Wing
+    3300040: Wings
+    3300042: Wings.001
+    4300000: Player
+    4300002: Wings.001
+    4300004: Reactor.001
+    4300006: Fuel.001
+    4300008: Cockpit.003
+    4300010: Interceptor
+    4300012: Cockpit.002
+    4300014: Tubular.001
+    4300016: Wing
+    4300018: Bomber
+    4300020: Cockpit.001
+    4300022: Fuel
+    4300024: Reactor
+    4300026: Tubular
+    4300028: Gun
+    4300030: Ovni
+    4300032: Socle
+    4300034: Wings
+    4300036: Ring
+    4300038: Leds
+    4300040: Canons
+    4300042: Cockpit
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
