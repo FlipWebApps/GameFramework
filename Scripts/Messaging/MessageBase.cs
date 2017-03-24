@@ -51,7 +51,9 @@ namespace GameFramework.Messaging
         [Conditional("UNITY_EDITOR")]
         public void DontShowInEditorLog()
         {
+#if UNITY_EDITOR
             DontShowInEditorLogInternal = true;
+#endif
         }
     }
 }
