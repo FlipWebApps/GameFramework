@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using GameFramework.EditorExtras;
 using GameFramework.GameStructure;
 using GameFramework.GameStructure.Levels;
@@ -61,7 +62,7 @@ namespace GameFramework.UI.Other.Components
         bool _isUpdating;
         //int ScorePart;
 
-        int _lastTimeRemaining;
+        int _lastTimeRemaining = int.MinValue;
 
         // Use this for initialization
         void Start()

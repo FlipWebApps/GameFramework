@@ -42,7 +42,10 @@ v4.2
 	- GameStructure: Fix for incorrect removal of event handler in EnableBasedUponSelected
 	- GameStructure: ShowXxxPrefab fix for possible display of selected rather than specified prefab
 	- GameStructure: Fix for getting an old context when using a reference to another context of type selected.
+	- GameStructure: Plain CharacterButton prefab removed unused stars
 	- Localisation: Fix for LocalisableTextDrawer not showing correctly when indented.
+	- Themes: Fix for Minimalist theme selection buttons where ValueToUnlock was not always showing on in Unity 5.5
+	- UI: Fix for TimeRemaining component not showing correct time on start
 	
 	Game Framework Extras (Extras Bundle) - Improvements
 	- Themes: Added text button options to all themed GeneralMessage windows.
