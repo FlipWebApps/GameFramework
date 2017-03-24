@@ -46,6 +46,7 @@ v4.2
 	
 	Game Framework Extras (Extras Bundle) - Improvements
 	- Themes: Added text button options to all themed GeneralMessage windows.
+	- Themes: Space GeneralMessage prefab was incorrectly referencing a couple of Cartoon sprites
 
 v4.1.1
 

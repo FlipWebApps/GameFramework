@@ -7364,7 +7364,7 @@ MonoBehaviour:
   UiCamera: {fileID: 0}
   DialogPrefabOverrides:
   - Path: GeneralMessage
-    Prefab: {fileID: 174806, guid: 492449600c5981249a3ae419f90ff6f1, type: 2}
+    Prefab: {fileID: 0}
   - Path: GameFeedbackDialog
     Prefab: {fileID: 0}
 --- !u!4 &1847298972
