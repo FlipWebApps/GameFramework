@@ -427,12 +427,19 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// The current item that this button corresponds to.
         /// </summary>
-        [Obsolete("DEPRECATED: Use GameItem or GetGameItem<T>() instead")]
-        public T CurrentItem { get; set; }
+        [Obsolete("GameItemButton CurrentItem property is DEPRECATED. Change to use GameItemButton GameItem or GetGameItem<T>() instead", true)]
+        public T CurrentItem {
+            get
+            {
+                Debug.LogError("GameItemButton CurrentItem property is DEPRECATED and no longer used. Change references to GameItemButton GameItem or GetGameItem<T>() instead");
+                return _currentItem;
+            } set { _currentItem = value; } }
+
+        T _currentItem;
 
         protected Player CurrentPlayer;
 
-        protected Image DisplayImage { get; set; }
+        protected Image DisplayImage { get; set; } 
         protected Text ValueToUnlockAmount;
         protected GameObject HighlightGameObject;
         protected GameObject LockGameObject;
