@@ -127,12 +127,12 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("SetSpriteRendererToCharacterSprite", "Set a SpriteRenderer to the specified sprite from the referenced Character", typeof(GameStructure.Characters.Components.SetSpriteRendererToCharacterSprite), "GameStructure", "Character"),
             new ComponentHelp("ShowCharacterInfo", "Show information about the referenced Character in a UI Text component. Information that can be displayed includes the name, number, description and value to unlock.", typeof(GameStructure.Characters.Components.ShowCharacterInfo), "GameStructure", "Character"),
             new ComponentHelp("ShowCharacterPrefab", "Create an instance of the specified prefab from a referenced Character", typeof(GameStructure.Characters.Components.ShowCharacterPrefab), "GameStructure", "Character"),
-            new ComponentHelp("UnlockCharacterButton", "Unlock GameItem button for Characters. Add this to a UI button for automatic handling of unlocking characters.", typeof(GameStructure.Characters.Components.UnlockCharacterButton), "UnlockCharacterButton", "Character"),
+            new ComponentHelp("UnlockCharacterButton", "Unlock GameItem button for Characters. Add this to a UI button for automatic handling of unlocking characters.", typeof(GameStructure.Characters.Components.UnlockCharacterButton), "GameStructure", "Character"),
 
             // GameStructure - Colliders
             new ComponentHelp("CoinCollider", "Collider for increasing or decreasing a players / levels coins when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.CoinCollider), "GameStructure", "Collider", "Player", "Level"),
             new ComponentHelp("GenericCollider", "Generic collider for acting when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.GenericCollider), "GameStructure", "Collider", "Player"),
-            new ComponentHelp("HealthCollider", "Health collider for increasing or decreasing a players health when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.HealthCollider), "HealthCollider", "Collider", "Player"),
+            new ComponentHelp("HealthCollider", "Health collider for increasing or decreasing a players health when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.HealthCollider), "GameStructure", "Collider", "Player"),
             new ComponentHelp("PointsCollider", "Collider for increasing or decreasing a players / levels points when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.PointsCollider), "GameStructure", "Collider", "Player", "Level"),
 
             // GameStructure - Game
@@ -143,7 +143,7 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("GenericGameItemButton", "GenericGameItem details button. Provides support for a details button including selection, unlocking, IAP and more.", typeof(GameStructure.GenericGameItems.Components.GenericGameItemButton), "GameStructure", "GenericGameItem"),
             new ComponentHelp("GenericGameItemManager", "Allows for automatic setup and referencing of a set of generic game items for your own usage.", typeof(GameStructure.GenericGameItems.Components.GenericGameItemManager), "GameStructure", "GenericGameItem"),
             new ComponentHelp("ShowGenericGameItemInfo", "Show information about the referenced GenericGameItem in a UI Text component. Information that can be displayed includes the name, number, description and value to unlock.", typeof(GameStructure.GenericGameItems.Components.ShowGenericGameItemInfo), "GameStructure", "GenericGameItem"),
-            new ComponentHelp("UnlockGenericGameItemButton", "Unlock GameItem button for GenericGameItems. Add this to a UI button for automatic handling of unlocking GenericGameItems.", typeof(GameStructure.GenericGameItems.Components.UnlockGenericGameItemButton), "UnlockGenericGameItemButton", "GenericGameItem"),
+            new ComponentHelp("UnlockGenericGameItemButton", "Unlock GameItem button for GenericGameItems. Add this to a UI button for automatic handling of unlocking GenericGameItems.", typeof(GameStructure.GenericGameItems.Components.UnlockGenericGameItemButton), "GameStructure", "GenericGameItem"),
             
             // GameStructure - Levels
             new ComponentHelp("BuyLevelButton", "Buy button for Levels. Add this to a UI button for automatic handling of purchasing Levels.", typeof(GameStructure.Levels.Components.BuyLevelButton), "GameStructure", "Level", "Billing"),
@@ -163,7 +163,7 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("ShowLevelScore", "Show the score for the referenced Level.", typeof(GameStructure.Levels.Components.ShowLevelScore), "GameStructure", "Level"),
             new ComponentHelp("StarsWonHandlerCoins", "A handler to set the number of stars won based upon the coins obtained for the referenced Level.", typeof(GameStructure.Levels.Components.StarsWonHandlerCoins), "GameStructure", "Level"),
             new ComponentHelp("StarsWonHandlerScore", "A handler to set the number of stars won based upon the amount of points obtained for the referenced Level.", typeof(GameStructure.Levels.Components.StarsWonHandlerScore), "GameStructure", "Level"),
-            new ComponentHelp("UnlockLevelButton", "Unlock GameItem button for Levels. Add this to a UI button for automatic handling of unlocking Levels.", typeof(GameStructure.Levels.Components.UnlockLevelButton), "UnlockLevelButton", "Level"),
+            new ComponentHelp("UnlockLevelButton", "Unlock GameItem button for Levels. Add this to a UI button for automatic handling of unlocking Levels.", typeof(GameStructure.Levels.Components.UnlockLevelButton), "GameStructure", "Level"),
             
             // GameStructure - Players
             new ComponentHelp("CreateLivesIcons", "Creates instances of a life icon using a referenced prefab", typeof(GameStructure.Players.Components.CreateLivesIcons), "GameStructure", "Player"),
@@ -196,7 +196,7 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("SetSpriteRendererToWorldSprite", "Set a SpriteRenderer to the specified sprite from the referenced World", typeof(GameStructure.Worlds.Components.SetSpriteRendererToWorldSprite), "GameStructure", "World"),
             new ComponentHelp("ShowWorldInfo", "Show information about the referenced World in a UI Text component. Information that can be displayed includes the name, number, description and value to unlock.", typeof(GameStructure.Worlds.Components.ShowWorldInfo), "GameStructure", "World"),
             new ComponentHelp("ShowWorldPrefab", "Create an instance of the specified prefab from a referenced World", typeof(GameStructure.Worlds.Components.ShowWorldPrefab), "GameStructure", "World"),
-            new ComponentHelp("UnlockWorldButton", "Unlock GameItem button for Worlds. Add this to a UI button for automatic handling of unlocking Worlds.", typeof(GameStructure.Worlds.Components.UnlockWorldButton), "UnlockWorldButton", "World"),
+            new ComponentHelp("UnlockWorldButton", "Unlock GameItem button for Worlds. Add this to a UI button for automatic handling of unlocking Worlds.", typeof(GameStructure.Worlds.Components.UnlockWorldButton), "GameStructure", "World"),
             new ComponentHelp("WorldButton", "World details button. Provides support for a details button including selection, unlocking, IAP and more.", typeof(GameStructure.Worlds.Components.WorldButton), "GameStructure", "World"),
             new ComponentHelp("WorldGameItemContext", "Reference a World that can then be used as the context by other components. This component can amonst others reference an item by number or the currently selecetd item. Other components can then use this context to determine what item to work with / display.", typeof(GameStructure.Worlds.Components.WorldGameItemContext), "GameStructure", "World"),
 
