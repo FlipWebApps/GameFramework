@@ -29,6 +29,7 @@ namespace GameFramework.GameStructure.Worlds.Components
     /// <summary>
     /// Unlock GameItem button for Worlds 
     /// </summary>
+    /// Add this to a UI button for automatic handling of unlocking Worlds.
     [AddComponentMenu("Game Framework/GameStructure/Worlds/UnlockWorldButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class UnlockWorldButton : UnlockGameItemButton<World>

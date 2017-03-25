@@ -25,8 +25,9 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Sets the current players health.
+    /// Sets the current players health to a specified value.
     /// </summary>
+    /// Used for initialisation purposes.
     [AddComponentMenu("Game Framework/GameStructure/Players/SetHealth")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class SetHealth : MonoBehaviour

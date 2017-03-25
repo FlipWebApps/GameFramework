@@ -26,7 +26,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Create an instance of the specified prefab from the referenced Character
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate Character Prefab")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]

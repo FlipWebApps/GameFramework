@@ -28,6 +28,7 @@ namespace GameFramework.GameStructure.Players.Components
     /// <summary>
     /// Sets the current players number of lives.
     /// </summary>
+    /// Used for initialisation purposes.
     [AddComponentMenu("Game Framework/GameStructure/Players/SetLives")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class SetLives : MonoBehaviour

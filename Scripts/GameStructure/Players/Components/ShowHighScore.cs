@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show the high score that a player has.
+    /// Show the high score for the referenced Player.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowHighScore")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

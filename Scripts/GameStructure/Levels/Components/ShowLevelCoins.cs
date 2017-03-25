@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Show the number of coins that have been collected for the level has.
+    /// Show the number of coins that have been collected for the referenced Level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelCoins")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

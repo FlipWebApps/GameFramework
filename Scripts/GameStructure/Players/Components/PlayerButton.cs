@@ -29,8 +29,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Player Details Button
+    /// Player details button
     /// </summary>
+    /// Provides support for a details button including selection, unlocking, IAP and more.
     [AddComponentMenu("Game Framework/GameStructure/Players/PlayerButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Players/")]
     public class PlayerButton : GameItemButton<Player>

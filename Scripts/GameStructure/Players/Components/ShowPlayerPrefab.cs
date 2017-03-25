@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Create an instance of the specified prefab from a referenced Player
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/Show Player Prefab")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

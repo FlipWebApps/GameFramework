@@ -35,7 +35,7 @@ using GameFramework.Preferences;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Base class for a settings dialog that contains built in support for settings audio and effect volumes and restoring 
+    /// Provides functionality for displaying and managing a settings dialog that contains built in support for settings audio and effect volumes and restoring 
     /// in app purchases.
     /// </summary>
     /// You can override this class to add additional functionality.

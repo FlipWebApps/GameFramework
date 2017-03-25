@@ -26,8 +26,11 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Reference a Player that can then be used as the context by other components.
     /// </summary>
+    /// This component can amonst others reference an item by number or the currently selecetd item. Other components can then use this 
+    /// context to determine what item to work with / display.
+
     [AddComponentMenu("Game Framework/GameStructure/Players/PlayerGameItemContext")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
     public class PlayerGameItemContext : GameItemContextBase

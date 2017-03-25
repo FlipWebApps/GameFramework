@@ -30,8 +30,9 @@ using UnityEngine.UI;
 namespace GameFramework.GameStructure.GenericGameItems.Components
 {
     /// <summary>
-    /// Show information about the currently selected GenericGameItem in a UI Text component
+    /// Show information about the referenced GenericGameItem in a UI Text component
     /// </summary>
+    /// Information that can be displayed includes the name, number, description and value to unlock.
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/Show GenericGameItem Info")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

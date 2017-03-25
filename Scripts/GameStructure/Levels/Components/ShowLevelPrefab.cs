@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Create an instance of the specified prefab from a referenced Level
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/Show Level Prefab")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

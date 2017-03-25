@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Creates instances of all World GameItems
+    /// Creates button instances for all Worlds using a referenced prefab.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Worlds/CreateWorldButtons")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]

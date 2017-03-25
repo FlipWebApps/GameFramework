@@ -27,8 +27,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Buy GameItem button for Characters 
+    /// Buy button for Characters.
     /// </summary>
+    /// Add this to a UI button for automatic handling of purchasing characters.
     [AddComponentMenu("Game Framework/GameStructure/Characters/BuyCharacterButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class BuyCharacterButton : BuyGameItemButton<Character>

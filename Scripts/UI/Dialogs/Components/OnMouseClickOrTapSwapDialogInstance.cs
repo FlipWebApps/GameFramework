@@ -25,7 +25,7 @@ using UnityEngine;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Loads the given level when a mouse button is pressed or the screen is tapped anywhere on the screen
+    /// Swapping between two dialog instances (windows) when a mouse button is pressed or the screen is tapped anywhere on the screen
     /// </summary>
     [AddComponentMenu("Game Framework/UI/Dialogs/OnMouseClickOrTapSwapDialogInstance")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]

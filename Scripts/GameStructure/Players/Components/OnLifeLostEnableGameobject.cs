@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// A handler for setting the number of stars won by the amount of coins the player collects.
+    /// Enable a specified gameobject when a life is lost.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/OnLifeLostEnableGameobject")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

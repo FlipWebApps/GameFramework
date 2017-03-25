@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Set an image to the specified sprite from the referenced Character
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Characters/Set Image To Character Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Characters/")]

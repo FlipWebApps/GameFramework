@@ -27,6 +27,8 @@ namespace GameFramework.UI.Dialogs.Components
     /// <summary>
     /// Shows the given dialog a single time
     /// </summary>
+    /// A record is made of whether the specified dialog has been shown so that it is only shown one time including across game restarts.
+    /// Use this component for showing things like help tips, guidelines or other one time information.
     [AddComponentMenu("Game Framework/UI/Dialogs/ShowDialogOnce")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/ui/dialogs/")]
     public class ShowDialogOnce : MonoBehaviour

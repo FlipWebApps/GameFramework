@@ -51,8 +51,10 @@ using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
 namespace GameFramework.GameStructure
 {
     /// <summary>
-    /// Contains details about the game and is the base class for managing other aspects such as levels etc.
+    /// A core component that holds and manages information about the game.
     /// </summary>
+    /// GameManager is where you can setup the structure of your game and holdes other key information and functionality relating to Preferences,
+    /// GameStructure, Display, Localisation, Audio, Messaging and more. Please see the online help for full information.
     [AddComponentMenu("Game Framework/GameStructure/GameManager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameManager : SingletonPersistant<GameManager>

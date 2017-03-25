@@ -25,7 +25,7 @@ using UnityEngine.UI;
 namespace GameFramework.Advertising.UnityAds.Components
 {
     /// <summary>
-    /// Component for showing the watch advert for coins dialog on button click. 
+    /// Shows a 'watch advert for coins dialog' on button click. 
     /// 
     /// This automatically hooks up the button onClick listener
     /// </summary>

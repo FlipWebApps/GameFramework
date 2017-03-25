@@ -24,7 +24,7 @@ using UnityEngine;
 namespace GameFramework.Advertising.UnityAds.Components
 {
     /// <summary>
-    /// Component to automatically show an advert. 
+    /// Automatically show a Unity Ads advert. 
     /// </summary>
     /// 
     /// The advert will be shown when this components Start method is called.

@@ -27,9 +27,10 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Enable or a Disable a gameobject based upon the settings of a specific Character.
+    /// Enable or a Disable a gameobject or UI button based upon various conditions relating to a specific Character or otherwise.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    /// You can add your own custom conditiong - please see the online help for further details.
     [AddComponentMenu("Game Framework/GameStructure/Characters/EnableBasedUponCharacter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class EnableBasedUponCharacter : EnableBasedUponGameItem<Character>

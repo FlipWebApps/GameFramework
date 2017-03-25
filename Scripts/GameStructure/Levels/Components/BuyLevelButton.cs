@@ -27,8 +27,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Buy GameItem button for Levels 
+    /// Buy button for Levels 
     /// </summary>
+    /// Add this to a UI button for automatic handling of purchasing levels.
     [AddComponentMenu("Game Framework/GameStructure/Levels/BuyLevelButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class BuyLevelButton : BuyGameItemButton<Level>

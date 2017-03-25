@@ -26,7 +26,7 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Show the settings dialog
+    /// Provides a method that you can add to a button click event for swapping between two dialog instances (windows)
     /// </summary>
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Dialogs/OnButtonClickSwapDialogInstance")]

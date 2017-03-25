@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Set a SpriteRenderer to the specified sprite from the referenced Player
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/Set SpriteRenderer To Player Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/Players/")]

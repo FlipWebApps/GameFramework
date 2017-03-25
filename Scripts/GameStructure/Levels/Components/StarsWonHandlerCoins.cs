@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// A handler for setting the number of stars won by the amount of coins the player collects.
+    /// A handler to set the number of stars won based upon the amount of coins obtained for the referenced Level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/StarsWonHandlerCoins")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

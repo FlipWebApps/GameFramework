@@ -29,8 +29,9 @@ using GameFramework.Billing.Messages;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// World Details Button
+    /// World details button
     /// </summary>
+    /// Provides support for a details button including selection, unlocking, IAP and more.
     [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class WorldButton : GameItemButton<World>

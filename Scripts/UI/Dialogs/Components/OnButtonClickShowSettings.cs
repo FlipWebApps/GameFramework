@@ -27,7 +27,7 @@ using UnityEngine.UI;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Show the settings dialog
+    /// Provides a method that you can add to a button click event for showing the settings dialog
     /// </summary>
     [RequireComponent(typeof(Button))]
     [AddComponentMenu("Game Framework/UI/Dialogs/OnButtonClickShowSettings")]

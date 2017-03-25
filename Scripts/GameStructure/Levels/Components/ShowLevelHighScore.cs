@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Show the high score that the level has.
+    /// Show the high score for the referenced Level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelHighScore")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

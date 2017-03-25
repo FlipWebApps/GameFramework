@@ -29,8 +29,10 @@ using UnityEngine.UI;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show information about the currently selected level
+    /// Show information about the referenced Player in a UI Text component
     /// </summary>
+    /// Information that can be displayed includes the name, number, description and value to unlock.
+
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowPlayerInfo")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

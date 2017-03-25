@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Set an image to the specified sprite from the referenced World
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Worlds/Set Image To World Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]

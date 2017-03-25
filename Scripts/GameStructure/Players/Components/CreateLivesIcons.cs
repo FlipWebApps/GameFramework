@@ -26,7 +26,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Creates instances of a life icon
+    /// Creates instances of a life icon using a referenced prefab
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/CreateLivesIcons")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

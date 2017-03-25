@@ -27,9 +27,10 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Enable or a Disable a gameobject based upon the settings of a specific Level.
+    /// Enable or a Disable a gameobject or UI button based upon various conditions relating to a specific Level or otherwise.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
+    /// You can add your own custom conditiong - please see the online help for further details.
     [AddComponentMenu("Game Framework/GameStructure/Levels/EnableBasedUponLevel")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class EnableBasedUponLevel : EnableBasedUponGameItem<Level>

@@ -31,7 +31,7 @@ using UnityEngine.SceneManagement;
 namespace GameFramework.UI.Dialogs.Components
 {
     /// <summary>
-    /// Base class for a pause dialog
+    /// Provides functionality for displaying and managing a pause window
     /// </summary>
     /// You can override this class to add additional functionality.
     [RequireComponent(typeof(DialogInstance))]

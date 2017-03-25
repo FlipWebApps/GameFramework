@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.GenericGameItems.Components
 {
     /// <summary>
-    /// Creates instances of all Character Game Items
+    /// Creates button instances for all GenericGameItems using a referenced prefab.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/GenericGameItem/Create GenericGameItem Buttons")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]

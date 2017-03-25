@@ -26,8 +26,10 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Reference a World that can then be used as the context by other components.
     /// </summary>
+    /// This component can amonst others reference an item by number or the currently selecetd item. Other components can then use this 
+    /// context to determine what item to work with / display.
     [AddComponentMenu("Game Framework/GameStructure/Worlds/WorldGameItemContext")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class WorldGameItemContext : GameItemContextBase

@@ -29,6 +29,7 @@ namespace GameFramework.GameStructure.Levels.Components
     /// <summary>
     /// Unlock GameItem button for Levels 
     /// </summary>
+    /// Add this to a UI button for automatic handling of unlocking Levels.
     [AddComponentMenu("Game Framework/GameStructure/Levels/UnlockLevelButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class UnlockLevelButton : UnlockGameItemButton<Level>

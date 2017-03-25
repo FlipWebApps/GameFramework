@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// A handler for setting the number of stars won by the amount of points the player gets.
+    /// A handler to set the number of stars won based upon the amount of points obtained for the referenced Level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/StarsWonHandlerScore")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

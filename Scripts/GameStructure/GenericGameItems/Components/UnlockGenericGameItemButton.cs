@@ -29,6 +29,7 @@ namespace GameFramework.GameStructure.GenericGameItems.Components
     /// <summary>
     /// Unlock GameItem button for GenericGameItems 
     /// </summary>
+    /// Add this to a UI button for automatic handling of unlocking GenericGameItems.
     [AddComponentMenu("Game Framework/GameStructure/GenericGameItem/Unlock GenericGameItem Button")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class UnlockGenericGameItemButton : UnlockGameItemButton<GenericGameItem>

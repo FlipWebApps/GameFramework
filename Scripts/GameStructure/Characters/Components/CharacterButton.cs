@@ -29,8 +29,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Character Details Button
+    /// Character details button.
     /// </summary>
+    /// Provides support for a details button including selection, unlocking, IAP and more.
     [AddComponentMenu("Game Framework/GameStructure/Characters/CharacterButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class CharacterButton : GameItemButton<Character>

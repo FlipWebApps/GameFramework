@@ -33,8 +33,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Level Details Button
+    /// Level details button
     /// </summary>
+    /// Provides support for a details button including selection, unlocking, IAP and more.
     [AddComponentMenu("Game Framework/GameStructure/Levels/LevelButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
     public class LevelButton : GameItemButton<Level>

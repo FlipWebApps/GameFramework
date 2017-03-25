@@ -27,8 +27,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Characters.Components
 {
     /// <summary>
-    /// Unlock GameItem button for Characters 
+    /// Unlock GameItem button for Characters.
     /// </summary>
+    /// Add this to a UI button for automatic handling of unlocking characters.
     [AddComponentMenu("Game Framework/GameStructure/Characters/UnlockCharacterButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
     public class UnlockCharacterButton : UnlockGameItemButton<Character>

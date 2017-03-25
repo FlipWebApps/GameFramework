@@ -26,7 +26,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Creates instances of a star icon
+    /// Creates instances of a star icon for the referenced Level using a referenced Prefab.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/CreateStarIcons")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

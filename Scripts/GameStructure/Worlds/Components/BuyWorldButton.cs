@@ -27,8 +27,9 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Buy GameItem button for Worlds 
+    /// Buy button for Worlds 
     /// </summary>
+    /// Add this to a UI button for automatic handling of purchasing worlds.
     [AddComponentMenu("Game Framework/GameStructure/Worlds/BuyWorldButton")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
     public class BuyWorldButton : BuyGameItemButton<World>

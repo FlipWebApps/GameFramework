@@ -28,9 +28,9 @@ using UnityEngine.UI;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show the health that a player has by updating the fill amount on an image that is set to image type filled.
-    /// Optinally lerps the image color between two values.
+    /// Show the health that a player has by updating the fill amount on an image.
     /// </summary>
+    /// The referenced image should have it's image type set to filled. This component will also optionally lerps the image color between two values.
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowHealthImage")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

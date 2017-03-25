@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Show the current level score that a player has.
+    /// Show the score for the referenced Level.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/ShowLevelScore")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

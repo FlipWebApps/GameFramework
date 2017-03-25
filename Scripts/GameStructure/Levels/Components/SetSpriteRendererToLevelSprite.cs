@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Set an image to the specified sprite
+    /// Set a SpriteRenderer to the specified sprite from the referenced Level
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/Set SpriteRenderer To Level Sprite")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]

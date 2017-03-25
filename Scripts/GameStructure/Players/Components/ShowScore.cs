@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show the score that a player has.
+    /// Show the score for the referenced Player.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowScore")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

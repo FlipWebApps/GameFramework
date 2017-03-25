@@ -28,7 +28,7 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show the number of coins that a player has.
+    /// Show the number of coins that have been collected for the referenced Player
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Players/ShowCoins")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]

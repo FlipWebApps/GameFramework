@@ -26,7 +26,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Create an instance of the specified prefab
+    /// Create an instance of the specified prefab from the referenced World
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/Instantiate World Prefab")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]

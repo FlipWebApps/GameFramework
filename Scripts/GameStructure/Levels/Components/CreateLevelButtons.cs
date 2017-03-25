@@ -27,7 +27,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Levels.Components
 {
     /// <summary>
-    /// Creates instances of all Level GameItems
+    /// Creates button instances for all Levels using a referenced prefab.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Levels/CreateLevelButtons")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
