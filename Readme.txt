@@ -60,3 +60,4 @@ Chinese Translation - luochuanyuewu
 German Translation - Lutz Becker
 Polish Translation - Marcin Budek
 GameItemExtensions - Aneroin
+Vietnamese Translation - Truong Giang
