@@ -186,6 +186,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
 
+#if UNITY_EDITOR
+            // aggregate messages up to avoid spamming to log
+            var containsCreatedGameItemsCount = 0;
+            var containsCreatedGameItemsMessage = "";
+#endif
             for (var i = 0; i < count; i++)
             {
                 // preference is to load from resources.
@@ -196,13 +201,23 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                     didLoadFromResources = true;
                     Items[i].InitialiseNonScriptableObjectValues(loadFromResources: loadFromResources);
                 }
-                else { 
-                    MyDebug.LogWarning("Unable to find " + TypeName + " GameItem in resources folder " + TypeName + "\\" + TypeName + "_" + (startNumber + i) + " so using defaults. To get the most from Game Framework if is recommended to create a new item in this folder (right click the folder | Create | Game Framework).");
+                else
+                {
+#if UNITY_EDITOR
+                    containsCreatedGameItemsCount++;
+                    containsCreatedGameItemsMessage += TypeName + "\\" + TypeName + "_" + (startNumber + i) + "\n";
+#endif
+
                     Items[i] = ScriptableObject.CreateInstance<T>();
                     Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock, loadFromResources: loadFromResources);
                 }
             }
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.Load()");
+
+#if UNITY_EDITOR
+            if (containsCreatedGameItemsMessage.Length > 0)
+                MyDebug.LogWarningF("{0} of {1} {2} GameItems do not contain a resources file and will use a default setup. To get the most out of Game Framework please create resource files for the following (see the getting started tutorial for more details):\n{3}", containsCreatedGameItemsCount, count, TypeName, containsCreatedGameItemsMessage);
+#endif
 
             SetupSelectedItem();
 
