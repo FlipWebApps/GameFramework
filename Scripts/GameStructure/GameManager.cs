@@ -547,24 +547,16 @@ namespace GameFramework.GameStructure
             BackGroundAudioVolume = 1;              // default if nothing else is set.
             EffectAudioVolume = 1;                  // default if nothing else is set.
             var audioSources = GetComponents<AudioSource>();
-            if (audioSources.Length == 0)
+            if (audioSources.Length > 0)
             {
-                MyDebug.LogWarning(
-                    "To make use of the Game Manager audio functions you should add 2 AudioSource components to the same gameobject as the GameManager. The first for background audio and the second for effects.");
+                BackGroundAudioSource = audioSources[0];
+                BackGroundAudioVolume = BackGroundAudioSource.volume;
             }
-            else
+            if (audioSources.Length > 1)
             {
-                if (audioSources.Length > 0)
-                {
-                    BackGroundAudioSource = audioSources[0];
-                    BackGroundAudioVolume = BackGroundAudioSource.volume;
-                }
-                if (audioSources.Length > 1)
-                {
-                    EffectAudioSources = new AudioSource[audioSources.Length - 1];
-                    Array.Copy(audioSources, 1, EffectAudioSources, 0, audioSources.Length - 1);
-                    EffectAudioVolume = EffectAudioSources[0].volume;
-                }
+                EffectAudioSources = new AudioSource[audioSources.Length - 1];
+                Array.Copy(audioSources, 1, EffectAudioSources, 0, audioSources.Length - 1);
+                EffectAudioVolume = EffectAudioSources[0].volume;
             }
 
             BackGroundAudioVolume = PreferencesFactory.GetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
@@ -755,8 +747,9 @@ namespace GameFramework.GameStructure
         /// <param name="pitchHigh"></param>
         public void PlayEffect(AudioClip clip, float pitchLow = 1, float pitchHigh = 1)
         {
-            Assert.IsNotNull(EffectAudioSources, "Ensure that you have added AudioSources if you are playing effects.");
-            Assert.AreNotEqual(0, EffectAudioSources.Length, "Ensure that you have added AudioSources if you are playying effects.");
+            
+            Assert.IsNotNull(EffectAudioSources, "To make use of the Game Manager audio functions you should add 2 AudioSource components to the same gameobject as the GameManager. The first for background audio, sebsequent ones for effects.");
+            Assert.AreNotEqual(0, EffectAudioSources.Length, "To make use of the Game Manager audio functions you should add 2 AudioSource components to the same gameobject as the GameManager. The first for background audio, sebsequent ones for effects.");
 
             var newPitch = UnityEngine.Random.Range(pitchLow, pitchHigh);
 

@@ -56,7 +56,7 @@ namespace GameFramework.Audio.Components
         {
             Assert.IsTrue(GameManager.IsActive, "Please ensure that GameFramework.GameStructure.GameManager is added to Edit->ProjectSettings->ScriptExecution before 'Default Time'.\n" +
                                                 "GameFramework.GameStructure.Audio.Components.StartStopBackgroundMusic does not necessarily need to appear in this list, but if it does ensure GameManager comes first");
-            Assert.IsNotNull(GameManager.Instance.BackGroundAudioSource, "Please add an AudioSource to the same GameObject as GameManager before using the StartStopBackgroundMusic component.");
+            Assert.IsNotNull(GameManager.Instance.BackGroundAudioSource, "To make use of the StartStopBackgroundMusic component you should add an AudioSource component to the same gameobject as the GameManager that will be used for playing background music.");
 
             if (Enable == ModeType.Play && !GameManager.Instance.BackGroundAudioSource.isPlaying)
                 GameManager.Instance.BackGroundAudioSource.Play();
