@@ -167,6 +167,7 @@ namespace GameFramework.UI.Dialogs.Components
         DialogButtonsType _dialogButtons;
         DialogInstance _swapToDialogInstance;
         bool _destroyOnClose;
+        GameObject _textTemplateButton;
 
 
         void Awake()
@@ -184,6 +185,9 @@ namespace GameFramework.UI.Dialogs.Components
                 Content = GameObjectHelper.GetChildNamedGameObject(Target, "Content", true);
             if (Content != null)
                 ContentAnimator = Content.GetComponent<Animator>();
+
+            // get any other references
+            _textTemplateButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "TextButton", true);
 
             IsShown = Target.activeSelf;
         }
@@ -290,38 +294,77 @@ namespace GameFramework.UI.Dialogs.Components
                     childGameObject.SetActive(false);
             }
 
+            GameObject okButton, cancelButton, yesButton, noButton;
             switch (_dialogButtons)
             {
+
                 case DialogButtonsType.Ok:
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
+                    okButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true);
+                    if (okButton != null)
+                    {
+                        okButton.SetActive(true);
+                    }
+                    else
+                    {
+                        Assert.IsNotNull(_textTemplateButton, "If using Ok buttons, ensure the Dialog a GameObject named OkButton or a GameObject named TextButton that is a template for text buttons"); ;
+                        var button = CreateTextButton(LocalisableText.CreateLocalised("Button.Ok"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneOk());
+                    }
                     break;
                 case DialogButtonsType.OkCancel:
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true).SetActive(true);
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
+                    okButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "OkButton", true);
+                    cancelButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true);
+                    if (okButton != null && cancelButton != null)
+                    {
+                        okButton.SetActive(true);
+                        cancelButton.SetActive(true);
+                    }
+                    else
+                    {
+                        Assert.IsNotNull(_textTemplateButton, "If using OkCancel buttons, ensure the Dialog has GameObjects named OkButton and CancelButton or a GameObject named TextButton that is a template for text buttons"); ;
+                        var button = CreateTextButton(LocalisableText.CreateLocalised("Button.Ok"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneOk());
+                        button = CreateTextButton(LocalisableText.CreateLocalised("Button.Cancel"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneCancel());
+                    }
                     break;
                 case DialogButtonsType.Cancel:
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true).SetActive(true);
+                    cancelButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "CancelButton", true);
+                    if (cancelButton != null)
+                    {
+                        cancelButton.SetActive(true);
+                    }
+                    else
+                    {
+                        Assert.IsNotNull(_textTemplateButton, "If using a Cancel button, ensure the Dialog a GameObject named CancelButton or a GameObject named TextButton that is a template for text buttons"); ;
+                        var button = CreateTextButton(LocalisableText.CreateLocalised("Button.Cancel"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneCancel());
+                    }
                     break;
                 case DialogButtonsType.YesNo:
-                    Assert.IsNotNull(GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true), "If using YesNo buttons, ensure the Dialog has a GameObject named YesButton");
-                    Assert.IsNotNull(GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true), "If using YesNo buttons, ensure the Dialog has a GameObject named NoButton");                    ;
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true).SetActive(true);
-                    GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true).SetActive(true);
+                    yesButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "YesButton", true);
+                    noButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "NoButton", true);
+                    if (yesButton != null && noButton != null)
+                    {
+                        yesButton.SetActive(true);
+                        noButton.SetActive(true);
+                    }
+                    else
+                    {
+                        Assert.IsNotNull(_textTemplateButton, "If using YesNo buttons, ensure the Dialog has GameObjects named YesButton and NoButton or a GameObject named TextButton that is a template for text buttons"); ;
+                        var button = CreateTextButton(LocalisableText.CreateLocalised("Button.Yes"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneYes());
+                        button = CreateTextButton(LocalisableText.CreateLocalised("Button.No"));
+                        button.GetComponent<Button>().onClick.AddListener(() => DoneNo());
+                    }
                     break;
                 case DialogButtonsType.Text:
-                    var templateButton = GameObjectHelper.GetChildNamedGameObject(gameObject, "TextButton", true);
-                    Assert.IsNotNull(templateButton, "If using Text buttons, ensure the Dialog has a GameObject named TextButton that is a template for text buttons"); ;
+                    Assert.IsNotNull(_textTemplateButton, "If using Text buttons, ensure the Dialog has a GameObject named TextButton that is a template for text buttons"); ;
                     Assert.IsNotNull(buttonText, "If using Text buttons, ensure you pass a valid array of localisable texts into the show method.");
                     var counter = 0;
                     foreach (var localisableText in buttonText)
                     {
-                        var button = Instantiate(templateButton);
-                        var textComponent = button.GetComponentInChildren<Text>(true);
-                        Assert.IsNotNull(textComponent, "If using Text buttons, ensure you the TextButton gameobject or one of it's children contains a Text component."); ;
-                        textComponent.text = localisableText.GetValue();
-                        button.transform.SetParent(templateButton.transform.parent);
-                        button.transform.localScale = Vector3.one;
-                        button.SetActive(true);
+                        var button = CreateTextButton(localisableText);
                         var counter1 = counter;
                         button.GetComponent<Button>().onClick.AddListener(() => DoneCustom(counter1));
                         counter++;
@@ -340,7 +383,25 @@ namespace GameFramework.UI.Dialogs.Components
 #endif
             StartCoroutine(CoRoutines.DelayedCallback(transitionTime, ShowFinished));
         }
-            
+
+
+        /// <summary>
+        /// Create an instance from teh text template button
+        /// </summary>
+        /// <param name="localisableText"></param>
+        /// <returns></returns>
+        GameObject CreateTextButton(LocalisableText localisableText)
+        {
+            var button = Instantiate(_textTemplateButton);
+            var textComponent = button.GetComponentInChildren<Text>(true);
+            Assert.IsNotNull(textComponent, "If using Text buttons, ensure you the TextButton gameobject or one of it's children contains a Text component."); ;
+            textComponent.text = localisableText.GetValue();
+            button.transform.SetParent(_textTemplateButton.transform.parent);
+            button.transform.localScale = Vector3.one;
+            button.SetActive(true);
+            return button;
+        }
+
         public void ShowFinished()
         {
         }
