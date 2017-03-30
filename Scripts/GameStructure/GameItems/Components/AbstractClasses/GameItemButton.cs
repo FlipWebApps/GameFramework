@@ -697,7 +697,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                     BuyOrUnlockContentShowsButtons
                         ? DialogInstance.DialogButtonsType.Custom
                         : DialogInstance.DialogButtonsType.Text,
-                buttonText: new[] { LocalisableText.CreateLocalised("Button.Cancel"), LocalisableText.CreateLocalised("Button.Unlock"), LocalisableText.CreateLocalised("Button.Buy") });
+                buttonText: new[] { LocalisableText.CreateLocalised("Button.Unlock"), LocalisableText.CreateLocalised("Button.Buy"), LocalisableText.CreateLocalised("Button.Cancel")});
         }
 
 
@@ -786,14 +786,14 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <param name="dialogInstance"></param>
         void BuyOrUnlockDialogCallback(DialogInstance dialogInstance)
         {
-            if (dialogInstance.DialogResultCustom == 1)
+            if (dialogInstance.DialogResultCustom == 0)
             {
                 if (ShowUnlockWindow)
                     DisplayUnlockDialog();
                 else
                     ProcessUnlock();
             }
-            else if (dialogInstance.DialogResultCustom == 2)
+            else if (dialogInstance.DialogResultCustom == 1)
                 BuyGameItemButton<T>.ProcessBuy(GameItem);
         }
 
