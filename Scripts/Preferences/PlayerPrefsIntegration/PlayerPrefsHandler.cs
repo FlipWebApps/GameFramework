@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Debugging;
 using UnityEngine;
 
 namespace GameFramework.Preferences.PlayerPrefsIntegration
@@ -103,6 +104,33 @@ namespace GameFramework.Preferences.PlayerPrefsIntegration
         }
 
         /// <summary>
+        /// Get boolean preferences
+        /// </summary>
+        public bool GetBool(string key, bool defaultValue = false, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Boolean preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Get Vector2 preferences
+        /// </summary>
+        public Vector2? GetVector2(string key, Vector2? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Vector2 preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Get Vector3 preferences
+        /// </summary>
+        public Vector3? GetVector3(string key, Vector3? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Vector3 preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+            return defaultValue;
+        }
+
+        /// <summary>
         /// Wrapper for the same method in PlayerPrefs.
         /// </summary>
         public bool HasKey(string key, bool? useSecurePrefs = null)
@@ -140,6 +168,30 @@ namespace GameFramework.Preferences.PlayerPrefsIntegration
         public void SetString(string key, string value, bool? useSecurePrefs = null)
         {
             PlayerPrefs.SetString(key, value);
+        }
+
+        /// <summary>
+        /// Set boolean preferences
+        /// </summary>
+        public void SetBool(string key, bool value, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("bool preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+        }
+
+        /// <summary>
+        /// Set Vector2 preferences
+        /// </summary>
+        public void SetVector2(string key, Vector2 value, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Vector2 preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+        }
+
+        /// <summary>
+        /// Set Vector3 preferences
+        /// </summary>
+        public void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Vector3 preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
         }
     }
 }

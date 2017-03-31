@@ -20,6 +20,8 @@
 //----------------------------------------------
 
 
+using UnityEngine;
+
 namespace GameFramework.Preferences
 {
     /// <summary>
@@ -73,6 +75,21 @@ namespace GameFramework.Preferences
         string GetString(string key, string defaultValue = "", bool? useSecurePrefs = null);
 
         /// <summary>
+        /// Get boolean preferences
+        /// </summary>
+        bool GetBool(string key, bool defaultValue = false, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Get Vector2 preferences
+        /// </summary>
+        Vector2? GetVector2(string key, Vector2? defaultValue = null, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Get Vector3 preferences
+        /// </summary>
+        Vector3? GetVector3(string key, Vector3? defaultValue = null, bool? useSecurePrefs = null);
+
+        /// <summary>
         /// For the similar method in PlayerPrefs.
         /// </summary>
         bool HasKey(string key, bool? useSecurePrefs = null);
@@ -96,6 +113,21 @@ namespace GameFramework.Preferences
         /// For the similar method in PlayerPrefs.
         /// </summary>
         void SetString(string key, string value, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Set boolean preferences
+        /// </summary>
+        void SetBool(string key, bool value, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Set Vector2 preferences
+        /// </summary>
+        void SetVector2(string key, Vector2 value, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Set Vector3 preferences
+        /// </summary>
+        void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null);
     }
 }
 

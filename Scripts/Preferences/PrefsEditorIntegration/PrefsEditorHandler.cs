@@ -111,6 +111,30 @@ namespace GameFramework.Preferences.PrefsEditorIntegration
         }
 
         /// <summary>
+        /// Get boolean preferences
+        /// </summary>
+        public bool GetBool(string key, bool defaultValue = false, bool? useSecurePrefs = null)
+        {
+            return SecurePlayerPrefs.GetBool(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Get Vector2 preferences
+        /// </summary>
+        public Vector2? GetVector2(string key, Vector2? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return SecurePlayerPrefs.GetVector2(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Get Vector3 preferences
+        /// </summary>
+        public Vector3? GetVector3(string key, Vector3? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return SecurePlayerPrefs.GetVector3(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
         /// Wrapper for the same method in PlayerPrefs but works with encrypted player prefs.
         /// </summary>
         public bool HasKey(string key, bool? useSecurePrefs = null)
@@ -148,6 +172,30 @@ namespace GameFramework.Preferences.PrefsEditorIntegration
         public void SetString(string key, string value, bool? useSecurePrefs = null)
         {
             SecurePlayerPrefs.SetString(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Set boolean preferences
+        /// </summary>
+        public void SetBool(string key, bool value, bool? useSecurePrefs = null)
+        {
+            SecurePlayerPrefs.SetBool(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Set Vector2 preferences
+        /// </summary>
+        public void SetVector2(string key, Vector2 value, bool? useSecurePrefs = null)
+        {
+            SecurePlayerPrefs.SetVector2(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Set Vector3 preferences
+        /// </summary>
+        public void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
+        {
+            SecurePlayerPrefs.SetVector3(key, value, useSecurePrefs);
         }
     }
 }

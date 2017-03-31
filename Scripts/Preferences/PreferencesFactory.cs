@@ -19,7 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Debugging;
 using GameFramework.Preferences.PlayerPrefsIntegration;
+using UnityEngine;
+
 #if PREFS_EDITOR
 using GameFramework.Preferences.PrefsEditorIntegration;
 #endif
@@ -155,6 +158,30 @@ namespace GameFramework.Preferences
         }
 
         /// <summary>
+        /// Factory method for getting boolean preferences
+        /// </summary>
+        public static bool GetBool(string key, bool defaultValue = false, bool? useSecurePrefs = null)
+        {
+            return Instance.GetBool(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for getting Vector2 preferences
+        /// </summary>
+        public static Vector2? GetVector2(string key, Vector2? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return Instance.GetVector2(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for getting Vector3 preferences
+        /// </summary>
+        public static Vector3? GetVector3(string key, Vector3? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return Instance.GetVector3(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
         public static bool HasKey(string key)
@@ -198,6 +225,30 @@ namespace GameFramework.Preferences
         public static void SetString(string key, string value, bool? useSecurePrefs = null)
         {
             Instance.SetString(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for setting boolean preferences
+        /// </summary>
+        public static void SetBool(string key, bool value, bool? useSecurePrefs = null)
+        {
+            Instance.SetBool(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for setting Vector2 preferences
+        /// </summary>
+        public static void SetVector2(string key, Vector2 value, bool? useSecurePrefs = null)
+        {
+            Instance.SetVector2(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for setting Vector3 preferences
+        /// </summary>
+        public static void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
+        {
+            Instance.SetVector3(key, value, useSecurePrefs);
         }
 
         #region Flags
