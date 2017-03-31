@@ -37,7 +37,9 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
             Bool,
             Float,
             Int,
-            String
+            String,
+            Vector2,
+            Vector3
         }
 
         #region Editor Parameters
@@ -45,7 +47,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// <summary>
         /// An array of BoolVariables
         /// </summary>
-        BoolVariable[] BoolVariables
+        public BoolVariable[] BoolVariables
         {
             get
             {
@@ -63,7 +65,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// <summary>
         /// An array of IntVariables
         /// </summary>
-        IntVariable[] IntVariables
+        public IntVariable[] IntVariables
         {
             get
             {
@@ -81,7 +83,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// <summary>
         /// An array of FloatVariables
         /// </summary>
-        FloatVariable[] FloatVariables
+        public FloatVariable[] FloatVariables
         {
             get
             {
@@ -97,9 +99,9 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         FloatVariable[] _floatVariables = new FloatVariable[0];
 
         /// <summary>
-        /// An array of StringVariable
+        /// An array of StringVariables
         /// </summary>
-        StringVariable[] StringVariables
+        public StringVariable[] StringVariables
         {
             get
             {
@@ -110,9 +112,45 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
                 _stringVariables = value;
             }
         }
-        [Tooltip("An array of StringVariable.")]
+        [Tooltip("An array of StringVariables.")]
         [SerializeField]
         StringVariable[] _stringVariables = new StringVariable[0];
+
+        /// <summary>
+        /// An array of Vector2Variables
+        /// </summary>
+        public Vector2Variable[] Vector2Variables
+        {
+            get
+            {
+                return _Vector2Variables;
+            }
+            set
+            {
+                _Vector2Variables = value;
+            }
+        }
+        [Tooltip("An array of Vector2Variables.")]
+        [SerializeField]
+        Vector2Variable[] _Vector2Variables = new Vector2Variable[0];
+
+        /// <summary>
+        /// An array of Vector3Variables
+        /// </summary>
+        public Vector3Variable[] Vector3Variables
+        {
+            get
+            {
+                return _Vector3Variables;
+            }
+            set
+            {
+                _Vector3Variables = value;
+            }
+        }
+        [Tooltip("An array of Vector3Variables.")]
+        [SerializeField]
+        Vector3Variable[] _Vector3Variables = new Vector3Variable[0];
 
         #endregion Editor Parameters
 
@@ -124,10 +162,45 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// <param name="useSecurePrefs"></param>
         public void Load(string prefix = "", bool? useSecurePrefs = null)
         {
+            foreach (var variable in BoolVariables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetBool(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs);
+                else
+                    variable.Value = variable.DefaultValue;
+            }
+            foreach (var variable in FloatVariables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetFloat(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs);
+                else
+                    variable.Value = variable.DefaultValue;
+            }
+            foreach (var variable in IntVariables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetInt(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs);
+                else
+                    variable.Value = variable.DefaultValue;
+            }
             foreach (var variable in StringVariables)
             {
                 if (variable.PersistChanges)
                     variable.Value = PreferencesFactory.GetString(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs);
+                else
+                    variable.Value = variable.DefaultValue;
+            }
+            foreach (var variable in Vector2Variables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetVector2(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs) ?? Vector2.zero;
+                else
+                    variable.Value = variable.DefaultValue;
+            }
+            foreach (var variable in Vector3Variables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetVector3(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs) ?? Vector3.zero;
                 else
                     variable.Value = variable.DefaultValue;
             }
@@ -136,15 +209,40 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// <summary>
         /// Update PlayerPrefs with values that should be saved.
         /// </summary>
-        /// Note: This does not call PlayerPrefs.Save()
+        /// Note: This does not call PreferencesFactory.Save()
         /// <param name="prefix"></param>
         /// <param name="useSecurePrefs"></param>
         public void UpdatePlayerPrefs(string prefix = "", bool? useSecurePrefs = null)
         {
+            foreach (var variable in BoolVariables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetBool(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
+            foreach (var variable in FloatVariables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetFloat(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
+            foreach (var variable in IntVariables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetInt(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
             foreach (var variable in StringVariables)
             {
                 if (variable.PersistChanges)
                     PreferencesFactory.SetString(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
+            foreach (var variable in Vector2Variables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetVector2(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
+            foreach (var variable in Vector3Variables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetVector3(prefix + variable.Tag, variable.Value, useSecurePrefs);
             }
         }
         #endregion Load / Save
@@ -202,6 +300,32 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
             return null;
         }
 
+        /// <summary>
+        /// Return an Vector2Variable with the given tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public Vector2Variable GetVector2(string tag)
+        {
+            foreach (var variable in Vector2Variables)
+                if (variable.Tag == tag)
+                    return variable;
+            return null;
+        }
+
+        /// <summary>
+        /// Return an Vector3Variable with the given tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public Vector3Variable GetVector3(string tag)
+        {
+            foreach (var variable in Vector3Variables)
+                if (variable.Tag == tag)
+                    return variable;
+            return null;
+        }
+
         #endregion get
     }
 
@@ -252,7 +376,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         /// An optional category that this item belongs to
         /// </summary>
         /// Can be used for grouping items
-        public bool Category
+        public string Category
         {
             get
             {
@@ -265,7 +389,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         }
         [Tooltip("An optional category that this item belongs to. Can be used for grouping items")]
         [SerializeField]
-        bool _category;
+        string _category;
 
         /// <summary>
         /// A default value for this variable
@@ -299,7 +423,7 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
                 _persistChanges = value;
             }
         }
-        [Tooltip("Whether changes should be saved across game sessions.")]
+        [Tooltip("Whether runtime changes should be saved across game sessions.")]
         [SerializeField]
         bool _persistChanges;
 
@@ -338,6 +462,22 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
 
     [Serializable]
     public class StringVariable : Variable<string>
+    {
+        #region Editor Parameters
+
+        #endregion Editor Parameters
+    }
+
+    [Serializable]
+    public class Vector2Variable : Variable<Vector2>
+    {
+        #region Editor Parameters
+
+        #endregion Editor Parameters
+    }
+
+    [Serializable]
+    public class Vector3Variable : Variable<Vector3>
     {
         #region Editor Parameters
 
