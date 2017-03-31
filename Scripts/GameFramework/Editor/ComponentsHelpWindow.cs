@@ -133,7 +133,10 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("CoinCollider", "Collider for increasing or decreasing a players / levels coins when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.CoinCollider), "GameStructure", "Collider", "Player", "Level"),
             new ComponentHelp("GenericCollider", "Generic collider for acting when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.GenericCollider), "GameStructure", "Collider", "Player"),
             new ComponentHelp("HealthCollider", "Health collider for increasing or decreasing a players health when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.HealthCollider), "GameStructure", "Collider", "Player"),
+            new ComponentHelp("LoseLevelCollider", "Collider for losing the current level when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.LoseLevelCollider), "GameStructure", "Collider", "Player", "Level"),
             new ComponentHelp("PointsCollider", "Collider for increasing or decreasing a players / levels points when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.PointsCollider), "GameStructure", "Collider", "Player", "Level"),
+            new ComponentHelp("StarCollider", "Collider for winning a star when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.StarCollider), "GameStructure", "Collider", "Player", "Level"),
+            new ComponentHelp("WinLevelCollider", "Collider for winning the current level when a tagged gameobject touches the attached collider or trigger.", typeof(GameStructure.Colliders.WinLevelCollider), "GameStructure", "Collider", "Player", "Level"),
 
             // GameStructure - Game
             new ComponentHelp("EnableBasedUponGameUnlocked", "Shows one of two gameobjects based upon whether the game is unlocked.", typeof(GameStructure.Game.Components.EnableBasedUponGameUnlocked), "GameStructure"),
