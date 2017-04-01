@@ -107,7 +107,7 @@ namespace GameFramework.UI.Dialogs.Components
         [Header("Pause")]
         [Tooltip("Whether to change the timescale when the GameOver window is shown.")]
         [SerializeField]
-        bool _pauseWhenShown = true;
+        bool _pauseWhenShown;
 
         /// <summary>
         /// The time scale that should be set when paused. Use this to stop physics and other effects.
