@@ -54,7 +54,7 @@ namespace GameFramework.GameStructure.Colliders
         string _collidingTag = "Player";
 
         /// <summary>
-        /// An minimum interval before a new collision can occur.
+        /// An minimum time interval before a new collision can occur.
         /// </summary>
         public float Interval
         {
@@ -67,7 +67,7 @@ namespace GameFramework.GameStructure.Colliders
                 _interval = value;
             }
         }
-        [Tooltip("An minimum interval before a new collision can occur.")]
+        [Tooltip("An minimum time interval before a new collision can occur.")]
         [SerializeField]
         float _interval;
 
@@ -121,7 +121,6 @@ namespace GameFramework.GameStructure.Colliders
                 _enter = value;
             }
         }
-        [Header("When Entering a Trigger")]
         [SerializeField]
         TriggerData _enter;
 
@@ -139,13 +138,13 @@ namespace GameFramework.GameStructure.Colliders
                 _processWithin = value;
             }
         }
-        [Header("When Within a Trigger")]
+        //[Header("When Within a Trigger")]
         [Tooltip("Whether to continuously process when within a trigger (process trigger / collider stay events)")]
         [SerializeField]
         bool _processWithin;
 
         /// <summary>
-        /// An interval before and between runs within triggers.
+        /// A time interval to wait before and between runs within triggers.
         /// </summary>
         public float RunInterval
         {
@@ -158,7 +157,7 @@ namespace GameFramework.GameStructure.Colliders
                 _runInterval = value;
             }
         }
-        [Tooltip("An interval before and between runs within triggers.")]
+        [Tooltip("A time to wait interval before and between runs within triggers.")]
         [SerializeField]
         float _runInterval;
 
