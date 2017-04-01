@@ -45,11 +45,9 @@ namespace GameFramework.GameStructure.GameItems.Editor
 
         Rect _prefabDropRect;
         Rect _spriteDropRect;
-        GameItem _gameItem;
 
         protected virtual void OnEnable()
         {
-            _gameItem = (GameItem)target;
             // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
             _giNameProperty = serializedObject.FindProperty("_localisableName");
             _giDescriptionProperty = serializedObject.FindProperty("_localisableDescription");
@@ -286,9 +284,11 @@ namespace GameFramework.GameStructure.GameItems.Editor
         {
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField(new GUIContent("Variables / Attributes (Experimental)", "Custom variables that you can access and use in your game. You can also subclass this GameItem if you want your own custom data or code."), EditorStyles.boldLabel);
+#if !PREFS_EDITOR
+            GameItem _gameItem = (GameItem)target;
             if (_gameItem.Variables.BoolVariables.Length > 0 || _gameItem.Variables.Vector2Variables.Length > 0 || _gameItem.Variables.Vector3Variables.Length > 0)
-            EditorGUILayout.HelpBox("Note: Persisting of runtime changes to Bool, Vector2 and Vector3 variables is only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.", MessageType.Info);
-
+                EditorGUILayout.HelpBox("Note: Persisting of runtime changes to Bool, Vector2 and Vector3 variables is only supported with the PlayerPrefs integration. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
+#endif
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(_giVariablesProperty, new GUIContent("Name"), true);
             EditorGUI.indentLevel--;
