@@ -85,11 +85,6 @@ namespace GameFramework.UI.Dialogs.Components
         [Tooltip("Specifies how the players overall coins should be updated with the coins obtained for the level.")]
         public CopyType UpdatePlayerCoins = CopyType.None;
 
-        [Header("Tuning")]
-        [Tooltip("The frequeency for checking needed coins.")]
-        // TODO: Move to messaging.
-        public float PeriodicUpdateDelay = 1f;
-
         /// <summary>
         /// Whether to change the timescale when the GameOver window is shown. 
         /// </summary>
