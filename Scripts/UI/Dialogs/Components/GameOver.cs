@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using GameFramework.EditorExtras;
 using GameFramework.GameObjects;
 using GameFramework.GameObjects.Components;
 using GameFramework.GameStructure;
@@ -32,6 +33,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using GameFramework.GameStructure.Game;
+using GameFramework.GameStructure.Players.Messages;
+using GameFramework.Messaging;
 using GameFramework.Preferences;
 
 #if FACEBOOK_SDK
@@ -60,6 +63,13 @@ namespace GameFramework.UI.Dialogs.Components
             OnWin
         };
 
+        public enum ResetTimeScaleType
+        {
+            None,
+            Close,
+            OnDestroy
+        };
+
         [Header("General")]
         public string LocalisationBase = "GameOver";
         public int TimesPlayedBeforeRatingPrompt = -1;
@@ -76,14 +86,71 @@ namespace GameFramework.UI.Dialogs.Components
         public CopyType UpdatePlayerCoins = CopyType.None;
 
         [Header("Tuning")]
+        [Tooltip("The frequeency for checking needed coins.")]
+        // TODO: Move to messaging.
         public float PeriodicUpdateDelay = 1f;
+
+        /// <summary>
+        /// Whether to change the timescale when the GameOver window is shown. 
+        /// </summary>
+        bool PauseWhenShown
+        {
+            get
+            {
+                return _pauseWhenShown;
+            }
+            set
+            {
+                _pauseWhenShown = value;
+            }
+        }
+        [Header("Pause")]
+        [Tooltip("Whether to change the timescale when the GameOver window is shown.")]
+        [SerializeField]
+        bool _pauseWhenShown = true;
+
+        /// <summary>
+        /// The time scale that should be set when paused. Use this to stop physics and other effects.
+        /// </summary>
+        public float TimeScale
+        {
+            get
+            {
+                return _timeScale;
+            }
+            set
+            {
+                _timeScale = value;
+            }
+        }
+        [Tooltip("The time scale that should be set when the game over window is shown. Use this to stop physics and other effects.")]
+        [Range(0, 1)]
+        [SerializeField]
+        float _timeScale = 1f;
+
+        public ResetTimeScaleType ResetTimeScale
+        {
+            get
+            {
+                return _resetTimeScale;
+            }
+            set
+            {
+                _resetTimeScale = value;
+            }
+        }
+        [Tooltip("Whether to reset the time scale on things like when the window is closed.\nIf you don't set this and the window was set to freeze time then you will need to manually reset this yourself otherwise your game might still appear paused.")]
+        [SerializeField]
+        ResetTimeScaleType _resetTimeScale = ResetTimeScaleType.Close;
 
         /// <summary>
         /// The DialogInstance associated with the game over dialog.
         /// </summary>
         protected DialogInstance DialogInstance;
 
+        float _oldTimeScale;
 
+        #region Lifecycle Methods
         /// <summary>
         /// Called when this instance is created for one time initialisation.
         /// </summary>
@@ -94,6 +161,26 @@ namespace GameFramework.UI.Dialogs.Components
             Assert.IsNotNull(DialogInstance.Target, "Ensure that you have set the script execution order of dialog instance in project settings (see help for details).");
         }
 
+
+        public virtual void OnEnable()
+        {
+            GameManager.SafeAddListener<PlayerCoinsChangedMessage>(PlayerCoinsChanged);
+        }
+
+
+        public virtual void OnDisable()
+        {
+            GameManager.SafeRemoveListener<PlayerCoinsChangedMessage>(PlayerCoinsChanged);
+        }
+
+
+        public virtual void OnDestroy()
+        {
+            if (PauseWhenShown && (ResetTimeScale == ResetTimeScaleType.OnDestroy || ResetTimeScale == ResetTimeScaleType.Close)) // Do on close also just to be sure.
+                Time.timeScale = _oldTimeScale;
+        }
+
+        #endregion Lifecycle Methods
 
         /// <summary>
         /// Shows the game over dialog.
@@ -216,6 +303,13 @@ namespace GameFramework.UI.Dialogs.Components
             currentLevel.UpdatePlayerPrefs();
             PreferencesFactory.Save();
 
+            // pause
+            if (PauseWhenShown)
+            {
+                _oldTimeScale = Time.timeScale;
+                Time.timeScale = TimeScale;
+            }
+
             //show dialog
             DialogInstance.Show();
 
@@ -237,10 +331,6 @@ namespace GameFramework.UI.Dialogs.Components
                 };
             Analytics.CustomEvent("GameOver", values);
 #endif
-
-            // co routine to periodic updates of display (don't need to do this every frame)
-            if (!Mathf.Approximately(PeriodicUpdateDelay, 0))
-                StartCoroutine(PeriodicUpdate());
         }
 
 
@@ -260,14 +350,15 @@ namespace GameFramework.UI.Dialogs.Components
         }
 
 
-        public virtual IEnumerator PeriodicUpdate()
+        /// <summary>
+        /// Handler for player coins changed messages.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool PlayerCoinsChanged(BaseMessage message)
         {
-            while (true)
-            {
-                UpdateNeededCoins();
-
-                yield return new WaitForSeconds(PeriodicUpdateDelay);
-            }
+            UpdateNeededCoins();
+            return true;
         }
 
 
@@ -325,6 +416,9 @@ namespace GameFramework.UI.Dialogs.Components
         /// </summary>
         public void Continue()
         {
+            if (PauseWhenShown && ResetTimeScale == ResetTimeScaleType.Close)
+                Time.timeScale = _oldTimeScale;
+
             GameManager.LoadSceneWithTransitions(ContinueScene);
         }
 
@@ -334,6 +428,9 @@ namespace GameFramework.UI.Dialogs.Components
         /// </summary>
         public void Retry()
         {
+            if (PauseWhenShown && ResetTimeScale == ResetTimeScaleType.Close)
+                Time.timeScale = _oldTimeScale;
+
             var sceneName = !string.IsNullOrEmpty(GameManager.Instance.IdentifierBase) && SceneManager.GetActiveScene().name.StartsWith(GameManager.Instance.IdentifierBase + "-") ? SceneManager.GetActiveScene().name.Substring((GameManager.Instance.IdentifierBase + "-").Length) : SceneManager.GetActiveScene().name;
             GameManager.LoadSceneWithTransitions(sceneName);
         }
