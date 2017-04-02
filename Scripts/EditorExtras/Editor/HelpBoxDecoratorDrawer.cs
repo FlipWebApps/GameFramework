@@ -58,7 +58,8 @@ namespace GameFramework.EditorExtras.Editor
 
         public override float GetHeight()
         {
-            return EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            var helpBoxAttribute = (HelpBoxAttribute)attribute;
+            return EditorStyles.helpBox.CalcHeight(new GUIContent(helpBoxAttribute.Text), EditorGUIUtility.currentViewWidth);
         }
     }
 }

@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using UnityEditor;
+using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
@@ -30,6 +31,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         SerializedProperty _nameProperty;
         SerializedProperty _parentProperty;
         SerializedProperty _worldPositionStaysProperty;
+        SerializedProperty _gameObjectToGameObjectAnimationProperty;
 
         public void OnEnable()
         {
@@ -38,6 +40,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             _nameProperty = serializedObject.FindProperty("_name");
             _parentProperty = serializedObject.FindProperty("_parent");
             _worldPositionStaysProperty = serializedObject.FindProperty("_worldPositionStays");
+            _gameObjectToGameObjectAnimationProperty = serializedObject.FindProperty("GameObjectToGameObjectAnimation");
         }
 
         public override void OnInspectorGUI()
@@ -50,10 +53,11 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 EditorGUILayout.PropertyField(_nameProperty);
             EditorGUILayout.PropertyField(_parentProperty);
             EditorGUILayout.PropertyField(_worldPositionStaysProperty);
-#if !BEAUTIFUL_TRANSITIONS
-            EditorGUILayout.HelpBox("Enable Beautiful Transitions from the integrations window (Window Menu | Game Framework) to allow for animations between selection changes.", MessageType.Info);
 
-#endif
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(new GUIContent("Animation", "Animate gameobject changes."), EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_gameObjectToGameObjectAnimationProperty);
+
             serializedObject.ApplyModifiedProperties();
         }
     }

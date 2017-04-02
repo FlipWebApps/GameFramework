@@ -19,21 +19,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Collections;
+using GameFramework.Animation.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-#if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
-#endif
-
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     public class GameItemContextConditionallyEnable
     {
-        public enum EnableModeType { GameObject, Button }
+        /// <summary>
+        /// The type of object that we are enabling
+        /// </summary>
+        public enum EnableModeType
+        {
+            GameObject,
+            Button
+        }
     }
 
     /// <summary>
@@ -60,7 +63,14 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [Tooltip("GameObject to show if the specified GameItem is not selected")]
         public GameObject ConditionNotMetGameObject;
 
+        /// <summary>
+        /// Settings for how to animate changes
+        /// </summary>
+        [Tooltip("Settings for hwow to animate changes")]
+        public GameObjectToGameObjectAnimation GameObjectToGameObjectAnimation;
+
         Button _button;
+        bool _isConditionMet;
 
         /// <summary>
         /// Setup
@@ -68,36 +78,38 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         protected override void Awake()
         {
             _button = GetComponent<Button>();
-
             base.Awake();
         }
 
         /// <summary>
         /// Called by the base class from start and optionally if a condition might have changed.
         /// </summary>
-        /// <param name="gameItem"></param>
         /// <param name="isStart"></param>
         public override void RunMethod(bool isStart = true)
         {
-            var isConditionMet = IsConditionMet(GetGameItem<T>());
+            var newIsConditionMet = IsConditionMet(GetGameItem<T>());
 
-            if (EnableMode == GameItemContextConditionallyEnable.EnableModeType.Button)
+            if (isStart || newIsConditionMet != _isConditionMet)
             {
-                Assert.IsNotNull(_button,
-                    "If you have an enable mode of button then ensure that the component is added to a GameObject that has a UI button.");
-                _button.interactable = isConditionMet;
+                _isConditionMet = newIsConditionMet;
+
+                if (EnableMode == GameItemContextConditionallyEnable.EnableModeType.Button)
+                {
+                    Assert.IsNotNull(_button,
+                        "If you have an enable mode of button then ensure that the component is added to a GameObject that has a UI button.");
+                    _button.interactable = _isConditionMet;
+                }
+                else
+                {
+                    var fromGameObject = _isConditionMet ? ConditionNotMetGameObject : ConditionMetGameObject;
+                    var toGameObject = _isConditionMet ? ConditionMetGameObject : ConditionNotMetGameObject;
+
+                    if (isStart)
+                        GameObjectToGameObjectAnimation.SwapImmediately(fromGameObject, toGameObject);
+                    else
+                        GameObjectToGameObjectAnimation.AnimatedSwap(this, fromGameObject, toGameObject);
+                }
             }
-            else
-            {
-                //#if BEAUTIFUL_TRANSITIONS
-                //            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, _newPrefabInstance));
-                //#else
-                if (ConditionMetGameObject != null)
-                    ConditionMetGameObject.SetActive(isConditionMet);
-                if (ConditionNotMetGameObject != null)
-                    ConditionNotMetGameObject.SetActive(!isConditionMet);
-            }
-//#endif
         }
 
 
@@ -106,22 +118,5 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         /// <returns></returns>
         public abstract bool IsConditionMet(T gameItem);
-
-
-#if BEAUTIFUL_TRANSITIONS
-        IEnumerator TransitionOutIn(GameObject oldGameObject, GameObject newGameObject)
-        {
-            if (oldGameObject != null)
-            {
-                if (TransitionHelper.ContainsTransition(oldGameObject))
-                {
-                    var transitions = TransitionHelper.TransitionOut(oldGameObject);
-                    yield return new WaitForSeconds(TransitionHelper.GetTransitionOutTime(transitions));
-                }
-                oldGameObject.SetActive(false);
-            }
-            newGameObject.SetActive(true);
-        }
-#endif
     }
 }

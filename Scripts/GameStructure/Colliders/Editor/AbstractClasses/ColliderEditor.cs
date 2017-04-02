@@ -71,7 +71,7 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
         protected void DrawBasicProperties()
         {
 #if !PRO_POOLING
-            EditorGUILayout.HelpBox("This component features enhancements when combined with the ProPooling asset allowing you to add gameobjects to the scene from a pre-allocated pool. Adding from a pool gives performance gains over instantiating prefabs on the fly. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
+            EditorGUILayout.HelpBox("This component features enhancements when combined with the ProPooling asset (also included in the extras bundle) allowing you to add gameobjects to the scene from a pre-allocated pool. Adding from a pool gives performance gains over instantiating prefabs on the fly. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
 #endif
             EditorGUILayout.PropertyField(_collidingTagProperty);
             EditorGUILayout.PropertyField(_intervalProperty);

@@ -21,6 +21,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using GameFramework.Animation.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Messaging;
 using UnityEngine;
@@ -87,6 +88,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [SerializeField]
         bool _worldPositionStays;
 
+        /// <summary>
+        /// Settings for how to animate changes
+        /// </summary>
+        [Tooltip("Settings for how to animate changes")]
+        public GameObjectToGameObjectAnimation GameObjectToGameObjectAnimation;
+
         readonly Dictionary<int, GameObject> _cachedPrefabInstances = new Dictionary<int, GameObject>();
         GameObject _selectedPrefabInstance;
 
@@ -94,7 +101,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <summary>
         /// Show the actual prefab
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="isStart"></param>
         public override void RunMethod(bool isStart = true)
         {
             GameObject newPrefabInstance;
@@ -115,30 +122,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                     "The Prefab you are trying to instantiate is not setup. Please ensure the add it to the target GameItem {0}_{1}.",
                     GameItem.IdentifierBase, GameItem.Number));
 
-#if BEAUTIFUL_TRANSITIONS
-            StartCoroutine(TransitionOutIn(_selectedPrefabInstance, newPrefabInstance));
-#else
-                if (_selectedPrefabInstance != null)
-                    _selectedPrefabInstance.SetActive(false);
-                newPrefabInstance.SetActive(true);
-#endif
+            if (isStart)
+                GameObjectToGameObjectAnimation.SwapImmediately(_selectedPrefabInstance, newPrefabInstance);
+            else
+                GameObjectToGameObjectAnimation.AnimatedSwap(this, _selectedPrefabInstance, newPrefabInstance);
+
             _selectedPrefabInstance = newPrefabInstance;
         }
-
-#if BEAUTIFUL_TRANSITIONS
-        IEnumerator TransitionOutIn(GameObject oldGameObject, GameObject newGameObject)
-        {
-            if (oldGameObject != null)
-            {
-                if (TransitionHelper.ContainsTransition(oldGameObject))
-                {
-                    var transitions = TransitionHelper.TransitionOut(oldGameObject);
-                    yield return new WaitForSeconds(TransitionHelper.GetTransitionOutTime(transitions));
-                }
-                oldGameObject.SetActive(false);
-            }
-            newGameObject.SetActive(true);
-        }
-#endif
     }
 }

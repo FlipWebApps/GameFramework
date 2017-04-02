@@ -40,6 +40,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         SerializedProperty _conditionMetGameObjectProperty;
         SerializedProperty _conditionNotMetGameObjectProperty;
         SerializedProperty _conditionsProperty;
+        SerializedProperty _gameObjectToGameObjectAnimationProperty;
 
         EnableBasedUponGameItem<T> _gameItemEditor;
 
@@ -68,6 +69,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             _conditionMetGameObjectProperty = serializedObject.FindProperty("ConditionMetGameObject");
             _conditionNotMetGameObjectProperty = serializedObject.FindProperty("ConditionNotMetGameObject");
             _conditionsProperty = serializedObject.FindProperty("ConditionReferences");
+            _gameObjectToGameObjectAnimationProperty = serializedObject.FindProperty("GameObjectToGameObjectAnimation");
         }
 
         public override void OnInspectorGUI()
@@ -84,9 +86,13 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 EditorGUILayout.PropertyField(_conditionNotMetGameObjectProperty);
                 EditorGUI.indentLevel--;
             }
-            //EditorGUILayout.PropertyField(_conditionsProperty, true);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(new GUIContent("Animation", "Animate gameobject changes."), EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_gameObjectToGameObjectAnimationProperty);
 
             // Display all items - use a for loop rather than a foreach loop in case of deletion.
+            //EditorGUILayout.PropertyField(_conditionsProperty, true);
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(new GUIContent("Conditions", "The different conditions that this component should react to."), EditorStyles.boldLabel);
             for (var i = 0; i < _gameItemEditor.ConditionReferences.Length; i++)
