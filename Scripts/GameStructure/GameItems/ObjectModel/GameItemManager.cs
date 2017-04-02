@@ -223,10 +223,10 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
             // if we didn't get any configuration files then unlock the selected item if it isn't already 
             // (otherwise unlock info comes directly from the config files).
-            if (!didLoadFromResources && !Selected.IsUnlocked)
+            if (!didLoadFromResources && !Items[0].IsUnlocked)
             {
-                Selected.StartUnlocked = Selected.IsUnlocked = Selected.IsUnlockedAnimationShown = true;
-                Selected.UpdatePlayerPrefs();
+                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
+                Items[0].UpdatePlayerPrefs();
             }
 
             _isLoaded = true;
