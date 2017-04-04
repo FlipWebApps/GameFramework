@@ -23,6 +23,7 @@ using System;
 using System.Collections;
 using GameFramework.Debugging;
 using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure.Levels.Messages;
 using GameFramework.GameStructure.Levels.ObjectModel;
 using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
@@ -191,6 +192,7 @@ namespace GameFramework.GameStructure.Levels
 
             SecondsRunning = 0f;
             IsLevelStarted = true;
+            GameManager.SafeQueueMessage(new LevelStartedMessage(Level));
         }
 
         [Obsolete("Call StartLevel() instead.")]
@@ -202,11 +204,12 @@ namespace GameFramework.GameStructure.Levels
         /// <summary>
         /// State change to level finished. Call GameOver if you want the GameOver dialog to be displayed.
         /// </summary>
-        public void EndLevel()
+        public void EndLevel(bool won = false)
         {
             IsLevelFinished = true;
             GameManager.Instance.TimesLevelsPlayed++;
             GameManager.Instance.TimesPlayedForRatingPrompt++;
+            GameManager.SafeQueueMessage(new LevelEndedMessage(Level, won));
         }
 
         [Obsolete("Call EndLevel() instead.")]
@@ -226,6 +229,7 @@ namespace GameFramework.GameStructure.Levels
             IsLevelPaused = true;
             _prePauseTimeScale = Time.timeScale;
             Time.timeScale = timeScale;
+            GameManager.SafeQueueMessage(new LevelPausedMessage(Level));
 
             if (showPauseDialog)
             {
@@ -253,6 +257,7 @@ namespace GameFramework.GameStructure.Levels
 
             IsLevelPaused = false;
             Time.timeScale = _prePauseTimeScale;
+            GameManager.SafeQueueMessage(new LevelResumedMessage(Level));
         }
 
 
@@ -268,7 +273,7 @@ namespace GameFramework.GameStructure.Levels
             Assert.IsTrue(UI.Dialogs.Components.GameOver.IsActive,
                 "Please ensure that you have a GameOver component added to your scene, or are using one of the default GameOver prefabs.");
 
-            EndLevel();
+            EndLevel(isWon);
 
             //TODO: move delayed showing into dialog instance.Show()!
             StartCoroutine(ShowGameOverDialog(isWon, showDialogDelay));
