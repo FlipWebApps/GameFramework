@@ -4,6 +4,43 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.3
+
+	Game Framework Core - Improvements
+	- Animation: Added GameObjectToGameObjectAnimation class for animation between two gameobjects
+	- Audio: Display GameManager audio source warning only on first use rather than always.
+	- Game Framework: Added Component Help window including a number of documentation updates.
+	- GameStructure: GameItem with missing resource files warnings are aggregated to avoid spamming the console.
+	- GameStructure: Variables - added support for Bool, Vector2 and Vector3 variables
+	- GameStructure: New Collider components Win Level, Lose Level, Star
+	- GameStructure: New Collider custom editor window
+	- GameStructure: Added options to pause the time when showing the GameOver window.
+	- GameStructure: Removed periodic update in favour of messaging.
+	- GameStructure: ShowPrefab and EnableBasedUponXxx support animated changes.
+	- GameStructure: If no GameItems are loaded from resources then the first rather than selected is forced unlocked (with button select mode it is valid that selected is locked)
+	- GameStructure: Added messages for Level Started, Ended, Paused, Resumed
+	- Localisation: Vietnamese Translation added. Many thanks to Truong Giang for this contribution
+	- Preferences: Added support for Bool, Vector2 and Vector3 preferences when using PlayerPrefs.
+	- UI: Dialog Ok, Cancel, Yes, No buttons will fall back to text buttons if a custom version is not present.
+	- UI: Standardised the order of buttons with negative option on the right
+		
+	Game Framework Core - Fixes
+	- Advertising: Fix for missing using statements when enabling AdMob integration
+	- EditorExtras: HelpBoxDecotarorDrawer uses the correct height.
+	- Facebook: Fix compile error when enabling Facebook integration.
+	- GameStructure: Variables - fix for non string variables marked as persisting not being saved / loaded correctly.
+	
+	Game Framework Extras (Extras Bundle) - Improvements
+	- Themes: Standardised the order of buttons om GeneralMessage dialogs with negative option on the right
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Getting Started Tutorial: Tutorial updates to remove warnings and for latest changes
+	- Dialogs: Updated tutorial to show different dialog types.
+	- Localisation Demo: Included Vietnamese localisation
+
+	Prefs Editor (Extras Bundle) - Improvements
+	- Added support for Vector2 and Vector3 preferences
+
 v4.2
 
 	Game Framework Core - Improvements

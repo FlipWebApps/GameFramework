@@ -762,9 +762,8 @@ namespace GameFramework.Facebook.Components
                         }
                     }else if (to != null && to.Type == JSONValueType.String)
                     {
-                         NumberOfInvitesSent++;
+                        NumberOfInvitesSent++;
                         InvitedFriends.Add(to.Str);
-                        Debug.Log("Value: " + value.Str);
                     }
                 }
             }

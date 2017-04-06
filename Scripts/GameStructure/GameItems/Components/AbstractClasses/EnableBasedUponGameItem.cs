@@ -53,6 +53,37 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             foreach (var type in ListeningMessageTypes)
                 GameManager.SafeAddListener(type, EvaluateConditionChanges);
 
+            ////TODO: Selection changes etc...
+            //foreach (var conditionReference in ConditionReferences)
+            //{
+            //    switch ((ConditionTypes)conditionReference.Identifier)
+            //    {
+            //        case ConditionTypes.CanUnlockWithCoins:
+            //        case ConditionTypes.CanUnlockWithCompletion:
+            //        case ConditionTypes.CanUnlockWithPayment:
+            //            //Selection
+            //            break;
+            //        case ConditionTypes.Coins:
+            //            // Coins
+            //            break;
+            //        case ConditionTypes.PlayerHasCoinsToUnlock:
+            //            // Player Coins
+            //            break;
+            //        case ConditionTypes.Score:
+            //            // Score
+            //            break;
+            //        case ConditionTypes.Selected:
+            //            // Selected
+            //            break;
+            //        case ConditionTypes.Unlocked:
+            //            // Unlocked
+            //            break;
+            //        case ConditionTypes.Custom:
+            //            var triggerMessageTypes = conditionReference.ScriptableObject.GetTriggerMessages();
+            //            break;
+            //    }
+            //}
+
             //GetGameItemManager().Unlocked += Unlocked;
             //GameManager.SafeAddListener<PlayerCoinsChangedMessage>(EvaluateConditionChanges);
 
