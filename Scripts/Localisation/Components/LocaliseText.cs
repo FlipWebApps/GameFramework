@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using System;
+using System.Globalization;
 using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using GameFramework.Localisation.Messages;
@@ -42,7 +43,7 @@ namespace GameFramework.Localisation.Components
     public class LocaliseText : RunOnMessage<LocalisationChangedMessage>
     {
 
-        public enum ModifierType { None, LowerCase, UpperCase}
+        public enum ModifierType { None, LowerCase, UpperCase, Title, FirstCapital}
 
         /// <summary>
         /// Localization key.
@@ -111,14 +112,25 @@ namespace GameFramework.Localisation.Components
             OnPreLocalise.Invoke(this);
 
             // apply any modifier
-            switch (Modifier)
+            if (!string.IsNullOrEmpty(PreLocaliseValue))
             {
-                case ModifierType.LowerCase:
-                    PreLocaliseValue = PreLocaliseValue.ToLower();
-                    break;
-                case ModifierType.UpperCase:
-                    PreLocaliseValue = PreLocaliseValue.ToUpper();
-                    break;
+                switch (Modifier)
+                {
+                    case ModifierType.LowerCase:
+                        PreLocaliseValue = PreLocaliseValue.ToLower();
+                        break;
+                    case ModifierType.UpperCase:
+                        PreLocaliseValue = PreLocaliseValue.ToUpper();
+                        break;
+                    case ModifierType.Title:
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(PreLocaliseValue);
+                        break;
+                    case ModifierType.FirstCapital:
+                        var characters = PreLocaliseValue.ToLower().ToCharArray();
+                        characters[0] = char.ToUpper(PreLocaliseValue[0]);
+                        PreLocaliseValue = new string(characters);
+                        break;
+                }
             }
 
             // set the value
