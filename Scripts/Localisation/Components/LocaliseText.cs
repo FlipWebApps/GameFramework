@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using GameFramework.Localisation.Messages;
@@ -33,10 +34,18 @@ namespace GameFramework.Localisation.Components
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class LocaliseText : RunOnMessage<LocalisationChangedMessage>
     {
+
+        public enum ModifierType { None, LowerCase, UpperCase}
+
         /// <summary>
         /// Localization key.
         /// </summary>
         public string Key;
+
+        /// <summary>
+        /// A modifier to apply
+        /// </summary>
+        public ModifierType Modifier = ModifierType.None;
 
         /// <summary>
         /// Manually change the value of whatever the localization component is attached to.
@@ -77,7 +86,18 @@ namespace GameFramework.Localisation.Components
         void OnLocalise()
         {
             // If we don't have a key then don't change the value
-            if (!string.IsNullOrEmpty(Key)) Value = Localisation.LocaliseText.Get(Key);
+            if (string.IsNullOrEmpty(Key)) return;
+            var value = Localisation.LocaliseText.Get(Key);
+            switch (Modifier)
+            {
+                case ModifierType.LowerCase:
+                    value = value.ToLower();
+                    break;
+                case ModifierType.UpperCase:
+                    value = value.ToUpper();
+                    break;
+            }
+            Value = value;
         }
 
 
