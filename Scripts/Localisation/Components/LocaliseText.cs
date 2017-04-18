@@ -23,9 +23,16 @@ using System;
 using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using GameFramework.Localisation.Messages;
+using UnityEngine.Events;
 
 namespace GameFramework.Localisation.Components
 {
+
+    [System.Serializable]
+    public class LocaliseTextOnPreLocaliseEvent : UnityEvent<LocaliseText>
+    {
+    }
+
     /// <summary>
     /// Localises a Text field based upon the given Key
     /// </summary>
@@ -48,6 +55,11 @@ namespace GameFramework.Localisation.Components
         public ModifierType Modifier = ModifierType.None;
 
         /// <summary>
+        /// Callback that allows for modification of the localisation string.
+        /// </summary>
+        public LocaliseTextOnPreLocaliseEvent OnPreLocalise;
+
+        /// <summary>
         /// Manually change the value of whatever the localization component is attached to.
         /// </summary>
         public string Value
@@ -59,6 +71,11 @@ namespace GameFramework.Localisation.Components
                 _textComponent.text = value;
             }
         }
+
+        /// <summary>
+        /// The localised value that can be referenced and modified by a PreLocaise callback before the display is updated.
+        /// </summary>
+        public string PreLocaliseValue { get; set; }
 
         UnityEngine.UI.Text _textComponent;
 
@@ -75,7 +92,7 @@ namespace GameFramework.Localisation.Components
                 Key = _textComponent.text;
             }
 
-            OnLocalise();
+            Localise();
             base.Awake();
         }
 
@@ -83,21 +100,29 @@ namespace GameFramework.Localisation.Components
         /// <summary>
         /// Update the display with the localise text
         /// </summary>
-        void OnLocalise()
+        void Localise()
         {
             // If we don't have a key then don't change the value
             if (string.IsNullOrEmpty(Key)) return;
-            var value = Localisation.LocaliseText.Get(Key);
+
+            PreLocaliseValue = Localisation.LocaliseText.Get(Key);
+
+            // Run any callback to modify the term.
+            OnPreLocalise.Invoke(this);
+
+            // apply any modifier
             switch (Modifier)
             {
                 case ModifierType.LowerCase:
-                    value = value.ToLower();
+                    PreLocaliseValue = PreLocaliseValue.ToLower();
                     break;
                 case ModifierType.UpperCase:
-                    value = value.ToUpper();
+                    PreLocaliseValue = PreLocaliseValue.ToUpper();
                     break;
             }
-            Value = value;
+
+            // set the value
+            Value = PreLocaliseValue;
         }
 
 
@@ -108,7 +133,7 @@ namespace GameFramework.Localisation.Components
         /// <returns></returns>
         public override bool RunMethod(LocalisationChangedMessage message)
         {
-            OnLocalise();
+            Localise();
             return true;
         }
     }
