@@ -570,9 +570,11 @@ namespace GameFramework.GameStructure
             LocaliseText.AllowedLanguages = SupportedLanguages;
 
             // setup players.
-            Assert.IsTrue(PlayerCount >= 1, "You need to specify at least 1 player in GameManager");
-            Players = new PlayerGameItemManager();
-            Players.Load(0, PlayerCount-1);
+            if (PlayerCount > 0)
+            {
+                Players = new PlayerGameItemManager();
+                Players.Load(0, PlayerCount - 1);
+            }
 
             //TODO: Make Obsolete
             if (WorldUnlockMode == GameItem.UnlockModeType.Coins || LevelUnlockMode == GameItem.UnlockModeType.Coins || CharacterUnlockMode == GameItem.UnlockModeType.Coins)
