@@ -4,6 +4,41 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+v4.3.1
+
+	Game Framework Core - Improvements
+	- Demo: Updated for new GameManager changes
+	- GameStructure: GameItem cleanup - the InitialiseXxx() loadFromResources parameter no longer does anything. Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually.
+	- GameStructure: GameItem LoadGameItemExtension and ClearGameItemExtension methods added
+	- GameStructure: LoadJsonData() return type changed to void. Reference GameItem.JsonData instead.
+	- GameStructure: Improved GameManager Player, World, Level and Character setup options and editor (see any editor warnings for any small changes to make in the component inspector).
+	- GameStructure: GameItemsManager Added LoadAutomatic() method for loading of automatically setup GameItems. 
+	- GameStructure: GameItemsManager Load() loadFromResources and valueToUnlock parameters no longer do anything as replaced by GameItem configuration files..
+	- Localisation: Added modifier to LocaliseText for auto conversion to Upper and Lower case
+	- Localisation: Allow for a pre-localisation callback to modify the localised value
+	- Localisation: Added modifier to LocaliseText for auto conversion toTitle case
+		
+	Game Framework Core - Fixes
+	- Localisation: Added missing French translations
+	- UI: DialogInstance fix for handling localisation key passed as an empty string.
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Various: Updated for latest GameManeger improvements
+	- Localisation: Updated demo to show upper / lower case modifiers and pre-localisation callback
+
+	Game Framework Tutorials (Extras Bundle) - Fixes
+	- Localisation: Demo fixes for incorrect Chinese flag override and removed Player setup warning.
+
+	PlayMaker Actions for Game Framework (Extras Bundle) - Improvements
+	- Added Actions: LevelGetCoins, LevelSetCoins, LevelChangeCoins
+	- Added LevelChangeScore and LevelSetScore
+	- Added Actions: LevelIsStarWon
+	- Added Actions: PlayerGetScore, PlayerSetScore, PlayerChangeScore
+	- Added Actions: PlayerGetCoins, PlayerSetCoins, PlayerChangeCoins
+	- Added Actions: PlayerGetHealth, PlayerSetHealth, PlayerChangeHealth
+	- Added Actions: PlayerGetLives, PlayerSetLives, PlayerChangeLives
+	- Changed Actions: LevelGetScore parameters changed for consistency
+	
 v4.3
 
 	Game Framework Core - Improvements

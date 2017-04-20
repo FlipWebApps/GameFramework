@@ -9,7 +9,7 @@ this framework that contains a lot of useful additional content to get you up an
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
 	- The full Pro Pooling asset for advanced gameobject pooling
 	- The full Prefs Editor asset for managing your player prefs.
-	- Alpha version of the upcoming Game Framework PlayMaker Extensions asset
+	- The full PlayMaker Actions for Game Framework asset
 	- Full 2D runner framework and game sample (work in progress).
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize
