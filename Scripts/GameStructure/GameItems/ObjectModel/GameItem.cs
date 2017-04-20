@@ -568,7 +568,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #endregion Initialisation
 
-        #region Load Data
+        #region Extension Data
 
         /// <summary>
         /// Load simple meta data associated with this game item. Called when this GameItem is initialised.
@@ -674,12 +674,20 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Load the GameItemExtension that corresponds to this item.
         /// </summary>
-        GameItemExtension LoadGameItemExtension()
+        public void LoadGameItemExtension()
         {
-            var giExtension = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number + "_Extension");
-            return giExtension;
+            GameItemExtensionData = GameManager.LoadResource<GameItemExtension>(IdentifierBase + "\\" + IdentifierBase + "_" + Number + "_Extension");
         }
 
+
+        /// <summary>
+        /// Clear larger data that takes up more space or needs additional parsing
+        /// </summary>
+        /// Use this method to manually clear any loaded game data to save memory
+        public void ClearGameItemExtension()
+        {
+            GameItemExtensionData = null;
+        }
 
         /// <summary>
         /// Return GameItemExtension object, caasted to type T
@@ -689,7 +697,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Assert.IsNotNull(GameItemExtensionData as T, "Unable to cast GameItemExtension to type specified : " + typeof(T).FullName);
             return GameItemExtensionData as T;
         }
-        #endregion Load Data
+        #endregion Extension Data
 
         /// <summary>
         /// Mark an item as bought and save.
