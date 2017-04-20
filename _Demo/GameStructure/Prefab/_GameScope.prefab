@@ -226,20 +226,24 @@ MonoBehaviour:
   AutoConvertUnsecurePrefs: 0
   ReferencePhysicalScreenHeightInInches: 4
   DisplayChangeCheckDelay: 0.5
+  PlayerSetupMode: 1
   DefaultLives: 3
   PlayerCount: 1
+  WorldSetupMode: 0
   AutoCreateWorlds: 0
   NumberOfAutoCreatedWorlds: 0
   LoadWorldDatafromResources: 0
   WorldUnlockMode: 0
   CoinsToUnlockWorlds: 10
   WorldLevelNumbers: []
-  AutoCreateLevels: 1
+  LevelSetupMode: 2
+  AutoCreateLevels: 0
   NumberOfAutoCreatedLevels: 4
   LoadLevelDatafromResources: 0
   LevelUnlockMode: 0
   CoinsToUnlockLevels: 10
-  AutoCreateCharacters: 1
+  CharacterSetupMode: 2
+  AutoCreateCharacters: 0
   NumberOfAutoCreatedCharacters: 3
   LoadCharacterDatafromResources: 0
   CharacterUnlockMode: 0
