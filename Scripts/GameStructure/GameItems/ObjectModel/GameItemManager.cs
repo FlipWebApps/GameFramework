@@ -26,7 +26,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using GameFramework.Debugging;
-using GameFramework.GameObjects;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
@@ -175,14 +174,47 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         }
 
-        
+
         /// <summary>
-        /// Load method that will setup the Items collection using common defaults before standard selection and unlock setup. If loadFromResources
-        /// is specified then this will try and load the GameItem from the resources folder
+        /// Load method that will setup the GameItems using common defaults before standard selection and unlock setup. 
         /// </summary>
-        public virtual void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
+        public void LoadAutomatic(int startNumber, int lastNumber, int valueToUnlock = -1, bool unlockWithCompletion = false, bool unlockWithCoins = false)
         {
-            var didLoadFromResources = false;
+            var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
+            Assert.AreNotEqual(count, 0, "You need to create 1 or more items in GameItemManager.LoadAutomatic()");
+
+            Items = new T[count];
+            for (var i = 0; i < count; i++)
+            {
+                Items[i] = ScriptableObject.CreateInstance<T>();
+                Items[i].Initialise(i, LocalisableText.CreateLocalised(),
+                    LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
+                Items[i].UnlockWithCompletion = unlockWithCompletion;
+                Items[i].UnlockWithCoins = unlockWithCoins;
+            }
+
+            SetupSelectedItem();
+
+            // Ensure the first item is always unlocked.
+            if (!Items[0].IsUnlocked)
+            {
+                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
+                Items[0].UpdatePlayerPrefs();
+            }
+
+            _isLoaded = true;
+        }
+
+
+        /// <summary>
+        /// Load method that will setup the Items collection using GameItem configuration files from the resources folder
+        /// </summary>
+        /// If any items are not able to be loaded then we will create a default item and show a warning.
+        public void Load(int startNumber, int lastNumber, int valueToUnlock = -1, bool loadFromResources = false)
+        {
+            if (loadFromResources) Debug.LogWarning("Obsolete in v4.4: The Load() loadFromResources parameter no longer does anything. Either subclass the GameItems if you need custom data or call LoadData() on the GameItem manually.");
+            if (valueToUnlock != -1) Debug.LogWarning("Obsolete in v4.4: The Load() valueToUnlock parameter no longer does anything as the value is loaded from the GameItem configuration files. Either call LoadAutomatic() or specify in configuration files instead.");
+
             var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
             Items = new T[count];
 
@@ -193,42 +225,33 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 #endif
             for (var i = 0; i < count; i++)
             {
-                // preference is to load from resources.
                 var loadedItem = GameItem.LoadFromResources<T>(TypeName, startNumber + i);
                 if (loadedItem != null)
                 {
                     Items[i] = loadedItem;
-                    didLoadFromResources = true;
-                    Items[i].InitialiseNonScriptableObjectValues(loadFromResources: loadFromResources);
+                    Items[i].InitialiseNonScriptableObjectValues();
                 }
                 else
                 {
+                    // otherwise create a default item on the fly - but show a warning.
 #if UNITY_EDITOR
                     containsCreatedGameItemsCount++;
                     containsCreatedGameItemsMessage += TypeName + "\\" + TypeName + "_" + (startNumber + i) + "\n";
 #endif
-
                     Items[i] = ScriptableObject.CreateInstance<T>();
-                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock, loadFromResources: loadFromResources);
+                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
+                        LocalisableText.CreateLocalised(), valueToUnlock: 10);
+                    Items[i].UnlockWithCoins = true;
                 }
             }
             Assert.AreNotEqual(Items.Length, 0, "You need to create 1 or more items in GameItemManager.Load()");
 
 #if UNITY_EDITOR
             if (containsCreatedGameItemsMessage.Length > 0)
-                MyDebug.LogWarningF("{0} of {1} {2} GameItems do not contain a resources file and will use a default setup. To get the most out of Game Framework please create resource files for the following (see the getting started tutorial for more details):\n{3}", containsCreatedGameItemsCount, count, TypeName, containsCreatedGameItemsMessage);
+                MyDebug.LogWarningF("GameItem Configuration resources files not found for {0} of {1} {2} GameItems so falling back to a default setup. Either use Automatic setup mode or to get the most out of Game Framework please create GameItem configuration files for the following (see the getting started tutorial for more details):\n{3}", containsCreatedGameItemsCount, count, TypeName, containsCreatedGameItemsMessage);
 #endif
 
             SetupSelectedItem();
-
-            // if we didn't get any configuration files then unlock the selected item if it isn't already 
-            // (otherwise unlock info comes directly from the config files).
-            if (!didLoadFromResources && !Items[0].IsUnlocked)
-            {
-                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
-                Items[0].UpdatePlayerPrefs();
-            }
-
             _isLoaded = true;
         }
 
@@ -381,7 +404,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Set the selected item to the next item if one exists
         /// </summary>
-        /// <param name="item"></param>
         public void SelectNext()
         {
             var nextItem = GetNextItem(Selected);

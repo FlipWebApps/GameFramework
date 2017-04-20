@@ -56,25 +56,26 @@ namespace GameFramework.GameStructure.Editor
 
         SerializedProperty _supportedLanguagesProperty;
 
+        SerializedProperty _playerSetupModeProperty;
         SerializedProperty _defaultLivesProperty;
         SerializedProperty _playerCountProperty;
 
+        SerializedProperty _worldSetupModeProperty;
         SerializedProperty _autoCreateWorldsProperty;
         SerializedProperty _numberOfAutoCreatedWorldsProperty;
-        SerializedProperty _loadWorldDatafromResources;
         SerializedProperty _coinsToUnlockWorldsProperty;
         SerializedProperty _worldUnlockModeProperty;
         SerializedProperty _worldLevelNumbersProperty;
 
+        SerializedProperty _levelSetupModeProperty;
         SerializedProperty _autoCreateLevelsProperty;
         SerializedProperty _numberOfAutoCreatedLevelsProperty;
-        SerializedProperty _loadLevelDatafromResources;
         SerializedProperty _coinsToUnlockLevelsProperty;
         SerializedProperty _levelUnlockModeProperty;
 
+        SerializedProperty _characterSetupModeProperty;
         SerializedProperty _autoCreateCharactersProperty;
         SerializedProperty _numberOfAutoCreatedCharactersProperty;
-        SerializedProperty _loadCharacterDatafromResources;
         SerializedProperty _coinsToUnlockCharactersProperty;
         SerializedProperty _characterUnlockModeProperty;
 
@@ -98,25 +99,26 @@ namespace GameFramework.GameStructure.Editor
 
             _supportedLanguagesProperty = serializedObject.FindProperty("SupportedLanguages");
 
+            _playerSetupModeProperty = serializedObject.FindProperty("PlayerSetupMode");
             _playerCountProperty = serializedObject.FindProperty("PlayerCount");
             _defaultLivesProperty = serializedObject.FindProperty("DefaultLives");
 
+            _worldSetupModeProperty = serializedObject.FindProperty("WorldSetupMode");
             _autoCreateWorldsProperty = serializedObject.FindProperty("AutoCreateWorlds");
             _numberOfAutoCreatedWorldsProperty = serializedObject.FindProperty("NumberOfAutoCreatedWorlds");
-            _loadWorldDatafromResources = serializedObject.FindProperty("LoadWorldDatafromResources");
             _worldUnlockModeProperty = serializedObject.FindProperty("WorldUnlockMode");
             _coinsToUnlockWorldsProperty = serializedObject.FindProperty("CoinsToUnlockWorlds");
             _worldLevelNumbersProperty = serializedObject.FindProperty("WorldLevelNumbers");
 
+            _levelSetupModeProperty = serializedObject.FindProperty("LevelSetupMode");
             _autoCreateLevelsProperty = serializedObject.FindProperty("AutoCreateLevels");
             _numberOfAutoCreatedLevelsProperty = serializedObject.FindProperty("NumberOfAutoCreatedLevels");
-            _loadLevelDatafromResources = serializedObject.FindProperty("LoadLevelDatafromResources");
             _levelUnlockModeProperty = serializedObject.FindProperty("LevelUnlockMode");
             _coinsToUnlockLevelsProperty = serializedObject.FindProperty("CoinsToUnlockLevels");
 
+            _characterSetupModeProperty = serializedObject.FindProperty("CharacterSetupMode");
             _autoCreateCharactersProperty = serializedObject.FindProperty("AutoCreateCharacters");
             _numberOfAutoCreatedCharactersProperty = serializedObject.FindProperty("NumberOfAutoCreatedCharacters");
-            _loadCharacterDatafromResources = serializedObject.FindProperty("LoadCharacterDatafromResources");
             _characterUnlockModeProperty = serializedObject.FindProperty("CharacterUnlockMode");
             _coinsToUnlockCharactersProperty = serializedObject.FindProperty("CoinsToUnlockCharacters");
 
@@ -206,83 +208,139 @@ namespace GameFramework.GameStructure.Editor
 
             // Player setup
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.PropertyField(_defaultLivesProperty);
-            EditorGUI.indentLevel += 1;
-            _showPlayerAdvanced = EditorGUILayout.Foldout(_showPlayerAdvanced, "Advanced");
-            if (_showPlayerAdvanced)
+            EditorGUILayout.PropertyField(_playerSetupModeProperty, new GUIContent("Player Setup"));
+            if (_playerSetupModeProperty.enumValueIndex == 1 || _playerSetupModeProperty.enumValueIndex == 2)
             {
-                EditorGUILayout.PropertyField(_playerCountProperty);
+                EditorGUILayout.PropertyField(_defaultLivesProperty);
+                EditorGUI.indentLevel += 1;
+                _showPlayerAdvanced = EditorGUILayout.Foldout(_showPlayerAdvanced, "Advanced");
+                if (_showPlayerAdvanced)
+                {
+                    EditorGUILayout.PropertyField(_playerCountProperty);
+                }
+                EditorGUI.indentLevel -= 1;
             }
-            EditorGUI.indentLevel -= 1;
+            else if (_playerSetupModeProperty.enumValueIndex == 3)
+                EditorGUILayout.HelpBox("Specified mode is coming soon...", MessageType.Info);
             EditorGUILayout.EndVertical();
 
             // Worlds setup
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.PropertyField(_autoCreateWorldsProperty);
-            if (_gameManager.AutoCreateWorlds)
-            {
-                EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
-                EditorGUILayout.PropertyField(_loadWorldDatafromResources, new GUIContent("Load From Resources"));
-                EditorGUILayout.PropertyField(_worldUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins)
-                    EditorGUILayout.PropertyField(_coinsToUnlockWorldsProperty);
+            EditorGUILayout.PropertyField(_worldSetupModeProperty, new GUIContent("World Setup"));
+            if (_worldSetupModeProperty.enumValueIndex != 0) {
+                // correct deprecated values - update setup mode and always set autocreate to false
+                _autoCreateWorldsProperty.boolValue = false;
 
-                EditorGUILayout.BeginVertical("Box");
-                EditorGUILayout.PropertyField(_autoCreateLevelsProperty);
-                if (_gameManager.AutoCreateLevels)
+                if (_worldSetupModeProperty.enumValueIndex == 1)
                 {
-                    EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
-                    EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
-                        EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
+                    EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
+                    EditorGUILayout.PropertyField(_worldUnlockModeProperty, new GUIContent("Unlock Mode"));
+                    if (_gameManager.WorldUnlockMode == GameItem.UnlockModeType.Coins)
+                        EditorGUILayout.PropertyField(_coinsToUnlockWorldsProperty);
+                }
+                else if (_worldSetupModeProperty.enumValueIndex == 2)
+                {
+                    EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
+                }
+                else if (_worldSetupModeProperty.enumValueIndex == 3)
+                    EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
+
+                // per world level setup
+                EditorGUILayout.BeginVertical("Box");
+                EditorGUILayout.PropertyField(_levelSetupModeProperty, new GUIContent("Level Setup"));
+                if (_levelSetupModeProperty.enumValueIndex != 0)
+                {
+                    // correct deprecated values - update setup mode and always set autocreate to false
+                    //_autoCreateLevelsProperty.boolValue = false;
+
+                    if (_levelSetupModeProperty.enumValueIndex == 1)
+                    {
+                        EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
+                        EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
+                        if (_levelUnlockModeProperty.enumValueIndex == 2)
+                            EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
+                    }
+                    else if (_levelSetupModeProperty.enumValueIndex == 2)
+                    {
+                        EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
+                    }
+                    else if (_levelSetupModeProperty.enumValueIndex == 3)
+                        EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
 
                     // level number ranges
-                    EditorGUILayout.LabelField("Level Number Ranges", EditorStyles.boldLabel);
-                    for (var i = 0; i < _worldLevelNumbersProperty.arraySize; i++)
+                    if (_levelSetupModeProperty.enumValueIndex == 1 || _levelSetupModeProperty.enumValueIndex == 2)
                     {
-                        EditorGUILayout.PropertyField(_worldLevelNumbersProperty.GetArrayElementAtIndex(i), new GUIContent("World " + i), true);
-                    }
-                    bool overlap = false;
-                    for (var i = 0; i < _gameManager.WorldLevelNumbers.Length - 1; i++)
-                    {
-                        for (var j = i+1; j < _gameManager.WorldLevelNumbers.Length; j++)
+                        EditorGUILayout.LabelField("Level Number Ranges", EditorStyles.boldLabel);
+                        for (var i = 0; i < _worldLevelNumbersProperty.arraySize; i++)
                         {
-                            if (_gameManager.WorldLevelNumbers[i].Overlaps(_gameManager.WorldLevelNumbers[j]))
-                                overlap = true;
+                            EditorGUILayout.PropertyField(_worldLevelNumbersProperty.GetArrayElementAtIndex(i),
+                                new GUIContent("World " + i), true);
                         }
+                        bool overlap = false;
+                        for (var i = 0; i < _gameManager.WorldLevelNumbers.Length - 1; i++)
+                        {
+                            for (var j = i + 1; j < _gameManager.WorldLevelNumbers.Length; j++)
+                            {
+                                if (_gameManager.WorldLevelNumbers[i].Overlaps(_gameManager.WorldLevelNumbers[j]))
+                                    overlap = true;
+                            }
+                        }
+                        if (overlap) EditorGUILayout.HelpBox("Level ranges should not overlap!", MessageType.Error);
                     }
-                    if (overlap) EditorGUILayout.HelpBox("Level ranges should not overlap!", MessageType.Error);
                 }
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndVertical();
 
             // Standalone level setup
-            if (!_gameManager.AutoCreateWorlds)
+            if (_worldSetupModeProperty.enumValueIndex == 0)
             {
                 EditorGUILayout.BeginVertical("Box");
-                EditorGUILayout.PropertyField(_autoCreateLevelsProperty);
-                if (_gameManager.AutoCreateLevels)
+
+                EditorGUILayout.PropertyField(_levelSetupModeProperty, new GUIContent("Level Setup"));
+                if (_levelSetupModeProperty.enumValueIndex != 0)
                 {
-                    EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
-                    EditorGUILayout.PropertyField(_loadLevelDatafromResources, new GUIContent("Load From Resources"));
-                    EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
-                    if (_gameManager.LevelUnlockMode == GameItem.UnlockModeType.Coins)
-                        EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
+                    // correct deprecated values - update setup mode and always set autocreate to false
+                    _autoCreateLevelsProperty.boolValue = false;
+
+                    if (_levelSetupModeProperty.enumValueIndex == 1)
+                    {
+                        EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
+                        EditorGUILayout.PropertyField(_levelUnlockModeProperty, new GUIContent("Unlock Mode"));
+                        if (_levelUnlockModeProperty.enumValueIndex == 2)
+                            EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
+                    }
+                    if (_levelSetupModeProperty.enumValueIndex == 2)
+                    {
+                        EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
+                    }
+                    if (_levelSetupModeProperty.enumValueIndex == 3)
+                        EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
                 }
                 EditorGUILayout.EndVertical();
             }
 
             // Standalone character setup
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.PropertyField(_autoCreateCharactersProperty);
-            if (_gameManager.AutoCreateCharacters)
+            EditorGUILayout.PropertyField(_characterSetupModeProperty, new GUIContent("Character Setup"));
+            if (_characterSetupModeProperty.enumValueIndex != 0)
             {
-                EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
-                EditorGUILayout.PropertyField(_loadCharacterDatafromResources, new GUIContent("Load From Resources"));
-                EditorGUILayout.PropertyField(_characterUnlockModeProperty, new GUIContent("Unlock Mode"));
-                if (_gameManager.CharacterUnlockMode == GameItem.UnlockModeType.Coins)
-                    EditorGUILayout.PropertyField(_coinsToUnlockCharactersProperty);
+                // correct deprecated values - update setup mode and always set autocreate to false
+                _autoCreateCharactersProperty.boolValue = false;
+
+                if (_characterSetupModeProperty.enumValueIndex == 1)
+                {
+                    EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
+                    EditorGUILayout.PropertyField(_characterUnlockModeProperty, new GUIContent("Unlock Mode"));
+                    if (_characterUnlockModeProperty.enumValueIndex == 2)
+                        EditorGUILayout.PropertyField(_coinsToUnlockCharactersProperty);
+                }
+                if (_characterSetupModeProperty.enumValueIndex == 2)
+                {
+                    EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
+                }
+                if (_characterSetupModeProperty.enumValueIndex == 3)
+                    EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
             }
             EditorGUILayout.EndVertical();
         }

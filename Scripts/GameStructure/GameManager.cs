@@ -59,6 +59,11 @@ namespace GameFramework.GameStructure
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameManager : SingletonPersistant<GameManager>
     {
+        /// <summary>
+        ///  different ways that we can load the different GameItems
+        /// </summary>
+        public enum GameItemSetupMode { None, Automatic, FromResources, Specified }
+
         // Inspector Values
         #region General 
 
@@ -146,9 +151,18 @@ namespace GameFramework.GameStructure
         #region Game Structure setup
 
         /// <summary>
-        /// Game Structure setup
+        /// How we want players to be setup.
         /// </summary>
-        [Header("Players")]
+        /// None - don't setup players.
+        /// Automatic - Setup automatically.
+        /// Resources - Load configuration files from resources.
+        /// Specified - Specify configuration files to use directly.
+        [Tooltip("How we want players to be setup.\n\nNone - don't setup players.\nAutomatic - Setup automatically.\nResources - Load configuration files from resources.\nSpecified - Specify configuration files to use directly.")]
+        public GameItemSetupMode PlayerSetupMode = GameItemSetupMode.Automatic;
+
+        /// <summary>
+        /// The default number of lives players will have (optional if not using lives).
+        /// </summary>
         [Tooltip("The default number of lives players will have (optional if not using lives).")]
         public int DefaultLives = 3;
 
@@ -160,10 +174,20 @@ namespace GameFramework.GameStructure
 
 
         /// <summary>
-        /// Whether to automatically setup wolds using default values.
+        /// How we want worlds to be setup.
         /// </summary>
-        [Header("Worlds")]
+        /// None - don't setup worlds.
+        /// Automatic - Setup automatically.
+        /// Resources - Load configuration files from resources.
+        /// Specified - Specify configuration files to use directly.
+        [Tooltip("How we want worlds to be setup.\n\nNone - don't setup worlds.\nAutomatic - Setup automatically.\nResources - Load configuration files from resources.\nSpecified - Specify configuration files to use directly.")]
+        public GameItemSetupMode WorldSetupMode = GameItemSetupMode.None;
+
+        /// <summary>
+        /// Whether to automatically setup wolds using default values. (Obsolete)
+        /// </summary>
         [Tooltip("Whether to automatically setup wolds using default values.")]
+        [Obsolete("Use WorldSetupMode instead")]
         public bool AutoCreateWorlds = false;
 
         /// <summary>
@@ -173,22 +197,22 @@ namespace GameFramework.GameStructure
         public int NumberOfAutoCreatedWorlds = 0;
 
         /// <summary>
-        /// 
+        /// Whether to try and load data from a resources file. (Obsolete)
         /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
-        public bool LoadWorldDatafromResources = false;
+        [Obsolete("Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually")]
+        public bool LoadWorldDatafromResources;
 
         /// <summary>
-        /// How we plan on letting users unlock worlds.
+        /// How we plan on letting users unlock worlds if using automatic setup.
         /// </summary>
-        [Tooltip("How we plan on letting users unlock worlds.")]
-        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
+        [Tooltip("How we plan on letting users unlock worlds if using automatic setup.")]
         public GameItem.UnlockModeType WorldUnlockMode;
 
         /// <summary>
-        /// The default number of coins to unlock worlds (can be overriden by json configuration files or code).
+        /// The default number of coins to unlock worlds (can be overriden by json configuration files or code) if using automatic setup.
         /// </summary>
-        [Tooltip("The default number of coins to unlock worlds (can be overriden by json configuration files or code).")]
+        [Tooltip("The default number of coins to unlock worlds (can be overriden by json configuration files or code) if using automatic setup.")]
         public int CoinsToUnlockWorlds = 10;
 
         /// <summary>
@@ -201,10 +225,20 @@ namespace GameFramework.GameStructure
 
 
         /// <summary>
-        /// Whether to automatically setup levels using default values.
+        /// How we want levels to be setup.
         /// </summary>
-        [Header("Levels")]
+        /// None - don't setup levels.
+        /// Automatic - Setup automatically.
+        /// Resources - Load configuration files from resources.
+        /// Specified - Specify configuration files to use directly.
+        [Tooltip("How we want levels to be setup.\n\nNone - don't setup levels.\nAutomatic - Setup automatically.\nResources - Load configuration files from resources.\nSpecified - Specify configuration files to use directly.")]
+        public GameItemSetupMode LevelSetupMode = GameItemSetupMode.None;
+
+        /// <summary>
+        /// Whether to automatically setup levels using default values. (Obsolete)
+        /// </summary>
         [Tooltip("Whether to automatically setup levels using default values.\n\nThis option is hidden if automatically creating worlds as we then need per world configuration.")]
+        [Obsolete("Use LevelSetupMode instead")]
         public bool AutoCreateLevels = false;
 
         /// <summary>
@@ -215,30 +249,39 @@ namespace GameFramework.GameStructure
         public int NumberOfAutoCreatedLevels = 10;
 
         /// <summary>
-        /// Whether to try and load data from a resources file.
+        /// Whether to try and load data from a resources file (Obsolete).
         /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
+        [Obsolete("Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually")]
         public bool LoadLevelDatafromResources = false;
 
         /// <summary>
-        /// How we plan on letting users unlock levels.
+        /// How we plan on letting users unlock levels if using automatic setup.
         /// </summary>
-        [Tooltip("How we plan on letting users unlock levels.")]
-        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
+        [Tooltip("How we plan on letting users unlock levels if using automatic setup.")]
         public GameItem.UnlockModeType LevelUnlockMode;
 
         /// <summary>
-        /// The default number of coins to unlock levels (can be overriden by json configuration files or code).
+        /// The default number of coins to unlock levels (can be overriden by json configuration files or code) if using automatic setup.
         /// </summary>
-        [Tooltip("The default number of coins to unlock levels (can be overriden by json configuration files or code).")]
+        [Tooltip("The default number of coins to unlock levels (can be overriden by json configuration files or code) if using automatic setup.")]
         public int CoinsToUnlockLevels = 10;
 
+        /// <summary>
+        /// How we want characters to be setup.
+        /// </summary>
+        /// None - don't setup characters.
+        /// Automatic - Setup automatically.
+        /// Resources - Load configuration files from resources.
+        /// Specified - Specify configuration files to use directly.
+        [Tooltip("How we want characters to be setup.\n\nNone - don't setup characters.\nAutomatic - Setup automatically.\nResources - Load configuration files from resources.\nSpecified - Specify configuration files to use directly.")]
+        public GameItemSetupMode CharacterSetupMode = GameItemSetupMode.None;
 
         /// <summary>
-        /// Whether to automatically setup characters using default values.
+        /// Whether to automatically setup characters using default values. (Obsolete)
         /// </summary>
-        [Header("Characters")]
         [Tooltip("Whether to automatically setup characters using default values.")]
+        [Obsolete("Use CharacterSetupMode instead")]
         public bool AutoCreateCharacters = false;
 
         /// <summary>
@@ -248,22 +291,22 @@ namespace GameFramework.GameStructure
         public int NumberOfAutoCreatedCharacters = 10;
 
         /// <summary>
-        /// Whether to try and load data from a resources file.
+        /// Whether to try and load data from a resources file (Obsolete).
         /// </summary>
         [Tooltip("Whether to try and load data from a resources file.")]
-        public bool LoadCharacterDatafromResources = false;
+        [Obsolete("Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually")]
+        public bool LoadCharacterDatafromResources;
 
         /// <summary>
-        /// How we plan on letting users unlock characters.
+        /// How we plan on letting users unlock characters if using automatic setup.
         /// </summary>
-        [Tooltip("How we plan on letting users unlock characters.")]
-        [Obsolete("Use the GameItem UnlockXxx settings instead.")]
+        [Tooltip("How we plan on letting users unlock characters if using automatic setup.")]
         public GameItem.UnlockModeType CharacterUnlockMode;
 
         /// <summary>
-        /// The default number of coins to unlock characters (can be overriden by json configuration files or code).
+        /// The default number of coins to unlock characters (can be overriden by json configuration files or code) if using automatic setup.
         /// </summary>
-        [Tooltip("The default number of coins to unlock characters (can be overriden by json configuration files or code).")]
+        [Tooltip("The default number of coins to unlock characters (can be overriden by json configuration files or code) if using automatic setup.")]
         public int CoinsToUnlockCharacters = 10;
 
         #endregion Game Structure setup
@@ -566,61 +609,106 @@ namespace GameFramework.GameStructure
             // display related properties
             SetDisplayProperties();
 
+
             // Localisation setup. If nothing stored then use system Language if it exists. Otherwise we will default to English.
             LocaliseText.AllowedLanguages = SupportedLanguages;
 
-            // setup players.
-            if (PlayerCount > 0)
-            {
-                Players = new PlayerGameItemManager();
+
+            // setup players
+            Players = new PlayerGameItemManager();
+            if (PlayerSetupMode == GameItemSetupMode.Automatic)
+                Players.LoadAutomatic(0, PlayerCount - 1);
+            else if (PlayerSetupMode == GameItemSetupMode.FromResources)
                 Players.Load(0, PlayerCount - 1);
-            }
+            else if (PlayerSetupMode == GameItemSetupMode.Specified)
+                Debug.LogError("World Specified setup mode is not currently implemented. Use one of the other modes for now.");
 
-            //TODO: Make Obsolete
-            if (WorldUnlockMode == GameItem.UnlockModeType.Coins || LevelUnlockMode == GameItem.UnlockModeType.Coins || CharacterUnlockMode == GameItem.UnlockModeType.Coins)
-                Debug.LogWarning("GameManager Unlock Modes are deprecated in favour of the more powerful UnlockXxx options in GameItem configuration files and will soon be removed. Change the GameManager settings to Custom to remove this warning and add / configure GameItem configuration files.");
 
-            // handle auto setup of worlds and levels
+            // setup of worlds and levels
             Worlds = new WorldGameItemManager();
             Levels = new LevelGameItemManager();
             Characters = new CharacterGameItemManager();
-            if (AutoCreateWorlds)
+
+            #region Workaround / warnings for upgraded values.
+            if (AutoCreateWorlds) {
+                Debug.LogWarning("GameManager World creation is improved and the AutoCreateWorlds property is replaced. In the GameManager component change the World Setup to 'Automatic' or 'From Resources' (if using GameItem configuration files) to carry forward the existing behaviour (simulating this change for now).");
+                WorldSetupMode = GameItemSetupMode.FromResources;
+            }
+            if (AutoCreateLevels)
             {
-                var coinsToUnlockWorlds = WorldUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockWorlds : -1;
-                Worlds.Load(1, NumberOfAutoCreatedWorlds, coinsToUnlockWorlds, LoadWorldDatafromResources);
+                Debug.LogWarning("GameManager Level creation is improved and the AutoCreateLevel property is replaced. In the GameManager component change the Level Setup to 'Automatic' or 'From Resources' (if using GameItem configuration files) to carry forward the existing behaviour (simulating this change for now).");
+                LevelSetupMode = GameItemSetupMode.FromResources;
+            }
+            if (AutoCreateCharacters) {
+                Debug.LogWarning("GameManager Character creation is improved and the AutoCreateCharacters property is replaced. In the GameManager component change the Character Setup to 'Automatic' or 'From Resources' (if using GameItem configuration files) to carry forward the existing behaviour (simulating this change for now).");
+                CharacterSetupMode = GameItemSetupMode.FromResources;
+            }
+            #endregion Workaround / warnings for upgraded values.
 
-                // if we have worlds then autocreate levels for each world.
-                if (AutoCreateLevels)
-                {
-                    for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
+            if (WorldSetupMode != GameItemSetupMode.None)
+            {
+                if (WorldSetupMode == GameItemSetupMode.Automatic)
+                    Worlds.LoadAutomatic(1, NumberOfAutoCreatedWorlds, CoinsToUnlockWorlds, WorldUnlockMode == GameItem.UnlockModeType.Completion, WorldUnlockMode == GameItem.UnlockModeType.Coins);
+                else if (WorldSetupMode == GameItemSetupMode.FromResources)
+                    Worlds.Load(1, NumberOfAutoCreatedWorlds);
+                else if (WorldSetupMode == GameItemSetupMode.Specified)
+                    Debug.LogError("World Specified setup mode is not currently implemented. Use one of the other modes for now.");
+
+                // if we have worlds then autocreate levels for each world levels setup at root level further down.
+                if (LevelSetupMode != GameItemSetupMode.Automatic) {
+                    if (LevelSetupMode == GameItemSetupMode.Automatic)
                     {
-                        var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                        Worlds.Items[i].Levels = new LevelGameItemManager();
-                        Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max, coinsToUnlock, LoadLevelDatafromResources);
+                        for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
+                        {
+                            Worlds.Items[i].Levels = new LevelGameItemManager();
+                            Worlds.Items[i].Levels.LoadAutomatic(
+                                WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max,
+                                CoinsToUnlockLevels,
+                                LevelUnlockMode == GameItem.UnlockModeType.Completion,
+                                LevelUnlockMode == GameItem.UnlockModeType.Coins);
+                        }
+                        // and assign the selected set of levels
+                        Levels = Worlds.Selected.Levels;
                     }
-
-                    // and assign the selected set of levels
-                    Levels = Worlds.Selected.Levels;
+                    else if (LevelSetupMode == GameItemSetupMode.FromResources)
+                    {
+                        for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
+                        {
+                            Worlds.Items[i].Levels = new LevelGameItemManager();
+                            Worlds.Items[i].Levels.LoadAutomatic(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max);
+                        }
+                        // and assign the selected set of levels
+                        Levels = Worlds.Selected.Levels;
+                    }
+                    else if (LevelSetupMode == GameItemSetupMode.Specified)
+                        Debug.LogError(
+                            "Level 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
                 }
             }
             else
             {
-                // otherwise not automatically setting up worlds so if auto setup of levels then create at root level.
-                if (AutoCreateLevels)
-                {
-                    var coinsToUnlock = LevelUnlockMode == GameItem.UnlockModeType.Coins ? CoinsToUnlockLevels : -1;
-                    Levels.Load(1, NumberOfAutoCreatedLevels, coinsToUnlock, LoadLevelDatafromResources);
-                }
+                // otherwise not automatically setting up worlds so setup any levels at root level.
+                if (LevelSetupMode == GameItemSetupMode.Automatic)
+                    Levels.LoadAutomatic(1, NumberOfAutoCreatedLevels, CoinsToUnlockLevels,
+                        LevelUnlockMode == GameItem.UnlockModeType.Completion,
+                        LevelUnlockMode == GameItem.UnlockModeType.Coins);
+                else if (LevelSetupMode == GameItemSetupMode.FromResources)
+                    Levels.Load(1, NumberOfAutoCreatedLevels);
+                else if (LevelSetupMode == GameItemSetupMode.Specified)
+                    Debug.LogError("Level 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
             }
 
-            // handle auto setup of characters
-            if (AutoCreateCharacters)
-            {
-                if (CharacterUnlockMode == GameItem.UnlockModeType.Coins)
-                    Characters.Load(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters, LoadCharacterDatafromResources);
-                else
-                    Characters.Load(1, NumberOfAutoCreatedCharacters, loadFromResources: LoadCharacterDatafromResources);
-            }
+
+            // setup of characters
+            if (CharacterSetupMode == GameItemSetupMode.Automatic)
+                Characters.LoadAutomatic(1, NumberOfAutoCreatedCharacters, CoinsToUnlockCharacters,
+                    CharacterUnlockMode == GameItem.UnlockModeType.Completion,
+                    CharacterUnlockMode == GameItem.UnlockModeType.Coins);
+            else if (CharacterSetupMode == GameItemSetupMode.FromResources)
+                Characters.Load(1, NumberOfAutoCreatedCharacters);
+            else if (CharacterSetupMode == GameItemSetupMode.Specified)
+                Debug.LogError("Character 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
+
 
             // coroutine to check for display changes (don't need to do this every frame)
             if (!Mathf.Approximately(DisplayChangeCheckDelay, 0))
