@@ -187,7 +187,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             for (var i = 0; i < count; i++)
             {
                 Items[i] = ScriptableObject.CreateInstance<T>();
-                Items[i].Initialise(i, LocalisableText.CreateLocalised(),
+                Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
                     LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
                 Items[i].UnlockWithCompletion = unlockWithCompletion;
                 Items[i].UnlockWithCoins = unlockWithCoins;
