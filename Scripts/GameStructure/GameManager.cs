@@ -654,36 +654,34 @@ namespace GameFramework.GameStructure
                 else if (WorldSetupMode == GameItemSetupMode.Specified)
                     Debug.LogError("World Specified setup mode is not currently implemented. Use one of the other modes for now.");
 
-                // if we have worlds then autocreate levels for each world levels setup at root level further down.
-                if (LevelSetupMode != GameItemSetupMode.Automatic) {
-                    if (LevelSetupMode == GameItemSetupMode.Automatic)
+                // if we have worlds then autocreate levels for each world.
+                if (LevelSetupMode == GameItemSetupMode.Automatic)
+                {
+                    for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
                     {
-                        for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
-                        {
-                            Worlds.Items[i].Levels = new LevelGameItemManager();
-                            Worlds.Items[i].Levels.LoadAutomatic(
-                                WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max,
-                                CoinsToUnlockLevels,
-                                LevelUnlockMode == GameItem.UnlockModeType.Completion,
-                                LevelUnlockMode == GameItem.UnlockModeType.Coins);
-                        }
-                        // and assign the selected set of levels
-                        Levels = Worlds.Selected.Levels;
+                        Worlds.Items[i].Levels = new LevelGameItemManager();
+                        Worlds.Items[i].Levels.LoadAutomatic(
+                            WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max,
+                            CoinsToUnlockLevels,
+                            LevelUnlockMode == GameItem.UnlockModeType.Completion,
+                            LevelUnlockMode == GameItem.UnlockModeType.Coins);
                     }
-                    else if (LevelSetupMode == GameItemSetupMode.FromResources)
-                    {
-                        for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
-                        {
-                            Worlds.Items[i].Levels = new LevelGameItemManager();
-                            Worlds.Items[i].Levels.LoadAutomatic(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max);
-                        }
-                        // and assign the selected set of levels
-                        Levels = Worlds.Selected.Levels;
-                    }
-                    else if (LevelSetupMode == GameItemSetupMode.Specified)
-                        Debug.LogError(
-                            "Level 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
+                    // and assign the selected set of levels
+                    Levels = Worlds.Selected.Levels;
                 }
+                else if (LevelSetupMode == GameItemSetupMode.FromResources)
+                {
+                    for (var i = 0; i < NumberOfAutoCreatedWorlds; i++)
+                    {
+                        Worlds.Items[i].Levels = new LevelGameItemManager();
+                        Worlds.Items[i].Levels.Load(WorldLevelNumbers[i].Min, WorldLevelNumbers[i].Max);
+                    }
+                    // and assign the selected set of levels
+                    Levels = Worlds.Selected.Levels;
+                }
+                else if (LevelSetupMode == GameItemSetupMode.Specified)
+                    Debug.LogError(
+                        "Level 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
             }
             else
             {
