@@ -479,6 +479,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="loadFromResources"></param>
         public void Initialise(int number, LocalisableText name = null, LocalisableText description = null, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
         {
+            if (loadFromResources) Debug.LogWarning("Obsolete in v4.4: The loadFromResources Initialise parameter no longer does anything. Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually.");
+
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
             Number = number;
@@ -487,7 +489,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            InitialiseNonScriptableObjectValues(player, loadFromResources);
+            InitialiseNonScriptableObjectValues(player);
         }
 
 
@@ -499,6 +501,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <param name="loadFromResources"></param>
         public void InitialiseNonScriptableObjectValues(Player player = null, bool loadFromResources = false)
         {
+            if (loadFromResources) Debug.LogWarning("Obsolete in v4.4: The loadFromResources Initialise parameter no longer does anything. Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually.");
+
             _isPlayer = IdentifierBase == "Player";
 
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
@@ -529,9 +533,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             }
 
             Variables.Load(PrefsPrefixPlayer);
-
-            if (loadFromResources)
-                LoadData();
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
