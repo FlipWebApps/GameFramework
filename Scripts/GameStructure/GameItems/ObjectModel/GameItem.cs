@@ -578,9 +578,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public void LoadData()
         {
             if (JsonData == null)
-                JsonData = LoadJsonData();
+                LoadJsonData();
             if (GameItemExtensionData == null)
-                GameItemExtensionData = LoadGameItemExtension();
+                LoadGameItemExtension();
 
             if (JsonData == null && GameItemExtensionData == null)
                 MyDebug.LogWarning("When loading game item from resources, corresponding JSON or GameItemExtension should be present. Either disable the Load From Resources option or check the file exists : " + IdentifierBase + "\\" + IdentifierBase + "_" + Number + "[_Extension]");
@@ -590,14 +590,13 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Load simple meta data associated with this game item.
         /// </summary>
         /// The file loaded must be placed in the resources folder as a json file under [IdentifierBase]\[IdentifierBase]_[Number].json
-        public JSONObject LoadJsonData()
+        public void LoadJsonData()
         {
             var path = string.Format("{0}\\{0}_{1}", IdentifierBase, Number);
             if (JsonData == null)
                 JsonData = LoadJsonDataFile(path);
             if (JsonData != null)
                 ParseJsonData(JsonData);
-            return JsonData;
         }
 
 
