@@ -258,7 +258,7 @@ namespace GameFramework.UI.Dialogs.Components
             // default result
             DialogResult = DialogResultType.Ok;
 
-            if (titleKey != null)
+            if (!string.IsNullOrEmpty(titleKey))
                 title = LocaliseText.Get(titleKey);
             if (title != null)
                 UIHelper.SetTextOnChildGameObject(gameObject, "ph_Title", title, true);
@@ -272,7 +272,7 @@ namespace GameFramework.UI.Dialogs.Components
                     childGameObject.SetActive(false);
             }
 
-            if (textKey != null)
+            if (!string.IsNullOrEmpty(textKey))
                 text = LocaliseText.Get(textKey);
             if (text != null)
                 UIHelper.SetTextOnChildGameObject(gameObject, "ph_Text", text, true);
@@ -283,7 +283,7 @@ namespace GameFramework.UI.Dialogs.Components
                     childGameObject.SetActive(false);
             }
 
-            if (text2Key != null)
+            if (!string.IsNullOrEmpty(text2Key))
                 text2 = LocaliseText.Get(text2Key);
             if (text2 != null)
                 UIHelper.SetTextOnChildGameObject(gameObject, "ph_Text2", text2, true);
