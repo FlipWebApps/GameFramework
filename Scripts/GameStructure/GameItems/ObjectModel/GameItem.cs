@@ -207,10 +207,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         List<LocalisableSpriteEntry> _localisableSprites = new List<LocalisableSpriteEntry>();
 
         /// <summary>
-        /// A value that is needed to unlock this item.
+        /// A list of custom variables for this game item.
         /// </summary>
-        /// Typically this will be the number of coins that you need to collect before being able to unlock this item. A value of
-        /// -1 means that you can not unlock this item in this way.
         public Variables.ObjectModel.Variables Variables
         {
             get

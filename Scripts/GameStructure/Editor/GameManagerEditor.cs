@@ -56,6 +56,8 @@ namespace GameFramework.GameStructure.Editor
 
         SerializedProperty _supportedLanguagesProperty;
 
+        SerializedProperty _variablesProperty;
+
         SerializedProperty _playerSetupModeProperty;
         SerializedProperty _defaultLivesProperty;
         SerializedProperty _playerCountProperty;
@@ -98,6 +100,8 @@ namespace GameFramework.GameStructure.Editor
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
 
             _supportedLanguagesProperty = serializedObject.FindProperty("SupportedLanguages");
+
+            _variablesProperty = serializedObject.FindProperty("Variables");
 
             _playerSetupModeProperty = serializedObject.FindProperty("PlayerSetupMode");
             _playerCountProperty = serializedObject.FindProperty("PlayerCount");
@@ -143,6 +147,7 @@ namespace GameFramework.GameStructure.Editor
 
             DrawGameDetails();
             DrawGameStructure();
+            DrawVariables();
             DrawLocalisation();
 
             // do this check here at the end of layout to avoid any layout issues
@@ -344,6 +349,22 @@ namespace GameFramework.GameStructure.Editor
             }
             EditorGUILayout.EndVertical();
         }
+
+
+        void DrawVariables()
+        {
+            EditorGUILayout.LabelField("Global Variables", EditorStyles.boldLabel);
+            EditorGUILayout.BeginVertical("Box");
+#if !PREFS_EDITOR
+            if (_gameManager.Variables.BoolVariables.Length > 0 || _gameManager.Variables.Vector2Variables.Length > 0 || _gameManager.Variables.Vector3Variables.Length > 0)
+                EditorGUILayout.HelpBox("Note: Persisting of runtime changes to Bool, Vector2 and Vector3 variables is only supported with the PlayerPrefs integration. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
+#endif
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(_variablesProperty, true);
+            EditorGUI.indentLevel--;
+            EditorGUILayout.EndVertical();
+        }
+
 
         void DrawLocalisation()
         {

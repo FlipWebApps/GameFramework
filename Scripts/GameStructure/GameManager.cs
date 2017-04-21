@@ -318,6 +318,15 @@ namespace GameFramework.GameStructure
         public string[] SupportedLanguages;
 
         #endregion Localisation Inspector Values
+        #region Global Variables
+
+        /// <summary>
+        /// A list of custom variables for this game item.
+        /// </summary>
+        [Tooltip("A list of custom variables for this game item.")]
+        public Variables.ObjectModel.Variables Variables;
+
+        #endregion Global Variables
 
         // Various properties
         #region GamePlay properties
