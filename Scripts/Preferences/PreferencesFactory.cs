@@ -182,6 +182,14 @@ namespace GameFramework.Preferences
         }
 
         /// <summary>
+        /// Factory method for getting Color preferences
+        /// </summary>
+        public static Color? GetColor(string key, Color? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return Instance.GetColor(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
         /// Factory method for the similar method in PlayerPrefs.
         /// </summary>
         public static bool HasKey(string key)
@@ -249,6 +257,14 @@ namespace GameFramework.Preferences
         public static void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
         {
             Instance.SetVector3(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Factory method for setting Color preferences
+        /// </summary>
+        public static void SetColor(string key, Color value, bool? useSecurePrefs = null)
+        {
+            Instance.SetColor(key, value, useSecurePrefs);
         }
 
         #region Flags

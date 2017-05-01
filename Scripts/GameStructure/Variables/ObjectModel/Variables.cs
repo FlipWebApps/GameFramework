@@ -152,6 +152,24 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         [SerializeField]
         Vector3Variable[] _Vector3Variables = new Vector3Variable[0];
 
+        /// <summary>
+        /// An array of ColorVariables
+        /// </summary>
+        public ColorVariable[] ColorVariables
+        {
+            get
+            {
+                return _colorVariables;
+            }
+            set
+            {
+                _colorVariables = value;
+            }
+        }
+        [Tooltip("An array of ColorVariables.")]
+        [SerializeField]
+        ColorVariable[] _colorVariables = new ColorVariable[0];
+
         #endregion Editor Parameters
 
         #region Load / Save
@@ -204,6 +222,13 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
                 else
                     variable.Value = variable.DefaultValue;
             }
+            foreach (var variable in ColorVariables)
+            {
+                if (variable.PersistChanges)
+                    variable.Value = PreferencesFactory.GetColor(prefix + variable.Tag, variable.DefaultValue, useSecurePrefs) ?? Color.white;
+                else
+                    variable.Value = variable.DefaultValue;
+            }
         }
 
         /// <summary>
@@ -243,6 +268,11 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
             {
                 if (variable.PersistChanges)
                     PreferencesFactory.SetVector3(prefix + variable.Tag, variable.Value, useSecurePrefs);
+            }
+            foreach (var variable in ColorVariables)
+            {
+                if (variable.PersistChanges)
+                    PreferencesFactory.SetColor(prefix + variable.Tag, variable.Value, useSecurePrefs);
             }
         }
         #endregion Load / Save
@@ -321,6 +351,19 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
         public Vector3Variable GetVector3(string tag)
         {
             foreach (var variable in Vector3Variables)
+                if (variable.Tag == tag)
+                    return variable;
+            return null;
+        }
+
+        /// <summary>
+        /// Return a ColorVariable with the given tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public ColorVariable GetColor(string tag)
+        {
+            foreach (var variable in ColorVariables)
                 if (variable.Tag == tag)
                     return variable;
             return null;
@@ -478,6 +521,14 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
 
     [Serializable]
     public class Vector3Variable : Variable<Vector3>
+    {
+        #region Editor Parameters
+
+        #endregion Editor Parameters
+    }
+
+    [Serializable]
+    public class ColorVariable : Variable<Color>
     {
         #region Editor Parameters
 

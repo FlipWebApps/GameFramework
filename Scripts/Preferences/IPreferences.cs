@@ -90,6 +90,11 @@ namespace GameFramework.Preferences
         Vector3? GetVector3(string key, Vector3? defaultValue = null, bool? useSecurePrefs = null);
 
         /// <summary>
+        /// Get Color preferences
+        /// </summary>
+        Color? GetColor(string key, Color? defaultValue = null, bool? useSecurePrefs = null);
+
+        /// <summary>
         /// For the similar method in PlayerPrefs.
         /// </summary>
         bool HasKey(string key, bool? useSecurePrefs = null);
@@ -128,6 +133,11 @@ namespace GameFramework.Preferences
         /// Set Vector3 preferences
         /// </summary>
         void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null);
+
+        /// <summary>
+        /// Set Color preferences
+        /// </summary>
+        void SetColor(string key, Color value, bool? useSecurePrefs = null);
     }
 }
 

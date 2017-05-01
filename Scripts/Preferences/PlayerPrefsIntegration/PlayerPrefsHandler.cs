@@ -131,6 +131,15 @@ namespace GameFramework.Preferences.PlayerPrefsIntegration
         }
 
         /// <summary>
+        /// Get Color preferences
+        /// </summary>
+        public Color? GetColor(string key, Color? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Color preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+            return defaultValue;
+        }
+
+        /// <summary>
         /// Wrapper for the same method in PlayerPrefs.
         /// </summary>
         public bool HasKey(string key, bool? useSecurePrefs = null)
@@ -192,6 +201,14 @@ namespace GameFramework.Preferences.PlayerPrefsIntegration
         public void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
         {
             MyDebug.LogWarning("Vector3 preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
+        }
+
+        /// <summary>
+        /// Set Color preferences
+        /// </summary>
+        public void SetColor(string key, Color value, bool? useSecurePrefs = null)
+        {
+            MyDebug.LogWarning("Color preferences are only supported with the PlayerPrefs integration. See Main Menu | Window | Game Framework | Integrations Window for more details.");
         }
     }
 }

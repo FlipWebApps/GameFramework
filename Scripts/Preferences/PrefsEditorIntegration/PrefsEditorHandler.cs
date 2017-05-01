@@ -135,6 +135,14 @@ namespace GameFramework.Preferences.PrefsEditorIntegration
         }
 
         /// <summary>
+        /// Get Color preferences
+        /// </summary>
+        public Color? GetColor(string key, Color? defaultValue = null, bool? useSecurePrefs = null)
+        {
+            return SecurePlayerPrefs.GetColor(key, defaultValue, useSecurePrefs);
+        }
+
+        /// <summary>
         /// Wrapper for the same method in PlayerPrefs but works with encrypted player prefs.
         /// </summary>
         public bool HasKey(string key, bool? useSecurePrefs = null)
@@ -196,6 +204,14 @@ namespace GameFramework.Preferences.PrefsEditorIntegration
         public void SetVector3(string key, Vector3 value, bool? useSecurePrefs = null)
         {
             SecurePlayerPrefs.SetVector3(key, value, useSecurePrefs);
+        }
+
+        /// <summary>
+        /// Set Color preferences
+        /// </summary>
+        public void SetColor(string key, Color value, bool? useSecurePrefs = null)
+        {
+            SecurePlayerPrefs.SetColor(key, value, useSecurePrefs);
         }
     }
 }
