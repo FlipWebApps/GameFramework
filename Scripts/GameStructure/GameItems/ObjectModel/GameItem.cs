@@ -504,6 +504,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             _isPlayer = IdentifierBase == "Player";
 
             // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
+            if (player == null) Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene and possibly increase the priority in ScriptExecutionOrder");
             Player = player ?? GameManager.Instance.Player;
 
             PrefsPrefixShared = IdentifierBasePrefs + Number + ".";

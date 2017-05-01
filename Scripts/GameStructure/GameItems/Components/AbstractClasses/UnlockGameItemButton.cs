@@ -322,7 +322,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             var canUnlock = false;
             if (!DisableIfCanNotUnlock)
             {
-                // if there are no more items available to unlock disable anyway, otherwise enabled for trying.
+                // if there are no more items available to unlock then still disable anyway, otherwise enabled for trying.
                 canUnlock = GetGameItemManager().HasMoreLockedCoinUnlockableItems();
             }
             else
@@ -386,17 +386,24 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 _gameItemToUnlock = gameItem;
                 _alreadyUnlocked = _gameItemToUnlock.IsUnlocked;
 
-                if (ShowConfirmWindow)
+                if (gameItem.ValueToUnlock > GameManager.Instance.Player.Coins)
                 {
-                    DisplayConfirmWindow();
-                }
-                else if (ShowUnlockWindow)
-                {
-                    DisplayUnlockWindow();
+                    DisplayCanNotUnlockWindow();
                 }
                 else
                 {
-                    ProcessUnlock();
+                    if (ShowConfirmWindow)
+                    {
+                        DisplayConfirmWindow();
+                    }
+                    else if (ShowUnlockWindow)
+                    {
+                        DisplayUnlockWindow();
+                    }
+                    else
+                    {
+                        ProcessUnlock();
+                    }
                 }
             }
             else
