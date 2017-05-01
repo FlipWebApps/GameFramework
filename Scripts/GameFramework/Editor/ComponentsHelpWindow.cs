@@ -207,6 +207,7 @@ namespace GameFramework.Localisation.Editor
             new ComponentHelp("GenericCallbackFunctions", "A collection of generic callback functions that can be used from UI input,  animators or otherwise that didn't really fit anywhere else!", typeof(Helper.Components.GenericCallbackFunctions), "Helper"),
 
             // Input
+            new ComponentHelp("OnButtonLoadScene", "Loads the given scene when a button is pressed optionally using any setup transitions (requires Beautiful Transitions)", typeof(Input.Components.OnButtonLoadScene), "Input", "GameStructure"),
             new ComponentHelp("OnEscapeLoadScene", "Loads the specified scene when the escape key or android back button is pressed", typeof(Input.Components.OnEscapeLoadScene), "Input", "GameStructure"),
             new ComponentHelp("OnEscapeQuit", "Quit the application when the escape key or android back button is pressed", typeof(Input.Components.OnEscapeQuit), "Input", "GameStructure"),
             new ComponentHelp("OnMouseClickOrTapLoadScene", "Loads the given scene when a mouse button is pressed or the screen is tapped", typeof(Input.Components.OnMouseClickOrTapLoadScene), "Input", "GameStructure"),
