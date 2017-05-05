@@ -75,6 +75,8 @@ namespace GameFramework.Display.Other.Components
         [Range(0, 1)]
         public float NormalisedBottom = 0;
 
+        GameObject _gradientPlaneGameObject;
+
         void Awake()
         {
             var attachedCamera = gameObject.GetComponent<Camera>();
@@ -90,9 +92,20 @@ namespace GameFramework.Display.Other.Components
             var gradientCam = new GameObject("Gradient Cam", typeof(Camera)).GetComponent<Camera>();
             gradientCam.depth = attachedCamera.depth - 1;
             gradientCam.cullingMask = 1 << GradientLayer;
+            DisplayGradient();
+        }
+
+        /// <summary>
+        /// Setup a new Gradient, destroying any old one that is already setup.
+        /// </summary>
+        public void DisplayGradient()
+        {
+            // destroy any old gradient place.
+            if (_gradientPlaneGameObject != null)
+                Destroy(_gradientPlaneGameObject);
 
             //1.154 is the height of a plane at z=0 with the default camera field of view of 60. .577 is half this.
-            var top = -.577f + (NormalisedTop*1.154f);
+            var top = -.577f + (NormalisedTop * 1.154f);
             var bottom = -.577f + (NormalisedBottom * 1.154f);
             var mesh = new Mesh
             {
@@ -102,17 +115,17 @@ namespace GameFramework.Display.Other.Components
                         new Vector3(-100f, top, 1f), new Vector3(100f, top, 1f), new Vector3(-100f, bottom, 1f),
                         new Vector3(100f, bottom, 1f)
                     },
-                colors = new[] {TopColor, TopColor, BottomColor, BottomColor},
-                triangles = new[] {0, 1, 2, 1, 3, 2}
+                colors = new[] { TopColor, TopColor, BottomColor, BottomColor },
+                triangles = new[] { 0, 1, 2, 1, 3, 2 }
             };
 
             var mat = new Material(Shader);
-            var gradientPlane = new GameObject("Gradient Plane", typeof(MeshFilter), typeof(MeshRenderer));
+            _gradientPlaneGameObject = new GameObject("Gradient Plane", typeof(MeshFilter), typeof(MeshRenderer));
 
-            ((MeshFilter)gradientPlane.GetComponent(typeof(MeshFilter))).mesh = mesh;
-            var gradRend = gradientPlane.GetComponent<Renderer>();
+            ((MeshFilter)_gradientPlaneGameObject.GetComponent(typeof(MeshFilter))).mesh = mesh;
+            var gradRend = _gradientPlaneGameObject.GetComponent<Renderer>();
             gradRend.material = mat;
-            gradientPlane.layer = GradientLayer;
+            _gradientPlaneGameObject.layer = GradientLayer;
         }
     }
 }
