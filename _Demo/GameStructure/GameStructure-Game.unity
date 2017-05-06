@@ -1638,6 +1638,7 @@ GameObject:
   - 23: {fileID: 1347754574}
   - 114: {fileID: 1347754573}
   - 114: {fileID: 1347754577}
+  - 114: {fileID: 1347754578}
   m_Layer: 0
   m_Name: Lose Health
   m_TagString: Untagged
@@ -1754,6 +1755,23 @@ MonoBehaviour:
   YAngle: 0
   ZAngle: 0
   OnlyWhenLevelRunning: 0
+--- !u!114 &1347754578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1347754571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 862a37582643f874ab88c643272be545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _context:
+    _contextMode: 0
+    _number: 0
+    _reactToChanges: 1
+    _referencedGameItemContextBase: {fileID: 0}
+  _tag: ObstacleScale
 --- !u!1 &1679453244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,6 +1857,7 @@ GameObject:
   - 92: {fileID: 1707624670}
   - 124: {fileID: 1707624669}
   - 81: {fileID: 1707624668}
+  - 114: {fileID: 1707624674}
   - 114: {fileID: 1707624673}
   m_Layer: 0
   m_Name: Main Camera
@@ -1931,6 +1950,24 @@ MonoBehaviour:
   GradientLayer: 7
   NormalisedTop: 1
   NormalisedBottom: 0
+--- !u!114 &1707624674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1707624667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22c49b34070b994f8d4b1c563099379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _context:
+    _contextMode: 0
+    _number: 0
+    _reactToChanges: 1
+    _referencedGameItemContextBase: {fileID: 0}
+  _tagTopColor: GradientTop
+  _tagBottomColor: GradientBottom
 --- !u!224 &1751037702 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22479264, guid: 1e89682e4ee4daa4baeda09cd8aee5d0,

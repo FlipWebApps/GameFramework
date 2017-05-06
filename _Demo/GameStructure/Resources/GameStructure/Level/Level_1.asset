@@ -49,6 +49,30 @@ MonoBehaviour:
     _intVariables: []
     _floatVariables: []
     _stringVariables: []
+    _Vector2Variables: []
+    _Vector3Variables:
+    - _tag: ObstacleScale
+      _name:
+        _isLocalised: 0
+        _data: 
+      _category: 
+      _defaultValue: {x: 1, y: 0.5, z: 0.5}
+      _persistChanges: 0
+    _colorVariables:
+    - _tag: GradientTop
+      _name:
+        _isLocalised: 0
+        _data: 
+      _category: 
+      _defaultValue: {r: 0.34509805, g: 0.34509805, b: 0.4627451, a: 1}
+      _persistChanges: 0
+    - _tag: GradientBottom
+      _name:
+        _isLocalised: 0
+        _data: 
+      _category: 
+      _defaultValue: {r: 1, g: 1, b: 1, a: 1}
+      _persistChanges: 0
   _starTotalCount: 3
   _star1Target: 6
   _star2Target: 8
