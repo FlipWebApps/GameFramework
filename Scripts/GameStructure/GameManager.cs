@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using GameFramework.Debugging;
 using GameFramework.Display.Placement;
@@ -41,7 +42,6 @@ using GameFramework.GameStructure.Game.Messages;
 using GameFramework.Preferences;
 using GameFramework.Audio.Messages;
 using GameFramework.GameStructure.GameItems.Messages;
-
 #pragma warning disable 618
 
 #if BEAUTIFUL_TRANSITIONS
@@ -62,7 +62,7 @@ namespace GameFramework.GameStructure
         /// <summary>
         ///  different ways that we can load the different GameItems
         /// </summary>
-        public enum GameItemSetupMode { None, Automatic, FromResources, Specified }
+        public enum GameItemSetupMode { None, Automatic, FromResources, Specified, MasterWithOverrides }
 
         // Inspector Values
         #region General 
@@ -266,6 +266,18 @@ namespace GameFramework.GameStructure
         /// </summary>
         [Tooltip("The default number of coins to unlock levels (can be overriden by json configuration files or code) if using automatic setup.")]
         public int CoinsToUnlockLevels = 10;
+
+        /// <summary>
+        /// A master level configuration file that is used as the basis for setting up levels.
+        /// </summary>
+        [Tooltip("A master level configuration file that is used as the basis for setting up levels.")]
+        public Level LevelMaster;
+
+        /// <summary>
+        /// A master level configuration file that is used as the basis for setting up levels.
+        /// </summary>
+        [Tooltip("A master level configuration file that is used as the basis for setting up levels.")]
+        public List<NumberedLevelReference> NumberedLevelReferences;
 
         /// <summary>
         /// How we want characters to be setup.
@@ -703,6 +715,8 @@ namespace GameFramework.GameStructure
                     Levels.Load(1, NumberOfAutoCreatedLevels);
                 else if (LevelSetupMode == GameItemSetupMode.Specified)
                     Debug.LogError("Level 'Specified' setup mode is not currently implemented. Use one of the other modes for now.");
+                else if (LevelSetupMode == GameItemSetupMode.MasterWithOverrides)
+                    Levels.LoadMasterWithOverrides(1, NumberOfAutoCreatedLevels, LevelMaster, NumberedLevelReferences.ToArray());
             }
 
 

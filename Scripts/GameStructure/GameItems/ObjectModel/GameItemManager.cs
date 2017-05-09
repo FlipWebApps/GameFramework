@@ -29,6 +29,7 @@ using GameFramework.Debugging;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel
@@ -176,37 +177,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
         /// <summary>
-        /// Load method that will setup the GameItems using common defaults before standard selection and unlock setup. 
-        /// </summary>
-        public void LoadAutomatic(int startNumber, int lastNumber, int valueToUnlock = -1, bool unlockWithCompletion = false, bool unlockWithCoins = false)
-        {
-            var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
-            Assert.AreNotEqual(count, 0, "You need to create 1 or more items in GameItemManager.LoadAutomatic()");
-
-            Items = new T[count];
-            for (var i = 0; i < count; i++)
-            {
-                Items[i] = ScriptableObject.CreateInstance<T>();
-                Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
-                    LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
-                Items[i].UnlockWithCompletion = unlockWithCompletion;
-                Items[i].UnlockWithCoins = unlockWithCoins;
-            }
-
-            SetupSelectedItem();
-
-            // Ensure the first item is always unlocked.
-            if (!Items[0].IsUnlocked)
-            {
-                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
-                Items[0].UpdatePlayerPrefs();
-            }
-
-            _isLoaded = true;
-        }
-
-
-        /// <summary>
         /// Load method that will setup the Items collection using GameItem configuration files from the resources folder
         /// </summary>
         /// If any items are not able to be loaded then we will create a default item and show a warning.
@@ -252,6 +222,79 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 #endif
 
             SetupSelectedItem();
+            _isLoaded = true;
+        }
+
+
+        /// <summary>
+        /// Load method that will setup the GameItems using common defaults before standard selection and unlock setup. 
+        /// </summary>
+        public void LoadAutomatic(int startNumber, int lastNumber, int valueToUnlock = -1, bool unlockWithCompletion = false, bool unlockWithCoins = false)
+        {
+            var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
+            Assert.AreNotEqual(count, 0, "You need to create 1 or more items in GameItemManager.LoadAutomatic()");
+
+            Items = new T[count];
+            for (var i = 0; i < count; i++)
+            {
+                Items[i] = ScriptableObject.CreateInstance<T>();
+                Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
+                    LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
+                Items[i].UnlockWithCompletion = unlockWithCompletion;
+                Items[i].UnlockWithCoins = unlockWithCoins;
+            }
+
+            SetupSelectedItem();
+
+            // Ensure the first item is always unlocked.
+            if (!Items[0].IsUnlocked)
+            {
+                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
+                Items[0].UpdatePlayerPrefs();
+            }
+
+            _isLoaded = true;
+        }
+
+
+        /// <summary>
+        /// Load method that will setup the GameItems using a master with overrides for specific levels. 
+        /// </summary>
+        public void LoadMasterWithOverrides(int startNumber, int lastNumber, GameItem master, NumberedGameItemReference<T>[] overrides)
+        {
+            var count = (lastNumber + 1) - startNumber;     // e.g. if start == 1 and last == 1 then we still want to create item number 1
+            Assert.AreNotEqual(count, 0, "You need to create 1 or more items in GameItemManager.LoadMasterWithOverrides()");
+            Assert.IsNotNull(master, "You must specify a master GameItem of type " + TypeName);
+
+            Items = new T[count];
+            for (var i = 1; i <= count; i++)
+            {
+                // check for any override
+                var instance = master;
+                foreach (var gameItemOverride in overrides)
+                {
+                    if (gameItemOverride.Number == i)
+                    {
+                        instance = gameItemOverride.GameItemReference;
+                        break;
+                    }
+                }
+                var gameItem = UnityEngine.Object.Instantiate(instance) as T; // create a copy so we don't overwrite values.
+                Assert.IsNotNull(gameItem, "The gameItem for item " + i + " is not of type " + TypeName);
+                gameItem.Number = i;
+                gameItem.InitialiseNonScriptableObjectValues();
+                Items[i-1] = gameItem;
+            }
+
+            SetupSelectedItem();
+
+            // Ensure the first item is always unlocked - TODO don't do this if there is an override!!
+            if (!Items[0].IsUnlocked)
+            {
+                Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
+                Items[0].UpdatePlayerPrefs();
+            }
+
             _isLoaded = true;
         }
 

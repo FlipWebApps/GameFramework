@@ -39,6 +39,7 @@ namespace GameFramework.GameStructure.Editor
         bool _showPlayerAdvanced;
 
         ReorderableList _supportedLanguagesList;
+        ReorderableList _numberedLevelReferencesList;
 
         SerializedProperty _gameNameProperty;
         SerializedProperty _playWebUrlProperty;
@@ -74,6 +75,8 @@ namespace GameFramework.GameStructure.Editor
         SerializedProperty _numberOfAutoCreatedLevelsProperty;
         SerializedProperty _coinsToUnlockLevelsProperty;
         SerializedProperty _levelUnlockModeProperty;
+        SerializedProperty _levelMasterProperty;
+        SerializedProperty _numberedLevelReferencesProperty;
 
         SerializedProperty _characterSetupModeProperty;
         SerializedProperty _autoCreateCharactersProperty;
@@ -119,6 +122,8 @@ namespace GameFramework.GameStructure.Editor
             _numberOfAutoCreatedLevelsProperty = serializedObject.FindProperty("NumberOfAutoCreatedLevels");
             _levelUnlockModeProperty = serializedObject.FindProperty("LevelUnlockMode");
             _coinsToUnlockLevelsProperty = serializedObject.FindProperty("CoinsToUnlockLevels");
+            _levelMasterProperty = serializedObject.FindProperty("LevelMaster");
+            _numberedLevelReferencesProperty = serializedObject.FindProperty("NumberedLevelReferences");
 
             _characterSetupModeProperty = serializedObject.FindProperty("CharacterSetupMode");
             _autoCreateCharactersProperty = serializedObject.FindProperty("AutoCreateCharacters");
@@ -138,6 +143,33 @@ namespace GameFramework.GameStructure.Editor
                         new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                         element, GUIContent.none);
                 };
+
+            _numberedLevelReferencesList = new ReorderableList(serializedObject, _numberedLevelReferencesProperty, true, true, true, true);
+            _numberedLevelReferencesList.drawHeaderCallback = (Rect rect) => {
+                EditorGUI.LabelField(rect, "Level Overrides (Between 1 and " + _numberOfAutoCreatedLevelsProperty.intValue + ")");
+            };
+            _numberedLevelReferencesList.drawElementCallback =
+                (Rect rect, int index, bool isActive, bool isFocused) => {
+                    var element = _numberedLevelReferencesList.serializedProperty.GetArrayElementAtIndex(index);
+                    var oldIndent = EditorGUI.indentLevel;
+                    EditorGUI.indentLevel = 0;
+                    rect.y += 2;
+                    EditorGUI.PropertyField(
+                        new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight),
+                        element.FindPropertyRelative("Number"), GUIContent.none);
+                    EditorGUI.PropertyField(
+                        new Rect(rect.x + 65, rect.y, rect.width - 65, EditorGUIUtility.singleLineHeight),
+                        element.FindPropertyRelative("GameItemReference"), GUIContent.none);
+                    EditorGUI.indentLevel = oldIndent;
+                };
+            _numberedLevelReferencesList.onAddCallback = (ReorderableList l) => {
+                var index = l.serializedProperty.arraySize;
+                l.serializedProperty.arraySize++;
+                l.index = index;
+                var element = l.serializedProperty.GetArrayElementAtIndex(index);
+                element.FindPropertyRelative("Number").intValue = 1;
+                element.FindPropertyRelative("GameItemReference").objectReferenceValue = null;
+            };
         }
 
         public override void OnInspectorGUI()
@@ -226,7 +258,9 @@ namespace GameFramework.GameStructure.Editor
                 EditorGUI.indentLevel -= 1;
             }
             else if (_playerSetupModeProperty.enumValueIndex == 3)
-                EditorGUILayout.HelpBox("Specified mode is coming soon...", MessageType.Info);
+                EditorGUILayout.HelpBox("Specified mode is not currently implemented for Players. Let us know if you need this functionality...", MessageType.Info);
+            else if (_playerSetupModeProperty.enumValueIndex == 4)
+                EditorGUILayout.HelpBox("MasterWithOverrides mode is not currently implemented for Players. Let us know if you need this functionality...", MessageType.Info);
             EditorGUILayout.EndVertical();
 
             // Worlds setup
@@ -248,7 +282,9 @@ namespace GameFramework.GameStructure.Editor
                     EditorGUILayout.PropertyField(_numberOfAutoCreatedWorldsProperty, new GUIContent("Count"));
                 }
                 else if (_worldSetupModeProperty.enumValueIndex == 3)
-                    EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
+                    EditorGUILayout.HelpBox("Specified mode is not currently implemented for Worlds. Let us know if you need this functionality...", MessageType.Info);
+                else if (_worldSetupModeProperty.enumValueIndex == 4)
+                    EditorGUILayout.HelpBox("MasterWithOverrides mode is not currently implemented for Worlds. Let us know if you need this functionality...", MessageType.Info);
 
                 // per world level setup
                 EditorGUILayout.BeginVertical("Box");
@@ -270,7 +306,9 @@ namespace GameFramework.GameStructure.Editor
                         EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
                     }
                     else if (_levelSetupModeProperty.enumValueIndex == 3)
-                        EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
+                        EditorGUILayout.HelpBox("Specified mode is not currently implemented for World Levels. Let us know if you need this functionality...", MessageType.Info);
+                    else if (_levelSetupModeProperty.enumValueIndex == 4)
+                        EditorGUILayout.HelpBox("MasterWithOverrides mode is not currently implemented for World Levels. Let us know if you need this functionality...", MessageType.Info);
 
                     // level number ranges
                     if (_levelSetupModeProperty.enumValueIndex == 1 || _levelSetupModeProperty.enumValueIndex == 2)
@@ -315,12 +353,20 @@ namespace GameFramework.GameStructure.Editor
                         if (_levelUnlockModeProperty.enumValueIndex == 2)
                             EditorGUILayout.PropertyField(_coinsToUnlockLevelsProperty);
                     }
-                    if (_levelSetupModeProperty.enumValueIndex == 2)
+                    else if (_levelSetupModeProperty.enumValueIndex == 2)
                     {
                         EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
                     }
-                    if (_levelSetupModeProperty.enumValueIndex == 3)
-                        EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
+                    else if (_levelSetupModeProperty.enumValueIndex == 3)
+                        EditorGUILayout.HelpBox("Specified mode is not currently implemented for Levels. Let us know if you need this functionality...", MessageType.Info);
+                    else if (_levelSetupModeProperty.enumValueIndex == 4)
+                    {
+                        EditorGUILayout.PropertyField(_numberOfAutoCreatedLevelsProperty, new GUIContent("Count"));
+                        EditorGUILayout.PropertyField(_levelMasterProperty, new GUIContent("Master"));
+                        EditorGUI.indentLevel += 1;
+                        _numberedLevelReferencesList.DoLayoutList();
+                        EditorGUI.indentLevel -= 1;
+                    }
                 }
                 EditorGUILayout.EndVertical();
             }
@@ -340,12 +386,14 @@ namespace GameFramework.GameStructure.Editor
                     if (_characterUnlockModeProperty.enumValueIndex == 2)
                         EditorGUILayout.PropertyField(_coinsToUnlockCharactersProperty);
                 }
-                if (_characterSetupModeProperty.enumValueIndex == 2)
+                else if (_characterSetupModeProperty.enumValueIndex == 2)
                 {
                     EditorGUILayout.PropertyField(_numberOfAutoCreatedCharactersProperty, new GUIContent("Count"));
                 }
-                if (_characterSetupModeProperty.enumValueIndex == 3)
-                    EditorGUILayout.HelpBox("Specified mode is coming soon please use a different mode for now...", MessageType.Info);
+                else if (_characterSetupModeProperty.enumValueIndex == 3)
+                    EditorGUILayout.HelpBox("Specified mode is not currently implemented for Characters. Let us know if you need this functionality...", MessageType.Info);
+                else if (_characterSetupModeProperty.enumValueIndex == 4)
+                    EditorGUILayout.HelpBox("MasterWithOverrides mode is not currently implemented for Characters. Let us know if you need this functionality...", MessageType.Info);
             }
             EditorGUILayout.EndVertical();
         }

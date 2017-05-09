@@ -56,7 +56,7 @@ MonoBehaviour:
         _isLocalised: 0
         _data: 
       _category: 
-      _defaultValue: {x: 1, y: 2, z: 2}
+      _defaultValue: {x: 20, y: 2, z: 2}
       _persistChanges: 0
     _colorVariables:
     - _tag: GradientTop
