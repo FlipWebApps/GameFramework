@@ -106,9 +106,9 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
             property = triggerDataProperty.FindPropertyRelative("_audioClip");
             EditorGUILayout.PropertyField(property);
             property = triggerDataProperty.FindPropertyRelative("_enableGameObjects");
-            EditorGUILayout.PropertyField(property);
+            EditorGUILayout.PropertyField(property, true);
             property = triggerDataProperty.FindPropertyRelative("_disableGameObjects");
-            EditorGUILayout.PropertyField(property);
+            EditorGUILayout.PropertyField(property, true);
         }
 
 
