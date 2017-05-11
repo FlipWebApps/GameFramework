@@ -20,9 +20,11 @@
 //----------------------------------------------
 
 using System;
+using GameFramework.Helper.UnityEvents;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 namespace GameFramework.GameStructure.Colliders
 {
@@ -289,7 +291,7 @@ namespace GameFramework.GameStructure.Colliders
                 _lastTriggerTime = Time.time;
                 _lastWithinTime = _lastTriggerTime;
 
-                ProcessTriggerData(Enter);
+                ProcessTriggerData(Enter, collidingGameObject);
                 EnterOccurred(collidingGameObject);
 
                 switch (DisableAfterUse)
@@ -335,7 +337,7 @@ namespace GameFramework.GameStructure.Colliders
             {
                 _lastWithinTime = Time.time;
 
-                ProcessTriggerData(Within);
+                ProcessTriggerData(Within, collidingGameObject);
                 StayOccurred(collidingGameObject);
             }
         }
@@ -360,7 +362,7 @@ namespace GameFramework.GameStructure.Colliders
             if ((!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
                 collidingGameObject.CompareTag(CollidingTag) && !_processingDisabled)
             {
-                ProcessTriggerData(Exit);
+                ProcessTriggerData(Exit, collidingGameObject);
                 ExitOccurred(collidingGameObject);
             }
         }
@@ -380,7 +382,7 @@ namespace GameFramework.GameStructure.Colliders
         /// Processing of any trigger data.
         /// </summary>
         /// <param name="triggerData"></param>
-        void ProcessTriggerData(TriggerData triggerData)
+        void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
             if (triggerData.InstantiatePrefab != null)
                 Instantiate(triggerData.InstantiatePrefab, transform.position, Quaternion.identity);
@@ -403,6 +405,8 @@ namespace GameFramework.GameStructure.Colliders
             foreach (var gameobject in triggerData.DisableGameObjects)
                 if (gameobject != null)
                     gameobject.SetActive(false);
+
+            triggerData.Callback.Invoke(collidingGameObject);
         }
 
 
@@ -498,6 +502,24 @@ namespace GameFramework.GameStructure.Colliders
             [Tooltip("An optional list of gameobjects to disable")]
             [SerializeField]
             GameObject[] _disableGameObjects;
+
+            /// <summary>
+            /// Methods that should be called.
+            /// </summary>
+            public UnityGameObjectEvent Callback
+            {
+                get
+                {
+                    return _callback;
+                }
+                set
+                {
+                    _callback = value;
+                }
+            }
+            [Tooltip("Methods that should be called.")]
+            [SerializeField]
+            UnityGameObjectEvent _callback;
         }
     }
 }

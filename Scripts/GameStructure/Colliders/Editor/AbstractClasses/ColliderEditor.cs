@@ -109,6 +109,8 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
             EditorGUILayout.PropertyField(property, true);
             property = triggerDataProperty.FindPropertyRelative("_disableGameObjects");
             EditorGUILayout.PropertyField(property, true);
+            property = triggerDataProperty.FindPropertyRelative("_callback");
+            EditorGUILayout.PropertyField(property, true);
         }
 
 
