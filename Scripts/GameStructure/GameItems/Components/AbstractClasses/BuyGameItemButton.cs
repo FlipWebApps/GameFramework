@@ -224,6 +224,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             else if (ConfirmDialogSpriteType == UnlockGameItemButton.DialogSpriteType.Custom)
                 sprite = ConfirmDialogSprite.GetSprite();
 
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, ConfirmContentPrefab, null, runtimeAnimatorController: ConfirmContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: ConfirmTitleText.FormatValue(_gameItemToBuy.Name, _gameItemToBuy.Description, _gameItemToBuy.ValueToUnlock),
                 text: ValueOrNull(ConfirmText1.FormatValue(_gameItemToBuy.Name, _gameItemToBuy.Description, _gameItemToBuy.ValueToUnlock)),

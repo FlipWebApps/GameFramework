@@ -687,6 +687,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayBuyOrUnlockDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, BuyOrUnlockContentPrefab, null, runtimeAnimatorController: BuyOrUnlockContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: BuyOrUnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
                 text: ValueOrNull(BuyOrUnlockText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
@@ -706,6 +707,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayBuyCantUnlockDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, BuyCantUnlockContentPrefab, null, runtimeAnimatorController: BuyCantUnlockContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: BuyCantUnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
                 text: ValueOrNull(BuyCantUnlockText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
@@ -724,6 +726,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayBuyDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             DialogManager.Instance.Show(title: BuyTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
                text: ValueOrNull(BuyText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
                text2: ValueOrNull(BuyText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
@@ -738,6 +741,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayConfirmUnlockDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, ConfirmContentPrefab, null, runtimeAnimatorController: ConfirmContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: ConfirmTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
                 text: ValueOrNull(ConfirmText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
@@ -756,6 +760,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayUnlockDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
             var unlockWindowSprite = GameItem.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
             dialogInstance.Show(title: UnlockTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
@@ -771,6 +776,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         void DisplayNotEnoughCoinsDialog()
         {
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, NotEnoughCoinsContentPrefab, null, runtimeAnimatorController: NotEnoughCoinsContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(titleKey: NotEnoughCoinsTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
                 textKey: ValueOrNull(NotEnoughCoinsText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),

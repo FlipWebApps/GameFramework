@@ -24,6 +24,7 @@ using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -425,6 +426,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             else if (CanNotUnlockDialogSpriteType == UnlockGameItemButton.DialogSpriteType.Custom)
                 sprite = CanNotUnlockDialogSprite.GetSprite();
 
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, CanNotUnlockContentPrefab, null, runtimeAnimatorController: CanNotUnlockContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: CanNotUnlockTitleText.GetValue(),
                 text: ValueOrNull(CanNotUnlockText1.GetValue()),
@@ -449,6 +451,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             else if (ConfirmDialogSpriteType == UnlockGameItemButton.DialogSpriteType.Custom)
                 sprite = ConfirmDialogSprite.GetSprite();
 
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, ConfirmContentPrefab, null, runtimeAnimatorController: ConfirmContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: ConfirmTitleText.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock),
                 text: ValueOrNull(ConfirmText1.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),
@@ -507,6 +510,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             GameManager.Instance.Player.UpdatePlayerPrefs();
             var unlockWindowSprite = _gameItemToUnlock.GetSpriteByType(GameItem.LocalisableSpriteType.UnlockWindow);
 
+            Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, UnlockContentPrefab, null, runtimeAnimatorController: UnlockContentAnimatorController, contentSiblingIndex: 1);
             dialogInstance.Show(title: UnlockTitleText.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock),
                 text: ValueOrNull(textKey.FormatValue(_gameItemToUnlock.Name, _gameItemToUnlock.Description, _gameItemToUnlock.ValueToUnlock)),

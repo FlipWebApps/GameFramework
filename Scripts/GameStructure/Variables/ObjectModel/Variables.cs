@@ -39,7 +39,8 @@ namespace GameFramework.GameStructure.Variables.ObjectModel
             Int,
             String,
             Vector2,
-            Vector3
+            Vector3,
+            Color
         }
 
         #region Editor Parameters

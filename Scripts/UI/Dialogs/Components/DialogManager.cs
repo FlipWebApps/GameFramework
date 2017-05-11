@@ -182,7 +182,7 @@ namespace GameFramework.UI.Dialogs.Components
 
 
         /// <summary>
-        /// 
+        /// Create an instance of the specified dialog
         /// </summary>
         /// <param name="prefabName"></param>
         /// <param name="contentPrefabName"></param>
