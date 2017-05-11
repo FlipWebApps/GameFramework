@@ -288,8 +288,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
             SetupSelectedItem();
 
-            // Ensure the first item is always unlocked - TODO don't do this if there is an override!!
-            if (!Items[0].IsUnlocked)
+            // Ensure the first item is always unlocked but only if no override already in place for the first level.
+            if (!Items[0].IsUnlocked && overrides.Length > 0 && overrides[0].Number != 1)
             {
                 Items[0].StartUnlocked = Items[0].IsUnlocked = Items[0].IsUnlockedAnimationShown = true;
                 Items[0].UpdatePlayerPrefs();
