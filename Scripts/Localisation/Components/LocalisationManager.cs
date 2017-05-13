@@ -33,7 +33,7 @@ namespace GameFramework.Localisation.Components
     /// <summary>
     /// Provides dialog creation, display and management functionality.
     /// </summary>
-    [AddComponentMenu("Game Framework/Localisation/LocalisationManager")]
+    [AddComponentMenu("Game Framework/Localisation/Localisation Manager")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class LocalisationManager : Singleton<LocalisationManager>
     {
@@ -85,5 +85,10 @@ namespace GameFramework.Localisation.Components
         string[] _supportedLanguages;
 
         #endregion editor fields
+
+        void Awake()
+        {
+            Debug.Log("TODO - Sanity check that the loaded localisation files actually contain the supported languages.");
+        }
     }
 }

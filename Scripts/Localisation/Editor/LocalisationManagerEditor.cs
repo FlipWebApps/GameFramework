@@ -71,6 +71,7 @@ namespace GameFramework.Localisation.Editor
                         new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                         element, GUIContent.none);
                 };
+
         }
 
         public override void OnInspectorGUI()

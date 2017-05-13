@@ -19,13 +19,18 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace GameFramework.Localisation.ObjectModel
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// Notes: We could have used a 2d array / matrix to hold values for each language, but would still need a dictionary to reference 
+    /// metadata such as the key (and index into the 2d array) pro's and con's of both, but we just put an entry astraight into the dictionary for now.
     [CreateAssetMenu(fileName = "Localisation", menuName = "Game Framework/Localisation")]
     [System.Serializable]
     public class LocalisationData : ScriptableObject //, ISerializationCallbackReceiver
@@ -59,14 +64,14 @@ namespace GameFramework.Localisation.ObjectModel
         /// <summary>
         /// Dictionary key is the Localisation key, values are array of languages from csv file.
         /// </summary>
-        static Dictionary<string, LocalisationEntry> Localisations
+        Dictionary<string, LocalisationEntry> Localisations
         {
             get
             {
                 return _localisations;
             }
         }
-        static readonly Dictionary<string, LocalisationEntry> _localisations = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
+        readonly Dictionary<string, LocalisationEntry> _localisations = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
 
         void PopulateDictionary()
         {
@@ -113,9 +118,22 @@ namespace GameFramework.Localisation.ObjectModel
         /// Add a new localisation language
         /// </summary>
         /// <param name="language"></param>
-        public void AddLanguage(string language)
+        public Language AddLanguage(string language)
         {
-            Languages.Add(new Language(language));
+            // don't allow duplicates
+            var existingLanguage = GetLanguage(language);
+            if (existingLanguage != null) return existingLanguage;
+
+            // add language
+            var newLanguage = new Language(language);
+            Languages.Add(newLanguage);
+
+            // add language to entries
+            foreach (var entry in LocalisationEntries)
+            {
+                entry.AddLanguage();
+            }
+            return newLanguage;
         }
 
         /// <summary>
@@ -124,14 +142,45 @@ namespace GameFramework.Localisation.ObjectModel
         /// <param name="language"></param>
         public void RemoveLanguage(string language)
         {
-            for (var i = 0; i < Languages.Count; i++)
+            var index = GetLanguageIndex(language);
+            if (index == -1) return;
+
+            Languages.RemoveAt(index);
+
+            // remove language from entries
+            foreach (var entry in LocalisationEntries)
             {
-                if (Languages[i].Name == language)
-                {
-                    Languages.RemoveAt(i);
-                    return;
-                }
+                entry.RemoveLanguage(index);
             }
+        }
+
+        /// <summary>
+        /// Gets a localisation language
+        /// </summary>
+        /// <param name="language"></param>
+        public Language GetLanguage(string language)
+        {
+            return Languages.Find(x => x.Name == language);
+        }
+
+        /// <summary>
+        /// Gets all the localisation language
+        /// </summary>
+        public List<Language> GetLanguages()
+        {
+            return Languages;
+        }
+
+        /// <summary>
+        /// Gets a localisation language
+        /// </summary>
+        /// <param name="language"></param>
+        public int GetLanguageIndex(string language)
+        {
+            for (var i = 0; i < Languages.Count; i++)
+                if (Languages[i].Name == language)
+                    return i;
+            return -1;
         }
 
         /// <summary>
@@ -140,15 +189,9 @@ namespace GameFramework.Localisation.ObjectModel
         /// <param name="language"></param>
         public bool ContainsLanguage(string language)
         {
-            for (var i = 0; i < Languages.Count; i++)
-            {
-                if (Languages[i].Name == language)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return GetLanguage(language) != null;
         }
+
         #endregion Language
 
         #region LocalisationEntries
@@ -157,28 +200,53 @@ namespace GameFramework.Localisation.ObjectModel
         /// Add a new localisation entry
         /// </summary>
         /// <param name="key"></param>
-        public void AddEntry(string key)
+        public LocalisationEntry AddEntry(string key)
         {
-            var localisationEntry = new LocalisationEntry(key);
+            // don't allow duplicates
+            var existingEntry = GetEntry(key);
+            if (existingEntry != null) return existingEntry;
+
+            // add a default language if there isn't one already
+            if (Languages.Count == 0)
+                AddLanguage("English");
+
+            var localisationEntry = new LocalisationEntry(key)
+            {
+                Languages = new string[Languages.Count]
+            };
+
             LocalisationEntries.Add(localisationEntry);
             Localisations.Add(key, localisationEntry);
+
+            return localisationEntry;
         }
 
-        ///// <summary>
-        ///// Remove a localisation language
-        ///// </summary>
-        ///// <param name="language"></param>
-        //public void RemoveLanguage(string language)
-        //{
-        //    for (var i = 0; i < Languages.Count; i++)
-        //    {
-        //        if (Languages[i].Name == language)
-        //        {
-        //            Languages.RemoveAt(i);
-        //            return;
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// Remove a localisation entry
+        /// </summary>
+        /// <param name="key"></param>
+        public void RemoveEntry(string key)
+        {
+            for (var i = 0; i < LocalisationEntries.Count; i++)
+            {
+                if (LocalisationEntries[i].Key == key)
+                {
+                    LocalisationEntries.RemoveAt(i);
+                    Localisations.Remove(key);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a localisation entry
+        /// </summary>
+        /// <param name="key"></param>
+        public LocalisationEntry GetEntry(string key)
+        {
+            LocalisationEntry value;
+            return Localisations.TryGetValue(key, out value) ? value : null;
+        }
 
         /// <summary>
         /// Returns whether a localisation entry exists
@@ -186,18 +254,12 @@ namespace GameFramework.Localisation.ObjectModel
         /// <param name="key"></param>
         public bool ContainsEntry(string key)
         {
-            foreach (var keyEntry in Localisations.Keys)
-            {
-                if (keyEntry == key)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return GetEntry(key) != null;
         }
         #endregion LocalisationEntries
 
-        // Merge(LocalistionData) - useful at runtime to create a single object
+
+        // TODO: Merge(LocalistionData) - useful at runtime to create a single object
     }
 
 
@@ -213,6 +275,27 @@ namespace GameFramework.Localisation.ObjectModel
         {
             Key = key;
         }
+
+        /// <summary>
+        /// Extend the languages array to add a new language.
+        /// </summary>
+        public void AddLanguage()
+        {
+            Array.Resize(ref Languages, Languages.Length + 1);
+        }
+
+        /// <summary>
+        /// Remove a language from the languages array.
+        /// </summary>
+        public void RemoveLanguage(int index)
+        {
+            for (var i = index; i < Languages.Length - 1; i++)
+            {
+                Languages[i] = Languages[i + 1];
+            }
+            Array.Resize(ref Languages, Languages.Length - 1);
+        }
+
     }
 
     [System.Serializable]

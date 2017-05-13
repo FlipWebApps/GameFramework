@@ -35,6 +35,8 @@ namespace GameFramework.EditorExtras.Editor
         public static readonly GUIStyle ToolbarSearchFieldCancel = "ToolbarSeachCancelButton";
         public static readonly GUIStyle ToolbarSearchFieldCancelEmpty = "ToolbarSeachCancelButtonEmpty";
 
+        public const float RemoveButtonWidth = 30f;
+
         #region GUI Styles
 
         public static Texture2D MakeColoredTexture(Color color)
