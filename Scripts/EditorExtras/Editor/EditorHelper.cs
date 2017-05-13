@@ -179,6 +179,32 @@ namespace GameFramework.EditorExtras.Editor
 
         #endregion string processing
 
+        #region Hideable Help Box
+        /// <summary>
+        /// Shows an editor help box that is hideable through a small button to the top right. 
+        /// </summary>
+        /// Pass back in teh returned rect to subsequent calls for the same helpbox
+        /// <param name="key"></param>
+        /// <param name="text"></param>
+        /// <param name="lastRect"></param>
+        /// <returns></returns>
+        public static Rect ShowHideableHelpBox(string key, string text, Rect lastRect)
+        {
+            var hidden = EditorPrefs.GetBool(key, false);
+            if (!hidden)
+            {
+                EditorGUILayout.HelpBox(text,
+                    MessageType.Info);
+                if (Event.current.type == EventType.Repaint)
+                {
+                    lastRect = GUILayoutUtility.GetLastRect();
+                }
+                var newRect = new Rect(lastRect.xMax - 15, lastRect.yMin, 15, 15);
+                if (GUI.Button(newRect, "x")) EditorPrefs.SetBool(key, true);
+            }
+            return lastRect;
+        }
+        #endregion Hideable Help Box
 
         #region GUIStyle
         /// <summary>
