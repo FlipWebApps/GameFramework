@@ -42,9 +42,13 @@ namespace GameFramework.Localisation.Editor
         int _currentTab;
 
         Rect _entriesHelpRect;
+        Vector2 _entriesScrollPosition;
+        float _entriesScrollHeight;
+        float _entriesScrollPositionY;  // cached between events to avoid layout errors
         string _newEntry;
 
         Rect _languagesHelpRect;
+        Vector2 _languagesScrollPosition;
         string _newLanguage;
 
         Rect _importExportHelpRect;
@@ -87,50 +91,108 @@ namespace GameFramework.Localisation.Editor
             }
         }
 
+        float expandedHeight = 0f;
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
 
-            EditorGUILayout.BeginVertical("Box");
+            _entriesScrollPosition = EditorGUILayout.BeginScrollView(_entriesScrollPosition, false, false);
+
+            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent calls. Otherwise osition changes 
+            // between this and repaint will cause errors due to possibly displaying different controls.
+            if (Event.current != null && Event.current.type == EventType.Layout) 
+                _entriesScrollPositionY = _entriesScrollPosition.y;
+
+            // set to initial value - we can later set to the correct size in Repaint event.
+            if (_entriesScrollHeight <= 0)
+                _entriesScrollHeight = Screen.height;
+
             string entryForDeleting = null;
+            var accumulativeHeightDrawn = 0;
+            var accumulativeSpace = 0;
+            var defaultRowHeight = 16;
             for (var i = 0; i < _entriesProperty.arraySize; i++)
             {
-                EditorGUILayout.BeginHorizontal();
                 var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
 
-                var keyProperty = entryProperty.FindPropertyRelative("Key");
-                EditorGUI.indentLevel++;
-                keyProperty.isExpanded = EditorGUILayout.Foldout(keyProperty.isExpanded, keyProperty.stringValue);
-                EditorGUI.indentLevel--;
-
-                //EditorGUILayout.PropertyField(keyProperty, GUIContent.none, GUILayout.ExpandWidth(true));
-
-                if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
+                // if top is below viewport or bottom is above then this item is not visible. we also need to draw items where we are unssure
+                // about the actual height
+                if ((accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height ||
+                    accumulativeHeightDrawn + defaultRowHeight < _entriesScrollPositionY) && 
+                    !entryProperty.isExpanded)
                 {
-                    entryForDeleting = keyProperty.stringValue;
-                    break;
+                    accumulativeHeightDrawn += defaultRowHeight;
+                    accumulativeSpace += defaultRowHeight;
                 }
-                EditorGUILayout.EndHorizontal();
-
-                if (keyProperty.isExpanded)
+                else
                 {
+                    // if off the top of the screen then continue to next
+                    //Debug.Log(accumulativeHeightDrawn + ", " + defaultRowHeight + ", " + _entriesScrollPosition.y);
+                    //if (accumulativeHeightDrawn + defaultRowHeight < _entriesScrollPosition.y)
+                    //{
+                    //    accumulativeHeightDrawn += defaultRowHeight;
+                    //    GUILayout.Space(defaultRowHeight);
+                    //    continue;
+                    //}
+                    //// if off the bottom of the screen then exit
+                    //if (accumulativeHeightDrawn > _entriesScrollPosition.y + Screen.height)
+                    //{
+                    //    accumulativeHeightDrawn += defaultRowHeight;
+                    //    GUILayout.Space(defaultRowHeight);
+                    //    continue;
+                    //}
+                    GUILayout.Space(accumulativeSpace);
+                    accumulativeSpace = 0;
+                    accumulativeHeightDrawn += defaultRowHeight;
+
+                    EditorGUILayout.BeginHorizontal();
+
+
                     EditorGUI.indentLevel++;
-                    var languagesProperty = entryProperty.FindPropertyRelative("Languages");
-                    for (var li = 0; li < languagesProperty.arraySize; li++)
-                    {
-                        var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name, GUILayout.Width(100));
-                        EditorStyles.textField.wordWrap = true;
-                        languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
-                        EditorStyles.textField.wordWrap = false;
-                        //EditorGUILayout.PropertyField(languageProperty, GUIContent.none);
-                        EditorGUILayout.EndHorizontal();
-                    }
+                    var keyProperty = entryProperty.FindPropertyRelative("Key");
+                    entryProperty.isExpanded =
+                        EditorGUILayout.Foldout(entryProperty.isExpanded, keyProperty.stringValue);
                     EditorGUI.indentLevel--;
+
+                    if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
+                    {
+                        entryForDeleting = keyProperty.stringValue;
+                        break;
+                    }
+                    EditorGUILayout.EndHorizontal();
+
+                    if (entryProperty.isExpanded)
+                    {
+                        EditorGUILayout.BeginVertical();
+                        EditorGUI.indentLevel++;
+                        var languagesProperty = entryProperty.FindPropertyRelative("Languages");
+                        for (var li = 0; li < languagesProperty.arraySize; li++)
+                        {
+                            var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
+                            EditorGUILayout.BeginHorizontal();
+                            EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
+                                GUILayout.Width(100));
+                            EditorStyles.textField.wordWrap = true;
+                            languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue,
+                                GUILayout.Width(Screen.width - 148));
+                            EditorStyles.textField.wordWrap = false;
+                            EditorGUILayout.EndHorizontal();
+                        }
+                        EditorGUI.indentLevel--;
+                        EditorGUILayout.EndVertical();
+
+                        if (Event.current != null && Event.current.type == EventType.Repaint)
+                            expandedHeight = GUILayoutUtility.GetLastRect().height; // only works on repaint.
+                        accumulativeHeightDrawn += (int)expandedHeight;
+                    }
                 }
             }
-            EditorGUILayout.EndVertical();
+            if (accumulativeSpace > 0)
+                GUILayout.Space(accumulativeSpace);
 
+            EditorGUILayout.EndScrollView();
+
+            if (Event.current != null && Event.current.type == EventType.Repaint)
+                _entriesScrollHeight = GUILayoutUtility.GetLastRect().height; // only works on repaint.
 
             // add functionality
             EditorGUILayout.BeginHorizontal();
