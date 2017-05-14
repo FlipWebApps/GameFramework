@@ -53,7 +53,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// <summary>
         /// List of loaded localisation entries.
         /// </summary>
-        List<LocalisationEntry> LocalisationEntries
+        public List<LocalisationEntry> LocalisationEntries
         {
             get
             {

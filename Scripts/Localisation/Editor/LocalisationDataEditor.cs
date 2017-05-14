@@ -45,7 +45,9 @@ namespace GameFramework.Localisation.Editor
         Vector2 _entriesScrollPosition;
         float _entriesScrollHeight;
         float _entriesScrollPositionY;  // cached between events to avoid layout errors
+        int _entriesDefaultRowHeight = 16;
         string _newEntry;
+        List<EntryData> _entryDataList;
 
         Rect _languagesHelpRect;
         Vector2 _languagesScrollPosition;
@@ -58,22 +60,27 @@ namespace GameFramework.Localisation.Editor
         {
             _targetLocalisationData = target as LocalisationData;
 
+            // setup for entries tab
             _entriesProperty = serializedObject.FindProperty("_localisationEntries");
+            _entryDataList = new List<EntryData>();
+            foreach (var entry in _targetLocalisationData.LocalisationEntries)
+                _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight });
 
+            // setup for languages tab
             _languagesProperty = serializedObject.FindProperty("_languages");
 
+            // setup for tools tab
             _importExportFilename = Application.dataPath;
         }
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
             DrawGUI();
-            serializedObject.ApplyModifiedProperties();
         }
 
         protected void DrawGUI()
         {
+            //TODO - SANITY CHECK ENTRYDATALIST
             _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.", _mainHelpRect);
 
             _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages", "Tools" });
@@ -91,89 +98,78 @@ namespace GameFramework.Localisation.Editor
             }
         }
 
-        float expandedHeight = 0f;
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
 
             _entriesScrollPosition = EditorGUILayout.BeginScrollView(_entriesScrollPosition, false, false);
 
-            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent calls. Otherwise osition changes 
-            // between this and repaint will cause errors due to possibly displaying different controls.
+            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent calls. Otherwise position changes 
+            // between this and repaint may cause errors due to possibly displaying different controls.
             if (Event.current != null && Event.current.type == EventType.Layout) 
                 _entriesScrollPositionY = _entriesScrollPosition.y;
 
-            // set to initial value - we can later set to the correct size in Repaint event.
+            // set scroll height to initial value (full screen height) - we can later set to the correct size in Repaint event.
             if (_entriesScrollHeight <= 0)
                 _entriesScrollHeight = Screen.height;
 
-            string entryForDeleting = null;
+            // here we avoid using properties apart from when we need to update due to them being very slow!
+            var indexForDeleting = -1;
             var accumulativeHeightDrawn = 0;
             var accumulativeSpace = 0;
-            var defaultRowHeight = 16;
             for (var i = 0; i < _entriesProperty.arraySize; i++)
             {
-                var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
+                var entryData = _entryDataList[i];
 
-                // if top is below viewport or bottom is above then this item is not visible. we also need to draw items where we are unssure
-                // about the actual height
-                if ((accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height ||
-                    accumulativeHeightDrawn + defaultRowHeight < _entriesScrollPositionY) && 
-                    !entryProperty.isExpanded)
+                // if top is below viewport or bottom is above then this item is not visible.
+                if (accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height ||
+                    accumulativeHeightDrawn + entryData.Height < _entriesScrollPositionY)
                 {
-                    accumulativeHeightDrawn += defaultRowHeight;
-                    accumulativeSpace += defaultRowHeight;
+                    accumulativeHeightDrawn += entryData.Height;
+                    accumulativeSpace += entryData.Height;
                 }
                 else
                 {
-                    // if off the top of the screen then continue to next
-                    //Debug.Log(accumulativeHeightDrawn + ", " + defaultRowHeight + ", " + _entriesScrollPosition.y);
-                    //if (accumulativeHeightDrawn + defaultRowHeight < _entriesScrollPosition.y)
-                    //{
-                    //    accumulativeHeightDrawn += defaultRowHeight;
-                    //    GUILayout.Space(defaultRowHeight);
-                    //    continue;
-                    //}
-                    //// if off the bottom of the screen then exit
-                    //if (accumulativeHeightDrawn > _entriesScrollPosition.y + Screen.height)
-                    //{
-                    //    accumulativeHeightDrawn += defaultRowHeight;
-                    //    GUILayout.Space(defaultRowHeight);
-                    //    continue;
-                    //}
+                    // fill space from skipped.
                     GUILayout.Space(accumulativeSpace);
                     accumulativeSpace = 0;
-                    accumulativeHeightDrawn += defaultRowHeight;
+                    accumulativeHeightDrawn += _entriesDefaultRowHeight;
 
+                    // draw the displayed item
+                    var localisationEntry = _targetLocalisationData.LocalisationEntries[i];
                     EditorGUILayout.BeginHorizontal();
-
-
                     EditorGUI.indentLevel++;
-                    var keyProperty = entryProperty.FindPropertyRelative("Key");
-                    entryProperty.isExpanded =
-                        EditorGUILayout.Foldout(entryProperty.isExpanded, keyProperty.stringValue);
+                    entryData.IsExpanded = EditorGUILayout.Foldout(entryData.IsExpanded, localisationEntry.Key);                  
                     EditorGUI.indentLevel--;
-
                     if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
                     {
-                        entryForDeleting = keyProperty.stringValue;
+                        indexForDeleting = i;
                         break;
                     }
                     EditorGUILayout.EndHorizontal();
 
-                    if (entryProperty.isExpanded)
+                    // handle expended status
+                    if (entryData.IsExpanded)
                     {
                         EditorGUILayout.BeginVertical();
                         EditorGUI.indentLevel++;
+                        var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
                         var languagesProperty = entryProperty.FindPropertyRelative("Languages");
-                        for (var li = 0; li < languagesProperty.arraySize; li++)
+                        for (var li = 0; li < localisationEntry.Languages.Length; li++)
                         {
                             var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
                                 GUILayout.Width(100));
                             EditorStyles.textField.wordWrap = true;
-                            languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue,
-                                GUILayout.Width(Screen.width - 148));
+                            languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
+                            //EditorGUI.BeginChangeCheck();
+                            //var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GUILayout.Width(Screen.width - 148));
+                            //if (EditorGUI.EndChangeCheck())
+                            //{
+                            //    Undo.RecordObject(target, "Language Changed");
+                            //    localisationEntry.Languages[li] = lang;
+                            //}
+
                             EditorStyles.textField.wordWrap = false;
                             EditorGUILayout.EndHorizontal();
                         }
@@ -181,8 +177,12 @@ namespace GameFramework.Localisation.Editor
                         EditorGUILayout.EndVertical();
 
                         if (Event.current != null && Event.current.type == EventType.Repaint)
-                            expandedHeight = GUILayoutUtility.GetLastRect().height; // only works on repaint.
-                        accumulativeHeightDrawn += (int)expandedHeight;
+                            entryData.Height = (int) GUILayoutUtility.GetLastRect().height; // only works on repaint.
+                        accumulativeHeightDrawn += entryData.Height;
+                    }
+                    else
+                    {
+                        entryData.Height = _entriesDefaultRowHeight;
                     }
                 }
             }
@@ -204,6 +204,9 @@ namespace GameFramework.Localisation.Editor
                 serializedObject.ApplyModifiedProperties();
                 _targetLocalisationData.AddEntry(_newEntry);
                 serializedObject.Update();
+
+                _entryDataList.Add(new EntryData());
+
                 var lastDot = _newEntry.LastIndexOf(".");
                 if (lastDot == -1)
                     _newEntry = ""; 
@@ -213,18 +216,24 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndHorizontal();
 
             // delay deleting to avoid editor issues.
-            if (entryForDeleting != null)
+            if (indexForDeleting != -1)
             {
                 //TODO: Show a warning first!
                 serializedObject.ApplyModifiedProperties();
-                _targetLocalisationData.RemoveEntry(entryForDeleting);
+                //_targetLocalisationData.RemoveEntry(indexForDeleting);
+
+                //_targetLocalisationData.RemoveEntry(indexForDeleting);
                 serializedObject.Update();
+
+                //_entryDataList.RemoveAt(indexForDeleting);
             }
 
         }
 
         protected void DrawLanguages()
         {
+            serializedObject.Update();
+
             _languagesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Languages", "Here you can specify the languages for which you will provide localised values.\n\nYou should enter the language name and also an optional ISO-639-1 code for use with google translate if you want to perform automatic translations. For convenience Unity supported languages are available from the dropdown button at the bottom right.", _languagesHelpRect);
             EditorGUILayout.BeginVertical("Box");
 
@@ -292,6 +301,9 @@ namespace GameFramework.Localisation.Editor
                 _targetLocalisationData.RemoveLanguage(languageForDeleting);
                 serializedObject.Update();
             }
+
+            serializedObject.ApplyModifiedProperties();
+
         }
 
         void AddLanguage(object languageObject)
@@ -354,5 +366,11 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndVertical();
         }
 
+        [Serializable]
+        class EntryData
+        {
+            public bool IsExpanded;
+            public int Height;
+        }
     }
 }
