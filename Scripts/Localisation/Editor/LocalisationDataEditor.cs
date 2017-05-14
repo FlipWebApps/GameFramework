@@ -45,12 +45,17 @@ namespace GameFramework.Localisation.Editor
         Rect _languagesHelpRect;
         string _newLanguage;
 
+        Rect _importExportHelpRect;
+        string _importExportFilename;
+
         protected virtual void OnEnable()
         {
             _targetLocalisationData = target as LocalisationData;
 
             _entriesProperty = serializedObject.FindProperty("_localisationEntries");
             _languagesProperty = serializedObject.FindProperty("_languages");
+
+            _importExportFilename = Application.dataPath;
         }
 
         public override void OnInspectorGUI()
@@ -62,9 +67,9 @@ namespace GameFramework.Localisation.Editor
 
         protected void DrawGUI()
         {
-            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.", _mainHelpRect);
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.", _mainHelpRect);
 
-            _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages" });
+            _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages", "Tools" });
             switch (_currentTab)
             {
                 case 0:
@@ -72,6 +77,9 @@ namespace GameFramework.Localisation.Editor
                     break;
                 case 1:
                     DrawLanguages();
+                    break;
+                case 2:
+                    DrawTools();
                     break;
             }
         }
@@ -89,8 +97,14 @@ namespace GameFramework.Localisation.Editor
             {
                 EditorGUILayout.BeginHorizontal();
                 var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
+
                 var keyProperty = entryProperty.FindPropertyRelative("Key");
-                EditorGUILayout.PropertyField(keyProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                EditorGUI.indentLevel++;
+                keyProperty.isExpanded = EditorGUILayout.Foldout(keyProperty.isExpanded, keyProperty.stringValue);
+                EditorGUI.indentLevel--;
+
+                //EditorGUILayout.PropertyField(keyProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+
                 if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
                 {
                     entryForDeleting = keyProperty.stringValue;
@@ -98,14 +112,20 @@ namespace GameFramework.Localisation.Editor
                 }
                 EditorGUILayout.EndHorizontal();
 
-                var languagesProperty = entryProperty.FindPropertyRelative("Languages");
-                for (var li = 0; li < languagesProperty.arraySize; li++)
+                if (keyProperty.isExpanded)
                 {
-                    var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name, GUILayout.Width(100));
-                    EditorGUILayout.PropertyField(languageProperty, GUIContent.none, GUILayout.ExpandWidth(true));
-                    EditorGUILayout.EndHorizontal();
+                    EditorGUI.indentLevel++;
+                    var languagesProperty = entryProperty.FindPropertyRelative("Languages");
+                    for (var li = 0; li < languagesProperty.arraySize; li++)
+                    {
+                        var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
+                            GUILayout.Width(100));
+                        EditorGUILayout.PropertyField(languageProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.EndHorizontal();
+                    }
+                    EditorGUI.indentLevel--;
                 }
             }
             EditorGUILayout.EndVertical();
@@ -207,5 +227,39 @@ namespace GameFramework.Localisation.Editor
             _targetLocalisationData.AddLanguage(language);
             serializedObject.Update();
         }
+
+
+        protected void DrawTools()
+        {
+            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.LabelField(new GUIContent("Import / Export", ""), EditorStyles.boldLabel);
+            _importExportHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.ImportExport", "If you would like to edit the data outside Unity then you can import from and export to .csv (text) files. Entries from any imported file will be merged with existing entries, replacing any keys that already exist with a similar name.\n\nIf you have previously used .csv files for localisation then you should use the import button to import old files into the new localisation system", _importExportHelpRect);
+            if (GUILayout.Button("Import", EditorStyles.miniButton))
+            {
+                var newFileName = EditorUtility.OpenFilePanel("Select a .csv localisation file", _importExportFilename, "csv");
+                if (!string.IsNullOrEmpty(newFileName))
+                {
+                    _importExportFilename = newFileName;
+                    if (_targetLocalisationData.LoadCsv(_importExportFilename))
+                        EditorUtility.DisplayDialog("Localisation Import", "Import complete!", "Ok");
+                    else
+                        EditorUtility.DisplayDialog("Localisation Import", "Import failed!\n\nSee the console window for further details.", "Ok");
+                }
+            }
+            if (GUILayout.Button("Export", EditorStyles.miniButton))
+            {
+                var newFileName = EditorUtility.SaveFilePanel("Select a .csv localisation file", _importExportFilename, "localisation", "csv");
+                if (!string.IsNullOrEmpty(newFileName))
+                {
+                    _importExportFilename = newFileName;
+                    if (_targetLocalisationData.WriteCsv(_importExportFilename))
+                        EditorUtility.DisplayDialog("Localisation Export", "Export complete!", "Ok");
+                    else
+                        EditorUtility.DisplayDialog("Localisation Export", "Export failed!\n\nSee the console window for further details.", "Ok");
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+
     }
 }

@@ -23,6 +23,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace GameFramework.Localisation.ObjectModel
 {
@@ -258,13 +260,190 @@ namespace GameFramework.Localisation.ObjectModel
         }
         #endregion LocalisationEntries
 
-
+        #region IO
         // TODO: Merge(LocalistionData) - useful at runtime to create a single object
+
+        /// <summary>
+        /// Write localisation data out to a csv file 
+        /// </summary>
+        /// <param name="filename"></param>
+        public bool WriteCsv(string filename)
+        {
+            try
+            {
+                var buffer = new StringBuilder();
+                buffer.Append("KEY,");
+                for (var i = 0; i < Languages.Count; i++)
+                {
+                    buffer.Append("\"");
+                    buffer.Append(Languages[i].Name);
+                    buffer.Append("\"");
+                    buffer.Append(i == Languages.Count - 1 ? "\n" : ",");
+                }
+
+                for (var i = 0; i < LocalisationEntries.Count; i++)
+                {
+                    buffer.Append("\"");
+                    buffer.Append(LocalisationEntries[i].Key);
+                    buffer.Append("\", ");
+                    for (var il = 0; il < LocalisationEntries[i].Languages.Length; il++)
+                    {
+                        buffer.Append("\"");
+                        buffer.Append(LocalisationEntries[i].Languages[il]);
+                        buffer.Append("\"");
+                        buffer.Append(il == LocalisationEntries[i].Languages.Length - 1 ? "\n" : ",");
+                    }
+                }
+                System.IO.File.WriteAllText(filename, buffer.ToString(), System.Text.Encoding.UTF8);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("An error occurred writing the csv file: " + e.Message);
+            }
+            return false;
+        }
+
+
+        #region Load CSV
+        public bool LoadCsv(string filename)
+        {
+            try
+            {
+                using (var rdr = new System.IO.StreamReader(filename, System.Text.Encoding.UTF8, true))
+                {
+                    var isHeader = true;
+                    var columnLanguageMapping = new int[0];
+                    foreach (IList<string> columns in FromReader(rdr))
+                    {
+                        // first row is the header
+                        if (isHeader)
+                        {
+                            // sanity check
+                            if (columns.Count < 2)
+                            {
+                                Debug.LogWarning("File should contain at least 2 columns (KEY,<Language>");
+                                return false;
+                            }
+
+                            // add missing languages and get reference to language index
+                            columnLanguageMapping = new int[columns.Count];
+                            for (var column = 1; column < columns.Count; ++column)
+                            {
+                                var language = columns[column];
+                                if (!ContainsLanguage(language))
+                                {
+                                    Debug.Log("Adding new language " + language);
+                                    AddLanguage(language);
+                                }
+                                columnLanguageMapping[column] = GetLanguageIndex(language);
+                            }
+                            isHeader = false;
+                        }
+
+                        else
+                        {
+                            var key = columns[0];
+                            var entry = AddEntry(key); // will return existing if found.
+
+                            // copy in new values
+                            for (int i = 1; i < columns.Count; ++i)
+                            {
+                                entry.Languages[columnLanguageMapping[i]] = columns[i];
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("An error occurred loading the csv file: " + e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        // parses a row from a csv file and yields the result back as a list of strings - one for each column.
+        IEnumerable<IList<string>> FromReader(System.IO.TextReader csv)
+        {
+            IList<string> result = new List<string>();
+
+            StringBuilder curValue = new StringBuilder();
+            var c = (char)csv.Read();
+            while (csv.Peek() != -1)
+            {
+                // when we are here we are at the start of a new column and c contains the first character
+                switch (c)
+                {
+                    case ',': //empty field
+                        result.Add("");
+                        c = (char)csv.Read();
+                        break;
+                    case '"': //qualified text
+                    case '\'':
+                        char q = c;
+                        c = (char)csv.Read();
+                        bool inQuotes = true;
+                        while (inQuotes && csv.Peek() != -1)
+                        {
+                            if (c == q)
+                            {
+                                c = (char)csv.Read();
+                                if (c != q)
+                                    inQuotes = false;
+                            }
+
+                            if (inQuotes)
+                            {
+                                curValue.Append(c);
+                                c = (char)csv.Read();
+                            }
+                        }
+                        result.Add(curValue.ToString());
+                        curValue = new StringBuilder();
+                        if (c == ',') c = (char)csv.Read(); // either ',', newline, or endofstream
+                        break;
+                    case '\n': //end of the record
+                    case '\r':
+                        //potential bug here depending on what your line breaks look like
+                        if (result.Count > 0) // don't return empty records
+                        {
+                            yield return result;
+                            result = new List<string>();
+                        }
+                        c = (char)csv.Read();
+                        break;
+                    default: //normal unqualified text
+                        while (c != ',' && c != '\r' && c != '\n' && csv.Peek() != -1)
+                        {
+                            curValue.Append(c);
+                            c = (char)csv.Read();
+                        }
+                        // if end of file then make sure that we add the last read character
+                        if (csv.Peek() == -1)
+                            curValue.Append(c);
+
+                        result.Add(curValue.ToString());
+                        curValue = new StringBuilder();
+                        if (c == ',') c = (char)csv.Read(); //either ',', newline, or endofstream
+                        break;
+                }
+
+            }
+            if (curValue.Length > 0) //potential bug: I don't want to skip on a empty column in the last record if a caller really expects it to be there
+                result.Add(curValue.ToString());
+            if (result.Count > 0)
+                yield return result;
+        }
+
+        #endregion Load CSV
+        #endregion IO
     }
 
 
 
-        [System.Serializable]
+    [System.Serializable]
     public class LocalisationEntry
     {
         public string Key = string.Empty;
