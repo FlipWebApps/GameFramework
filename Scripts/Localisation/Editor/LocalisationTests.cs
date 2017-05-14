@@ -75,6 +75,22 @@ namespace GameFramework.Localisation
             Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
         }
 
+        [TestCase("English", "en")]
+        [TestCase("French", "fr")]
+        public void AddLanguage(string language, string code)
+        {
+            // Arrange
+            var localisationData = CreateNewLocalisation();
+
+            //// Act
+            localisationData.AddLanguage(language, code);
+
+            //// Assert
+            Assert.IsTrue(localisationData.ContainsLanguage(language), "Language not added");
+            Assert.AreEqual(code, localisationData.GetLanguage(language).Code, "Language not added");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
         [TestCase("English", "French", "Spanish")]
         [TestCase("French", "German", "Spanish")]
         public void AddLanguageMultiple(string language, string language2, string language3)

@@ -20,6 +20,8 @@
 //----------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using GameFramework.EditorExtras.Editor;
 using GameFramework.Localisation.ObjectModel;
@@ -53,6 +55,7 @@ namespace GameFramework.Localisation.Editor
             _targetLocalisationData = target as LocalisationData;
 
             _entriesProperty = serializedObject.FindProperty("_localisationEntries");
+
             _languagesProperty = serializedObject.FindProperty("_languages");
 
             _importExportFilename = Application.dataPath;
@@ -86,10 +89,6 @@ namespace GameFramework.Localisation.Editor
 
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.LabelField("Basic Properties", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(_entriesProperty, true);
-            EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical("Box");
             string entryForDeleting = null;
@@ -120,9 +119,11 @@ namespace GameFramework.Localisation.Editor
                     {
                         var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
-                            GUILayout.Width(100));
-                        EditorGUILayout.PropertyField(languageProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name, GUILayout.Width(100));
+                        EditorStyles.textField.wordWrap = true;
+                        languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
+                        EditorStyles.textField.wordWrap = false;
+                        //EditorGUILayout.PropertyField(languageProperty, GUIContent.none);
                         EditorGUILayout.EndHorizontal();
                     }
                     EditorGUI.indentLevel--;
@@ -162,8 +163,14 @@ namespace GameFramework.Localisation.Editor
 
         protected void DrawLanguages()
         {
-            _languagesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Languages", "Here you can specify the languages for which you will provide localised values.", _languagesHelpRect);
+            _languagesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Languages", "Here you can specify the languages for which you will provide localised values.\n\nYou should enter the language name and also an optional ISO-639-1 code for use with google translate if you want to perform automatic translations. For convenience Unity supported languages are available from the dropdown button at the bottom right.", _languagesHelpRect);
             EditorGUILayout.BeginVertical("Box");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Name", GUILayout.ExpandWidth(true));
+            EditorGUILayout.LabelField("Code", GUILayout.Width(60 + GuiStyles.RemoveButtonWidth + 6));
+            //EditorGUILayout.LabelField("", GUILayout.Width(GuiStyles.RemoveButtonWidth));
+            EditorGUILayout.EndHorizontal();
 
             string languageForDeleting = null;
             for (var i = 0; i < _languagesProperty.arraySize; i++)
@@ -173,6 +180,10 @@ namespace GameFramework.Localisation.Editor
                 var languageProperty = _languagesProperty.GetArrayElementAtIndex(i);
                 var nameProperty = languageProperty.FindPropertyRelative("Name");
                 EditorGUILayout.PropertyField(nameProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+
+                var codeProperty = languageProperty.FindPropertyRelative("Code");
+                EditorGUILayout.PropertyField(codeProperty, GUIContent.none, GUILayout.Width(60));
+
                 if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
                 {
                     languageForDeleting = nameProperty.stringValue;
@@ -197,15 +208,15 @@ namespace GameFramework.Localisation.Editor
             }
             GUI.enabled = true;
 
+            //if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Plus More", "Add to list"), GUILayout.Width(25)))
             if (GUILayout.Button(new GUIContent("+", "Add a new language to the list"), EditorStyles.miniButton, GUILayout.Width(20)))
             {
                 serializedObject.ApplyModifiedProperties();
                 var menu = new GenericMenu();
-                var systemLanguages = Enum.GetNames(typeof(SystemLanguage));
-                for (var i = 0; i < systemLanguages.Length; i++)
+                for (var i = 0; i < Languages.LanguageDefinitions.Length; i++)
                 {
-                    if (!_targetLocalisationData.ContainsLanguage(systemLanguages[i]))
-                        menu.AddItem(new GUIContent(systemLanguages[i]), false, AddLanguage, systemLanguages[i]);
+                    if (!_targetLocalisationData.ContainsLanguage(Languages.LanguageDefinitions[i].Name))
+                        menu.AddItem(new GUIContent(Languages.LanguageDefinitions[i].Name + " (" + Languages.LanguageDefinitions[i].Code + ")"), false, AddLanguage, Languages.LanguageDefinitions[i].Name);
                 }
                 menu.ShowAsContext();
             }
@@ -224,7 +235,7 @@ namespace GameFramework.Localisation.Editor
         void AddLanguage(object languageObject)
         {
             var language = languageObject as string;
-            _targetLocalisationData.AddLanguage(language);
+            _targetLocalisationData.AddLanguage(language, Languages.LanguageDefinitionsDictionary[language].Code);
             serializedObject.Update();
         }
 
@@ -234,7 +245,7 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField(new GUIContent("Import / Export", ""), EditorStyles.boldLabel);
             _importExportHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.ImportExport", "If you would like to edit the data outside Unity then you can import from and export to .csv (text) files. Entries from any imported file will be merged with existing entries, replacing any keys that already exist with a similar name.\n\nIf you have previously used .csv files for localisation then you should use the import button to import old files into the new localisation system", _importExportHelpRect);
-            if (GUILayout.Button("Import", EditorStyles.miniButton))
+            if (GUILayout.Button("Import csv", EditorStyles.miniButton))
             {
                 var newFileName = EditorUtility.OpenFilePanel("Select a .csv localisation file", _importExportFilename, "csv");
                 if (!string.IsNullOrEmpty(newFileName))
@@ -246,7 +257,7 @@ namespace GameFramework.Localisation.Editor
                         EditorUtility.DisplayDialog("Localisation Import", "Import failed!\n\nSee the console window for further details.", "Ok");
                 }
             }
-            if (GUILayout.Button("Export", EditorStyles.miniButton))
+            if (GUILayout.Button("Export csv", EditorStyles.miniButton))
             {
                 var newFileName = EditorUtility.SaveFilePanel("Select a .csv localisation file", _importExportFilename, "localisation", "csv");
                 if (!string.IsNullOrEmpty(newFileName))
@@ -256,6 +267,26 @@ namespace GameFramework.Localisation.Editor
                         EditorUtility.DisplayDialog("Localisation Export", "Export complete!", "Ok");
                     else
                         EditorUtility.DisplayDialog("Localisation Export", "Export failed!\n\nSee the console window for further details.", "Ok");
+                }
+            }
+
+            if (GUILayout.Button("GOOGLE))"))
+            {
+                var sourceLang = "en";
+                var targetLang = "no";
+                var sourceText = "Some English Text";
+                string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
+                             + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + WWW.EscapeURL(sourceText);
+
+                WWW www = new WWW(url);
+                while (!www.isDone) ;
+                if (www.error != null)
+                {
+                    Debug.LogError(www.error);
+                }
+                else
+                {
+                    Debug.Log(www.text);
                 }
             }
             EditorGUILayout.EndVertical();

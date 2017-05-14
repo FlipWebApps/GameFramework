@@ -120,14 +120,15 @@ namespace GameFramework.Localisation.ObjectModel
         /// Add a new localisation language
         /// </summary>
         /// <param name="language"></param>
-        public Language AddLanguage(string language)
+        /// <param name="code"></param>
+        public Language AddLanguage(string language, string code = "")
         {
             // don't allow duplicates
             var existingLanguage = GetLanguage(language);
             if (existingLanguage != null) return existingLanguage;
 
             // add language
-            var newLanguage = new Language(language);
+            var newLanguage = new Language(language, code);
             Languages.Add(newLanguage);
 
             // add language to entries
@@ -438,6 +439,28 @@ namespace GameFramework.Localisation.ObjectModel
         }
 
         #endregion Load CSV
+
+        // Exactly the same as above but allow the user to change from Auto, for when google get's all Jerk Butt-y
+        public IEnumerator Process(string sourceLang, string targetLang, string sourceText)
+        {
+            string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
+                         + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + WWW.EscapeURL(sourceText);
+
+            WWW www = new WWW(url);
+            yield return www;
+
+            if (www.isDone)
+            {
+                if (string.IsNullOrEmpty(www.error))
+                {
+                    Debug.Log(www.text);
+                    //var N = JSONNode.Parse(www.text);
+                    //translatedText = N[0][0][0];
+                    //if (isDebug)
+                    //    print(translatedText);
+                }
+            }
+        }
         #endregion IO
     }
 
@@ -480,11 +503,20 @@ namespace GameFramework.Localisation.ObjectModel
     [System.Serializable]
     public class Language
     {
-        public string Name = string.Empty;
+        /// <summary>
+        /// English name of this language
+        /// </summary>
+        public string Name;
 
-        public Language(string name)
+        /// <summary>
+        /// ISO-639-1 Code for the language
+        /// </summary>
+        public string Code;
+
+        public Language(string name = "", string code = "")
         {
             Name = name;
+            Code = code;
         }
     }
 }
