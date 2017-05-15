@@ -34,25 +34,28 @@ namespace GameFramework.Localisation.Editor
     public class LocalisationDataEditor : UnityEditor.Editor
     {
         LocalisationData _targetLocalisationData;
-
         SerializedProperty _entriesProperty;
         SerializedProperty _languagesProperty;
 
         Rect _mainHelpRect;
         int _currentTab;
 
+        // Entries tab variables
         Rect _entriesHelpRect;
         Vector2 _entriesScrollPosition;
         float _entriesScrollHeight;
         float _entriesScrollPositionY;  // cached between events to avoid layout errors
         int _entriesDefaultRowHeight = 16;
         string _newEntry;
+        [SerializeField]
         List<EntryData> _entryDataList;
 
+        // Languages tab variables
         Rect _languagesHelpRect;
         Vector2 _languagesScrollPosition;
         string _newLanguage;
 
+        // Tools tab variables
         Rect _importExportHelpRect;
         string _importExportFilename;
 
@@ -62,9 +65,7 @@ namespace GameFramework.Localisation.Editor
 
             // setup for entries tab
             _entriesProperty = serializedObject.FindProperty("_localisationEntries");
-            _entryDataList = new List<EntryData>();
-            foreach (var entry in _targetLocalisationData.LocalisationEntries)
-                _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight });
+            SyncEntries();
 
             // setup for languages tab
             _languagesProperty = serializedObject.FindProperty("_languages");
@@ -75,12 +76,6 @@ namespace GameFramework.Localisation.Editor
 
         public override void OnInspectorGUI()
         {
-            DrawGUI();
-        }
-
-        protected void DrawGUI()
-        {
-            //TODO - SANITY CHECK ENTRYDATALIST
             _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.", _mainHelpRect);
 
             _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages", "Tools" });
@@ -100,11 +95,13 @@ namespace GameFramework.Localisation.Editor
 
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
+            SyncEntries();
+            Undo.RecordObject(target, "Localisation Entry Changed");
 
-            _entriesScrollPosition = EditorGUILayout.BeginScrollView(_entriesScrollPosition, false, false);
+            _entriesScrollPosition = EditorGUILayout.BeginScrollView(_entriesScrollPosition, false, false, GUILayout.ExpandHeight(false));
 
-            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent calls. Otherwise position changes 
-            // between this and repaint may cause errors due to possibly displaying different controls.
+            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent 
+            // calls. Otherwise position changes  between this and repaint may cause errors due to displaying different controls.
             if (Event.current != null && Event.current.type == EventType.Layout) 
                 _entriesScrollPositionY = _entriesScrollPosition.y;
 
@@ -116,12 +113,12 @@ namespace GameFramework.Localisation.Editor
             var indexForDeleting = -1;
             var accumulativeHeightDrawn = 0;
             var accumulativeSpace = 0;
-            for (var i = 0; i < _entriesProperty.arraySize; i++)
+            for (var i = 0; i < _targetLocalisationData.LocalisationEntries.Count; i++)
             {
                 var entryData = _entryDataList[i];
 
                 // if top is below viewport or bottom is above then this item is not visible.
-                if (accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height ||
+                if (//accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height || // commented out as this fails when expended shrinks in size causing new items to need to be drawn
                     accumulativeHeightDrawn + entryData.Height < _entriesScrollPositionY)
                 {
                     accumulativeHeightDrawn += entryData.Height;
@@ -130,7 +127,7 @@ namespace GameFramework.Localisation.Editor
                 else
                 {
                     // fill space from skipped.
-                    GUILayout.Space(accumulativeSpace);
+                    if (accumulativeSpace > 0) GUILayout.Space(accumulativeSpace);
                     accumulativeSpace = 0;
                     accumulativeHeightDrawn += _entriesDefaultRowHeight;
 
@@ -152,32 +149,66 @@ namespace GameFramework.Localisation.Editor
                     {
                         EditorGUILayout.BeginVertical();
                         EditorGUI.indentLevel++;
-                        var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
-                        var languagesProperty = entryProperty.FindPropertyRelative("Languages");
+                        //var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
+                        //var languagesProperty = entryProperty.FindPropertyRelative("Languages");
                         for (var li = 0; li < localisationEntry.Languages.Length; li++)
                         {
-                            var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
+                            //var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
                                 GUILayout.Width(100));
                             EditorStyles.textField.wordWrap = true;
-                            languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
-                            //EditorGUI.BeginChangeCheck();
-                            //var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GUILayout.Width(Screen.width - 148));
-                            //if (EditorGUI.EndChangeCheck())
-                            //{
-                            //    Undo.RecordObject(target, "Language Changed");
-                            //    localisationEntry.Languages[li] = lang;
-                            //}
-
+                            //languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
+                            EditorGUI.BeginChangeCheck();
+                            var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GUILayout.Width(Screen.width - 148 - 60));
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                localisationEntry.Languages[li] = lang;
+                            }
                             EditorStyles.textField.wordWrap = false;
+
+                            if (li > 0 && GUILayout.Button("Translate", EditorStyles.miniButton, GUILayout.Width(60)))
+                            {
+                                var sourceCode = _targetLocalisationData.GetLanguages()[0].Code;
+                                if (!string.IsNullOrEmpty(sourceCode))
+                                {
+                                    var targetCode = _targetLocalisationData.GetLanguages()[li].Code;
+                                    if (!string.IsNullOrEmpty(targetCode))
+                                    {
+                                        var sourceText = localisationEntry.Languages[0];
+                                        string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
+                                                     + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + WWW.EscapeURL(sourceText);
+
+                                        WWW www = new WWW(url);
+                                        while (!www.isDone) ;
+                                        if (www.error != null)
+                                        {
+                                            Debug.LogError(www.error);
+                                        }
+                                        else
+                                        {
+                                            Debug.Log(www.text);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        EditorUtility.DisplayDialog("Localisation Import", "There is no code specified for the language '" + _targetLocalisationData.GetLanguages()[li].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
+                                    }
+                                }
+                                else
+                                {
+                                    EditorUtility.DisplayDialog("Localisation Translate", "There is no code specified for the language '" + _targetLocalisationData.GetLanguages()[0].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
+                                }
+                            }
+
+
                             EditorGUILayout.EndHorizontal();
                         }
                         EditorGUI.indentLevel--;
                         EditorGUILayout.EndVertical();
 
                         if (Event.current != null && Event.current.type == EventType.Repaint)
-                            entryData.Height = (int) GUILayoutUtility.GetLastRect().height; // only works on repaint.
+                            entryData.Height = (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
                         accumulativeHeightDrawn += entryData.Height;
                     }
                     else
@@ -186,8 +217,7 @@ namespace GameFramework.Localisation.Editor
                     }
                 }
             }
-            if (accumulativeSpace > 0)
-                GUILayout.Space(accumulativeSpace);
+            if (accumulativeSpace > 0) GUILayout.Space(accumulativeSpace);
 
             EditorGUILayout.EndScrollView();
 
@@ -216,19 +246,23 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndHorizontal();
 
             // delay deleting to avoid editor issues.
-            if (indexForDeleting != -1)
+            if (indexForDeleting != -1 &&
+                EditorUtility.DisplayDialog("Delete Entry?", "Are you sure you want to delete this entry?", "Yes", "No"))
             {
-                //TODO: Show a warning first!
-                serializedObject.ApplyModifiedProperties();
-                //_targetLocalisationData.RemoveEntry(indexForDeleting);
-
-                //_targetLocalisationData.RemoveEntry(indexForDeleting);
+                _targetLocalisationData.LocalisationEntries.RemoveAt(indexForDeleting);
+                _entryDataList.RemoveAt(indexForDeleting);
                 serializedObject.Update();
-
-                //_entryDataList.RemoveAt(indexForDeleting);
             }
-
         }
+
+        private void SyncEntries()
+        {
+            if (_entryDataList == null) _entryDataList = new List<EntryData>();
+            if (_entryDataList.Count != _targetLocalisationData.LocalisationEntries.Count)
+                foreach (var entry in _targetLocalisationData.LocalisationEntries)
+                    _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight });
+        }
+
 
         protected void DrawLanguages()
         {
@@ -294,7 +328,8 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndHorizontal();
 
             // delay deleting to avoid editor issues.
-            if (languageForDeleting != null)
+            if (languageForDeleting != null && 
+                EditorUtility.DisplayDialog("Delete Language?", "Are you sure you want to delete this language?", "Yes", "No"))
             {
                 //TODO: Show a warning first!
                 serializedObject.ApplyModifiedProperties();
@@ -341,26 +376,6 @@ namespace GameFramework.Localisation.Editor
                         EditorUtility.DisplayDialog("Localisation Export", "Export complete!", "Ok");
                     else
                         EditorUtility.DisplayDialog("Localisation Export", "Export failed!\n\nSee the console window for further details.", "Ok");
-                }
-            }
-
-            if (GUILayout.Button("GOOGLE))"))
-            {
-                var sourceLang = "en";
-                var targetLang = "no";
-                var sourceText = "Some English Text";
-                string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-                             + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + WWW.EscapeURL(sourceText);
-
-                WWW www = new WWW(url);
-                while (!www.isDone) ;
-                if (www.error != null)
-                {
-                    Debug.LogError(www.error);
-                }
-                else
-                {
-                    Debug.Log(www.text);
                 }
             }
             EditorGUILayout.EndVertical();
