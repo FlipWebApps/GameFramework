@@ -62,8 +62,8 @@ namespace GameFramework.Advertising.UnityAds
                         switch (result)
                         {
                             case (ShowResult.Finished):
-                                GameManager.Instance.GetPlayer().Coins += coins;
-                                GameManager.Instance.GetPlayer().UpdatePlayerPrefs();
+                                GameManager.Instance.Player.Coins += coins;
+                                GameManager.Instance.Player.UpdatePlayerPrefs();
                                 PreferencesFactory.Save();
                                 DialogManager.Instance.Show(title: "Coins", text: LocaliseText.Format("Advertising.UnityAds.WatchForCoins.Finished", coins));
                                 break;
