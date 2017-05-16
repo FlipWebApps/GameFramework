@@ -23,8 +23,9 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
+using GameFramework.Debugging;
+using UnityEngine.Assertions;
 
 namespace GameFramework.Localisation.ObjectModel
 {
@@ -38,9 +39,9 @@ namespace GameFramework.Localisation.ObjectModel
     public class LocalisationData : ScriptableObject //, ISerializationCallbackReceiver
     {
         /// <summary>
-        /// List of loaded languages.
+        /// List of loaded languages. You can read from this, but should not manipulate this - use the other methods.
         /// </summary>
-        List<Language> Languages
+        public List<Language> Languages
         {
             get
             {
@@ -51,7 +52,7 @@ namespace GameFramework.Localisation.ObjectModel
         List<Language> _languages = new List<Language>();
 
         /// <summary>
-        /// List of loaded localisation entries.
+        /// List of loaded localisation entries. You can read from this, but should not manipulate this - use the other methods.
         /// </summary>
         public List<LocalisationEntry> LocalisationEntries
         {
@@ -75,14 +76,14 @@ namespace GameFramework.Localisation.ObjectModel
         }
         readonly Dictionary<string, LocalisationEntry> _localisations = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
 
-        void PopulateDictionary()
-        {
-            _localisations.Clear();
-            foreach (var localisationEntry in LocalisationEntries)
-            {
-                _localisations.Add(localisationEntry.Key, localisationEntry);
-            }
-        }
+        //void PopulateDictionary()
+        //{
+        //    _localisations.Clear();
+        //    foreach (var localisationEntry in LocalisationEntries)
+        //    {
+        //        _localisations.Add(localisationEntry.Key, localisationEntry);
+        //    }
+        //}
 
         //public void OnBeforeSerialize()
         //{
@@ -100,7 +101,7 @@ namespace GameFramework.Localisation.ObjectModel
 
         /// <summary>
         /// Internal method for verifying that the dictionary and list are synchronised and that entries have the same number of languages as localisations.
-        /// This setup is needed for ease of working within the Unity Editor
+        /// This setup with both list and dictionaries is needed for ease of working within the Unity Editor
         /// </summary>
         /// <returns></returns>
         public string InternalVerifyState()
@@ -167,15 +168,7 @@ namespace GameFramework.Localisation.ObjectModel
         }
 
         /// <summary>
-        /// Gets all the localisation language
-        /// </summary>
-        public List<Language> GetLanguages()
-        {
-            return Languages;
-        }
-
-        /// <summary>
-        /// Gets a localisation language
+        /// Gets the index for the specified localisation language
         /// </summary>
         /// <param name="language"></param>
         public int GetLanguageIndex(string language)
@@ -187,7 +180,7 @@ namespace GameFramework.Localisation.ObjectModel
         }
 
         /// <summary>
-        /// Get a localisation language
+        /// Whether this contains the specified language
         /// </summary>
         /// <param name="language"></param>
         public bool ContainsLanguage(string language)
@@ -259,10 +252,43 @@ namespace GameFramework.Localisation.ObjectModel
         {
             return GetEntry(key) != null;
         }
+
+
+        /// <summary>
+        /// Gets a text translation from a LocalisationEntry
+        /// </summary>
+        /// <param name="key"></param>
+        public string GetText(string key, string language)
+        {
+            var languageIndex = GetLanguageIndex(language);
+            if (languageIndex == -1) return null;
+            return GetText(key, languageIndex);
+        }
+
+
+        /// <summary>
+        /// Gets a text translation from a LocalisationEntry
+        /// </summary>
+        /// <param name="key"></param>
+        public string GetText(string key, int languageIndex)
+        {
+            Assert.IsTrue(languageIndex >= 0 && languageIndex < Languages.Count, "language index is out of bounds when getting key '" + key + "'");
+            var entry = GetEntry(key);
+            if (entry == null)
+            {
+                MyDebug.LogWarningF("Localisation key {0} not found.", key);
+                return null;
+            }
+            return entry.Languages[languageIndex];
+        }
         #endregion LocalisationEntries
 
         #region IO
         // TODO: Merge(LocalistionData) - useful at runtime to create a single object
+        public void Merge(LocalisationData localisationData) {
+            Debug.Log("MERGE " + localisationData.GetInstanceID());
+            Debug.Log("NOT IMPLEMENTED. TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
+        }
 
         /// <summary>
         /// Write localisation data out to a csv file 

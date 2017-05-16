@@ -31,6 +31,7 @@ using UnityEngine;
 namespace GameFramework.Localisation.Editor
 {
     [CustomEditor(typeof(LocalisationData))]
+    [Serializable]
     public class LocalisationDataEditor : UnityEditor.Editor
     {
         LocalisationData _targetLocalisationData;
@@ -42,13 +43,14 @@ namespace GameFramework.Localisation.Editor
 
         // Entries tab variables
         Rect _entriesHelpRect;
+        [SerializeField]
         Vector2 _entriesScrollPosition;
         float _entriesScrollHeight;
         float _entriesScrollPositionY;  // cached between events to avoid layout errors
         int _entriesDefaultRowHeight = 16;
         string _newEntry;
         [SerializeField]
-        List<EntryData> _entryDataList;
+        public List<EntryData> _entryDataList;
 
         // Languages tab variables
         Rect _languagesHelpRect;
@@ -155,7 +157,7 @@ namespace GameFramework.Localisation.Editor
                         {
                             //var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
                             EditorGUILayout.BeginHorizontal();
-                            EditorGUILayout.LabelField(_targetLocalisationData.GetLanguages()[li].Name,
+                            EditorGUILayout.LabelField(_targetLocalisationData.Languages[li].Name,
                                 GUILayout.Width(100));
                             EditorStyles.textField.wordWrap = true;
                             //languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
@@ -169,10 +171,10 @@ namespace GameFramework.Localisation.Editor
 
                             if (li > 0 && GUILayout.Button("Translate", EditorStyles.miniButton, GUILayout.Width(60)))
                             {
-                                var sourceCode = _targetLocalisationData.GetLanguages()[0].Code;
+                                var sourceCode = _targetLocalisationData.Languages[0].Code;
                                 if (!string.IsNullOrEmpty(sourceCode))
                                 {
-                                    var targetCode = _targetLocalisationData.GetLanguages()[li].Code;
+                                    var targetCode = _targetLocalisationData.Languages[li].Code;
                                     if (!string.IsNullOrEmpty(targetCode))
                                     {
                                         var sourceText = localisationEntry.Languages[0];
@@ -192,12 +194,12 @@ namespace GameFramework.Localisation.Editor
                                     }
                                     else
                                     {
-                                        EditorUtility.DisplayDialog("Localisation Import", "There is no code specified for the language '" + _targetLocalisationData.GetLanguages()[li].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
+                                        EditorUtility.DisplayDialog("Localisation Import", "There is no code specified for the language '" + _targetLocalisationData.Languages[li].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
                                     }
                                 }
                                 else
                                 {
-                                    EditorUtility.DisplayDialog("Localisation Translate", "There is no code specified for the language '" + _targetLocalisationData.GetLanguages()[0].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
+                                    EditorUtility.DisplayDialog("Localisation Translate", "There is no code specified for the language '" + _targetLocalisationData.Languages[0].Name + "'.\n\nPlease enter under the languages tab.", "Ok");
                                 }
                             }
 
@@ -382,7 +384,7 @@ namespace GameFramework.Localisation.Editor
         }
 
         [Serializable]
-        class EntryData
+        public class EntryData
         {
             public bool IsExpanded;
             public int Height;

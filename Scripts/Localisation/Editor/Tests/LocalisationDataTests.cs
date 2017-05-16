@@ -31,7 +31,7 @@ namespace GameFramework.Localisation
     /// <summary>
     /// Test cases for localisation. You can also view these to see how you might use the API.
     /// </summary>
-    public class LocalisationTests
+    public class LocalisationDataTests
     {
         #region Helper Functions
 
@@ -40,6 +40,24 @@ namespace GameFramework.Localisation
             return ScriptableObject.CreateInstance<LocalisationData>();
         }
 
+        /// <summary>
+        /// Fills a LocalisationData with the specified languages and keys and values in the format key-language
+        /// </summary>
+        /// <param name="localisationData"></param>
+        /// <param name="languages"></param>
+        /// <param name="keys"></param>
+        private void FillLocalisationData(LocalisationData localisationData, string[] languages, string[] keys)
+        {
+            foreach (var language in languages)
+                localisationData.AddLanguage(language);
+
+            foreach (var key in keys)
+            {
+                var entry = localisationData.AddEntry(key);
+                for (var i = 0; i < languages.Length; i++)
+                    entry.Languages[i] = key + "-" + languages[i];
+            }
+        }
         #endregion Helper Functions
 
         #region Setup Tests
@@ -205,7 +223,7 @@ namespace GameFramework.Localisation
                 localisationData.AddLanguage(language);
 
             //// Act
-            var returnedLanguages = localisationData.GetLanguages();
+            var returnedLanguages = localisationData.Languages  ;
 
             //// Assert
             Assert.AreEqual(languages.Length, returnedLanguages.Count, "The number of languages is different");
@@ -277,16 +295,7 @@ namespace GameFramework.Localisation
         {
             // Arrange
             var localisationData = CreateNewLocalisation();
-
-            foreach (var language in languages)
-                localisationData.AddLanguage(language);
-
-            foreach (var key in keys)
-            {
-                var entry = localisationData.AddEntry(key);
-                for (var i = 0; i < languages.Length; i++)
-                    entry.Languages[i] = key + "-" + languages[i];
-            }
+            FillLocalisationData(localisationData, languages, keys);
 
             //// Act
             localisationData.RemoveLanguage(removeLanguage);
@@ -487,6 +496,78 @@ namespace GameFramework.Localisation
 
             //// Assert
             Assert.IsFalse(containsEntry, "Missing LocalisationEntry was returned as found");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key1", "English")]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English2")]
+        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "French")]
+        [TestCase(new[] { "English3", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English3")]
+        [TestCase(new[] { "English", "French3", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key2", "French3")]
+        [TestCase(new[] { "English", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key3", "Spanish")]
+        public void GetText(string[] languages, string[] keys, string getKey, string getLanguage)
+        {
+            // Arrange
+            var localisationData = CreateNewLocalisation();
+            FillLocalisationData(localisationData, languages, keys);
+
+            //// Act
+            var text = localisationData.GetText(getKey, getLanguage);
+
+            //// Assert
+            Assert.AreEqual(getKey + "-" + getLanguage, text, "Got the wrong value");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key3", "English")]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key4", "English2")]
+        public void GetTextKeyNotFound(string[] languages, string[] keys, string getKey, string getLanguage)
+        {
+            // Arrange
+            var localisationData = CreateNewLocalisation();
+            FillLocalisationData(localisationData, languages, keys);
+
+            //// Act
+            var text = localisationData.GetText(getKey, getLanguage);
+
+            //// Assert
+            Assert.IsNull(text, "Should not have found a value");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key1", "French")]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key2", "Spanish")]
+        public void GetTextLanguageNotFound(string[] languages, string[] keys, string getKey, string getLanguage)
+        {
+            // Arrange
+            var localisationData = CreateNewLocalisation();
+            FillLocalisationData(localisationData, languages, keys);
+
+            //// Act
+            var text = localisationData.GetText(getKey, getLanguage);
+
+            //// Assert
+            Assert.IsNull(text, "Should not have found a value");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key1", 0)]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", 1)]
+        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", 1)]
+        [TestCase(new[] { "English3", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key1", 0)]
+        [TestCase(new[] { "English", "French3", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key2", 1)]
+        [TestCase(new[] { "English", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key3", 2)]
+        public void GetTextByIndex(string[] languages, string[] keys, string getKey, int language)
+        {
+            // Arrange
+            var localisationData = CreateNewLocalisation();
+            FillLocalisationData(localisationData, languages, keys);
+
+            //// Act
+            var text = localisationData.GetText(getKey, language);
+
+            //// Assert
+            Assert.AreEqual(getKey + "-" + localisationData.Languages[language].Name, text, "Got the wrong value");
             Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
         }
 

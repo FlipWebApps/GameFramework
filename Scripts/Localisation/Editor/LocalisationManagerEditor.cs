@@ -37,16 +37,16 @@ namespace GameFramework.Localisation.Editor
         ReorderableList _supportedLanguagesList;
 
         SerializedProperty _setupModeProperty;
-        SerializedProperty _localisationDataProperty;
+        SerializedProperty _specifiedLocalisationDataProperty;
         SerializedProperty _supportedLanguagesProperty;
 
         void OnEnable()
         {
             _setupModeProperty = serializedObject.FindProperty("_setupMode");
-            _localisationDataProperty = serializedObject.FindProperty("_localisationData");
+            _specifiedLocalisationDataProperty = serializedObject.FindProperty("_specifiedLocalisationData");
             _supportedLanguagesProperty = serializedObject.FindProperty("_supportedLanguages");
 
-            _localisationDataList = new ReorderableList(serializedObject, _localisationDataProperty, true, true, true, true);
+            _localisationDataList = new ReorderableList(serializedObject, _specifiedLocalisationDataProperty, true, true, true, true);
             _localisationDataList.drawHeaderCallback = (Rect rect) => {
                 EditorGUI.LabelField(rect, "Localisation Files");
             };
