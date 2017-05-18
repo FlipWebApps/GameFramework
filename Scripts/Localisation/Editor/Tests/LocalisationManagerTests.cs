@@ -62,19 +62,6 @@ namespace GameFramework.Localisation
             UnityEngine.Object.DestroyImmediate(localisationManager);
         }
 
-        LocalisationData CreateLocalisationData(string[] languages, string[]keys)
-        {
-            var localisationData = ScriptableObject.CreateInstance<LocalisationData>();
-            foreach (var language in languages)
-                localisationData.AddLanguage(language);
-            foreach (var key in keys)
-            {
-                var entry = localisationData.AddEntry(key);
-                for (var i = 0; i < languages.Length; i++)
-                    entry.Languages[i] = key + "-" + languages[i];
-            }
-            return localisationData;
-        }
         #endregion Helper Functions
 
         #region Setup Tests
@@ -98,7 +85,7 @@ namespace GameFramework.Localisation
         public void CreateLocalisationSpecifiedSingle(string[] languages, string[] keys)
         {
             // Arrange
-            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
 
             //// Act
             var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, new string[0]);
@@ -118,7 +105,7 @@ namespace GameFramework.Localisation
         public void CreateLocalisationSpecifiedMultiple(string[] languages, string[] keys)
         {
             // Arrange
-            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
 
             //// Act
             var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, new string[0]);
@@ -140,7 +127,7 @@ namespace GameFramework.Localisation
         public void CanUseLanguage(string[] languages, string[] keys, string[] supportedLanguages, string language)
         {
             // Arrange
-            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
             var localisationManager = CreateLocalisationManagerSpecified( new LocalisationData[] { localisationData }, supportedLanguages);
 
             //// Act
@@ -159,7 +146,7 @@ namespace GameFramework.Localisation
         public void CanUseLanguageNotValid(string[] languages, string[] keys, string[] supportedLanguages, string language)
         {
             // Arrange
-            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
             var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, supportedLanguages);
 
             //// Act
@@ -175,24 +162,49 @@ namespace GameFramework.Localisation
 
         #region Get
 
-        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, new[] { "English" }, "Spanish")]
-        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, new[] { "English", "French" }, "Spanish")]
-        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, new string[0], "Spanish")]
-        public void GetText(string[] languages, string[] keys, string[] supportedLanguages, string language)
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key1", "English")]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English2")]
+        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "French")]
+        [TestCase(new[] { "English3", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English3")]
+        [TestCase(new[] { "English", "French3", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key2", "French3")]
+        [TestCase(new[] { "English", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key3", "Spanish")]
+        public void GetTextDefaultLanguage(string[] languages, string[] keys, string getKey, string getLanguage)
         {
-            Assert.IsTrue(false, "TO IMPLEMENT");
-            //// Arrange
-            //var localisationData = CreateLocalisationData(languages, keys);
-            //var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, supportedLanguages);
+            // Arrange
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
+            var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, languages);
+            localisationManager.Language = getLanguage;
 
             ////// Act
-            //var canUseLanguage = localisationManager.CanUseLanguage(language);
+            var text = localisationManager.GetText(getKey);
 
             ////// Assert
-            //Assert.IsFalse(canUseLanguage, "The language can not be used!");
+            Assert.AreEqual(getKey + "-" + getLanguage, text, "Got the wrong value");
 
             ////// Cleanup
-            //DestroyLocalisationManager(localisationManager);
+            DestroyLocalisationManager(localisationManager);
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Key1", "English")]
+        [TestCase(new[] { "English2", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English2")]
+        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "French")]
+        [TestCase(new[] { "English3", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key1", "English3")]
+        [TestCase(new[] { "English", "French3", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key2", "French3")]
+        [TestCase(new[] { "English", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" }, "Key3", "Spanish")]
+        public void GetTextSpecifiedLanguage(string[] languages, string[] keys, string getKey, string specifiedLanguage)
+        {
+            // Arrange
+            var localisationData = LocalisationDataTests.CreateLocalisationData(languages, keys);
+            var localisationManager = CreateLocalisationManagerSpecified(new LocalisationData[] { localisationData }, languages);
+
+            ////// Act
+            var text = localisationManager.GetText(getKey, specifiedLanguage);
+
+            ////// Assert
+            Assert.AreEqual(getKey + "-" + specifiedLanguage, text, "Got the wrong value");
+
+            ////// Cleanup
+            DestroyLocalisationManager(localisationManager);
         }
         #endregion Get
 

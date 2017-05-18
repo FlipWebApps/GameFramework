@@ -35,9 +35,25 @@ namespace GameFramework.Localisation
     {
         #region Helper Functions
 
-        LocalisationData CreateNewLocalisation()
+        /// <summary>
+        /// Create an empty LocalisationData
+        /// </summary>
+        internal static LocalisationData CreateLocalisationData()
         {
             return ScriptableObject.CreateInstance<LocalisationData>();
+        }
+
+        /// <summary>
+        /// Create and fill a LocalisationData with the specified languages and keys and values in the format key-language
+        /// </summary>
+        /// <param name="languages"></param>
+        /// <param name="keys"></param>
+        /// <returns></returns>
+        internal static LocalisationData CreateLocalisationData(string[] languages, string[] keys)
+        {
+            var localisationData = ScriptableObject.CreateInstance<LocalisationData>();
+            FillLocalisationData(localisationData, languages, keys);
+            return localisationData;
         }
 
         /// <summary>
@@ -46,7 +62,7 @@ namespace GameFramework.Localisation
         /// <param name="localisationData"></param>
         /// <param name="languages"></param>
         /// <param name="keys"></param>
-        private void FillLocalisationData(LocalisationData localisationData, string[] languages, string[] keys)
+        internal static void FillLocalisationData(LocalisationData localisationData, string[] languages, string[] keys)
         {
             foreach (var language in languages)
                 localisationData.AddLanguage(language);
@@ -66,13 +82,27 @@ namespace GameFramework.Localisation
         public void CreateLocalisation()
         {
             //// Act
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Assert
             Assert.IsNotNull(localisationData, "No LocalisationData was created");
             Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
         }
 
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" })]
+        [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" })]
+        [TestCase(new[] { "English", "French", "Spanish" }, new[] { "Key1", "Key2", "Key3" })]
+        public void Instantiate(string[] languages, string[] keys)
+        {
+            // Arrange
+            var localisationData = CreateLocalisationData(languages, keys);
+
+            //// Act
+            var localisationDataCopy = ScriptableObject.Instantiate(localisationData);
+
+            //// Assert
+            Assert.IsNull(localisationDataCopy.InternalVerifyState(), localisationDataCopy.InternalVerifyState());
+        }
 
         #endregion Setup Tests
 
@@ -83,7 +113,7 @@ namespace GameFramework.Localisation
         public void AddLanguage(string language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddLanguage(language);
@@ -98,7 +128,7 @@ namespace GameFramework.Localisation
         public void AddLanguage(string language, string code)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddLanguage(language, code);
@@ -114,7 +144,7 @@ namespace GameFramework.Localisation
         public void AddLanguageMultiple(string language, string language2, string language3)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddLanguage(language);
@@ -133,7 +163,7 @@ namespace GameFramework.Localisation
         public void AddlanguageNoDuplicates(string language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             var entry1 = localisationData.AddLanguage(language);
@@ -151,7 +181,7 @@ namespace GameFramework.Localisation
         public void AddLanguageAdjustsEntries(string[] languages, string[] keys, string newLanguage)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             foreach (var language in languages)
                 localisationData.AddLanguage(language);
@@ -181,7 +211,7 @@ namespace GameFramework.Localisation
         public void GetLanguage(string language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(language);
 
             //// Act
@@ -199,7 +229,7 @@ namespace GameFramework.Localisation
         public void GetLanguageNotFound(string[] languages, string checkLanguage)
         {
             //// Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             foreach (var language in languages)
                 localisationData.AddLanguage(language);
 
@@ -218,7 +248,7 @@ namespace GameFramework.Localisation
         public void GetLanguages(params string[] languages)
         {
             //// Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             foreach (var language in languages)
                 localisationData.AddLanguage(language);
 
@@ -239,7 +269,7 @@ namespace GameFramework.Localisation
         public void GetLanguageIndex(params string[] languages)
         {
             //// Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             foreach(var language in languages)
                 localisationData.AddLanguage(language);
 
@@ -254,7 +284,7 @@ namespace GameFramework.Localisation
         public void RemoveLanguage(string language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(language);
 
             //// Act
@@ -271,7 +301,7 @@ namespace GameFramework.Localisation
         public void RemoveLanguageWhenMultiple(string languageToRemove, string language, string language2, string language3)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(language);
             localisationData.AddLanguage(language2);
             localisationData.AddLanguage(language3);
@@ -294,8 +324,7 @@ namespace GameFramework.Localisation
         public void RemoveLanguageAdjustsEntries(string[] languages, string[] keys, string removeLanguage)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
-            FillLocalisationData(localisationData, languages, keys);
+            var localisationData = CreateLocalisationData(languages, keys);
 
             //// Act
             localisationData.RemoveLanguage(removeLanguage);
@@ -319,7 +348,7 @@ namespace GameFramework.Localisation
         public void ContainsLanguage(string language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(language);
 
             //// Act
@@ -335,7 +364,7 @@ namespace GameFramework.Localisation
         public void ContainsLanguageNotFound(string language, string languageToAdd)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(languageToAdd);
 
             //// Act
@@ -355,7 +384,7 @@ namespace GameFramework.Localisation
         public void AddLocalisationEntry(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddEntry(key);
@@ -370,7 +399,7 @@ namespace GameFramework.Localisation
         public void AddLocalisationEntryMultiple(string key, string key2, string key3)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddEntry(key);
@@ -389,7 +418,7 @@ namespace GameFramework.Localisation
         public void AddLocalisationEntryNoLanguagesCreatesDefault(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             localisationData.AddEntry(key);
@@ -404,7 +433,7 @@ namespace GameFramework.Localisation
         public void AddLocalisationEntryNoDuplicates(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
 
             //// Act
             var entry1 = localisationData.AddEntry(key);
@@ -421,7 +450,7 @@ namespace GameFramework.Localisation
         public void GetLocalisationEntry(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddEntry(key);
 
             //// Act
@@ -437,7 +466,7 @@ namespace GameFramework.Localisation
         public void RemoveLocalisationEntry(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddEntry(key);
 
             //// Act
@@ -454,7 +483,7 @@ namespace GameFramework.Localisation
         public void RemoveLocalisationEntryWhenMultiple(string languageToRemove, string language, string language2, string language3)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddLanguage(language);
             localisationData.AddLanguage(language2);
             localisationData.AddLanguage(language3);
@@ -472,7 +501,7 @@ namespace GameFramework.Localisation
         public void ContainsLocalisationEntry(string key)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddEntry(key);
 
             //// Act
@@ -488,7 +517,7 @@ namespace GameFramework.Localisation
         public void ContainsLocalisationEntryNotFound(string key, string keyToAdd)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
+            var localisationData = CreateLocalisationData();
             localisationData.AddEntry(keyToAdd);
 
             //// Act
@@ -508,8 +537,7 @@ namespace GameFramework.Localisation
         public void GetText(string[] languages, string[] keys, string getKey, string getLanguage)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
-            FillLocalisationData(localisationData, languages, keys);
+            var localisationData = CreateLocalisationData(languages, keys);
 
             //// Act
             var text = localisationData.GetText(getKey, getLanguage);
@@ -524,8 +552,7 @@ namespace GameFramework.Localisation
         public void GetTextKeyNotFound(string[] languages, string[] keys, string getKey, string getLanguage)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
-            FillLocalisationData(localisationData, languages, keys);
+            var localisationData = CreateLocalisationData(languages, keys);
 
             //// Act
             var text = localisationData.GetText(getKey, getLanguage);
@@ -540,8 +567,7 @@ namespace GameFramework.Localisation
         public void GetTextLanguageNotFound(string[] languages, string[] keys, string getKey, string getLanguage)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
-            FillLocalisationData(localisationData, languages, keys);
+            var localisationData = CreateLocalisationData(languages, keys);
 
             //// Act
             var text = localisationData.GetText(getKey, getLanguage);
@@ -560,8 +586,7 @@ namespace GameFramework.Localisation
         public void GetTextByIndex(string[] languages, string[] keys, string getKey, int language)
         {
             // Arrange
-            var localisationData = CreateNewLocalisation();
-            FillLocalisationData(localisationData, languages, keys);
+            var localisationData = CreateLocalisationData(languages, keys);
 
             //// Act
             var text = localisationData.GetText(getKey, language);

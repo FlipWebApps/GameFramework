@@ -36,7 +36,7 @@ namespace GameFramework.Localisation.ObjectModel
     /// metadata such as the key (and index into the 2d array) pro's and con's of both, but we just put an entry astraight into the dictionary for now.
     [CreateAssetMenu(fileName = "Localisation", menuName = "Game Framework/Localisation")]
     [System.Serializable]
-    public class LocalisationData : ScriptableObject //, ISerializationCallbackReceiver
+    public class LocalisationData : ScriptableObject , ISerializationCallbackReceiver
     {
         /// <summary>
         /// List of loaded languages. You can read from this, but should not manipulate this - use the other methods.
@@ -76,28 +76,30 @@ namespace GameFramework.Localisation.ObjectModel
         }
         readonly Dictionary<string, LocalisationEntry> _localisations = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
 
-        //void PopulateDictionary()
-        //{
-        //    _localisations.Clear();
-        //    foreach (var localisationEntry in LocalisationEntries)
-        //    {
-        //        _localisations.Add(localisationEntry.Key, localisationEntry);
-        //    }
-        //}
+        #region Setup
 
-        //public void OnBeforeSerialize()
-        //{
-        //    LocalisationEntries.Clear();
-        //    foreach (var localisation in Localisations)
-        //    {
-        //        LocalisationEntries.Add(localisation.Value);
-        //    }
-        //}
+        /// <summary>
+        /// As dictionaries can't be serialised we need to populate from the serialised lists.
+        /// </summary>
+        void PopulateDictionary()
+        {
+            _localisations.Clear();
+            foreach (var localisationEntry in LocalisationEntries)
+            {
+                _localisations.Add(localisationEntry.Key, localisationEntry);
+            }
+        }
 
-        //public void OnAfterDeserialize()
-        //{
-        //    PopulateDictionary();
-        //}
+        public void OnBeforeSerialize()
+        {
+            // Don't need to do anything as code should ensure both dictionaries and lists are updated
+        }
+
+        public void OnAfterDeserialize()
+        {
+            // As dictionaries can't be serialised we need to populate from the serialised lists.
+            PopulateDictionary();
+        }
 
         /// <summary>
         /// Internal method for verifying that the dictionary and list are synchronised and that entries have the same number of languages as localisations.
@@ -114,6 +116,8 @@ namespace GameFramework.Localisation.ObjectModel
             if (LocalisationEntries.Count != Localisations.Count) return string.Format("Counts different - {0} different from {1}", LocalisationEntries.Count, Localisations.Count);
             return null;
         }
+
+        #endregion Setup
 
         #region Language
 

@@ -130,13 +130,13 @@ namespace GameFramework.Localisation.Components
 
                 // set and notify of changes
                 _language = value;
+                _languageIndex = LocalisationData.GetLanguageIndex(_language);
                 PreferencesFactory.SetString("Language", Language, false);
                 GameManager.SafeQueueMessage(new LocalisationChangedMessage(_language, oldLanguage));
             }
         }
         string _language;
-
-        static string _defaultUserLanguage;             // the first language from the user localisation file.
+        int _languageIndex;
 
         void Awake()
         {
@@ -269,14 +269,31 @@ namespace GameFramework.Localisation.Components
         #region Access
 
         /// <summary>
+        /// Returns whether the specified key is present.
+        /// </summary>
+        public bool Exists(string key)
+        {
+            if (LocalisationData == null) return false;
+            return LocalisationData.ContainsEntry(key);
+        }
+
+
+        /// <summary>
         /// Localise the specified value based on the currently set language.
         /// </summary>
         /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
-        public string Get(string key, string language = null, bool missingReturnsNull = false)
+        public string GetText(string key, string language = null, bool missingReturnsNull = false)
         {
             Assert.IsNotNull(LocalisationData, "Localisation data has not been loaded. Ensure that you have a Localisation Manager added to your scene and if needed increase the script execution of that component.");
 
-            return (LocalisationData.GetText(key, language));
+            if (language == null)
+            {
+                return LocalisationData.GetText(key, _languageIndex);
+            }
+            else
+            {
+                return (LocalisationData.GetText(key, language));
+            }
             //// try and get the key
             //string[] vals;
             //if (_localisations.TryGetValue(key, out vals))
@@ -309,17 +326,8 @@ namespace GameFramework.Localisation.Components
         /// <summary>
         /// Get the localised value and format it.
         /// </summary>
-        public string Format(string key, params object[] parameters) { return string.Format(Get(key), parameters); }
+        public string FormatText(string key, params object[] parameters) { return string.Format(GetText(key), parameters); }
 
-
-        /// <summary>
-        /// Returns whether the specified key is present.
-        /// </summary>
-        public bool Exists(string key)
-        {
-            if (LocalisationData == null) return false;
-            return LocalisationData.ContainsEntry(key);
-        }
         #endregion Access
     }
 }

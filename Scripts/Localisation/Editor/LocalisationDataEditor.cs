@@ -35,7 +35,6 @@ namespace GameFramework.Localisation.Editor
     public class LocalisationDataEditor : UnityEditor.Editor
     {
         LocalisationData _targetLocalisationData;
-        SerializedProperty _entriesProperty;
         SerializedProperty _languagesProperty;
 
         Rect _mainHelpRect;
