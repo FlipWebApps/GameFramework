@@ -36,7 +36,7 @@ namespace GameFramework.Localisation.Components
     /// </summary>
     [AddComponentMenu("Game Framework/Localisation/Localisation Manager")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class LocalisationManager : Singleton<LocalisationManager>
+    public class LocalisationManager : SingletonPersistant<LocalisationManager>
     {
         /// <summary>
         /// Different modes for setting up the localisation
@@ -138,8 +138,10 @@ namespace GameFramework.Localisation.Components
         string _language;
         int _languageIndex;
 
-        void Awake()
+        protected override void GameSetup()
         {
+            base.GameSetup();
+
             LoadLocalisationData();
             foreach (var language in SupportedLanguages)
                 if (!LocalisationData.ContainsLanguage(language))
@@ -162,21 +164,21 @@ namespace GameFramework.Localisation.Components
                 if (asset != null)
                     LocalisationData = Instantiate(asset);  // create a copy so we don't overwrite values.
 
-                // try and load identifier localisation
+                // try and load identifier localisation if specified and present, or if not user localisation
+                var identifierLocalisationLoaded = false;
                 if (GameManager.IsActive && GameManager.GetIdentifierBase() != null)
                 {
                     asset = Resources.Load<LocalisationData>(GameManager.GetIdentifierBase() + "/Localisation");
                     if (asset != null)
                     {
+                        identifierLocalisationLoaded = true;
                         if (LocalisationData == null)
                             LocalisationData = asset;
                         else
                             LocalisationData.Merge(asset);
                     }
                 }
-
-                // try and load user localisation
-                if (GameManager.IsActive && GameManager.GetIdentifierBase() != null)
+                if (!identifierLocalisationLoaded)
                 {
                     asset = Resources.Load<LocalisationData>("Localisation");
                     if (asset != null)
@@ -187,6 +189,7 @@ namespace GameFramework.Localisation.Components
                             LocalisationData.Merge(asset);
                     }
                 }
+                Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
             }
             else if (SetupMode == SetupModeType.Specified)
             {
@@ -197,9 +200,8 @@ namespace GameFramework.Localisation.Components
                     else
                         LocalisationData.Merge(localisationData);
                 }
+                Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that localisation files exist and are in the correct location!");
             }
-
-            Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that localisation files exist and are in the correct location!");
 
             // if no usable language is already set then set to the default language.
             if (!CanUseLanguage(Language))
@@ -261,7 +263,7 @@ namespace GameFramework.Localisation.Components
             if (SupportedLanguages.Length > 0 && TrySetAllowedLanguage(SupportedLanguages[0])) return;
 
             //// 2. if not set then fall back to first Language from first (default) file
-            if (LocalisationData.Languages.Count > 0 && TrySetAllowedLanguage(LocalisationData.Languages[0].Name)) return;
+            if (LocalisationData != null && LocalisationData.Languages.Count > 0 && TrySetAllowedLanguage(LocalisationData.Languages[0].Name)) return;
         }
 
         #endregion Language
@@ -282,7 +284,7 @@ namespace GameFramework.Localisation.Components
         /// Localise the specified value based on the currently set language.
         /// </summary>
         /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
-        public string GetText(string key, string language = null, bool missingReturnsNull = false)
+        public string GetText(string key, string language = null)
         {
             Assert.IsNotNull(LocalisationData, "Localisation data has not been loaded. Ensure that you have a Localisation Manager added to your scene and if needed increase the script execution of that component.");
 
@@ -294,32 +296,6 @@ namespace GameFramework.Localisation.Components
             {
                 return (LocalisationData.GetText(key, language));
             }
-            //// try and get the key
-            //string[] vals;
-            //if (_localisations.TryGetValue(key, out vals))
-            //{
-            //    if (language == null)
-            //    {
-            //        if (_languageIndex < vals.Length)
-            //            return vals[_languageIndex];
-            //    }
-            //    else
-            //    {
-            //        // get value for a specific language
-            //        var index = Array.IndexOf(Languages, language);
-            //        if (index == -1) return null;
-            //        if (index < vals.Length)
-            //            return vals[index];
-            //        else
-            //            return null;
-            //    }
-            //}
-
-            //if (missingReturnsNull) return null;
-
-            //MyDebug.LogWarningF("Localisation key not found: '{0}' for Language {1}", key, Language);
-            //return key;
-            return null;
         }
 
 

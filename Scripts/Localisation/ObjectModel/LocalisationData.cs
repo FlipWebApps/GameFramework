@@ -21,7 +21,6 @@
 
 using System;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using GameFramework.Debugging;
@@ -30,10 +29,10 @@ using UnityEngine.Assertions;
 namespace GameFramework.Localisation.ObjectModel
 {
     /// <summary>
-    /// 
+    /// A class for holding information and working with a collection of localisation entries.
     /// </summary>
     /// Notes: We could have used a 2d array / matrix to hold values for each language, but would still need a dictionary to reference 
-    /// metadata such as the key (and index into the 2d array) pro's and con's of both, but we just put an entry astraight into the dictionary for now.
+    /// metadata such as the key (and index into the 2d array) pro's and con's of both, but we just put an entry straight into the dictionary for now.
     [CreateAssetMenu(fileName = "Localisation", menuName = "Game Framework/Localisation")]
     [System.Serializable]
     public class LocalisationData : ScriptableObject , ISerializationCallbackReceiver
@@ -54,27 +53,27 @@ namespace GameFramework.Localisation.ObjectModel
         /// <summary>
         /// List of loaded localisation entries. You can read from this, but should not manipulate this - use the other methods.
         /// </summary>
-        public List<LocalisationEntry> LocalisationEntries
+        public List<LocalisationEntry> Entries
         {
             get
             {
-                return _localisationEntries;
+                return _entries;
             }
         }
         [SerializeField]
-        List<LocalisationEntry> _localisationEntries = new List<LocalisationEntry>();
+        List<LocalisationEntry> _entries = new List<LocalisationEntry>();
 
         /// <summary>
-        /// Dictionary key is the Localisation key, values are array of languages from csv file.
+        /// Dictionary key is the Localisation key, values are LocalisationEntries. You can read from this, but should not manipulate this - use the other methods.
         /// </summary>
-        Dictionary<string, LocalisationEntry> Localisations
+        Dictionary<string, LocalisationEntry> EntriesDictionary
         {
             get
             {
-                return _localisations;
+                return _entriesDictionary;
             }
         }
-        readonly Dictionary<string, LocalisationEntry> _localisations = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
+        readonly Dictionary<string, LocalisationEntry> _entriesDictionary = new Dictionary<string, LocalisationEntry>(System.StringComparer.Ordinal);
 
         #region Setup
 
@@ -83,10 +82,10 @@ namespace GameFramework.Localisation.ObjectModel
         /// </summary>
         void PopulateDictionary()
         {
-            _localisations.Clear();
-            foreach (var localisationEntry in LocalisationEntries)
+            _entriesDictionary.Clear();
+            foreach (var entry in Entries)
             {
-                _localisations.Add(localisationEntry.Key, localisationEntry);
+                _entriesDictionary.Add(entry.Key, entry);
             }
         }
 
@@ -108,12 +107,12 @@ namespace GameFramework.Localisation.ObjectModel
         /// <returns></returns>
         public string InternalVerifyState()
         {
-            foreach (var entry in LocalisationEntries)
+            foreach (var entry in Entries)
             {
-                if (!Localisations.ContainsKey(entry.Key)) return string.Format("Missing {0} from dictionary", entry.Key);
+                if (!EntriesDictionary.ContainsKey(entry.Key)) return string.Format("Missing {0} from dictionary", entry.Key);
                 if (entry.Languages.Length != Languages.Count) return string.Format("Missing languages from {0}", entry.Key);
             }
-            if (LocalisationEntries.Count != Localisations.Count) return string.Format("Counts different - {0} different from {1}", LocalisationEntries.Count, Localisations.Count);
+            if (Entries.Count != EntriesDictionary.Count) return string.Format("Counts different - {0} different from {1}", Entries.Count, EntriesDictionary.Count);
             return null;
         }
 
@@ -137,7 +136,7 @@ namespace GameFramework.Localisation.ObjectModel
             Languages.Add(newLanguage);
 
             // add language to entries
-            foreach (var entry in LocalisationEntries)
+            foreach (var entry in Entries)
             {
                 entry.AddLanguage();
             }
@@ -156,7 +155,7 @@ namespace GameFramework.Localisation.ObjectModel
             Languages.RemoveAt(index);
 
             // remove language from entries
-            foreach (var entry in LocalisationEntries)
+            foreach (var entry in Entries)
             {
                 entry.RemoveLanguage(index);
             }
@@ -210,15 +209,15 @@ namespace GameFramework.Localisation.ObjectModel
             if (Languages.Count == 0)
                 AddLanguage("English");
 
-            var localisationEntry = new LocalisationEntry(key)
+            var entry = new LocalisationEntry(key)
             {
                 Languages = new string[Languages.Count]
             };
 
-            LocalisationEntries.Add(localisationEntry);
-            Localisations.Add(key, localisationEntry);
+            Entries.Add(entry);
+            EntriesDictionary.Add(key, entry);
 
-            return localisationEntry;
+            return entry;
         }
 
         /// <summary>
@@ -227,12 +226,12 @@ namespace GameFramework.Localisation.ObjectModel
         /// <param name="key"></param>
         public void RemoveEntry(string key)
         {
-            for (var i = 0; i < LocalisationEntries.Count; i++)
+            for (var i = 0; i < Entries.Count; i++)
             {
-                if (LocalisationEntries[i].Key == key)
+                if (Entries[i].Key == key)
                 {
-                    LocalisationEntries.RemoveAt(i);
-                    Localisations.Remove(key);
+                    Entries.RemoveAt(i);
+                    EntriesDictionary.Remove(key);
                     return;
                 }
             }
@@ -245,7 +244,7 @@ namespace GameFramework.Localisation.ObjectModel
         public LocalisationEntry GetEntry(string key)
         {
             LocalisationEntry value;
-            return Localisations.TryGetValue(key, out value) ? value : null;
+            return EntriesDictionary.TryGetValue(key, out value) ? value : null;
         }
 
         /// <summary>
@@ -265,7 +264,11 @@ namespace GameFramework.Localisation.ObjectModel
         public string GetText(string key, string language)
         {
             var languageIndex = GetLanguageIndex(language);
-            if (languageIndex == -1) return null;
+            if (languageIndex == -1)
+            {
+                MyDebug.LogWarningF("Localisation key {0} not found for language {1}.", key, language);
+                return null;
+            }
             return GetText(key, languageIndex);
         }
 
@@ -280,7 +283,7 @@ namespace GameFramework.Localisation.ObjectModel
             var entry = GetEntry(key);
             if (entry == null)
             {
-                MyDebug.LogWarningF("Localisation key {0} not found.", key);
+                MyDebug.LogWarningF("Localisation key {0} not found for language index {1}.", key, languageIndex);
                 return null;
             }
             return entry.Languages[languageIndex];
@@ -312,17 +315,17 @@ namespace GameFramework.Localisation.ObjectModel
                     buffer.Append(i == Languages.Count - 1 ? "\n" : ",");
                 }
 
-                for (var i = 0; i < LocalisationEntries.Count; i++)
+                for (var i = 0; i < Entries.Count; i++)
                 {
                     buffer.Append("\"");
-                    buffer.Append(LocalisationEntries[i].Key);
+                    buffer.Append(Entries[i].Key);
                     buffer.Append("\", ");
-                    for (var il = 0; il < LocalisationEntries[i].Languages.Length; il++)
+                    for (var il = 0; il < Entries[i].Languages.Length; il++)
                     {
                         buffer.Append("\"");
-                        buffer.Append(LocalisationEntries[i].Languages[il]);
+                        buffer.Append(Entries[i].Languages[il].Replace("\"", "\\\""));
                         buffer.Append("\"");
-                        buffer.Append(il == LocalisationEntries[i].Languages.Length - 1 ? "\n" : ",");
+                        buffer.Append(il == Entries[i].Languages.Length - 1 ? "\n" : ",");
                     }
                 }
                 System.IO.File.WriteAllText(filename, buffer.ToString(), System.Text.Encoding.UTF8);
@@ -469,33 +472,13 @@ namespace GameFramework.Localisation.ObjectModel
         }
 
         #endregion Load CSV
-
-        // Exactly the same as above but allow the user to change from Auto, for when google get's all Jerk Butt-y
-        public IEnumerator Process(string sourceLang, string targetLang, string sourceText)
-        {
-            string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-                         + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + WWW.EscapeURL(sourceText);
-
-            WWW www = new WWW(url);
-            yield return www;
-
-            if (www.isDone)
-            {
-                if (string.IsNullOrEmpty(www.error))
-                {
-                    Debug.Log(www.text);
-                    //var N = JSONNode.Parse(www.text);
-                    //translatedText = N[0][0][0];
-                    //if (isDebug)
-                    //    print(translatedText);
-                }
-            }
-        }
         #endregion IO
     }
 
 
-
+    /// <summary>
+    /// Holds information about a single localisation entry including the key that identifies it and per language translations.
+    /// </summary>
     [System.Serializable]
     public class LocalisationEntry
     {
@@ -530,6 +513,9 @@ namespace GameFramework.Localisation.ObjectModel
 
     }
 
+    /// <summary>
+    /// Holds information about a localisation language including it's name and abbreviated code.
+    /// </summary>
     [System.Serializable]
     public class Language
     {

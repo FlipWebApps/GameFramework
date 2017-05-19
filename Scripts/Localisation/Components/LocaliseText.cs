@@ -92,11 +92,17 @@ namespace GameFramework.Localisation.Components
             {
                 Key = _textComponent.text;
             }
-
-            Localise();
             base.Awake();
         }
 
+        /// <summary>
+        /// Setup
+        /// </summary>
+        public override void Start()
+        {
+            Localise();
+            base.Start();
+        }
 
         /// <summary>
         /// Update the display with the localise text

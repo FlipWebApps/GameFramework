@@ -52,10 +52,10 @@ namespace GameFramework.Localisation.Editor
             {
                 dataPosition.x = rowPosition.xMax - 16;
                 dataPosition.width = 16;
-                if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string")))
-                {
-                    LocalisationEditorWindow.ShowWindowNew(dataProperty.stringValue);
-                }
+                //if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string")))
+                //{
+                //    LocalisationEditorWindow.ShowWindowNew(dataProperty.stringValue);
+                //}
             }
 
             if (isLocalisedProperty.boolValue)
