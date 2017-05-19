@@ -111,6 +111,23 @@ namespace GameFramework.EditorExtras.Editor
             }
         }
         static GUIStyle _borderlessButtonStyle;
+
+
+        public static GUIStyle WordWrapStyle
+        {
+            get
+            {
+                if (_wordWrapStyle != null) return _wordWrapStyle;
+
+                _wordWrapStyle = new GUIStyle(GUI.skin.textField)
+                {
+                    wordWrap = true
+                };
+                return _wordWrapStyle;
+            }
+        }
+        static GUIStyle _wordWrapStyle;
+
         #endregion GUI Styles
 
     }

@@ -47,7 +47,6 @@ namespace GameFramework.Localisation.Editor
         [SerializeField]
         Vector2 _entriesScrollPosition;
         float _entriesScrollHeight;
-        float _entriesScrollPositionY;  // cached between events to avoid layout errors
         int _entriesDefaultRowHeight = 16;
         string _newEntry;
         [SerializeField]
@@ -67,6 +66,8 @@ namespace GameFramework.Localisation.Editor
             _targetLocalisationData = target as LocalisationData;
 
             // setup for entries tab
+            // set scroll height to initial value (full screen height) - we can later set to the correct size in Repaint event.
+            if (_entriesScrollHeight <= 0) _entriesScrollHeight = Screen.height;
 
             // setup for languages tab
             _languagesProperty = serializedObject.FindProperty("_languages");
@@ -98,6 +99,7 @@ namespace GameFramework.Localisation.Editor
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
             SyncEntries();
+            Debug.Log(_entryDataList.Count);
             Undo.RecordObject(target, "Localisation Entry Changed");
 
             // filter
@@ -121,15 +123,6 @@ namespace GameFramework.Localisation.Editor
 
             _entriesScrollPosition = EditorGUILayout.BeginScrollView(_entriesScrollPosition, false, false, GUILayout.ExpandHeight(false));
 
-            // as GUI is called multiple times we record the y position on the initial layout event and use that for all subsequent 
-            // calls. Otherwise position changes between this and repaint may cause errors due to displaying different controls.
-            if (Event.current.type == EventType.Layout) 
-                _entriesScrollPositionY = _entriesScrollPosition.y;
-
-            // set scroll height to initial value (full screen height) - we can later set to the correct size in Repaint event.
-            if (_entriesScrollHeight <= 0)
-                _entriesScrollHeight = Screen.height;
-
             // here we avoid using properties due to them being very slow!
             var indexForDeleting = -1;
             var accumulativeHeightDrawn = 0;
@@ -139,21 +132,27 @@ namespace GameFramework.Localisation.Editor
                 var entryData = _entryDataList[i];
                 if (entryData.MatchesFilter)
                 {
-                    // if top is below viewport or bottom is above then this item is not visible.
-                    if (//accumulativeHeightDrawn > _entriesScrollPositionY + Screen.height || // commented out as this fails when expended shrinks in size causing new items to need to be drawn
-                        accumulativeHeightDrawn + entryData.Height < _entriesScrollPositionY)
+                    // if top is below viewport or bottom is above then this item is not visible. For repaint events we need to use the 
+                    // previously recorded display state to avoid changing the number of controls drawn.
+                    //if ((Event.current.type == EventType.Repaint && entryData.IsShown == false) ||
+                    //    (Event.current.type != EventType.Repaint &&
+                    if ((Event.current.type != EventType.Layout && entryData.IsShown == false) ||
+                        (Event.current.type == EventType.Layout &&
+                         (accumulativeHeightDrawn > _entriesScrollPosition.y + _entriesScrollHeight ||
+                          accumulativeHeightDrawn + entryData.Height < _entriesScrollPosition.y)))
                     {
                         accumulativeHeightDrawn += entryData.Height;
                         accumulativeSpace += entryData.Height;
+                        entryData.IsShown = false;
                     }
                     else
                     {
                         // fill space from skipped.
                         if (accumulativeSpace > 0) GUILayout.Space(accumulativeSpace);
                         accumulativeSpace = 0;
-                        accumulativeHeightDrawn += _entriesDefaultRowHeight;
 
                         // draw the displayed item
+                        entryData.IsShown = true;
                         var localisationEntry = _entryDataList[i].LocalisationEntry;
                         EditorGUILayout.BeginHorizontal();
                         EditorGUI.indentLevel++;
@@ -165,23 +164,22 @@ namespace GameFramework.Localisation.Editor
                             break;
                         }
                         EditorGUILayout.EndHorizontal();
+                        if (Event.current.type == EventType.Repaint)
+                            //entryData.Height = (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
+                            entryData.Height = _entriesDefaultRowHeight;
 
                         // handle expended status
                         if (entryData.IsExpanded)
                         {
                             EditorGUILayout.BeginVertical();
                             EditorGUI.indentLevel++;
-                            //var entryProperty = _entriesProperty.GetArrayElementAtIndex(i);
-                            //var languagesProperty = entryProperty.FindPropertyRelative("Languages");
                             for (var li = 0; li < localisationEntry.Languages.Length; li++)
                             {
-                                //var languageProperty = languagesProperty.GetArrayElementAtIndex(li);
                                 EditorGUILayout.BeginHorizontal();
                                 EditorGUILayout.LabelField(_targetLocalisationData.Languages[li].Name,
                                     GUILayout.Width(100));
-                                //languageProperty.stringValue = EditorGUILayout.TextArea(languageProperty.stringValue, GUILayout.Width(Screen.width - 148));
                                 EditorGUI.BeginChangeCheck();
-                                var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GuiStyles.WordWrapStyle, GUILayout.Width(Screen.width - 148 - 60));
+                                var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GuiStyles.WordWrapStyle, GUILayout.Width(Screen.width - 148 - 60 - 2));
                                 if (EditorGUI.EndChangeCheck())
                                 {
                                     localisationEntry.Languages[li] = lang;
@@ -227,14 +225,13 @@ namespace GameFramework.Localisation.Editor
                             EditorGUI.indentLevel--;
                             EditorGUILayout.EndVertical();
 
-                            if (Event.current != null && Event.current.type == EventType.Repaint)
-                                entryData.Height = (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
-                            accumulativeHeightDrawn += entryData.Height;
+                            // repaint events will give a new correct size for the last drawn rect so record here.
+                            if (Event.current.type == EventType.Repaint)
+                                entryData.Height += (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
                         }
-                        else
-                        {
-                            entryData.Height = _entriesDefaultRowHeight;
-                        }
+
+                        accumulativeHeightDrawn += entryData.Height;
+                       // Debug.Log(entryData.LocalisationEntry.Key + ", " + accumulativeHeightDrawn);
                     }
                 }
             }
@@ -264,19 +261,26 @@ namespace GameFramework.Localisation.Editor
                     var newLocalisationEntry = _targetLocalisationData.AddEntry(_newEntry);
                     serializedObject.Update();
                     var insertIndex = 0;
+                    var scrollOffset = 0;
                     for (; insertIndex < _entryDataList.Count; insertIndex++)
+                    {
                         if (_newEntry.CompareTo(_entryDataList[insertIndex].LocalisationEntry.Key) < 0)
                             break;
+                        else
+                            scrollOffset += _entryDataList[insertIndex].Height;
+                    }
                     _entryDataList.Insert(insertIndex, new EntryData()
                     {
                         LocalisationEntry = newLocalisationEntry,
-                        MatchesFilter = _newEntry.IndexOf(_filter, StringComparison.OrdinalIgnoreCase) >= 0
+                        MatchesFilter = _newEntry.IndexOf(_filter + "", StringComparison.OrdinalIgnoreCase) >= 0
                     });
+                    _entriesScrollPosition.y = scrollOffset;
 
                     var lastDot = _newEntry.LastIndexOf(".");
                     if (lastDot == -1)
                         _newEntry = "";
-                    else _newEntry = _newEntry.Substring(0, lastDot + 1);
+                    else
+                        _newEntry = _newEntry.Substring(0, lastDot + 1);
                 }
                 GUI.FocusControl("EntryAdd");
             }
@@ -287,7 +291,7 @@ namespace GameFramework.Localisation.Editor
             if (indexForDeleting != -1 &&
                 EditorUtility.DisplayDialog("Delete Entry?", "Are you sure you want to delete this entry?", "Yes", "No"))
             {
-                _targetLocalisationData.Entries.Remove(_entryDataList[indexForDeleting].LocalisationEntry);
+                _targetLocalisationData.RemoveEntry(_entryDataList[indexForDeleting].LocalisationEntry.Key);
                 _entryDataList.RemoveAt(indexForDeleting);
                 serializedObject.Update();
             }
@@ -298,10 +302,30 @@ namespace GameFramework.Localisation.Editor
             if (_entryDataList == null) _entryDataList = new List<EntryData>();
             if (_entryDataList.Count != _targetLocalisationData.Entries.Count)
             {
+                // find a match in target or add.
                 foreach (var entry in _targetLocalisationData.Entries)
-                    _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight, LocalisationEntry = entry });
+                {
+                    var match = false;
+                    foreach (var entryData in _entryDataList)
+                        if (entry.Equals(entryData.LocalisationEntry))
+                            match = true;
+                    if (!match) _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight, LocalisationEntry = entry });
+                }
+                // find a match in target or remove.
+                for (int i = _entryDataList.Count - 1; i >= 0; i--)
+                {
+                    var entryData = _entryDataList[i];
+                    var match = false;
+                    foreach (var entry in _targetLocalisationData.Entries)
+                        if (entry.Equals(entryData.LocalisationEntry))
+                            match = true;
+                    if (!match) _entryDataList.RemoveAt(i);
+                }
                 _entryDataList.Sort((x, y) => x.LocalisationEntry.Key.CompareTo(y.LocalisationEntry.Key));
             }
+            var internalStateError = _targetLocalisationData.InternalVerifyState();
+            if (internalStateError != null)
+                Debug.Log("Internal state error - please report including the actions you just took Thanks!" + _targetLocalisationData.InternalVerifyState());
         }
 
 

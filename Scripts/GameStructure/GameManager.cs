@@ -630,11 +630,6 @@ namespace GameFramework.GameStructure
             // display related properties
             SetDisplayProperties();
 
-
-            // Localisation setup. If nothing stored then use system Language if it exists. Otherwise we will default to English.
-            LocaliseText.AllowedLanguages = SupportedLanguages;
-
-
             // setup players
             Players = new PlayerGameItemManager();
             if (PlayerSetupMode == GameItemSetupMode.Automatic)
