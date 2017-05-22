@@ -266,6 +266,27 @@ namespace GameFramework.Localisation
         [TestCase("English")]
         [TestCase("English", "French")]
         [TestCase("English", "French", "Spanish")]
+        public void GetLanguageNames(params string[] languages)
+        {
+            //// Arrange
+            var localisationData = CreateLocalisationData();
+            foreach (var language in languages)
+                localisationData.AddLanguage(language);
+
+            //// Act
+            var returnedLanguages = localisationData.GetLanguageNames();
+
+            //// Assert
+            Assert.AreEqual(languages.Length, returnedLanguages.Length, "The number of languages is different");
+            for (var i = 0; i < languages.Length; i++)
+                Assert.AreEqual(languages[i], returnedLanguages[i], "Language " + languages[i] + " was not found");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+
+        [TestCase("English")]
+        [TestCase("English", "French")]
+        [TestCase("English", "French", "Spanish")]
         public void GetLanguageIndex(params string[] languages)
         {
             //// Arrange
@@ -597,6 +618,97 @@ namespace GameFramework.Localisation
         }
 
         #endregion LocalisationEntry Tests		
+
+        #region IO
+
+        [TestCase(new[] { "English" }, new[] { "English" })]
+        [TestCase(new[] { "English" }, new[] { "French" })]
+        [TestCase(new[] { "English" }, new[] { "English", "French" })]
+        public void MergeLanguage(string[] languages, string[] languages2)
+        {
+            // Arrange
+            var keys = new[] { "Key1", "Key2" };
+            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData2 = CreateLocalisationData(languages2, keys);
+
+            //// Act
+            localisationData.Merge(localisationData2);
+
+            //// Assert
+            foreach (var language in languages)
+            {
+                Assert.IsNotNull(localisationData.GetLanguage(language), "Missing language " + language + " from the initial localisation file");
+            }
+            foreach (var language in languages2)
+            {
+                Assert.IsNotNull(localisationData.GetLanguage(language), "Missing language " + language + " from the localisation file being merged in.");
+            }
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "Key1", "Key2" }, new[] { "Key1", "Key2" })]
+        [TestCase(new[] { "Key1", "Key2" }, new[] { "Key3", "Key4" })]
+        [TestCase(new[] { "Key1", "Key2" }, new[] { "Key2", "Key3" })]
+        public void MergeKeys(string[] keys, string[] keys2)
+        {
+            // Arrange
+            var languages = new[] { "English" };
+            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationData2 = CreateLocalisationData(languages, keys2);
+
+            //// Act
+            localisationData.Merge(localisationData2);
+
+            //// Assert
+            foreach (var key in keys)
+            {
+                Assert.IsNotNull(localisationData.GetEntry(key), "Missing key " + key + " from the initial localisation file.");
+            }
+            foreach (var key in keys2)
+            {
+                Assert.IsNotNull(localisationData.GetEntry(key), "Missing key " + key + " from the localisation file being merged in.");
+            }
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, new[] { "English" }, new[] { "Key1", "Key2" })]
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, new[] { "English", "French" }, new[] { "Key1", "Key2" })]
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, new[] { "English" }, new[] { "Key3", "Key4" })]
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, new[] { "English", "French" }, new[] { "Key3", "Key4" })]
+        public void MergeValues(string[] languages, string[] keys, string[] languages2, string[] keys2)
+        {
+            // Arrange
+            var localisationData = CreateLocalisationData(languages, keys);
+            var localisationDataOriginal = CreateLocalisationData(languages, keys);
+            var localisationData2 = CreateLocalisationData(languages2, keys2);
+            // adjust auto keys in second localisation data file so we can identify them after merging.
+            foreach (var entry in localisationData2.Entries)
+            {
+                for (int i = 0; i < entry.Languages.Length; i++)
+                {
+                    entry.Languages[i] = "2-" + entry.Languages[i];
+                }
+            }
+
+            //// Act
+            localisationData.Merge(localisationData2);
+
+            //// Assert
+            foreach (var entry in localisationData.Entries)
+            {
+                foreach (var language in localisationData.Languages)
+                {
+                    if (localisationData2.ContainsEntry(entry.Key) && localisationData2.ContainsLanguage(language.Name))
+                        Assert.AreEqual("2-" + entry.Key + "-" + language.Name, localisationData.GetText(entry.Key, language.Name), "Value is not changed " + entry.Key + " - " + language.Name);
+                    else if (!localisationData2.ContainsEntry(entry.Key) && !localisationDataOriginal.ContainsLanguage(language.Name))
+                        Assert.IsNull(localisationData.GetText(entry.Key, language.Name), "Value should be null " + entry.Key + " - " + language.Name);
+                    else
+                        Assert.AreEqual(entry.Key + "-" + language.Name, localisationData.GetText(entry.Key, language.Name), "Value is incorrectly changed " + entry.Key + " - " + language.Name);
+                }
+            }
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+        #endregion IO
 
         [Test]
         public void PlaceHolder()

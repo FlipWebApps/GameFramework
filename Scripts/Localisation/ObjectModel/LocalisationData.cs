@@ -183,6 +183,18 @@ namespace GameFramework.Localisation.ObjectModel
         }
 
         /// <summary>
+        /// Gets an array of the localisation language names
+        /// </summary>
+        /// <param name="language"></param>
+        public string[] GetLanguageNames()
+        {
+            var languageNames = new string[Languages.Count];
+            for (int i = 0; i < Languages.Count; i++)
+                languageNames[i] = Languages[i].Name;
+            return languageNames;
+        }
+
+        /// <summary>
         /// Whether this contains the specified language
         /// </summary>
         /// <param name="language"></param>
@@ -293,8 +305,34 @@ namespace GameFramework.Localisation.ObjectModel
         #region IO
         // TODO: Merge(LocalistionData) - useful at runtime to create a single object
         public void Merge(LocalisationData localisationData) {
-            Debug.Log("MERGE " + localisationData.GetInstanceID());
-            Debug.Log("NOT IMPLEMENTED. TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
+            Debug.Log("MERGE " + localisationData.GetInstanceID() + ". TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
+            // Merge languages
+            foreach (var language in localisationData.Languages)
+            {
+                if (!ContainsLanguage(language.Name))
+                {
+                    AddLanguage(language.Name, language.Code);
+                }
+            }
+            // Merge keys
+            foreach (var entry in localisationData.Entries)
+            {
+                if (!ContainsEntry(entry.Key))
+                {
+                    AddEntry(entry.Key);
+                }
+            }
+            // Merge values for each key and language from the second file. 
+            foreach (var entry in localisationData.Entries)
+            {
+                var masterEntry = GetEntry(entry.Key);
+                foreach (var language in localisationData.Languages)
+                {
+                    var index = localisationData.GetLanguageIndex(language.Name);
+                    var masterindex = GetLanguageIndex(language.Name);
+                    masterEntry.Languages[masterindex] = entry.Languages[index];
+                }
+            }
         }
 
         /// <summary>
