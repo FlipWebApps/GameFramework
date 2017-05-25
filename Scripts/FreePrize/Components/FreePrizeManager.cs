@@ -223,9 +223,9 @@ namespace GameFramework.FreePrize.Components
             IsShowingFreePrizeDialog = true;
             var dialogInstance = DialogManager.Instance.Create(null, null, ContentPrefab, null,
                 runtimeAnimatorController: ContentAnimatorController);
-            string text = LocaliseText.Format("FreePrize.Text1", CurrentPrizeAmount);
+            string text = GlobalLocalisation.FormatText("FreePrize.Text1", CurrentPrizeAmount);
 
-            dialogInstance.Show(title: LocaliseText.Get("FreePrize.Title"), text: text, text2Key: "FreePrize.Text2",
+            dialogInstance.Show(title: GlobalLocalisation.GetText("FreePrize.Title", missingReturnsKey: true), text: text, text2Key: "FreePrize.Text2",
                 doneCallback: ShowFreePrizeDone,
                 dialogButtons:
                     ContentShowsButtons

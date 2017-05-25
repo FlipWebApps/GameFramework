@@ -169,7 +169,7 @@ namespace GameFramework.Localisation
         /// <summary>
         /// Get the localised value and format it.
         /// </summary>
-        public static string Format(string key, params object[] parameters) { return string.Format(Get(key), parameters); }
+        public static string Format(string key, params object[] parameters) { return string.Format(Get(key, missingReturnsNull: true), parameters); }
 
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace GameFramework.UI.Other.Components.AbstractClasses
 
             // if localisation key specified then get and cache string.
             if (!string.IsNullOrEmpty(LocalisationKey))
-                _localisationString = LocaliseText.Get(LocalisationKey);
+                _localisationString = GlobalLocalisation.GetText(LocalisationKey, missingReturnsKey: true);
 
             // initialise queue. we set aside capacity 2 as we assume most cases won't exceed this.
             _valuesPendingDisplay = new Queue<T>(2);

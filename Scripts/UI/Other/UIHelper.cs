@@ -58,7 +58,7 @@ namespace GameFramework.UI.Other
         /// <returns>bool indicating whether the text is set or not (vhild gameobject not found)</returns>
         public static bool SetTextOnChildGameObjectLocalised(GameObject thisGameObject, string childObjectName, string textKey, bool includeInactive = false)
         {
-            return SetTextOnChildGameObject(thisGameObject, childObjectName, LocaliseText.Get(textKey), includeInactive);
+            return SetTextOnChildGameObject(thisGameObject, childObjectName, GlobalLocalisation.GetText(textKey, missingReturnsKey: true), includeInactive);
         }
 
         /// <summary>

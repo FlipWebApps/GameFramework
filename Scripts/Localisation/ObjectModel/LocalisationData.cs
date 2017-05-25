@@ -295,7 +295,7 @@ namespace GameFramework.Localisation.ObjectModel
             var entry = GetEntry(key);
             if (entry == null)
             {
-                MyDebug.LogWarningF("Localisation key {0} not found for language index {1}.", key, languageIndex);
+                MyDebug.LogWarningF("Localisation key {0} not found for language {1} (index {2}).", key, Languages[languageIndex].Name, languageIndex);
                 return null;
             }
             return entry.Languages[languageIndex];

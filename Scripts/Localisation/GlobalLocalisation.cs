@@ -282,25 +282,32 @@ namespace GameFramework.Localisation
         /// <summary>
         /// Localise the specified value based on the currently set language.
         /// </summary>
-        /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
-        public static string GetText(string key, string language = null)
+        /// If language is specific then this method will try and get the key for that particular value, returning null if not found unless
+        /// missingReturnsKey is set in which case the key will be returned.
+        public static string GetText(string key, string language = null, bool missingReturnsKey = false)
         {
+            string text;
             Load();
             if (language == null)
-            {
-                return LocalisationData.GetText(key, _languageIndex);
-            }
+                text = LocalisationData.GetText(key, _languageIndex);
             else
-            {
-                return (LocalisationData.GetText(key, language));
-            }
+                text = LocalisationData.GetText(key, language);
+
+            return (text != null || !missingReturnsKey) ? text : key;
         }
 
 
         /// <summary>
         /// Get the localised value and format it.
         /// </summary>
-        public static string FormatText(string key, params object[] parameters) { return string.Format(GetText(key), parameters); }
+        /// This will return null if the key is not found.
+        public static string FormatText(string key, params object[] parameters) {
+            var text = GetText(key);
+            if (text != null)
+                return string.Format(text, parameters);
+            else
+                return null;
+        }
 
         #endregion Access
     }

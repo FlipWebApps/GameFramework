@@ -81,9 +81,9 @@ namespace GameFramework.UI.Dialogs.Components
             // set values in UI
             _musicVolume.value = GameManager.Instance.BackGroundAudioVolume;
             _sfxVolume.value = GameManager.Instance.EffectAudioVolume;
-            _language.options = (from item in LocaliseText.AllowedLanguages select new Dropdown.OptionData(LocaliseText.Get("Language.LocalisedName", item))).ToList();
-            for (var i = 0; i < LocaliseText.AllowedLanguages.Length; i++)
-                if (LocaliseText.AllowedLanguages[i] == LocaliseText.Language)
+            _language.options = (from item in GlobalLocalisation.SupportedLanguages select new Dropdown.OptionData(GlobalLocalisation.GetText("Language.LocalisedName", item, missingReturnsKey: true))).ToList();
+            for (var i = 0; i < GlobalLocalisation.SupportedLanguages.Length; i++)
+                if (GlobalLocalisation.SupportedLanguages[i] == GlobalLocalisation.Language)
                     _language.value = i;
 
             // show the dialog
@@ -125,7 +125,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// </summary>
         public void LanguageChanged(int index)
         {
-            LocaliseText.Language = LocaliseText.AllowedLanguages[index];
+            GlobalLocalisation.Language = GlobalLocalisation.SupportedLanguages[index];
         }
 
 

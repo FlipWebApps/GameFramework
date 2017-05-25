@@ -61,7 +61,7 @@ namespace GameFramework.Localisation.Editor
             if (isLocalisedProperty.boolValue)
             {
                 rowPosition.y += EditorGUIUtility.singleLineHeight + 2;
-                var localisedText = LocaliseText.Exists(dataProperty.stringValue) ? LocaliseText.Get(dataProperty.stringValue) : "<Key not found in localisation file>";
+                var localisedText = GlobalLocalisation.GetText(dataProperty.stringValue) ?? "<Key not found in currently loaded localisation>";
                 EditorGUI.LabelField(rowPosition, localisedText);
             }
 

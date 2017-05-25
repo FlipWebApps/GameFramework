@@ -112,7 +112,7 @@ namespace GameFramework.Localisation.Components
             // If we don't have a key then don't change the value
             if (string.IsNullOrEmpty(Key)) return;
 
-            PreLocaliseValue = Localisation.LocaliseText.Get(Key);
+            PreLocaliseValue = GlobalLocalisation.GetText(Key);
 
             // Run any callback to modify the term.
             OnPreLocalise.Invoke(this);

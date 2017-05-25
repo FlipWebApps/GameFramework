@@ -107,7 +107,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// </summary>
         public string GetValue(string language = null)
         {
-            return IsLocalised ? LocaliseText.Get(Data, language) : Data;
+            return IsLocalised ? GlobalLocalisation.GetText(Data, language, true) : Data;
         }
 
 
@@ -116,7 +116,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// </summary>
         public string FormatValue(params object[] parameters)
         {
-            return IsLocalised ? LocaliseText.Format(Data, parameters) : string.Format(Data, parameters);
+            return IsLocalised ? (GlobalLocalisation.FormatText(Data, parameters) ?? Data) : string.Format(Data, parameters);
         }
 
 
