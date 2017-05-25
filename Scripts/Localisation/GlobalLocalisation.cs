@@ -28,66 +28,26 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using GameFramework.Preferences;
 using GameFramework.Localisation.Messages;
+using GameFramework.Localisation.Components;
+using System.Collections.Generic;
 
-namespace GameFramework.Localisation.Components
+namespace GameFramework.Localisation
 {
     /// <summary>
-    /// Provides dialog creation, display and management functionality.
+    /// Support for a shared global localisation including retrieval and displaying of text and notifications.
     /// </summary>
-    [AddComponentMenu("Game Framework/Localisation/Localisation Manager")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class LocalisationManager : SingletonPersistant<LocalisationManager>
+    /// LocalisationData files are loaded based upon the configuration in a LocalisationConfiguration component if one is found, otherwise using 
+    /// an automatic detection mode....
+    /// Supported languages are loaded from a LocalisationConfiguration component if one is added to the scene. Otherwise this is taken from the 
+    /// last loaded LocalisationData file.
+    /// For further information please see: http://www.flipwebapps.com/unity-assets/game-framework/localisation/
+    public static class GlobalLocalisation
     {
         /// <summary>
-        /// Different modes for setting up the localisation
+        /// A list of localisation languages that we support. This is either loaded from a LocalisationConfiguration file if
+        /// present of based upon the loaded localisations.
         /// </summary>
-        /// Auto = Try loading from a resources folder with the names Default/Localisation & Localisation
-        /// Specified = Specified LocalisationData files are passed in.
-        public enum SetupModeType { Auto, Specified }
-
-        #region editor fields
-
-        /// <summary>
-        /// How to setup the localisation either by default or specified resource files.
-        /// </summary>
-        public SetupModeType SetupMode
-        {
-            get
-            {
-                return _setupMode;
-            }
-            set
-            {
-                _setupMode = value;
-            }
-        }
-        [SerializeField]
-        [Tooltip("How to setup the localisation either by default or specified resource files.")]
-        SetupModeType _setupMode = SetupModeType.Auto;
-
-        /// <summary>
-        /// A list of specified localisation data files for loading
-        /// </summary>
-        /// Values in files towards the bottom of the list will override any values present in earlier files.
-        public LocalisationData[] SpecifiedLocalisationData
-        {
-            get
-            {
-                return _specifiedLocalisationData;
-            }
-            set
-            {
-                _specifiedLocalisationData = value;
-            }
-        }
-        [SerializeField]
-        [Tooltip("A list of specified localisation data files. Values in files towards the bottom of the list will override any values present in earlier files.")]
-        LocalisationData[] _specifiedLocalisationData = new LocalisationData[0];
-
-        /// <summary>
-        /// A list of localisation languages that we support
-        /// </summary>
-        public string[] SupportedLanguages
+        public static string[] SupportedLanguages
         {
             get
             {
@@ -98,22 +58,18 @@ namespace GameFramework.Localisation.Components
                 _supportedLanguages = value;
             }
         }
-        [SerializeField]
-        [Tooltip("A list of localisation languages that we support")]
-        string[] _supportedLanguages = new string[0];
-
-        #endregion editor fields
+        static string[] _supportedLanguages = new string[0];
 
         /// <summary>
         /// A combined LocalisationData from all added sources
         /// </summary>
-        public LocalisationData LocalisationData { get; private set; }
+        public static LocalisationData LocalisationData { get; private set; }
 
         /// <summary>
         /// The currently active Language. 
         /// </summary>
         /// This will allow you to set the Language to something that isn't in the AllowedLanguages array.
-        public string Language
+        public static string Language
         {
             get
             {
@@ -135,34 +91,42 @@ namespace GameFramework.Localisation.Components
                 GameManager.SafeQueueMessage(new LocalisationChangedMessage(_language, oldLanguage));
             }
         }
-        string _language;
-        int _languageIndex;
+        static string _language;
+        static int _languageIndex;
 
-        protected override void GameSetup()
-        {
-            base.GameSetup();
-
-            LoadLocalisationData();
-            foreach (var language in SupportedLanguages)
-                if (!LocalisationData.ContainsLanguage(language))
-                    Debug.Log("Localisation files do not contain definitions for the specified supported language '" + language + "'");
-        }
-
-        #region Load Dictionary
+        #region Load
 
         /// <summary>
         /// Load LocalisationData files
         /// </summary>
-        public void LoadLocalisationData()
+        public static void Load(LocalisationConfiguration localisationConfiguration = null)
         {
-            LocalisationData = null;
+            if (LocalisationData != null) return;
+            Reload(localisationConfiguration);
+        }
 
-            if (SetupMode == SetupModeType.Auto)
+        /// <summary>
+        /// Load LocalisationData files
+        /// </summary>
+        static void Reload(LocalisationConfiguration localisationConfiguration = null)
+        {
+            Clear();
+
+            if (localisationConfiguration == null)
+                localisationConfiguration = GameObject.FindObjectOfType<LocalisationConfiguration>();
+            var setupMode = localisationConfiguration == null ? LocalisationConfiguration.SetupModeType.Auto : localisationConfiguration.SetupMode;
+            string[] loadedSupportedLanguages = new string[0];
+
+            // set localisation data
+            if (setupMode == LocalisationConfiguration.SetupModeType.Auto)
             {
                 // Try to load the default Localisation file directly - don't use GameMangager method as we load in 'reverse'
                 var asset = Resources.Load<LocalisationData>("Default/Localisation");
                 if (asset != null)
-                    LocalisationData = Instantiate(asset);  // create a copy so we don't overwrite values.
+                {
+                    LocalisationData = ScriptableObject.Instantiate(asset);  // create a copy so we don't overwrite values.
+                    loadedSupportedLanguages = asset.GetLanguageNames();
+                }
 
                 // try and load identifier localisation if specified and present, or if not user localisation
                 var identifierLocalisationLoaded = false;
@@ -176,6 +140,7 @@ namespace GameFramework.Localisation.Components
                             LocalisationData = asset;
                         else
                             LocalisationData.Merge(asset);
+                        loadedSupportedLanguages = asset.GetLanguageNames(); // override any previous
                     }
                 }
                 if (!identifierLocalisationLoaded)
@@ -187,27 +152,61 @@ namespace GameFramework.Localisation.Components
                             LocalisationData = asset;
                         else
                             LocalisationData.Merge(asset);
+                        loadedSupportedLanguages = asset.GetLanguageNames(); // override any previous
                     }
                 }
                 Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
             }
-            else if (SetupMode == SetupModeType.Specified)
+            else if (setupMode == LocalisationConfiguration.SetupModeType.Specified)
             {
-                foreach (var localisationData in SpecifiedLocalisationData)
+                foreach (var localisationData in localisationConfiguration.SpecifiedLocalisationData)
                 {
+                    // first item gets loaded / copied, subsequent get merged into this.
                     if (LocalisationData == null)
-                        LocalisationData = Instantiate(localisationData);  // create a copy so we don't overwrite values.
+                        LocalisationData = ScriptableObject.Instantiate(localisationData);  // create a copy so we don't overwrite values.
                     else
+                    {
                         LocalisationData.Merge(localisationData);
+                    }
+                    loadedSupportedLanguages = localisationData.GetLanguageNames(); // if exists override
                 }
-                Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that localisation files exist and are in the correct location!");
+                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was loaded. Please check that localisation files exist and are in the correct location!");
             }
+
+            // set Supported Languages - either from config if present or based upon loaded files.
+            if (localisationConfiguration != null && localisationConfiguration.SupportedLanguages.Length > 0)
+            {
+                List<string> validSupportedLanguages = new List<string>();
+                foreach (var language in localisationConfiguration.SupportedLanguages) {
+                    if (LocalisationData.ContainsLanguage(language))
+                            validSupportedLanguages.Add(language);
+                    else
+                        Debug.Log("Localisation files do not contain definitions for the specified supported language '" + language + "'");
+                }
+                    SupportedLanguages = validSupportedLanguages.ToArray();
+            }
+            else
+            {
+                SupportedLanguages = loadedSupportedLanguages;
+            }
+
 
             // if no usable language is already set then set to the default language.
             if (!CanUseLanguage(Language))
                 SetLanguageToDefault();
         }
-        #endregion Load Dictionary
+
+        /// <summary>
+        /// Clear any loaded dictionaries
+        /// </summary>
+        public static void Clear()
+        {
+            LocalisationData = null;
+            SupportedLanguages = new string[0];
+            _language = null;
+            _languageIndex = -1;
+        }
+        #endregion Load
 
         #region Language
         /// <summary>
@@ -215,7 +214,7 @@ namespace GameFramework.Localisation.Components
         /// </summary>
         /// <param name="language"></param>
         /// <returns></returns>
-        public bool CanUseLanguage(string language)
+        public static bool CanUseLanguage(string language)
         {
             if (LocalisationData == null) return false;
 
@@ -235,7 +234,7 @@ namespace GameFramework.Localisation.Components
         /// </summary>
         /// <param name="newDefaultLanguage"></param>
         /// <returns></returns>
-        public bool TrySetAllowedLanguage(string newDefaultLanguage)
+        public static bool TrySetAllowedLanguage(string newDefaultLanguage)
         {
             if (CanUseLanguage(newDefaultLanguage))
             {
@@ -246,7 +245,7 @@ namespace GameFramework.Localisation.Components
         }
 
 
-        void SetLanguageToDefault(bool keepIfAlreadySet = false)
+        static void SetLanguageToDefault(bool keepIfAlreadySet = false)
         {
             if (keepIfAlreadySet && !string.IsNullOrEmpty(Language))
                 return;
@@ -273,9 +272,9 @@ namespace GameFramework.Localisation.Components
         /// <summary>
         /// Returns whether the specified key is present.
         /// </summary>
-        public bool Exists(string key)
+        public static bool Exists(string key)
         {
-            if (LocalisationData == null) return false;
+            Load();
             return LocalisationData.ContainsEntry(key);
         }
 
@@ -284,10 +283,9 @@ namespace GameFramework.Localisation.Components
         /// Localise the specified value based on the currently set language.
         /// </summary>
         /// If language is specific then this method will try and get the key for that particular value, returning null if not found.
-        public string GetText(string key, string language = null)
+        public static string GetText(string key, string language = null)
         {
-            Assert.IsNotNull(LocalisationData, "Localisation data has not been loaded. Ensure that you have a Localisation Manager added to your scene and if needed increase the script execution of that component.");
-
+            Load();
             if (language == null)
             {
                 return LocalisationData.GetText(key, _languageIndex);
@@ -302,7 +300,7 @@ namespace GameFramework.Localisation.Components
         /// <summary>
         /// Get the localised value and format it.
         /// </summary>
-        public string FormatText(string key, params object[] parameters) { return string.Format(GetText(key), parameters); }
+        public static string FormatText(string key, params object[] parameters) { return string.Format(GetText(key), parameters); }
 
         #endregion Access
     }

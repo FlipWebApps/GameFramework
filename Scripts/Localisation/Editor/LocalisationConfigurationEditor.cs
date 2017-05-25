@@ -19,10 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.Localisation.Components;
-using GameFramework.Preferences;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -30,8 +27,8 @@ using UnityEngine;
 
 namespace GameFramework.Localisation.Editor
 {
-    [CustomEditor(typeof(LocalisationManager))]
-    public class LocalisationManagerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(LocalisationConfiguration))]
+    public class LocalisationConfigurationEditor : UnityEditor.Editor
     {
         ReorderableList _localisationDataList;
         ReorderableList _supportedLanguagesList;

@@ -326,7 +326,7 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// A list of localisation languages that we support
         /// </summary>
-        [Tooltip("A list of localisation languages that we support")]
+        [Obsolete("v4.4 Obsolete - Set and access through GlobalLocalisation instead.")]
         public string[] SupportedLanguages;
 
         #endregion Localisation Inspector Values

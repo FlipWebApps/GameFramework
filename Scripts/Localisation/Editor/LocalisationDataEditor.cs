@@ -31,7 +31,6 @@ using UnityEngine;
 namespace GameFramework.Localisation.Editor
 {
     [CustomEditor(typeof(LocalisationData))]
-    [Serializable]
     public class LocalisationDataEditor : UnityEditor.Editor
     {
         LocalisationData _targetLocalisationData;
@@ -42,15 +41,12 @@ namespace GameFramework.Localisation.Editor
 
         // Entries tab variables
         Rect _entriesHelpRect;
-        [SerializeField]
         string _filter;
-        [SerializeField]
         Vector2 _entriesScrollPosition;
         float _entriesScrollHeight;
         int _entriesDefaultRowHeight = 16;
-        string _newEntry;
-        [SerializeField]
-        public List<EntryData> _entryDataList;
+        string _newKey;
+        public List<EntryReference> _entryReferenceList;
 
         // Languages tab variables
         Rect _languagesHelpRect;
@@ -79,7 +75,6 @@ namespace GameFramework.Localisation.Editor
         public override void OnInspectorGUI()
         {
             _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.", _mainHelpRect);
-
             _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages", "Tools" });
             switch (_currentTab)
             {
@@ -99,7 +94,6 @@ namespace GameFramework.Localisation.Editor
         protected void DrawEntries() {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
             SyncEntries();
-            Debug.Log(_entryDataList.Count);
             Undo.RecordObject(target, "Localisation Entry Changed");
 
             // filter
@@ -109,15 +103,15 @@ namespace GameFramework.Localisation.Editor
             _filter = EditorGUILayout.TextField(_filter, GuiStyles.ToolbarSearchField, GUILayout.ExpandWidth(true));
             if (EditorGUI.EndChangeCheck())
             {
-                foreach (var entry in _entryDataList)
-                    entry.MatchesFilter = entry.LocalisationEntry.Key.IndexOf(_filter, StringComparison.OrdinalIgnoreCase) >= 0;
+                foreach (var entryReference in _entryReferenceList)
+                    entryReference.MatchesFilter = entryReference.Key.IndexOf(_filter, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             if (GUILayout.Button("", string.IsNullOrEmpty(_filter) ? GuiStyles.ToolbarSearchFieldCancelEmpty : GuiStyles.ToolbarSearchFieldCancel, GUILayout.ExpandWidth(false)))
             {
                 _filter = "";
                 GUIUtility.keyboardControl = 0;
-                foreach (var entry in _entryDataList)
-                    entry.MatchesFilter = true;
+                foreach (var entryReference in _entryReferenceList)
+                    entryReference.MatchesFilter = true;
             }
             EditorGUILayout.EndHorizontal();
 
@@ -127,23 +121,23 @@ namespace GameFramework.Localisation.Editor
             var indexForDeleting = -1;
             var accumulativeHeightDrawn = 0;
             var accumulativeSpace = 0;
-            for (var i = 0; i < _entryDataList.Count; i++)
+            for (var i = 0; i < _entryReferenceList.Count; i++)
             {
-                var entryData = _entryDataList[i];
-                if (entryData.MatchesFilter)
+                var entryReference = _entryReferenceList[i];
+                if (entryReference.MatchesFilter)
                 {
                     // if top is below viewport or bottom is above then this item is not visible. For repaint events we need to use the 
                     // previously recorded display state to avoid changing the number of controls drawn.
                     //if ((Event.current.type == EventType.Repaint && entryData.IsShown == false) ||
                     //    (Event.current.type != EventType.Repaint &&
-                    if ((Event.current.type != EventType.Layout && entryData.IsShown == false) ||
+                    if ((Event.current.type != EventType.Layout && entryReference.IsShown == false) ||
                         (Event.current.type == EventType.Layout &&
                          (accumulativeHeightDrawn > _entriesScrollPosition.y + _entriesScrollHeight ||
-                          accumulativeHeightDrawn + entryData.Height < _entriesScrollPosition.y)))
+                          accumulativeHeightDrawn + entryReference.Height < _entriesScrollPosition.y)))
                     {
-                        accumulativeHeightDrawn += entryData.Height;
-                        accumulativeSpace += entryData.Height;
-                        entryData.IsShown = false;
+                        accumulativeHeightDrawn += entryReference.Height;
+                        accumulativeSpace += entryReference.Height;
+                        entryReference.IsShown = false;
                     }
                     else
                     {
@@ -152,11 +146,17 @@ namespace GameFramework.Localisation.Editor
                         accumulativeSpace = 0;
 
                         // draw the displayed item
-                        entryData.IsShown = true;
-                        var localisationEntry = _entryDataList[i].LocalisationEntry;
+                        entryReference.IsShown = true;
+                        var localisationEntry = _targetLocalisationData.GetEntry(_entryReferenceList[i].Key);
                         EditorGUILayout.BeginHorizontal();
                         EditorGUI.indentLevel++;
-                        entryData.IsExpanded = EditorGUILayout.Foldout(entryData.IsExpanded, localisationEntry.Key);
+                        //var oldExpanded = entryReference.IsExpanded;
+                        entryReference.IsExpanded = EditorGUILayout.Foldout(entryReference.IsExpanded, localisationEntry.Key);
+                        // if we are not using a static default height (see below) then we need to flag changes to the expanded state, and in OnInspectorGUI
+                        // call repaint within a 'if (Event.current.type == EventType.Repaint && _updatePostRepaint)' check. This so that if an entry 
+                        // decreases in size we correctly draw items that might previously have been hidden.
+                        //if (entryReference.IsExpanded != oldExpanded) // force repaint on changes incase new items become visable due to collapsing
+                        //    _updatePostRepaint = true;
                         EditorGUI.indentLevel--;
                         if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(GuiStyles.RemoveButtonWidth)))
                         {
@@ -164,12 +164,12 @@ namespace GameFramework.Localisation.Editor
                             break;
                         }
                         EditorGUILayout.EndHorizontal();
-                        if (Event.current.type == EventType.Repaint)
+                        //if (Event.current.type == EventType.Repaint)
                             //entryData.Height = (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
-                            entryData.Height = _entriesDefaultRowHeight;
+                        entryReference.Height = _entriesDefaultRowHeight;
 
                         // handle expended status
-                        if (entryData.IsExpanded)
+                        if (entryReference.IsExpanded)
                         {
                             EditorGUILayout.BeginVertical();
                             EditorGUI.indentLevel++;
@@ -179,7 +179,7 @@ namespace GameFramework.Localisation.Editor
                                 EditorGUILayout.LabelField(_targetLocalisationData.Languages[li].Name,
                                     GUILayout.Width(100));
                                 EditorGUI.BeginChangeCheck();
-                                var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GuiStyles.WordWrapStyle, GUILayout.Width(Screen.width - 148 - 60 - 2));
+                                var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GuiStyles.WordWrapStyle, GUILayout.Width(Screen.width - 100 - 60 - 50));
                                 if (EditorGUI.EndChangeCheck())
                                 {
                                     localisationEntry.Languages[li] = lang;
@@ -227,10 +227,10 @@ namespace GameFramework.Localisation.Editor
 
                             // repaint events will give a new correct size for the last drawn rect so record here.
                             if (Event.current.type == EventType.Repaint)
-                                entryData.Height += (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
+                                entryReference.Height += (int)GUILayoutUtility.GetLastRect().height; // only works on repaint.
                         }
 
-                        accumulativeHeightDrawn += entryData.Height;
+                        accumulativeHeightDrawn += entryReference.Height;
                        // Debug.Log(entryData.LocalisationEntry.Key + ", " + accumulativeHeightDrawn);
                     }
                 }
@@ -251,36 +251,36 @@ namespace GameFramework.Localisation.Editor
                 Event.current.Use();
             }
             GUI.SetNextControlName("EntryAdd");
-            _newEntry = EditorGUILayout.TextField("", _newEntry, GUILayout.ExpandWidth(true));
-            var isValidEntry = !string.IsNullOrEmpty(_newEntry) && !_targetLocalisationData.ContainsEntry(_newEntry);
+            _newKey = EditorGUILayout.TextField("", _newKey, GUILayout.ExpandWidth(true));
+            var isValidEntry = !string.IsNullOrEmpty(_newKey) && !_targetLocalisationData.ContainsEntry(_newKey);
             GUI.enabled = isValidEntry;
             if (entryAddPressed || GUILayout.Button(new GUIContent("Add", "Add the specified entry to the list"), EditorStyles.miniButton, GUILayout.Width(100)))
             {
                 if (isValidEntry)
                 {
-                    var newLocalisationEntry = _targetLocalisationData.AddEntry(_newEntry);
+                    _targetLocalisationData.AddEntry(_newKey);
                     serializedObject.Update();
                     var insertIndex = 0;
                     var scrollOffset = 0;
-                    for (; insertIndex < _entryDataList.Count; insertIndex++)
+                    for (; insertIndex < _entryReferenceList.Count; insertIndex++)
                     {
-                        if (_newEntry.CompareTo(_entryDataList[insertIndex].LocalisationEntry.Key) < 0)
+                        if (_newKey.CompareTo(_entryReferenceList[insertIndex].Key) < 0)
                             break;
                         else
-                            scrollOffset += _entryDataList[insertIndex].Height;
+                            scrollOffset += _entryReferenceList[insertIndex].Height;
                     }
-                    _entryDataList.Insert(insertIndex, new EntryData()
+                    _entryReferenceList.Insert(insertIndex, new EntryReference()
                     {
-                        LocalisationEntry = newLocalisationEntry,
-                        MatchesFilter = _newEntry.IndexOf(_filter + "", StringComparison.OrdinalIgnoreCase) >= 0
+                        Key = _newKey,
+                        MatchesFilter = _newKey.IndexOf(_filter + "", StringComparison.OrdinalIgnoreCase) >= 0
                     });
                     _entriesScrollPosition.y = scrollOffset;
 
-                    var lastDot = _newEntry.LastIndexOf(".");
+                    var lastDot = _newKey.LastIndexOf(".");
                     if (lastDot == -1)
-                        _newEntry = "";
+                        _newKey = "";
                     else
-                        _newEntry = _newEntry.Substring(0, lastDot + 1);
+                        _newKey = _newKey.Substring(0, lastDot + 1);
                 }
                 GUI.FocusControl("EntryAdd");
             }
@@ -291,37 +291,38 @@ namespace GameFramework.Localisation.Editor
             if (indexForDeleting != -1 &&
                 EditorUtility.DisplayDialog("Delete Entry?", "Are you sure you want to delete this entry?", "Yes", "No"))
             {
-                _targetLocalisationData.RemoveEntry(_entryDataList[indexForDeleting].LocalisationEntry.Key);
-                _entryDataList.RemoveAt(indexForDeleting);
+                _targetLocalisationData.RemoveEntry(_entryReferenceList[indexForDeleting].Key);
+                _entryReferenceList.RemoveAt(indexForDeleting);
                 serializedObject.Update();
             }
+
         }
 
         private void SyncEntries()
         {
-            if (_entryDataList == null) _entryDataList = new List<EntryData>();
-            if (_entryDataList.Count != _targetLocalisationData.Entries.Count)
+            if (_entryReferenceList == null) _entryReferenceList = new List<EntryReference>();
+            if (_entryReferenceList.Count != _targetLocalisationData.Entries.Count)
             {
                 // find a match in target or add.
                 foreach (var entry in _targetLocalisationData.Entries)
                 {
                     var match = false;
-                    foreach (var entryData in _entryDataList)
-                        if (entry.Equals(entryData.LocalisationEntry))
+                    foreach (var entryReference in _entryReferenceList)
+                        if (entry.Key.Equals(entryReference.Key))
                             match = true;
-                    if (!match) _entryDataList.Add(new EntryData() { Height = _entriesDefaultRowHeight, LocalisationEntry = entry });
+                    if (!match) _entryReferenceList.Add(new EntryReference() { Height = _entriesDefaultRowHeight, Key = entry.Key });
                 }
                 // find a match in target or remove.
-                for (int i = _entryDataList.Count - 1; i >= 0; i--)
+                for (int i = _entryReferenceList.Count - 1; i >= 0; i--)
                 {
-                    var entryData = _entryDataList[i];
+                    var entryReference = _entryReferenceList[i];
                     var match = false;
                     foreach (var entry in _targetLocalisationData.Entries)
-                        if (entry.Equals(entryData.LocalisationEntry))
+                        if (entry.Key.Equals(entryReference.Key))
                             match = true;
-                    if (!match) _entryDataList.RemoveAt(i);
+                    if (!match) _entryReferenceList.RemoveAt(i);
                 }
-                _entryDataList.Sort((x, y) => x.LocalisationEntry.Key.CompareTo(y.LocalisationEntry.Key));
+                _entryReferenceList.Sort((x, y) => x.Key.CompareTo(y.Key));
             }
             var internalStateError = _targetLocalisationData.InternalVerifyState();
             if (internalStateError != null)
@@ -330,13 +331,13 @@ namespace GameFramework.Localisation.Editor
 
 
         [Serializable]
-        public class EntryData
+        public class EntryReference
         {
             public bool IsExpanded;
             public bool IsShown;
             public bool MatchesFilter = true;
             public int Height;
-            public LocalisationEntry LocalisationEntry;
+            public string Key; // a reference that can be used for looking up items from the original collection.
         }
 
 
@@ -407,9 +408,8 @@ namespace GameFramework.Localisation.Editor
 
             // delay deleting to avoid editor issues.
             if (languageForDeleting != null && 
-                EditorUtility.DisplayDialog("Delete Language?", "Are you sure you want to delete this language?", "Yes", "No"))
+                EditorUtility.DisplayDialog("Delete Language?", "Are you sure you want to delete this language?\n\nDeleting this language will also delete all translations for this language from the list of entries.", "Yes", "No"))
             {
-                //TODO: Show a warning first!
                 serializedObject.ApplyModifiedProperties();
                 _targetLocalisationData.RemoveLanguage(languageForDeleting);
                 serializedObject.Update();

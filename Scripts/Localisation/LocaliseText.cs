@@ -67,7 +67,7 @@ namespace GameFramework.Localisation
         public static string[] AllowedLanguages {
             get {
                 ShowDeprecationWarning();
-                return LocalisationManager.Instance.SupportedLanguages;
+                return GlobalLocalisation.SupportedLanguages;
             }
         }
 
@@ -81,7 +81,7 @@ namespace GameFramework.Localisation
             {
                 ShowDeprecationWarning();
                 var languages = new List<string>();
-                foreach (var language in LocalisationManager.Instance.LocalisationData.Languages)
+                foreach (var language in GlobalLocalisation.LocalisationData.Languages)
                     languages.Add(language.Name);
                 return languages.ToArray();
             }
@@ -96,11 +96,11 @@ namespace GameFramework.Localisation
         {
             get
             {
-                return LocalisationManager.Instance.Language;
+                return GlobalLocalisation.Language;
             }
             set
             {
-                LocalisationManager.Instance.Language = value;
+                GlobalLocalisation.Language = value;
             }
         }
 
@@ -110,8 +110,7 @@ namespace GameFramework.Localisation
         {
             if (!_hasShownWarning)
             {
-                Assert.IsTrue(LocalisationManager.IsActive, "Localisation data has not been loaded. Ensure that you have a Localisation Manager added to your scene and if needed increase the script execution of that component.");
-                Debug.LogError("LocaliseText and the use of csv files as a way of doing localisation has been replaced. Please convert csv files to Localisation files and code calls from LocaliseText to LocalisationManager. See the documentation for further upgrade details.");
+                Debug.LogError("LocaliseText and the use of csv files as a way of doing localisation has been replaced. Please convert csv files to Localisation files and code calls from LocaliseText to GlobalLocalisation. See the documentation for further upgrade details.");
             }
             _hasShownWarning = true;
         }
@@ -152,7 +151,7 @@ namespace GameFramework.Localisation
         public static bool TrySetAllowedLanguage(string newDefaultLanguage)
         {
             ShowDeprecationWarning();
-            return LocalisationManager.Instance.TrySetAllowedLanguage(newDefaultLanguage);
+            return GlobalLocalisation.TrySetAllowedLanguage(newDefaultLanguage);
         }
 
 
@@ -163,7 +162,7 @@ namespace GameFramework.Localisation
         public static string Get(string key, string language = null, bool missingReturnsNull = false)
         {
             ShowDeprecationWarning();
-            return LocalisationManager.Instance.GetText(key, language) ?? key;
+            return GlobalLocalisation.GetText(key, language) ?? key;
         }
 
 
@@ -179,7 +178,7 @@ namespace GameFramework.Localisation
         public static bool Exists(string key)
         {
             ShowDeprecationWarning();
-            return LocalisationManager.Instance.Exists(key);
+            return GlobalLocalisation.Exists(key);
         }
 
 
