@@ -114,7 +114,7 @@ namespace GameFramework.Localisation.Components
 
             PreLocaliseValue = GlobalLocalisation.GetText(Key);
 
-            // Run any callback to modify the term.
+            // Run any callback to modify the value.
             OnPreLocalise.Invoke(this);
 
             // apply any modifier

@@ -176,7 +176,7 @@ namespace GameFramework.Localisation
         }
 
 
-        [TestCase(new [] {"English"}, new [] { "Key1", "Key2"}, "Spanish" )]
+        [TestCase(new[] { "English" }, new[] { "Key1", "Key2" }, "Spanish")]
         [TestCase(new[] { "English", "French" }, new[] { "Key1", "Key2", "Key3" }, "Spanish")]
         public void AddLanguageAdjustsEntries(string[] languages, string[] keys, string newLanguage)
         {
@@ -253,7 +253,7 @@ namespace GameFramework.Localisation
                 localisationData.AddLanguage(language);
 
             //// Act
-            var returnedLanguages = localisationData.Languages  ;
+            var returnedLanguages = localisationData.Languages;
 
             //// Assert
             Assert.AreEqual(languages.Length, returnedLanguages.Count, "The number of languages is different");
@@ -291,7 +291,7 @@ namespace GameFramework.Localisation
         {
             //// Arrange
             var localisationData = CreateLocalisationData();
-            foreach(var language in languages)
+            foreach (var language in languages)
                 localisationData.AddLanguage(language);
 
             //// Assert
@@ -313,7 +313,7 @@ namespace GameFramework.Localisation
 
             //// Assert
             Assert.IsFalse(localisationData.ContainsLanguage(language), "Language was not removed");
-                        Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
         }
 
         [TestCase("English", "English", "French", "Spanish")]
@@ -517,6 +517,25 @@ namespace GameFramework.Localisation
             Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
         }
 
+        [TestCase(new[] { "Key1" }, "")]
+        [TestCase(new[] { "Key1", "Key2" }, "")]
+        [TestCase(new[] { "Key1", "Key2", "Key3" }, "")]
+        public void ClearLocalisationEntries(string[] keys, string dummy)
+        {
+            // Arrange
+            var localisationData = CreateLocalisationData();
+            foreach(var key in keys)
+                localisationData.AddEntry(key);
+
+            //// Act
+            localisationData.ClearEntries();
+
+            //// Assert
+            foreach (var key in keys)
+                Assert.IsFalse(localisationData.ContainsEntry(key), "LocalisationEntry was not removed");
+            Assert.IsNull(localisationData.InternalVerifyState(), localisationData.InternalVerifyState());
+        }
+
         [TestCase("Key1")]
         [TestCase("Key2")]
         public void ContainsLocalisationEntry(string key)
@@ -620,6 +639,68 @@ namespace GameFramework.Localisation
         #endregion LocalisationEntry Tests		
 
         #region IO
+
+
+        public System.Collections.Generic.IEnumerable<TestCaseData> LoadCsvTests()
+        {
+            // Last row doesn't end in new line
+            yield return new TestCaseData(
+                "Key,English\nKey1,Value1\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
+                new string[,] { { "Value1" }, { "Value2" } }
+                );
+            // Last row ends in new line
+            yield return new TestCaseData(
+                "Key,English\nKey1,Value1\nKey2,Value2\n", new[] { "English" }, new[] { "Key1", "Key2" },
+                new string[,] { { "Value1" }, { "Value2" } }
+                );
+            // Quoted value
+            yield return new TestCaseData(
+                "Key,English\nKey1,\"Value1\"\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
+                new string[,] { { "Value1" }, { "Value2" } }
+                );
+            // Quoted value with escaped quote
+            yield return new TestCaseData(
+                "Key,English\nKey1,\"Value\"\"1\"\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
+                new string[,] { { "Value\"1" }, { "Value2" } }
+                );
+            // Multiple languages value
+            yield return new TestCaseData(
+                "Key,English,Spanish\nKey1,Value1,Value2\nKey2,Value3,Value4", new[] { "English", "Spanish" }, new[] { "Key1", "Key2" },
+                new string[,] { { "Value1", "Value2" }, { "Value3", "Value4" } }
+                );
+        }
+
+        [Test]
+        [TestCaseSource("LoadCsvTests")]
+        public void LoadCsv(string csvData, string[] languages, string[] keys, string[,] values)
+        {
+            // Arrange
+            using (var rdr = new System.IO.StringReader(csvData))
+            {
+
+                //// Act
+                var localisationData = LocalisationData.LoadCsv(rdr);
+
+                //// Assert
+                Assert.AreEqual(languages.Length, localisationData.Languages.Count, "Languages not setup as expected");
+                Assert.AreEqual(keys.Length, localisationData.Entries.Count, "Entries not setup as expected");
+                foreach(var language in languages)
+                {
+                    Assert.IsTrue(localisationData.GetLanguage(language) != null, "Missing language " + language);
+                }
+                for (var i = 0; i < keys.Length; i++)
+                {
+                    var key = keys[i];
+                    Assert.IsTrue(localisationData.GetEntry(key) != null, "Missing entry " + key);
+                    for (var l = 0; l < languages.Length; l++)
+                    {
+                        var language = languages[l];
+                        Assert.AreEqual(values[i,l], localisationData.GetText(key, language), "Values are not the same.");
+                    }
+                }
+            }
+        }
+
 
         [TestCase(new[] { "English" }, new[] { "English" })]
         [TestCase(new[] { "English" }, new[] { "French" })]

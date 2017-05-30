@@ -52,16 +52,22 @@ namespace GameFramework.Localisation.Editor
             {
                 dataPosition.x = rowPosition.xMax - 16;
                 dataPosition.width = 16;
-                //if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string")))
-                //{
-                //    LocalisationEditorWindow.ShowWindowNew(dataProperty.stringValue);
-                //}
+                if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string"), EditorStyles.toolbarDropDown))
+                {
+                    var menu = new GenericMenu();
+                    for (var i = 0; i < GlobalLocalisation.LocalisationData.Entries.Count; i++)
+                    {
+                        var entry = GlobalLocalisation.LocalisationData.Entries[i];
+                        menu.AddItem(new GUIContent(entry.Key), false, SetKey, new KeyPropertyReference() { Key = entry.Key, Property = dataProperty });
+                    }
+                    menu.ShowAsContext();
+                }
             }
 
             if (isLocalisedProperty.boolValue)
             {
                 rowPosition.y += EditorGUIUtility.singleLineHeight + 2;
-                var localisedText = GlobalLocalisation.GetText(dataProperty.stringValue) ?? "<Key not found in currently loaded localisation>";
+                var localisedText = GlobalLocalisation.GetText(dataProperty.stringValue) ?? "<Key not in loaded localisation>";
                 EditorGUI.LabelField(rowPosition, localisedText);
             }
 
@@ -78,6 +84,20 @@ namespace GameFramework.Localisation.Editor
                 return EditorGUIUtility.singleLineHeight * 2 + 2;
             else
                 return EditorGUIUtility.singleLineHeight;
+        }
+
+        void SetKey(object keyPropertyReferenceObject)
+        {
+            var keyPropertyReference = keyPropertyReferenceObject as KeyPropertyReference;
+            keyPropertyReference.Property.serializedObject.Update();
+            keyPropertyReference.Property.stringValue = keyPropertyReference.Key;
+            keyPropertyReference.Property.serializedObject.ApplyModifiedProperties();
+        }
+
+        class KeyPropertyReference
+        {
+            public string Key;
+            public SerializedProperty Property;
         }
     }
 }

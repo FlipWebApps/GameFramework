@@ -155,7 +155,7 @@ namespace GameFramework.Localisation
                         loadedSupportedLanguages = asset.GetLanguageNames(); // override any previous
                     }
                 }
-                Assert.IsNotNull(LocalisationData, "LocalisationManager: No localisation data was loaded. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
+                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was found so creating an empty one. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
             }
             else if (setupMode == LocalisationConfiguration.SetupModeType.Specified)
             {
@@ -170,7 +170,15 @@ namespace GameFramework.Localisation
                     }
                     loadedSupportedLanguages = localisationData.GetLanguageNames(); // if exists override
                 }
-                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was loaded. Please check that localisation files exist and are in the correct location!");
+                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was found so creating an empty one. Please check that localisation files exist and are in the correct location!");
+            }
+
+            // if nothing loaded then create an empty localisation to avoid errors.
+            if (LocalisationData == null)
+            {
+                LocalisationData = ScriptableObject.CreateInstance<LocalisationData>();
+                LocalisationData.AddLanguage("English", "en");
+                loadedSupportedLanguages = LocalisationData.GetLanguageNames();
             }
 
             // set Supported Languages - either from config if present or based upon loaded files.
@@ -181,7 +189,7 @@ namespace GameFramework.Localisation
                     if (LocalisationData.ContainsLanguage(language))
                             validSupportedLanguages.Add(language);
                     else
-                        Debug.Log("Localisation files do not contain definitions for the specified supported language '" + language + "'");
+                        Debug.Log("GlobalLocalisation: Localisation files do not contain definitions for the specified supported language '" + language + "'");
                 }
                     SupportedLanguages = validSupportedLanguages.ToArray();
             }

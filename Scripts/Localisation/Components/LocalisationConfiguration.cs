@@ -34,7 +34,7 @@ namespace GameFramework.Localisation.Components
     /// <summary>
     /// Allows for setting of configuration used by the global localisation.
     /// </summary>
-    [AddComponentMenu("Game Framework/Localisation/Localisation Manager")]
+    [AddComponentMenu("Game Framework/Localisation/Localisation Configuration")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class LocalisationConfiguration : MonoBehaviour
     {

@@ -66,7 +66,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// <summary>
         /// Dictionary key is the Localisation key, values are LocalisationEntries. You can read from this, but should not manipulate this - use the other methods.
         /// </summary>
-        Dictionary<string, LocalisationEntry> EntriesDictionary
+        public Dictionary<string, LocalisationEntry> EntriesDictionary
         {
             get
             {
@@ -219,7 +219,7 @@ namespace GameFramework.Localisation.ObjectModel
 
             // add a default language if there isn't one already
             if (Languages.Count == 0)
-                AddLanguage("English");
+                AddLanguage("English", "en");
 
             var entry = new LocalisationEntry(key)
             {
@@ -247,6 +247,15 @@ namespace GameFramework.Localisation.ObjectModel
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Remove all localisation entries
+        /// </summary>
+        public void ClearEntries()
+        {
+            Entries.Clear();
+            EntriesDictionary.Clear();
         }
 
         /// <summary>
@@ -291,7 +300,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// <param name="key"></param>
         public string GetText(string key, int languageIndex)
         {
-            Assert.IsTrue(languageIndex >= 0 && languageIndex < Languages.Count, "language index is out of bounds when getting key '" + key + "'");
+            Assert.IsTrue(languageIndex >= 0 && languageIndex < Languages.Count, string.Format("language index {0} is out of bounds when getting key '{1}'", languageIndex, key));
             var entry = GetEntry(key);
             if (entry == null)
             {
@@ -303,7 +312,7 @@ namespace GameFramework.Localisation.ObjectModel
         #endregion LocalisationEntries
 
         #region IO
-        // TODO: Merge(LocalistionData) - useful at runtime to create a single object
+        // TODO: Merge(LocalistionData, bool unloadable) - allow for a localisation to be later unloadable
         public void Merge(LocalisationData localisationData) {
             Debug.Log("MERGE " + localisationData.GetInstanceID() + ". TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
             // Merge languages
@@ -356,13 +365,21 @@ namespace GameFramework.Localisation.ObjectModel
                 for (var i = 0; i < Entries.Count; i++)
                 {
                     buffer.Append("\"");
-                    buffer.Append(Entries[i].Key);
-                    buffer.Append("\", ");
+                    buffer.Append(Entries[i].Key.Replace("\"", "\"\""));
+                    buffer.Append("\",");
                     for (var il = 0; il < Entries[i].Languages.Length; il++)
                     {
-                        buffer.Append("\"");
-                        buffer.Append(Entries[i].Languages[il].Replace("\"", "\\\""));
-                        buffer.Append("\"");
+                        var text = Entries[i].Languages[il];
+                        if (text.Contains("\"") || text.Contains(",") || text.Contains("\n"))
+                        {
+                            buffer.Append("\"");
+                            buffer.Append(Entries[i].Languages[il].Replace("\"", "\"\""));
+                            buffer.Append("\"");
+                        }
+                        else
+                        {
+                            buffer.Append(text);
+                        }
                         buffer.Append(il == Entries[i].Languages.Length - 1 ? "\n" : ",");
                     }
                 }
@@ -378,66 +395,68 @@ namespace GameFramework.Localisation.ObjectModel
 
 
         #region Load CSV
-        public bool LoadCsv(string filename)
+        public static LocalisationData LoadCsv(string filename)
         {
             try
             {
                 using (var rdr = new System.IO.StreamReader(filename, System.Text.Encoding.UTF8, true))
                 {
-                    var isHeader = true;
-                    var columnLanguageMapping = new int[0];
-                    foreach (IList<string> columns in FromReader(rdr))
-                    {
-                        // first row is the header
-                        if (isHeader)
-                        {
-                            // sanity check
-                            if (columns.Count < 2)
-                            {
-                                Debug.LogWarning("File should contain at least 2 columns (KEY,<Language>");
-                                return false;
-                            }
-
-                            // add missing languages and get reference to language index
-                            columnLanguageMapping = new int[columns.Count];
-                            for (var column = 1; column < columns.Count; ++column)
-                            {
-                                var language = columns[column];
-                                if (!ContainsLanguage(language))
-                                {
-                                    Debug.Log("Adding new language " + language);
-                                    AddLanguage(language);
-                                }
-                                columnLanguageMapping[column] = GetLanguageIndex(language);
-                            }
-                            isHeader = false;
-                        }
-
-                        else
-                        {
-                            var key = columns[0];
-                            var entry = AddEntry(key); // will return existing if found.
-
-                            // copy in new values
-                            for (int i = 1; i < columns.Count; ++i)
-                            {
-                                entry.Languages[columnLanguageMapping[i]] = columns[i];
-                            }
-                        }
-                    }
+                    return LoadCsv(rdr);
                 }
             }
             catch (Exception e)
             {
                 Debug.LogWarning("An error occurred loading the csv file: " + e.Message);
-                return false;
+                return null;
             }
+        }
 
-            return true;
+        public static LocalisationData LoadCsv(System.IO.TextReader rdr)
+        {
+            var localisationData = ScriptableObject.CreateInstance<LocalisationData>();
+            var isHeader = true;
+            foreach (IList<string> columns in FromReader(rdr))
+            {
+                // first row is the header
+                if (isHeader)
+                {
+                    // sanity check
+                    if (columns.Count < 2)
+                    {
+                        Debug.LogWarning("File should contain at least 2 columns (KEY,<Language>");
+                        return null;
+                    }
+
+                    // add missing languages and get reference to language index
+                    for (var column = 1; column < columns.Count; ++column)
+                    {
+                        var language = columns[column];
+                        if (!localisationData.ContainsLanguage(language))
+                        {
+                            MyDebug.Log("Adding new language " + language);
+                            localisationData.AddLanguage(language);
+                        }
+                    }
+                    isHeader = false;
+                }
+
+                else
+                {
+                    var key = columns[0];
+                    var entry = localisationData.AddEntry(key); // will return existing if found.
+
+                    // copy in new values
+                    for (int i = 1; i < columns.Count; ++i)
+                    {
+                        entry.Languages[i - 1] = columns[i];
+                    }
+                }
+            }
+            return localisationData;
         }
 
         // parses a row from a csv file and yields the result back as a list of strings - one for each column.
-        IEnumerable<IList<string>> FromReader(System.IO.TextReader csv)
+        static IEnumerable<IList<string>> FromReader(System.IO.TextReader csv)
         {
             IList<string> result = new List<string>();
 
@@ -493,7 +512,7 @@ namespace GameFramework.Localisation.ObjectModel
                             c = (char)csv.Read();
                         }
                         // if end of file then make sure that we add the last read character
-                        if (csv.Peek() == -1)
+                        if (csv.Peek() == -1 && c != '\r' && c != '\n')
                             curValue.Append(c);
 
                         result.Add(curValue.ToString());
