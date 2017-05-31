@@ -19,24 +19,17 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
-using System.Linq;
-using GameFramework.GameObjects.Components;
 using GameFramework.Localisation.ObjectModel;
-using GameFramework.GameStructure;
 using UnityEngine;
-using UnityEngine.Assertions;
-using GameFramework.Preferences;
-using GameFramework.Localisation.Messages;
 
 namespace GameFramework.Localisation.Components
 {
     /// <summary>
     /// Allows for setting of configuration used by the global localisation.
     /// </summary>
-    [AddComponentMenu("Game Framework/Localisation/Localisation Configuration")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
-    public class LocalisationConfiguration : MonoBehaviour
+    [CreateAssetMenu(fileName = "LocalisationConfiguration", menuName = "Game Framework/Localisation Configuration", order = 21)]
+    [System.Serializable]
+    public class LocalisationConfiguration : ScriptableObject
     {
         /// <summary>
         /// Different modes for setting up the localisation
@@ -62,7 +55,7 @@ namespace GameFramework.Localisation.Components
             }
         }
         [SerializeField]
-        [Tooltip("How to setup the localisation either by default or specified resource files.")]
+        [Tooltip("How to setup the localisation either by automatically using files from default locations or using specified resource files.")]
         SetupModeType _setupMode = SetupModeType.Auto;
 
         /// <summary>
@@ -99,7 +92,7 @@ namespace GameFramework.Localisation.Components
             }
         }
         [SerializeField]
-        [Tooltip("A list of localisation languages that we support")]
+        [Tooltip("A list of localisation languages that we support.")]
         string[] _supportedLanguages = new string[0];
 
         #endregion editor fields

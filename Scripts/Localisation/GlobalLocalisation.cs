@@ -30,6 +30,7 @@ using GameFramework.Preferences;
 using GameFramework.Localisation.Messages;
 using GameFramework.Localisation.Components;
 using System.Collections.Generic;
+using GameFramework.Debugging;
 
 namespace GameFramework.Localisation
 {
@@ -108,19 +109,21 @@ namespace GameFramework.Localisation
         /// <summary>
         /// Load LocalisationData files
         /// </summary>
-        static void Reload(LocalisationConfiguration localisationConfiguration = null)
+        public static void Reload(LocalisationConfiguration localisationConfiguration = null)
         {
             Clear();
 
             if (localisationConfiguration == null)
-                localisationConfiguration = GameObject.FindObjectOfType<LocalisationConfiguration>();
+                localisationConfiguration = GameManager.LoadResource<LocalisationConfiguration>("LocalisationConfiguration");
+                //localisationConfiguration = GameObject.FindObjectOfType<LocalisationConfiguration>();
             var setupMode = localisationConfiguration == null ? LocalisationConfiguration.SetupModeType.Auto : localisationConfiguration.SetupMode;
             string[] loadedSupportedLanguages = new string[0];
 
             // set localisation data
             if (setupMode == LocalisationConfiguration.SetupModeType.Auto)
             {
-                // Try to load the default Localisation file directly - don't use GameMangager method as we load in 'reverse'
+                // Try to load the default Localisation file directly - don't use GameMangager method as we load in 'reverse' as user items
+                // should overwrite system ones.
                 var asset = Resources.Load<LocalisationData>("Default/Localisation");
                 if (asset != null)
                 {
@@ -155,7 +158,8 @@ namespace GameFramework.Localisation
                         loadedSupportedLanguages = asset.GetLanguageNames(); // override any previous
                     }
                 }
-                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was found so creating an empty one. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
+                if (LocalisationData == null)
+                    MyDebug.LogWarning("GlobalLocalisation: No localisation data was found so creating an empty one. Please check that a localisation files exist at /Resources/Localisation or /Resources/Default/Localisation!");
             }
             else if (setupMode == LocalisationConfiguration.SetupModeType.Specified)
             {
@@ -170,7 +174,8 @@ namespace GameFramework.Localisation
                     }
                     loadedSupportedLanguages = localisationData.GetLanguageNames(); // if exists override
                 }
-                Assert.IsNotNull(LocalisationData, "GlobalLocalisation: No localisation data was found so creating an empty one. Please check that localisation files exist and are in the correct location!");
+                if (LocalisationData == null)
+                    MyDebug.LogWarning("GlobalLocalisation: No localisation data was found so creating an empty one. Please check that localisation files exist and are in the correct location!");
             }
 
             // if nothing loaded then create an empty localisation to avoid errors.

@@ -27,7 +27,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
     /// <summary>
     /// Example class that shows how to add your own custom condition classes.
     /// </summary>
-    [CreateAssetMenu(fileName = "CustomConditionExample", menuName = "Game Framework/Custom Condition Example")]
+    [CreateAssetMenu(fileName = "CustomConditionExample", menuName = "Game Framework/Custom Condition Example", order = 60)]
     [System.Serializable]
     public class CustomConditionExample : Condition
     {

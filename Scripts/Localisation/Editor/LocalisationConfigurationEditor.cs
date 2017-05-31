@@ -19,11 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.EditorExtras.Editor;
 using GameFramework.Localisation.Components;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-#pragma warning disable 618
 
 namespace GameFramework.Localisation.Editor
 {
@@ -36,6 +36,8 @@ namespace GameFramework.Localisation.Editor
         SerializedProperty _setupModeProperty;
         SerializedProperty _specifiedLocalisationDataProperty;
         SerializedProperty _supportedLanguagesProperty;
+
+        Rect _mainHelpRect;
 
         void OnEnable()
         {
@@ -85,6 +87,8 @@ namespace GameFramework.Localisation.Editor
 
         void DrawLocalisation()
         {
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Configuration", "Welcome to the new Game Framework localisation system!\n\nYou can add a Localisation Configuration to your Resources folder (named LocalisationConfiguration) to control the default setup of the localisation system.\n\nIf you experience any problems, can help with new translations, or have improvement suggestions then please get in contact. Your support is appreciated.", _mainHelpRect);
+
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.PropertyField(_setupModeProperty);
             if (_setupModeProperty.enumValueIndex == 1)

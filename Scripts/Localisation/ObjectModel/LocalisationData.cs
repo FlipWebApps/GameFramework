@@ -33,7 +33,7 @@ namespace GameFramework.Localisation.ObjectModel
     /// </summary>
     /// Notes: We could have used a 2d array / matrix to hold values for each language, but would still need a dictionary to reference 
     /// metadata such as the key (and index into the 2d array) pro's and con's of both, but we just put an entry straight into the dictionary for now.
-    [CreateAssetMenu(fileName = "Localisation", menuName = "Game Framework/Localisation")]
+    [CreateAssetMenu(fileName = "Localisation", menuName = "Game Framework/Localisation", order = 20)]
     [System.Serializable]
     public class LocalisationData : ScriptableObject , ISerializationCallbackReceiver
     {
@@ -312,9 +312,14 @@ namespace GameFramework.Localisation.ObjectModel
         #endregion LocalisationEntries
 
         #region IO
-        // TODO: Merge(LocalistionData, bool unloadable) - allow for a localisation to be later unloadable
+        /// <summary>
+        /// Merge languages and entries from a second LocalisationData into the current one overwriting existing entries with the same name.
+        /// </summary>
+        /// <param name="localisationData"></param>
         public void Merge(LocalisationData localisationData) {
-            Debug.Log("MERGE " + localisationData.GetInstanceID() + ". TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
+            // TODO: TRACK THE INSTANCE ID SO WE CAN LATER UNLOAD");
+            // TODO: Merge(LocalistionData, bool unloadable) - allow for a localisation to be later unloadable
+
             // Merge languages
             foreach (var language in localisationData.Languages)
             {

@@ -26,7 +26,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
     /// <summary>
     /// Allows for adding your own custom data and functionality to a GameItem
     /// </summary>
-    [CreateAssetMenu(fileName = "type_x_Extension", menuName = "Game Framework/GameItem Extension")]
+    [CreateAssetMenu(fileName = "type_x_Extension", menuName = "Game Framework/GameItem Extension", order = 61)]
     public class GameItemExtension : ScriptableObject
     {
     }

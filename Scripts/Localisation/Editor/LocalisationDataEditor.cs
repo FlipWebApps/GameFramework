@@ -36,6 +36,7 @@ namespace GameFramework.Localisation.Editor
 
         Rect _mainHelpRect;
         int _currentTab;
+        bool _targetChanged;
 
         // Entries tab variables
         Rect _entriesHelpRect;
@@ -75,7 +76,8 @@ namespace GameFramework.Localisation.Editor
 
         public override void OnInspectorGUI()
         {
-            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "This localisation file is where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.", _mainHelpRect);
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Main", "Welcome to the new Game Framework localisation system!\n\nThese localisation files are where you can define localised text in different languages.\n\nIf you have previously used .csv files then you can import these under the tools tab.\n\nIf you experience any problems, can help with new translations, or have improvement suggestions then please get in contact. Your support is appreciated.", _mainHelpRect);
+            _targetChanged = false;
 
             // Additional handling for detecting undo / redo and set current tab.
             // for language changes just set focus to correct tab - we don't maintain any internal state so nothing more needed
@@ -83,6 +85,7 @@ namespace GameFramework.Localisation.Editor
             {
                 _currentTab = 1;
                 _languagesCount = _targetLocalisationData.Languages.Count;
+                _targetChanged = true;
             }
             // for entry changes we need to also update our internal state. 
             // this catches also import csv changes etc. that don't update internal editor state directly.
@@ -92,6 +95,7 @@ namespace GameFramework.Localisation.Editor
             {
                 _currentTab = 0;
                 SyncEntries();
+                _targetChanged = true;
             }
 
             // Main tabs and display
@@ -107,6 +111,12 @@ namespace GameFramework.Localisation.Editor
                 case 2:
                     DrawTools();
                     break;
+            }
+
+            if (_targetChanged)
+            {
+                EditorUtility.SetDirty(_targetLocalisationData);
+                GlobalLocalisation.Reload();
             }
         }
 
@@ -213,7 +223,7 @@ namespace GameFramework.Localisation.Editor
                                 {
                                     Undo.RecordObject(_targetLocalisationData, "Edit Localisation Entry");
                                     localisationEntry.Languages[li] = lang;
-                                    EditorUtility.SetDirty(_targetLocalisationData);
+                                    _targetChanged = true;
                                 }
 
                                 if (li > 0 && GUILayout.Button("Translate", EditorStyles.miniButton, GUILayout.Width(60)))
@@ -227,8 +237,11 @@ namespace GameFramework.Localisation.Editor
                                             var sourceText = localisationEntry.Languages[0];
                                             string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
                                                          + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + WWW.EscapeURL(sourceText);
-
-                                            WWW www = new WWW(url);
+                                            var wwwForm = new WWWForm();
+                                            wwwForm.AddField("username", "");
+                                            //var headers = new Dictionary<string, string>();
+                                            wwwForm.headers.Add("content-type", "application/json");
+                                            var www = new WWW(url, wwwForm);
                                             while (!www.isDone) ;
                                             if (www.error != null)
                                             {
@@ -282,7 +295,7 @@ namespace GameFramework.Localisation.Editor
                         Undo.RecordObject(_targetLocalisationData, "Delete Localisation Entry");
                         _targetLocalisationData.RemoveEntry(keyToDelete);
                         _entryReferenceList.RemoveAt(indexForDeleting);
-                        EditorUtility.SetDirty(_targetLocalisationData);
+                        _targetChanged = true;
                     }
                 }
             }
@@ -305,7 +318,7 @@ namespace GameFramework.Localisation.Editor
                 {
                     Undo.RecordObject(_targetLocalisationData, "Add Localisation Entry");
                     _targetLocalisationData.AddEntry(_newKey);
-                    EditorUtility.SetDirty(_targetLocalisationData);
+                    _targetChanged = true;
 
                     _languagesCount = _targetLocalisationData.Languages.Count; // set incase a first language was autocreated.
 
@@ -344,6 +357,7 @@ namespace GameFramework.Localisation.Editor
                 Undo.RecordObject(_targetLocalisationData, "Delete Localisation Entry");
                 _targetLocalisationData.ClearEntries();
                 _entryReferenceList.Clear();
+                _targetChanged = true;
             }
             GUI.enabled = true;
         }
@@ -439,7 +453,7 @@ namespace GameFramework.Localisation.Editor
             {
                 Undo.RecordObject(_targetLocalisationData, "Add Language");
                 _targetLocalisationData.AddLanguage(_newLanguage);
-                EditorUtility.SetDirty(_targetLocalisationData);
+                _targetChanged = true;
                 _newLanguage = "";
             }
             GUI.enabled = true;
@@ -463,7 +477,7 @@ namespace GameFramework.Localisation.Editor
             {
                 Undo.RecordObject(_targetLocalisationData, "Delete Language");
                 _targetLocalisationData.RemoveLanguage(languageForDeleting);
-                EditorUtility.SetDirty(_targetLocalisationData);
+                _targetChanged = true;
             }
         }
 
@@ -472,7 +486,7 @@ namespace GameFramework.Localisation.Editor
             var language = languageObject as string;
             Undo.RecordObject(_targetLocalisationData, "Add Language");
             _targetLocalisationData.AddLanguage(language, Languages.LanguageDefinitionsDictionary[language].Code);
-            EditorUtility.SetDirty(_targetLocalisationData);
+            _targetChanged = true;
         }
 
         #endregion Languages
@@ -495,7 +509,7 @@ namespace GameFramework.Localisation.Editor
                     {
                         Undo.RecordObject(_targetLocalisationData, "Import Localisation Csv");
                         _targetLocalisationData.Merge(importedLocalisationData);
-                        EditorUtility.SetDirty(_targetLocalisationData);
+                        _targetChanged = true;
                         EditorUtility.DisplayDialog("Localisation Import", string.Format("Import Complete!\n\nImported {0} languages and {1} entries.", importedLocalisationData.Languages.Count, importedLocalisationData.Entries.Count), "Ok");
                     }
                     else

@@ -23,6 +23,7 @@ using UnityEngine;
 using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using GameFramework.Localisation.ObjectModel;
+using System.Collections.Generic;
 
 namespace GameFramework.Localisation.Editor
 {
@@ -55,9 +56,11 @@ namespace GameFramework.Localisation.Editor
                 if (GUI.Button(dataPosition, new GUIContent("+", "Add a new localisation string"), EditorStyles.toolbarDropDown))
                 {
                     var menu = new GenericMenu();
-                    for (var i = 0; i < GlobalLocalisation.LocalisationData.Entries.Count; i++)
+                    var entries = new List<LocalisationEntry>(GlobalLocalisation.LocalisationData.Entries);
+                    entries.Sort((x, y) => x.Key.CompareTo(y.Key));
+                    for (var i = 0; i < entries.Count; i++)
                     {
-                        var entry = GlobalLocalisation.LocalisationData.Entries[i];
+                        var entry = entries[i];
                         menu.AddItem(new GUIContent(entry.Key), false, SetKey, new KeyPropertyReference() { Key = entry.Key, Property = dataProperty });
                     }
                     menu.ShowAsContext();
@@ -67,7 +70,9 @@ namespace GameFramework.Localisation.Editor
             if (isLocalisedProperty.boolValue)
             {
                 rowPosition.y += EditorGUIUtility.singleLineHeight + 2;
-                var localisedText = GlobalLocalisation.GetText(dataProperty.stringValue) ?? "<Key not in loaded localisation>";
+                var localisedText = GlobalLocalisation.Exists(dataProperty.stringValue) ?
+                    GlobalLocalisation.GetText(dataProperty.stringValue) :
+                    "<Key not in loaded localisation>";
                 EditorGUI.LabelField(rowPosition, localisedText);
             }
 
