@@ -778,9 +778,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             Assert.IsTrue(DialogManager.IsActive, "Ensure that you have added a DialogManager component to your scene before showing a dialog!");
             var dialogInstance = DialogManager.Instance.Create(null, null, NotEnoughCoinsContentPrefab, null, runtimeAnimatorController: NotEnoughCoinsContentAnimatorController, contentSiblingIndex: 1);
-            dialogInstance.Show(titleKey: NotEnoughCoinsTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
-                textKey: ValueOrNull(NotEnoughCoinsText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
-                text2Key: ValueOrNull(NotEnoughCoinsText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+            dialogInstance.Show(title: NotEnoughCoinsTitleText.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock),
+                text: ValueOrNull(NotEnoughCoinsText1.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
+                text2: ValueOrNull(NotEnoughCoinsText2.FormatValue(GameItem.Name, GameItem.Description, GameItem.ValueToUnlock)),
                 sprite: DialogSpriteToUse(NotEnoughCoinsDialogSpriteType, NotEnoughCoinsDialogSprite),
                 dialogButtons: NotEnoughCoinsContentShowsButtons ? DialogInstance.DialogButtonsType.Custom : DialogInstance.DialogButtonsType.Ok);
         }
