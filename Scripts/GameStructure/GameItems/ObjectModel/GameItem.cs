@@ -282,7 +282,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             {
                 if (LocalisableName.IsLocalisedWithNoKey())
                 {
-                    var value = LocaliseText.Get(FullKey("Name"), missingReturnsNull: true);
+                    var value = GlobalLocalisation.GetText(FullKey("Name"));
                     if (value == null) return IdentifierBase + " " + Number;
                     return value;
                 }
@@ -298,7 +298,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             get
             {
-                return LocalisableDescription.IsLocalisedWithNoKey() ? LocaliseText.Get(FullKey("Desc")) : LocalisableDescription.GetValue();
+                return LocalisableDescription.IsLocalisedWithNoKey() ? GlobalLocalisation.GetText(FullKey("Desc"), missingReturnsKey: true) : LocalisableDescription.GetValue();
             }
         }
 

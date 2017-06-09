@@ -33,7 +33,7 @@ namespace GameFramework.Localisation.Components
     {
         public override bool IsConditionMet()
         {
-            return Localisation.LocaliseText.AllowedLanguages.Length > 1;
+            return GlobalLocalisation.SupportedLanguages.Length > 1;
         }
     }
 }

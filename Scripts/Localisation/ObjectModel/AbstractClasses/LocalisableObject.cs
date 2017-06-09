@@ -120,7 +120,7 @@ namespace GameFramework.Localisation.ObjectModel.AbstractClasses
         /// <returns></returns>
         public UnityEngine.Object GetObject(bool fallbackToDefault = true)
         {
-            return GetObject(LocaliseText.Language, fallbackToDefault);
+            return GetObject(GlobalLocalisation.Language, fallbackToDefault);
         }
 
 

@@ -62,7 +62,7 @@ namespace GameFramework.FreePrize.Components
         public override void RunMethod()
         {
             TimeSpan time = FreePrizeManager.Instance.GetTimeToPrize();
-            _text.text = LocaliseText.Format("FreePrize.NewPrize", time.Hours, time.Minutes, time.Seconds);
+            _text.text = GlobalLocalisation.FormatText("FreePrize.NewPrize", time.Hours, time.Minutes, time.Seconds);
  }
     }
 }

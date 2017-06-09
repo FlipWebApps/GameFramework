@@ -89,7 +89,7 @@ namespace GameFramework.Social
         {
             DialogManager.Instance.Show("GameFeedbackDialog",
                 titleKey: "GameFeedback.FeedbackTitle",
-                text2: LocaliseText.Format("GameFeedback.AssumeLike", GameManager.Instance.GameName),
+                text2: GlobalLocalisation.FormatText("GameFeedback.AssumeLike", GameManager.Instance.GameName),
                 doneCallback: LikeCallback,
                 dialogButtons: DialogInstance.DialogButtonsType.YesNo);
 
@@ -116,7 +116,7 @@ namespace GameFramework.Social
         public void GameFeedbackAssumeTheyLike()
         {
             DialogManager.Instance.Show(titleKey: "GameFeedback.RateTitle",
-                text2: LocaliseText.Format("GameFeedback.AssumeLike", GameManager.Instance.GameName),
+                text2: GlobalLocalisation.FormatText("GameFeedback.AssumeLike", GameManager.Instance.GameName),
                 doneCallback: RateCallback);
 
             HasAskedToRate = true;
@@ -156,7 +156,7 @@ namespace GameFramework.Social
 
             DialogManager.Instance.Show("GameFeedbackDialog",
                 titleKey: "GameFeedback.RateTitle",
-                text2: LocaliseText.Format(text2Key, GameManager.Instance.GameName),
+                text2: GlobalLocalisation.FormatText(text2Key, GameManager.Instance.GameName),
                 doneCallback: RateCallback,
                 dialogButtons: DialogInstance.DialogButtonsType.Custom);
 

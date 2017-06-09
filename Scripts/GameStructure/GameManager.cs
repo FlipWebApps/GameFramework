@@ -326,7 +326,7 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// A list of localisation languages that we support
         /// </summary>
-        [Tooltip("A list of localisation languages that we support")]
+        [Obsolete("v4.4 Obsolete - Set and access through GlobalLocalisation instead.")]
         public string[] SupportedLanguages;
 
         #endregion Localisation Inspector Values
@@ -629,11 +629,6 @@ namespace GameFramework.GameStructure
 			Assert.IsNotNull(Camera.main, "You need a main camera in your scene!");
             // display related properties
             SetDisplayProperties();
-
-
-            // Localisation setup. If nothing stored then use system Language if it exists. Otherwise we will default to English.
-            LocaliseText.AllowedLanguages = SupportedLanguages;
-
 
             // setup players
             Players = new PlayerGameItemManager();

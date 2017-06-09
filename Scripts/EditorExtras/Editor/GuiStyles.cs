@@ -35,6 +35,8 @@ namespace GameFramework.EditorExtras.Editor
         public static readonly GUIStyle ToolbarSearchFieldCancel = "ToolbarSeachCancelButton";
         public static readonly GUIStyle ToolbarSearchFieldCancelEmpty = "ToolbarSeachCancelButtonEmpty";
 
+        public const float RemoveButtonWidth = 30f;
+
         #region GUI Styles
 
         public static Texture2D MakeColoredTexture(Color color)
@@ -109,6 +111,23 @@ namespace GameFramework.EditorExtras.Editor
             }
         }
         static GUIStyle _borderlessButtonStyle;
+
+
+        public static GUIStyle WordWrapStyle
+        {
+            get
+            {
+                if (_wordWrapStyle != null) return _wordWrapStyle;
+
+                _wordWrapStyle = new GUIStyle(GUI.skin.textField)
+                {
+                    wordWrap = true
+                };
+                return _wordWrapStyle;
+            }
+        }
+        static GUIStyle _wordWrapStyle;
+
         #endregion GUI Styles
 
     }

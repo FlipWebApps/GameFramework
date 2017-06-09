@@ -38,7 +38,6 @@ namespace GameFramework.GameStructure.Editor
         bool _showPrefs;
         bool _showPlayerAdvanced;
 
-        ReorderableList _supportedLanguagesList;
         ReorderableList _numberedLevelReferencesList;
 
         SerializedProperty _gameNameProperty;
@@ -54,8 +53,6 @@ namespace GameFramework.GameStructure.Editor
 
         SerializedProperty _displayChangeCheckDelayProperty;
         SerializedProperty _identifierBaseProperty;
-
-        SerializedProperty _supportedLanguagesProperty;
 
         SerializedProperty _variablesProperty;
 
@@ -102,8 +99,6 @@ namespace GameFramework.GameStructure.Editor
             _referencePhysicalScreenHeightInInchesProperty = serializedObject.FindProperty("ReferencePhysicalScreenHeightInInches");
             _displayChangeCheckDelayProperty = serializedObject.FindProperty("DisplayChangeCheckDelay");
 
-            _supportedLanguagesProperty = serializedObject.FindProperty("SupportedLanguages");
-
             _variablesProperty = serializedObject.FindProperty("Variables");
 
             _playerSetupModeProperty = serializedObject.FindProperty("PlayerSetupMode");
@@ -130,19 +125,6 @@ namespace GameFramework.GameStructure.Editor
             _numberOfAutoCreatedCharactersProperty = serializedObject.FindProperty("NumberOfAutoCreatedCharacters");
             _characterUnlockModeProperty = serializedObject.FindProperty("CharacterUnlockMode");
             _coinsToUnlockCharactersProperty = serializedObject.FindProperty("CoinsToUnlockCharacters");
-
-            _supportedLanguagesList = new ReorderableList(serializedObject, _supportedLanguagesProperty, true, true, true, true);
-            _supportedLanguagesList.drawHeaderCallback = (Rect rect) => {
-                EditorGUI.LabelField(rect, "Supported Languages");
-            };
-            _supportedLanguagesList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) => {
-                    var element = _supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
-                    rect.y += 2;
-                    EditorGUI.PropertyField(
-                        new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
-                        element, GUIContent.none);
-                };
 
             _numberedLevelReferencesList = new ReorderableList(serializedObject, _numberedLevelReferencesProperty, true, true, true, true);
             _numberedLevelReferencesList.drawHeaderCallback = (Rect rect) => {
@@ -180,7 +162,6 @@ namespace GameFramework.GameStructure.Editor
             DrawGameDetails();
             DrawGameStructure();
             DrawVariables();
-            DrawLocalisation();
 
             // do this check here at the end of layout to avoid any layout issues
             if (Event.current.type == EventType.Repaint)
@@ -410,18 +391,6 @@ namespace GameFramework.GameStructure.Editor
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(_variablesProperty, true);
             EditorGUI.indentLevel--;
-            EditorGUILayout.EndVertical();
-        }
-
-
-        void DrawLocalisation()
-        {
-            EditorGUILayout.LabelField("Localisation", EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUI.indentLevel += 1;
-            //EditorList.Show(_supportedLanguagesProperty, EditorListOption.ListLabel | EditorListOption.Buttons | EditorListOption.AlwaysShowAddButton, addButtonText: "Add Language", addButtonToolTip: "Add Language");
-            _supportedLanguagesList.DoLayoutList();
-            EditorGUI.indentLevel -= 1;
             EditorGUILayout.EndVertical();
         }
     }

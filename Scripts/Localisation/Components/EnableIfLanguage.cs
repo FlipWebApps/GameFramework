@@ -38,7 +38,7 @@ namespace GameFramework.Localisation.Components
 
         public override bool IsConditionMet()
         {
-            return Localisation.LocaliseText.Language == Language;
+            return GlobalLocalisation.Language == Language;
         }
     }
 }

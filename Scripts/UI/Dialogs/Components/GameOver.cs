@@ -239,7 +239,7 @@ namespace GameFramework.UI.Dialogs.Components
             }
 
             // set some text based upon the result
-            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "AchievementText", LocaliseText.Format(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name));
+            UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "AchievementText", GlobalLocalisation.FormatText(LocalisationBase + ".Achievement", currentLevel.Score, currentLevel.Name) ?? LocalisationBase + ".Achievement");
 
             // setup stars
             var starsGameObject = GameObjectHelper.GetChildNamedGameObject(DialogInstance.gameObject, "Stars", true);
@@ -285,9 +285,9 @@ namespace GameFramework.UI.Dialogs.Components
             if (ShowScore)
             {
                 Assert.IsNotNull(scoreGameObject, "GameOver->ShowScore is enabled, but could not find a 'Score' gameobject. Disable the option or fix the structure.");
-                var distanceText = LocaliseText.Format(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString());
+                var distanceText = GlobalLocalisation.FormatText(LocalisationBase + ".ScoreResult", currentLevel.Score.ToString()) ?? LocalisationBase + ".ScoreResult";
                 if (currentLevel.HighScore > currentLevel.OldHighScore)
-                    distanceText += "\n" + LocaliseText.Get(LocalisationBase + ".NewHighScore");
+                    distanceText += "\n" + GlobalLocalisation.GetText(LocalisationBase + ".NewHighScore", missingReturnsKey: true);
                 UIHelper.SetTextOnChildGameObject(scoreGameObject, "ScoreResult", distanceText, true);
             }
 
@@ -384,10 +384,10 @@ namespace GameFramework.UI.Dialogs.Components
             {
                 if (minimumCoins == 0)
                     UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins",
-                        LocaliseText.Format(LocalisationBase + ".TargetCoinsGot", minimumCoins), true);
+                        GlobalLocalisation.FormatText(LocalisationBase + ".TargetCoinsGot", minimumCoins) ?? LocalisationBase + ".TargetCoinsGot", true);
                 else if (minimumCoins > 0)
                     UIHelper.SetTextOnChildGameObject(DialogInstance.gameObject, "TargetCoins",
-                        LocaliseText.Format(LocalisationBase + ".TargetCoins", minimumCoins), true);
+                        GlobalLocalisation.FormatText(LocalisationBase + ".TargetCoins", minimumCoins) ?? LocalisationBase + ".TargetCoins", true);
                 else
                     targetCoinsGameobject.SetActive(false);
             }

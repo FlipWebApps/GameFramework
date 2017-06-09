@@ -22,18 +22,19 @@
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
+using GameFramework.EditorExtras.Editor;
 
 namespace GameFramework.Localisation.Editor
 {
     /// <summary>
-    /// Editor window for localisation.
+    /// Editor window for viewing global localisation.
     /// </summary>
-    public class LocalisationEditorWindow : EditorWindow
+    public class GlobalLocalisationEditorWindow : EditorWindow
     {
         public int SelectedKeyIndex;
 
-        Texture2D _newIcon;
-        Texture2D _saveIcon;
+        //Texture2D _newIcon;
+        //Texture2D _saveIcon;
         Texture2D _refreshIcon;
         //Texture2D _deleteIcon;
         //Texture2D _redTexture;
@@ -49,12 +50,12 @@ namespace GameFramework.Localisation.Editor
         string _newKey;
 
         // Add menu item for showing the window
-        [MenuItem("Window/Game Framework/Localisation Editor (Alpha)", priority = 1)]
+        //[MenuItem("Window/Game Framework/Global Localisation Viewer", priority = 1)]
         public static void ShowWindow()
         {
             //Show existing window instance. If one doesn't exist, make one.
             //var prefsEditorWindow = 
-            GetWindow<LocalisationEditorWindow>("Localisations", true);
+            GetWindow<GlobalLocalisationEditorWindow>("Global Localisations", true);
         }
 
 
@@ -62,15 +63,15 @@ namespace GameFramework.Localisation.Editor
         {
             //Show existing window instance. If one doesn't exist, make one.
             var localisationEditorWindow = 
-            GetWindow<LocalisationEditorWindow>("Localisations", true);
+            GetWindow<GlobalLocalisationEditorWindow>("Global Localisations", true);
             localisationEditorWindow._showNew = true;
         }
 
 
         void OnEnable()
         {
-            _newIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\New.png", typeof(Texture2D)) as Texture2D;
-            _saveIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Save.png", typeof(Texture2D)) as Texture2D;
+            //_newIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\New.png", typeof(Texture2D)) as Texture2D;
+            //_saveIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Save.png", typeof(Texture2D)) as Texture2D;
             _refreshIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Refresh.png", typeof(Texture2D)) as Texture2D;
             //_deleteIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\PrefsEditor\Sprites\Delete.png", typeof(Texture2D)) as Texture2D;
             //_redTexture = MakeColoredTexture(1, 1, new Color(1.0f, 0.0f, 0.0f, 0.1f));
@@ -104,6 +105,8 @@ namespace GameFramework.Localisation.Editor
         /// </summary>
         void OnGUI()
         {
+            GlobalLocalisation.Load(); // ensure loaded
+
             DrawToolbar();
             if (_showNew) DrawNew();
             GUILayout.Space(5);
@@ -117,32 +120,32 @@ namespace GameFramework.Localisation.Editor
         void DrawToolbar()
         {
             GUILayout.Space(10);
-            EditorGUILayout.LabelField("NOTE: This Editor is Alpha and currently only displays localisation entries!", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Global Localisation", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("For now you must add / edit manually in the Localisation.csv file for now (see online help).");
             EditorGUILayout.LabelField("Please show your support and rate Game Framework on the asset store");
             GUILayout.Space(10);
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
-            if (ButtonTrimmed("New...", _newIcon, EditorStyles.toolbarButton, "Add a new item"))
-            {
-                _newKey = "";
-                _showNew = true;
-                ClearFocus();
-            }
+            //if (ButtonTrimmed("New...", _newIcon, EditorStyles.toolbarButton, "Add a new item"))
+            //{
+            //    _newKey = "";
+            //    _showNew = true;
+            //    ClearFocus();
+            //}
 
-            GUI.enabled = false;
-            if (ButtonTrimmed("Save All", _saveIcon, EditorStyles.toolbarButton, "Save modified entries"))
-            {
-                Save();
-                Reload();
-            }
+            //GUI.enabled = false;
+            //if (ButtonTrimmed("Save All", _saveIcon, EditorStyles.toolbarButton, "Save modified entries"))
+            //{
+            //    Save();
+            //    Reload();
+            //}
 
-            if (ButtonTrimmed("Delete All...", null, EditorStyles.toolbarButton, "Delete all prefs entries"))
-            {
-                if (EditorUtility.DisplayDialog("Delete All Player Prefs",
-                    "Are you sure you want to delete all Player Prefs?", "Yes", "No"))              
-                    DeleteAll();
-            }
+            //if (ButtonTrimmed("Delete All...", null, EditorStyles.toolbarButton, "Delete all prefs entries"))
+            //{
+            //    if (EditorUtility.DisplayDialog("Delete All Player Prefs",
+            //        "Are you sure you want to delete all Player Prefs?", "Yes", "No"))              
+            //        DeleteAll();
+            //}
             GUILayout.FlexibleSpace();
             GUI.enabled = true;
 
@@ -217,7 +220,7 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.BeginHorizontal();
 
             _scrollPositionKeys = EditorGUILayout.BeginScrollView(_scrollPositionKeys, GUILayout.Width(_leftPanelWidth), GUILayout.MinWidth(100));
-            var keys = LocaliseText.Localisations.Keys.ToList();
+            var keys = GlobalLocalisation.LocalisationData.EntriesDictionary.Keys.ToList();
             keys.Sort();
             for (var i = 0; i < keys.Count; i++)
             {
@@ -233,6 +236,7 @@ namespace GameFramework.Localisation.Editor
                     if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
                     { 
                         SelectedKeyIndex = i;
+
                         ClearFocus();
                         Repaint();
                     }
@@ -255,28 +259,27 @@ namespace GameFramework.Localisation.Editor
 
             LocaliseText.LoadDictionary();
 
-            var key = LocaliseText.Localisations.Keys.ToList()[SelectedKeyIndex];
             //var boldGUIStyle = new GUIStyle(EditorStyles.numberField);
             //boldGUIStyle.fontStyle = FontStyle.Bold;
-
             for (var i = 0; i < LocaliseText.Languages.Length; i++)
             {
-                var languageEntry = LocaliseText.Languages[i];
-                
-                string stringValue = LocaliseText.Get(key, languageEntry);
-                float num = EditorStyles.textArea.CalcHeight(new GUIContent(stringValue), EditorGUIUtility.currentViewWidth);
-                int num2 = Mathf.CeilToInt(num / 13f);
-                num2 = Mathf.Clamp(num2, 1, int.MaxValue);
-                var height = 32f + (float)((num2 - 1) * 13);
-                //Debug.Log(num2 + ", " + height);
-                EditorGUILayout.LabelField(languageEntry, EditorStyles.boldLabel);
+                var languageEntry = GlobalLocalisation.LocalisationData.Languages[i];
 
-                EditorGUI.BeginChangeCheck();
-                stringValue = EditorGUILayout.TextArea(LocaliseText.Get(key, languageEntry), EditorStyles.textArea, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth), GUILayout.MinHeight(height), GUILayout.MaxHeight(height));
-                if (EditorGUI.EndChangeCheck())
-                {
-                    LocaliseText.Localisations[key][i] = stringValue;
-                }
+                string stringValue = GlobalLocalisation.LocalisationData.GetText(keys[SelectedKeyIndex], i);
+                //float num = EditorStyles.textArea.CalcHeight(new GUIContent(stringValue), EditorGUIUtility.currentViewWidth);
+                //int num2 = Mathf.CeilToInt(num / 13f);
+                //num2 = Mathf.Clamp(num2, 1, int.MaxValue);
+                //var height = 32f + (float)((num2 - 1) * 13);
+                //Debug.Log(num2 + ", " + height);
+                EditorGUILayout.LabelField(languageEntry.Name, EditorStyles.boldLabel);
+                EditorGUILayout.TextArea(stringValue, GuiStyles.WordWrapStyle, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth));
+
+                    //EditorGUI.BeginChangeCheck();
+                    //stringValue = EditorGUILayout.TextArea(stringValue, EditorStyles.textArea, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth), GUILayout.MinHeight(height), GUILayout.MaxHeight(height));
+                    //if (EditorGUI.EndChangeCheck())
+                    //{
+                    //    //LocaliseText.Localisations[key][i] = stringValue;
+                    //}
             }
 
             EditorGUILayout.EndScrollView();

@@ -67,7 +67,7 @@ namespace GameFramework.UI.Other.Components
         void Start()
         {
             if (!string.IsNullOrEmpty(LocalisationKey))
-                _localisationString = LocaliseText.Get(LocalisationKey);
+                _localisationString = GlobalLocalisation.GetText(LocalisationKey, missingReturnsKey: true);
 
             if (Text == null) Text = GetComponent<UnityEngine.UI.Text>();
             Assert.IsNotNull(Text, "Time Remaining must either be on the same gameobject as a UI Text control or have a Text component specified in it's settings.");

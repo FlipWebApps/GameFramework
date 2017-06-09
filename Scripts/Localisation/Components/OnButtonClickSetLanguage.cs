@@ -43,7 +43,7 @@ namespace GameFramework.Localisation.Components
         /// </summary>
         public  override void OnClick()
         {
-            Localisation.LocaliseText.Language = Language;
+            GlobalLocalisation.Language = Language;
         }
     }
 }

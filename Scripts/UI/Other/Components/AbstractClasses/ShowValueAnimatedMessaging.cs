@@ -105,7 +105,7 @@ namespace GameFramework.UI.Other.Components.AbstractClasses
         {
             // if localisation key specified then get and cache string.
             if (!string.IsNullOrEmpty(LocalisationKey))
-                _localisationString = LocaliseText.Get(LocalisationKey);
+                _localisationString = GlobalLocalisation.GetText(LocalisationKey, missingReturnsKey: true);
         }
 
         /// <summary>

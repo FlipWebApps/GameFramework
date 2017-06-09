@@ -92,11 +92,17 @@ namespace GameFramework.Localisation.Components
             {
                 Key = _textComponent.text;
             }
-
-            Localise();
             base.Awake();
         }
 
+        /// <summary>
+        /// Setup
+        /// </summary>
+        public override void Start()
+        {
+            Localise();
+            base.Start();
+        }
 
         /// <summary>
         /// Update the display with the localise text
@@ -106,9 +112,9 @@ namespace GameFramework.Localisation.Components
             // If we don't have a key then don't change the value
             if (string.IsNullOrEmpty(Key)) return;
 
-            PreLocaliseValue = Localisation.LocaliseText.Get(Key);
+            PreLocaliseValue = GlobalLocalisation.GetText(Key);
 
-            // Run any callback to modify the term.
+            // Run any callback to modify the value.
             OnPreLocalise.Invoke(this);
 
             // apply any modifier
