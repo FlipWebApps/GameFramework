@@ -52,6 +52,7 @@ namespace GameFramework.Localisation
         {
             get
             {
+                Load();
                 return _supportedLanguages;
             }
             set
