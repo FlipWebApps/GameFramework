@@ -4,6 +4,48 @@ IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors oc
 
 CHANGE LOG
 
+
+v4.4
+Important: This version contains a rewritten localisation system. Please take a backup before you upgrade and see any in game warnings for further upgrade information.
+
+	Game Framework Core - Improvements
+	- Demo: Update to show use of SetScaleFromLevelVariable component (set on the in game collider).
+	- Editor: Added EditorHelper ShowHideableHelpBox function
+	- GameStructure: GameManager now has a list of (Global) Variables.
+	- GameStructure: Added support for Color Variables.
+	- GameStructure: Added SetGradientBackgroundFromGameItemVariable, SetPositionFromGameItemVariable, SetRotationFromGameItemVariable, SetScaleFromGameItemVariable components and implementations for Character, Level, Player and World
+	- GameStructure: Added new Level setup mode to GameManager - Load Master With Overrides
+	- GameStructure: Fix for colliders not showing gameobjects to enable / disable
+	- GameStructure: Added callback to colliders for hooking up your own code.
+	- Input: Added OnButtonLoadScene component
+	- Localisation: Localisation system overhauled. Old csv localisation files should be imported to a new Localisation object in the resources folder. 
+	- Localisation: Localisation configuration is moved from GameManager to default setup based upon configuration files or by creating a LocalisationConfiguration object in the resources folder.
+	- Localisation: GlobalLocalisation class as a replacement for LocaliseText for accessing localisation. 
+	
+	Game Framework Core - Fixes
+	- Advertising: Removed reference to obsolete code.
+	- GameStructure: Assert for GameManager being setup in GameItem when passing in null player reference.
+	- GameStructure: Fix for an unlock button with don't disable set and selected mode allowing buttons to be uncorrectly unlocked even when enough coins aren't available
+	- GameStructure: Additional asset statements for checking of runtime dependencies.
+	- GameStructure: Fix for GameItem DisplayNotEnoughCoinsDialog text being wrong.
+	- Localisation: Force load of localisation files when getting supported languages.
+	
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- All: Updated to use new localisation files
+	- Getting Started Tutorial: Changes unlock mode to Completion for Part 1
+
+	PlayMaker Actions for Game Framework (Extras Bundle) - Improvements
+	- Added Actions: <GameItem>GetVariable actions for getting variables from Worlds, Players, Levels and Characters.
+	- Added Actions: <GameItem>GetVariable actions for getting variables from Worlds, Players, Levels and Characters.
+	- Added Actions: <GameItem>SetVariable Actions for setting variables on Worlds, Players, Levels and Characters.
+	- Added abstract EveryFrameAction class for easy creation of new actions.
+	
+	BeautifulTransitions (Extras Bundle):
+	- General: Better naming in the component menu list
+
+	 Prefs Editor (Extras Bundle): Updated to v1.1 that includes:
+	- SecurePlayerPrefs: Added support for Color preferences
+
 v4.3.1
 
 	Game Framework Core - Improvements
