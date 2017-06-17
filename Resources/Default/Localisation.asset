@@ -159,73 +159,73 @@ MonoBehaviour:
     Description: 
     Languages:
     - Cancel
-    - Cancel
-    - Cancel
-    - Cancel
+    - Avbryt
+    - Cancelar
+    - Cancelar
     - Annuler
-    - Cancel
-    - Cancel
-    - Cancel
+    - "\u53D6\u6D88"
+    - Stornieren
+    - Anuluj
     - "H\u1EE7y"
   - Key: Button.Ok
     Description: 
     Languages:
     - Ok
     - Ok
-    - Ok
-    - Ok
+    - "Est\xE1 bem"
+    - De acuerdo
     - Accepter
+    - "\u597D"
+    - OK
     - Ok
-    - Ok
-    - Ok
-    - Ok
+    - "\u0110\u01B0\u1EE3c"
   - Key: Button.Yes
     Description: 
     Languages:
     - Yes
-    - Yes
-    - Yes
-    - Yes
+    - Ja
+    - sim
+    - "S\xED"
     - Oui
-    - Yes
-    - Yes
-    - Yes
+    - "\u662F"
+    - Ja
+    - tak
     - "\u0110\u1ED3ng \xFD"
   - Key: Button.No
     Description: 
     Languages:
     - No
-    - No
-    - No
+    - Nei
+    - "N\xE3o"
     - No
     - Non
-    - No
-    - No
-    - No
+    - "\u6CA1\u6709"
+    - Nein
+    - Nie
     - "Kh\xF4ng"
   - Key: Button.Unlock
     Description: 
     Languages:
     - Unlock
-    - Unlock
-    - Unlock
-    - Unlock
+    - "L\xE5se opp"
+    - Desbloquear
+    - desbloquear
     - "D\xE9bloquer"
-    - Unlock
-    - Unlock
-    - Unlock
+    - "\u5F00\u9501"
+    - Freischalten
+    - "Odblokowa\u0107"
     - "M\u1EDF kh\xF3a"
   - Key: Button.Buy
     Description: 
     Languages:
     - Buy
-    - Buy
-    - Buy
-    - Buy
-    - Acheter
-    - Buy
-    - Buy
-    - Buy
+    - "Kj\xF8p"
+    - Comprar
+    - Comprar
+    - Achetez
+    - "\u8D2D\u4E70"
+    - Kaufen
+    - Kup
     - Mua
   - Key: Facebook.Logout
     Description: 
