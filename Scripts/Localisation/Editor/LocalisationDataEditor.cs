@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using GameFramework.EditorExtras.Editor;
+using GameFramework.Helper;
 using GameFramework.Localisation.ObjectModel;
 using UnityEditor;
 using UnityEngine;
@@ -226,6 +227,7 @@ namespace GameFramework.Localisation.Editor
                                     _targetChanged = true;
                                 }
 
+                                // TODO: Move to a callback so we don't block the UI
                                 if (li > 0 && GUILayout.Button("Translate", EditorStyles.miniButton, GUILayout.Width(60)))
                                 {
                                     var sourceCode = _targetLocalisationData.Languages[0].Code;
@@ -249,7 +251,29 @@ namespace GameFramework.Localisation.Editor
                                             }
                                             else
                                             {
-                                                Debug.Log(www.text);
+                                                Debug.Log("Google Translate Response:" + www.text);
+                                                var json = ObjectModel.Internal.SimpleJSON.JSONNode.Parse(www.text);
+                                                if (json != null)
+                                                {
+                                                    var translation = "";
+                                                    for (var lines = 0; lines < json[0].Count; lines++)
+                                                    {
+                                                        // Dig through and take apart the text to get to the good stuff.
+                                                        var translatedText = json[0][lines][0].ToString();
+                                                        if (translatedText.Length > 2)
+                                                            translatedText = translatedText.Substring(1,
+                                                                translatedText.Length - 2);
+                                                        if (translation.Length > 0)
+                                                            translation += "\n";
+                                                        translation +=
+                                                            translatedText.Replace("\\n", "").Replace("\\\"", "\"");
+                                                    }
+                                                    Undo.RecordObject(_targetLocalisationData, "Edit Localisation Entry");
+                                                    localisationEntry.Languages[li] = translation;
+                                                    _targetChanged = true;
+                                                }
+                                                else 
+                                                    Debug.LogError("Unable to parse json response");
                                             }
                                         }
                                         else
