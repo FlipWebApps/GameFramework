@@ -641,7 +641,7 @@ namespace GameFramework.Localisation
         #region IO
 
 
-        public System.Collections.Generic.IEnumerable<TestCaseData> LoadCsvTests()
+        public static System.Collections.Generic.IEnumerable<TestCaseData> LoadCsvTests()
         {
             // Last row doesn't end in new line
             yield return new TestCaseData(
