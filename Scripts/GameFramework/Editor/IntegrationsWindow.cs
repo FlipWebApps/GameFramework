@@ -33,6 +33,7 @@ namespace GameFramework.GameFramework.Editor {
         Texture2D _beautifulTransitionsIcon;
         Texture2D _prefsEditorIcon;
         Texture2D _proPoolingIcon;
+        Texture2D _playMakerActionsForGameFrameworkIcon;
         Texture2D _adMobIcon;
         Texture2D _facebookIcon;
         Texture2D _playMakerIcon;
@@ -53,6 +54,7 @@ namespace GameFramework.GameFramework.Editor {
             _beautifulTransitionsIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\BeautifulTransitions.png", typeof(Texture2D)) as Texture2D;
             _prefsEditorIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PrefsEditor.png", typeof(Texture2D)) as Texture2D;
             _proPoolingIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\ProPooling.png", typeof(Texture2D)) as Texture2D;
+            _playMakerActionsForGameFrameworkIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PlayMakerActionsForGameFramework.png", typeof(Texture2D)) as Texture2D;
             _adMobIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\AdMob.png", typeof(Texture2D)) as Texture2D;
             _facebookIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\Facebook.png", typeof(Texture2D)) as Texture2D;
             _playMakerIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PlayMaker.png", typeof(Texture2D)) as Texture2D;
@@ -69,11 +71,12 @@ namespace GameFramework.GameFramework.Editor {
             ShowAsset("Beautiful Transitions", "BEAUTIFUL_TRANSITIONS", "https://www.assetstore.unity3d.com/#!/content/56442?aid=1011lGnE", "Simply and easily create beautiful transitions for your UI elements, gameobjects , cameras or scenes. Included as part of the Game Framework - Extras bundle.\n\nEnable for automatic use of scene and gameobject transitions.", "Asset Store", @"Assets\FlipWebApps\BeautifulTransitions", _beautifulTransitionsIcon, true);
             ShowAsset("Prefs Editor (Secured)", "PREFS_EDITOR", "https://www.assetstore.unity3d.com/#!/content/61908?aid=1011lGnE", "Full editor for viewing, editing and managing your PlayerPrefs. Included as part of the Game Framework - Extras bundle.\n\nEnable for optional use of secured player preferences to prevent cheating.", "Asset Store", @"Assets\FlipWebApps\PrefsEditor", _prefsEditorIcon, true);
             ShowAsset("Pro Pooling", "PRO_POOLING", "https://www.assetstore.unity3d.com/#!/content/59286?aid=1011lGnE", "Powerful gameobject and prefab pooling. Included as part of the Game Framework - Extras bundle.\n\nAdds Gameobject pooling and performance improvements", "Asset Store", @"Assets\FlipWebApps\ProPooling", _proPoolingIcon, true);
+            ShowAsset("PlayMaker Actions for Game Framework", null, "https://www.assetstore.unity3d.com/#!/content/88418?aid=1011lGnE", "Combine the power of Game Framework and PlayMaker using this set of custom actions.\n\nPlaymaker integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.\n\nWith these assets installed, enable PlayMaker integration below to use these actions.", "Asset Store", @"Assets\FlipWebApps\GameFrameworkPlayMakerExtensions", _playMakerActionsForGameFrameworkIcon, true);
 
             GUILayout.Label("Third Party", EditorStyles.boldLabel);
             ShowAsset("Facebook", "FACEBOOK_SDK", "https://developers.facebook.com/docs/unity/", "Facebook support for WebGL, Android and iOS.\n\nEnables Facebook support components and functionality in GameFramework", "Download", @"Assets\FacebookSDK", _facebookIcon, false);
             ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon, false);
-            ShowAsset("PlayMaker", "PLAYMAKER", "https://www.assetstore.unity3d.com/#!/content/368?aid=1011lGnE", "PlayMaker actions to combine the power of Game Framework and PlayMaker.\n\nThis integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.\n\nNOTE: Game Framework PlayMaker Extensions is an early alpha - please get in contact so we can extend it with the functionality that you need!", "Asset Store (Play Maker)", @"Assets\PlayMaker", _playMakerIcon, true);
+            ShowAsset("PlayMaker", "PLAYMAKER", "https://www.assetstore.unity3d.com/#!/content/368?aid=1011lGnE", "Combine the power of Game Framework and PlayMaker.\n\nPlaymaker integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.", "Asset Store (Play Maker)", @"Assets\PlayMaker", _playMakerIcon, true);
 
             GUILayout.Label("Asset developers - contact us to get your asset listed here!");
 
@@ -86,13 +89,16 @@ namespace GameFramework.GameFramework.Editor {
 
             GUILayout.BeginHorizontal();
             GUI.enabled = folder == null || AssetDatabase.IsValidFolder(folder);
-            if (GUILayout.Toggle(PlayerSettingsHelper.IsScriptingDefineSet(defineName), ""))
+            if (defineName != null)
             {
-                PlayerSettingsHelper.AddScriptingDefineAllTargets(defineName);
-            }
-            else
-            {
-                PlayerSettingsHelper.RemoveScriptingDefineAllTargets(defineName);
+                if (GUILayout.Toggle(PlayerSettingsHelper.IsScriptingDefineSet(defineName), ""))
+                {
+                    PlayerSettingsHelper.AddScriptingDefineAllTargets(defineName);
+                }
+                else
+                {
+                    PlayerSettingsHelper.RemoveScriptingDefineAllTargets(defineName);
+                }
             }
             GUI.enabled = true;
             GUILayout.Label(assetName, new GUIStyle(EditorStyles.boldLabel) { padding = new RectOffset(5, 5, 5, 5), margin = new RectOffset(0, 0, 0, 0) });
