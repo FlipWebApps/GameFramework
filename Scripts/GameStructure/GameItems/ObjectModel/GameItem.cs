@@ -518,6 +518,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
+            foreach(var scoreConfigurationEntry in GameConfiguration.Instance.ScoreConfigurationEntries) {
+                //Debug.Log(scoreConfigurationEntry.Key);
+            }
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
             if (StartUnlocked) {
