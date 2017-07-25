@@ -404,6 +404,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         public int OldHighScore { get; set; }
 
+        ScoreEntry[] _scoreEntries { get; set; }
+
         /// <summary>
         /// Whether the current item is unlocked. 
         /// </summary>
@@ -518,8 +520,12 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            foreach(var scoreConfigurationEntry in GameConfiguration.Instance.ScoreConfigurationEntries) {
-                //Debug.Log(scoreConfigurationEntry.Key);
+            _scoreEntries = new ScoreEntry[GameConfiguration.Instance.ScoreConfigurationEntries.Count];
+            for (var scoreEntryCount = 0; scoreEntryCount < _scoreEntries.Length; scoreEntryCount++) { 
+                var scoreEntry = new ScoreEntry() {
+                    ScoreConfigurationEntry = GameConfiguration.Instance.ScoreConfigurationEntries[scoreEntryCount]
+                };
+                _scoreEntries[scoreEntryCount] = scoreEntry;
             }
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
@@ -1597,4 +1603,31 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #endregion extra classes for configuration
     }
 
+
+
+    /// <summary>
+    /// Runtime information about a single score entry including the key that identifies it.
+    /// </summary>
+    public class ScoreEntry
+    {
+        /// <summary>
+        /// A reference to the ScoreConfigurationEntry that this entry is based upon.
+        /// </summary>
+        public ScoreConfigurationEntry ScoreConfigurationEntry { get; set; }
+
+        #region Runtime Properties
+        ///// <summary>
+        ///// A unique key that identifies this entry.
+        ///// </summary>
+        //public string Key
+        //{
+        //    get
+        //    {
+        //        return _key;
+        //    }
+        //}
+        //[SerializeField]
+        //string _key;
+        #endregion Runtime Properties
+    }
 }

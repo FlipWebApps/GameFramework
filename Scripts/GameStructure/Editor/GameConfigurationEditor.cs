@@ -46,7 +46,7 @@ namespace GameFramework.GameStructure.Editor
         {
             serializedObject.Update();
 
-            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow", "Add a Game Configuration to your Resources folder (named GameConfiguration) to control fixed aspects of your game.\n\nNOTE: These are seperate from GameManager so that they can be loaded and used independently.\n\nIf you experience any problems or have improvement suggestions then please get in contact. Your support is appreciated.", _mainHelpRect);
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow", "Add a Game Configuration to your Resources folder (named GameConfiguration) to control fixed aspects of your game.\n\nNOTE: These are seperate from the GameManager component so that they can be loaded and used independently.\n\nIf you experience any problems or have improvement suggestions then please get in contact. Your support is appreciated.", _mainHelpRect);
 
             // Main tabs and display
             //_currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Scores" });
@@ -63,7 +63,7 @@ namespace GameFramework.GameStructure.Editor
 
         void DrawScores() 
         {
-            _scoresHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow.Scores", "By default GameItems such as Player, Level, etc. have support for a standard Score counter and Coins.\n\nYou can add additional 'Score' counters here that you might need in your game e.g. Gems, ... These will then be available for use from code or within the components that reference a score such as 'ShowScore'.", _mainHelpRect);
+            _scoresHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow.Scores", "By default GameItems such as Player, Level, etc. have support for a standard Score counter and Coins.\n\nYou can add additional 'Score' counters here that you might need in your game e.g. Gems, ... These will then be available for use in all GameItems from code or within the components that reference a score such as 'ShowScore'.", _scoresHelpRect);
 
             EditorGUILayout.BeginVertical("Box");
             EditorGUI.indentLevel++;

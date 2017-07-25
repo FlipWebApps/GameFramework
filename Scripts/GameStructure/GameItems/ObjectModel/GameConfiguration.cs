@@ -77,7 +77,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
 
     /// <summary>
-    /// Holds information about a single score entry including the key that identifies it.
+    /// Configuration information about a single score entry including the key that identifies it.
     /// </summary>
     [System.Serializable]
     public class ScoreConfigurationEntry
@@ -104,6 +104,5 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #region Runtime Properties
         // Value (float / int)
         #endregion Runtime Properties
-
     }
 }
