@@ -25,6 +25,7 @@ using GameFramework.GameStructure;
 using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
+using GameFramework.GameStructure.Game.ObjectModel;
 
 namespace GameFramework.Debugging.Components.Editor {
 
@@ -383,6 +384,37 @@ namespace GameFramework.Debugging.Components.Editor {
             GameManager.Instance.Levels.Selected.StarWon(4,
                 GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(4), "4", GUILayout.Width(50)));
             GUILayout.EndHorizontal();
+
+
+            // level score
+            foreach (var counterEntry in GameConfiguration.Instance.CharacterCounterConfigurationEntries)
+            {
+                GUILayout.BeginHorizontal();
+                var level = GameManager.Instance.Levels.Selected;
+                var amount = level.GetCounter(counterEntry.Key);
+                GUILayout.Label(string.Format("{0} ({1})", counterEntry.Key, amount), GUILayout.Width(100));
+                if (GUILayout.Button("-100", GUILayout.Width(50)))
+                {
+                    level.DecreaseCounter(counterEntry.Key, 100);
+                }
+                if (GUILayout.Button("-10", GUILayout.Width(50)))
+                {
+                    level.DecreaseCounter(counterEntry.Key, 10);
+                }
+                if (GUILayout.Button("0", GUILayout.Width(50)))
+                {
+                    level.SetCounter(counterEntry.Key, 0);
+                }
+                if (GUILayout.Button("+10", GUILayout.Width(50)))
+                {
+                    level.IncreaseCounter(counterEntry.Key, 10);
+                }
+                if (GUILayout.Button("+100", GUILayout.Width(50)))
+                {
+                    level.IncreaseCounter(counterEntry.Key, 100);
+                }
+                GUILayout.EndHorizontal();
+            }
         }
 
         void FreePrizeMenuOptions()

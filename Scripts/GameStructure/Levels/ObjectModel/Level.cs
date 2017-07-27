@@ -19,8 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.Messages;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Levels.ObjectModel
@@ -196,6 +198,15 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// </summary>
         public override string IdentifierBasePrefs { get { return "L"; } }
 
+        /// <summary>
+        /// Override in subclasses to return a list of custom counter configuration entries that should also
+        /// be added to this GameItem.
+        /// </summary>
+        /// <returns></returns>
+        public override List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        {
+            return GameConfiguration.Instance.LevelCounterConfigurationEntries;
+        }
 
         /// <summary>
         /// The number of stars that have been won for this level. Represented as a bitmask.

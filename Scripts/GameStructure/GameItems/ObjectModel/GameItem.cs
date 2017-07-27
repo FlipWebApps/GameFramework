@@ -31,6 +31,7 @@ using GameFramework.Localisation;
 using GameFramework.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
+using GameFramework.GameStructure.Game.ObjectModel;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
@@ -404,7 +405,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         public int OldHighScore { get; set; }
 
-        ScoreEntry[] _scoreEntries { get; set; }
+        CounterEntry[] _counterEntries { get; set; }
 
         /// <summary>
         /// Whether the current item is unlocked. 
@@ -520,12 +521,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Score = 0;
             HighScore = GetSettingInt("HS", 0);
             OldHighScore = HighScore;
-            _scoreEntries = new ScoreEntry[GameConfiguration.Instance.ScoreConfigurationEntries.Count];
-            for (var scoreEntryCount = 0; scoreEntryCount < _scoreEntries.Length; scoreEntryCount++) { 
-                var scoreEntry = new ScoreEntry() {
-                    ScoreConfigurationEntry = GameConfiguration.Instance.ScoreConfigurationEntries[scoreEntryCount]
+
+            // Setup counters.
+            var counterConfigurationEntries = GetCustomCounterConfigurationEntries();
+            var numberOfCounterEntries = counterConfigurationEntries == null ? 0 : counterConfigurationEntries.Count;
+            _counterEntries = new CounterEntry[numberOfCounterEntries];
+            for (var counterEntryCount = 0; counterEntryCount < numberOfCounterEntries; counterEntryCount++)
+            {
+                var counterEntry = new CounterEntry()
+                {
+                    CounterConfigurationEntry = counterConfigurationEntries[counterEntryCount]
                 };
-                _scoreEntries[scoreEntryCount] = scoreEntry;
+                _counterEntries[counterEntryCount] = counterEntry;
+                counterEntry.LoadFromPrefs(this);
             }
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
@@ -740,6 +748,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber); // saved at global level rather than per player.
 
             Variables.UpdatePlayerPrefs(PrefsPrefixPlayer);
+
+            foreach (var counterEntry in _counterEntries)
+                counterEntry.UpdatePlayerPrefs(this);
         }
 
         #region Get Prefab Related
@@ -1397,6 +1408,169 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #endregion
 
+        #region Counter Related
+
+        /// <summary>
+        /// Override in subclasses to return a list of custom counter configuration entries that should also
+        /// be added to this GameItem.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        {
+            return null;
+        }
+
+        CounterEntry GetCounterEntry(int index)
+        {
+            return _counterEntries[index];
+        }
+
+        /// <summary>
+        /// Get the index of a counter so this can be passed for performance later on rather than looking up
+        /// by name each time.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>Index of the counter for later use when increasing / decreasing / getting the value or -1 if a counter with key is not defined.</returns>
+        public int GetCounterIndex(string key)
+        {
+            for (var i = 0; i < _counterEntries.Length; i++)
+                if (_counterEntries[i].CounterConfigurationEntry.Key.Equals(key)) return i;
+            return -1;
+        }
+
+        /// <summary>
+        /// Get the amount that a counter is currently set to
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public int GetCounter(int index)
+        {
+            return GetCounterEntry(index).Amount;
+        }
+
+
+        /// <summary>
+        /// Get the amount that a counter is currently set to
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public int GetCounter(string key)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                return GetCounter(index);
+            return 0;
+        }
+
+        /// <summary>
+        /// Set the amount of a counter
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public void SetCounter(int index, int amount)
+        {
+            GetCounterEntry(index).Amount = amount;
+        }
+
+
+        /// <summary>
+        /// Set the amount of a counter
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public void SetCounter(string key, int amount)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                SetCounter(index, amount);
+        }
+
+        /// <summary>
+        /// Increase a counter by the specified amount
+        /// </summary>
+        public void IncreaseCounter(int index, int amount = 1)
+        {
+            var counter = GetCounterEntry(index);
+            if (counter != null)
+            {
+                counter.Amount += amount;
+                //TODO Batch changes and consider limits
+                //var tempScore = Score + points; // batch updates to avoid sending multiple messages.
+                //Score = Mathf.Max(tempScore, 0);
+                //if (Score > HighScore)
+                //{
+                //    HighScore = Score;
+                //}
+            }
+        }
+
+        /// <summary>
+        /// Increase a counter by the specified amount
+        /// </summary>
+        public void IncreaseCounter(string key, int amount = 1)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                IncreaseCounter(index, amount);
+        }
+
+
+        /// <summary>
+        /// Decrease a counter by the specified amount
+        /// </summary>
+
+        public void DecreaseCounter(int index, int amount = 1)
+        {
+            var counter = GetCounterEntry(index);
+            if (counter != null)
+            {
+                counter.Amount -= amount;
+                //TODO Batch changes and consider limits
+                //var tempScore = Score - points; // batch updates to avoid sending multiple messages.
+                //Score = Mathf.Max(tempScore, 0);
+                //if (Score > HighScore)
+                //{
+                //    HighScore = Score;
+                //}
+            }
+        }
+
+        /// <summary>
+        /// Decrease a counter by the specified amount
+        /// </summary>
+
+        public void DecreaseCounter(string key, int amount = 1)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                DecreaseCounter(index, amount);
+        }
+
+        /// <summary>
+        /// Send a CounterChangedMessage when the counter changes.
+        /// </summary>
+        /// <param name="newCounter"></param>
+        /// <param name="oldCounter"></param>
+        /// You may want to override this in your derived classes to send custom messages.
+        public virtual void SendCounterChangedMessage(int newCounter, int oldCounter)
+        {
+            //GameManager.Messenger.QueueMessage(new CounterChangedMessage(this, newCounter, oldCounter));
+        }
+
+        ///// <summary>
+        ///// Send a HidhScoreChangedMessage when the high score changes.
+        ///// </summary>
+        ///// <param name="newHighScore"></param>
+        ///// <param name="oldHighScore"></param>
+        ///// You may want to override this in your derived classes to send custom messages.
+        //public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
+        //{
+        //    GameManager.Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
+        //}
+        #endregion
+
         #region For setting gameitem instance specific settings
         /// <summary>
         /// Set a string preferences setting that is unique to this GameItem instance
@@ -1600,34 +1774,66 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             [Tooltip("The sprite that will be used for this type unless overridden for a particular language.")]
             public LocalisableSprite LocalisableSprite;
         }
+
+        /// <summary>
+        /// Runtime information about a single counter entry including the key that identifies it.
+        /// </summary>
+        class CounterEntry
+        {
+            /// <summary>
+            /// A reference to the CounterConfigurationEntry that this entry is based upon.
+            /// </summary>
+            public CounterConfigurationEntry CounterConfigurationEntry { get; set; }
+
+            #region Runtime Properties
+
+            /// <summary>
+            /// The current amount that this counter is at.
+            /// </summary>
+            public int Amount
+            {
+                get { return _amount; }
+                set
+                {
+                    if (value < CounterConfigurationEntry.Minimum)
+                        value = CounterConfigurationEntry.Minimum;
+                    _amount = value;
+                }
+            }
+            int _amount;
+
+            ///// <summary>
+            ///// The highest amount that this counter has reached.
+            ///// </summary>
+            //public int HighestAmount { get; set; }
+            #endregion Runtime Properties
+
+            /// <summary>
+            /// Load this item from perferences within the context of the specified GameItem
+            /// </summary>
+            /// <param name="container"></param>
+            public void LoadFromPrefs(GameItem container)
+            {
+                if (CounterConfigurationEntry.PersistChanges)
+                    Amount = container.GetSettingInt("Ctr." + CounterConfigurationEntry.Key, 0);
+                else
+                    Amount = 0;
+            }
+
+            /// <summary>
+            /// Set this item to perferences within the context of the specified GameItem
+            /// </summary>
+            /// <param name="container"></param>
+            public void UpdatePlayerPrefs(GameItem container)
+            {
+                if (CounterConfigurationEntry.PersistChanges)
+                    container.SetSetting("Ctr." + CounterConfigurationEntry.Key, Amount);
+            }
+        }
         #endregion extra classes for configuration
     }
 
 
 
-    /// <summary>
-    /// Runtime information about a single score entry including the key that identifies it.
-    /// </summary>
-    public class ScoreEntry
-    {
-        /// <summary>
-        /// A reference to the ScoreConfigurationEntry that this entry is based upon.
-        /// </summary>
-        public ScoreConfigurationEntry ScoreConfigurationEntry { get; set; }
 
-        #region Runtime Properties
-        ///// <summary>
-        ///// A unique key that identifies this entry.
-        ///// </summary>
-        //public string Key
-        //{
-        //    get
-        //    {
-        //        return _key;
-        //    }
-        //}
-        //[SerializeField]
-        //string _key;
-        #endregion Runtime Properties
-    }
 }
