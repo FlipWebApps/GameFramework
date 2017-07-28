@@ -65,7 +65,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             if (GameItem != null)
             {
-                _textComponent.text = Text.FormatValue(GameItem.GetCounter(_counterIndex));
+                _textComponent.text = Text.FormatValue(GameItem.GetCounterInt(_counterIndex));
             }
         }
     }

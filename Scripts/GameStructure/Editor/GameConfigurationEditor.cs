@@ -42,6 +42,7 @@ namespace GameFramework.GameStructure.Editor
         int _currentTab;
 
         Rect _countersHelpRect;
+        string[] _counterTypeNames = new string[] { "Integer", "Float" };
 
         void OnEnable()
         {
@@ -139,7 +140,7 @@ namespace GameFramework.GameStructure.Editor
                 {
                     var elementProperty = arrayProperty.GetArrayElementAtIndex(i);
                     var keyProperty = elementProperty.FindPropertyRelative("_key");
-                    var minimumProperty = elementProperty.FindPropertyRelative("_minimum");
+                    var counterTypeProperty = elementProperty.FindPropertyRelative("_counterType");
                     var persistChangesProperty = elementProperty.FindPropertyRelative("_persistChanges");
                     var deleted = false;
                     var isSystemEntry = keyProperty.stringValue.Equals("Score") || keyProperty.stringValue.Equals("Coins");
@@ -164,25 +165,61 @@ namespace GameFramework.GameStructure.Editor
                     {
                         EditorGUILayout.PropertyField(keyProperty);
 
-                        GUILayout.BeginHorizontal();
-                        var minimumToggle = EditorGUILayout.Toggle(new GUIContent(minimumProperty.displayName, minimumProperty.tooltip), minimumProperty.intValue != int.MinValue);
-                        if (minimumToggle && minimumProperty.intValue == int.MinValue)
-                            minimumProperty.intValue = 0;
-                        else if (!minimumToggle && minimumProperty.intValue != int.MinValue)
-                            minimumProperty.intValue = int.MinValue;
-                        if (minimumToggle)
-                            EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
-                        GUILayout.EndHorizontal();
+                        counterTypeProperty.enumValueIndex = EditorGUILayout.Popup("Type", counterTypeProperty.enumValueIndex, _counterTypeNames);
 
-                        //GUILayout.BeginHorizontal();
-                        //var maximumToggle = EditorGUILayout.Toggle(new GUIContent(minimumProperty.displayName, minimumProperty.tooltip), minimumProperty.intValue != int.MinValue);
-                        //if (minimumToggle && minimumProperty.intValue == int.MinValue)
-                        //    minimumProperty.intValue = 0;
-                        //else if (!minimumToggle && minimumProperty.intValue != int.MinValue)
-                        //    minimumProperty.intValue = int.MinValue;
-                        //if (minimumToggle)
-                        //    EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
-                        //GUILayout.EndHorizontal();
+                        // display appropriate minimum / maximum field using type min / max as bounds if we are not restricting the limits
+                        if (counterTypeProperty.enumValueIndex == 0)
+                        {
+                            var minimumProperty = elementProperty.FindPropertyRelative("_intMinimum");
+                            GUILayout.BeginHorizontal();
+                            var minimumToggle = EditorGUILayout.Toggle(new GUIContent("Minimum", "The lowest value that this counter can take."), minimumProperty.intValue != int.MinValue);
+                            var isMinimumValue = minimumProperty.intValue == int.MinValue;
+                            if (minimumToggle && isMinimumValue)
+                                minimumProperty.intValue = 0;
+                            else if (!minimumToggle && !isMinimumValue)
+                                minimumProperty.intValue = int.MinValue;
+                            if (minimumToggle)
+                                EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
+                            GUILayout.EndHorizontal();
+
+                            var maximumProperty = elementProperty.FindPropertyRelative("_intMaximum");
+                            GUILayout.BeginHorizontal();
+                            var maximumToggle = EditorGUILayout.Toggle(new GUIContent("Maximum", "The highest value that this counter can take."), maximumProperty.intValue != int.MaxValue);
+                            var isMaximumValue = maximumProperty.intValue == int.MaxValue;
+                            if (maximumToggle && isMaximumValue)
+                                maximumProperty.intValue = 0;
+                            else if (!maximumToggle && !isMaximumValue)
+                                maximumProperty.intValue = int.MaxValue;
+                            if (maximumToggle)
+                                EditorGUILayout.PropertyField(maximumProperty, GUIContent.none);
+                            GUILayout.EndHorizontal();
+                        }
+                        else if (counterTypeProperty.enumValueIndex == 1)
+                        {
+                            var minimumProperty = elementProperty.FindPropertyRelative("_floatMinimum");
+                            GUILayout.BeginHorizontal();
+                            var minimumToggle = EditorGUILayout.Toggle(new GUIContent("Minimum", "The lowest value that this counter can take."), !Mathf.Approximately(minimumProperty.floatValue, float.MinValue));
+                            var isMinimumValue = Mathf.Approximately(minimumProperty.floatValue, float.MinValue);
+                            if (minimumToggle && isMinimumValue)
+                                minimumProperty.floatValue = 0;
+                            else if (!minimumToggle && !isMinimumValue)
+                                minimumProperty.floatValue = float.MinValue;
+                            if (minimumToggle)
+                                EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
+                            GUILayout.EndHorizontal();
+
+                            var maximumProperty = elementProperty.FindPropertyRelative("_floatMaximum");
+                            GUILayout.BeginHorizontal();
+                            var maximumToggle = EditorGUILayout.Toggle(new GUIContent("Maximum", "The highest value that this counter can take."), !Mathf.Approximately(maximumProperty.floatValue, float.MaxValue));
+                            var isMaximumValue = Mathf.Approximately(maximumProperty.floatValue, float.MaxValue);
+                            if (maximumToggle && isMaximumValue)
+                                maximumProperty.floatValue = 0;
+                            else if (!maximumToggle && !isMaximumValue)
+                                maximumProperty.floatValue = float.MaxValue;
+                            if (maximumToggle)
+                                EditorGUILayout.PropertyField(maximumProperty, GUIContent.none);
+                            GUILayout.EndHorizontal();
+                        }
 
                         EditorGUILayout.PropertyField(persistChangesProperty);
                     }
@@ -212,12 +249,13 @@ namespace GameFramework.GameStructure.Editor
             var newElement =
                 arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
             newElement.isExpanded = true;
-            var keyProperty = newElement.FindPropertyRelative("_key");
-            keyProperty.stringValue = null;
-            var minimumProperty = newElement.FindPropertyRelative("_minimum");
-            minimumProperty.intValue = 0;
-            var persistChangesProperty = newElement.FindPropertyRelative("_persistChanges");
-            persistChangesProperty.boolValue = false;
+            newElement.FindPropertyRelative("_key").stringValue = null;
+            newElement.FindPropertyRelative("_counterType").enumValueIndex = 0;
+            newElement.FindPropertyRelative("_intMinimum").intValue = 0;
+            newElement.FindPropertyRelative("_floatMinimum").floatValue = 0;
+            newElement.FindPropertyRelative("_intMaximum").intValue = int.MaxValue;
+            newElement.FindPropertyRelative("_floatMaximum").floatValue = float.MaxValue;
+            newElement.FindPropertyRelative("_persistChanges").boolValue = false;
         }
     }
 }

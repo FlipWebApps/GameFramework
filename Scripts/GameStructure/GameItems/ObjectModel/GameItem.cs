@@ -1410,6 +1410,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #region Counter Related
 
+        #region Counter Access
         /// <summary>
         /// Override in subclasses to return a list of custom counter configuration entries that should also
         /// be added to this GameItem.
@@ -1437,15 +1438,17 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 if (_counterEntries[i].CounterConfigurationEntry.Key.Equals(key)) return i;
             return -1;
         }
+        #endregion Counter Access
 
+        #region IntCounter
         /// <summary>
         /// Get the amount that a counter is currently set to
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public int GetCounter(int index)
+        public int GetCounterInt(int index)
         {
-            return GetCounterEntry(index).Amount;
+            return GetCounterEntry(index).IntAmount;
         }
 
 
@@ -1454,11 +1457,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public int GetCounter(string key)
+        public int GetCounterInt(string key)
         {
             var index = GetCounterIndex(key);
             if (index != -1)
-                return GetCounter(index);
+                return GetCounterInt(index);
             return 0;
         }
 
@@ -1470,7 +1473,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <returns></returns>
         public void SetCounter(int index, int amount)
         {
-            GetCounterEntry(index).Amount = amount;
+            GetCounterEntry(index).IntAmount = amount;
         }
 
 
@@ -1495,10 +1498,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             var counter = GetCounterEntry(index);
             if (counter != null)
             {
-                counter.Amount += amount;
+                counter.IntAmount += amount;
                 //TODO Batch changes and consider limits
                 //var tempScore = Score + points; // batch updates to avoid sending multiple messages.
-                //Score = Mathf.Max(tempScore, 0);
                 //if (Score > HighScore)
                 //{
                 //    HighScore = Score;
@@ -1520,16 +1522,14 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Decrease a counter by the specified amount
         /// </summary>
-
         public void DecreaseCounter(int index, int amount = 1)
         {
             var counter = GetCounterEntry(index);
             if (counter != null)
             {
-                counter.Amount -= amount;
+                counter.IntAmount -= amount;
                 //TODO Batch changes and consider limits
                 //var tempScore = Score - points; // batch updates to avoid sending multiple messages.
-                //Score = Mathf.Max(tempScore, 0);
                 //if (Score > HighScore)
                 //{
                 //    HighScore = Score;
@@ -1547,6 +1547,116 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (index != -1)
                 DecreaseCounter(index, amount);
         }
+        #endregion IntCounter
+
+        #region Float Counter
+        /// <summary>
+        /// Get the amount that a counter is currently set to
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public float GetCounterFloat(int index)
+        {
+            return GetCounterEntry(index).FloatAmount;
+        }
+
+
+        /// <summary>
+        /// Get the amount that a counter is currently set to
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public float GetCounterFloat(string key)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                return GetCounterFloat(index);
+            return 0;
+        }
+
+        /// <summary>
+        /// Set the amount of a counter
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public void SetCounter(int index, float amount)
+        {
+            GetCounterEntry(index).FloatAmount = amount;
+        }
+
+
+        /// <summary>
+        /// Set the amount of a counter
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public void SetCounter(string key, float amount)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                SetCounter(index, amount);
+        }
+
+        /// <summary>
+        /// Increase a counter by the specified amount
+        /// </summary>
+        public void IncreaseCounter(int index, float amount = 1)
+        {
+            var counter = GetCounterEntry(index);
+            if (counter != null)
+            {
+                counter.FloatAmount += amount;
+                //TODO Batch changes and consider limits
+                //var tempScore = Score + points; // batch updates to avoid sending multiple messages.
+                //if (Score > HighScore)
+                //{
+                //    HighScore = Score;
+                //}
+            }
+        }
+
+        /// <summary>
+        /// Increase a counter by the specified amount
+        /// </summary>
+        public void IncreaseCounter(string key, float amount = 1)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                IncreaseCounter(index, amount);
+        }
+
+
+        /// <summary>
+        /// Decrease a counter by the specified amount
+        /// </summary>
+        public void DecreaseCounter(int index, float amount = 1)
+        {
+            var counter = GetCounterEntry(index);
+            if (counter != null)
+            {
+                counter.FloatAmount -= amount;
+                //TODO Batch changes and consider limits
+                //var tempScore = Score - points; // batch updates to avoid sending multiple messages.
+                //if (Score > HighScore)
+                //{
+                //    HighScore = Score;
+                //}
+            }
+        }
+
+        /// <summary>
+        /// Decrease a counter by the specified amount
+        /// </summary>
+
+        public void DecreaseCounter(string key, float amount = 1)
+        {
+            var index = GetCounterIndex(key);
+            if (index != -1)
+                DecreaseCounter(index, amount);
+        }
+        #endregion Float Counter
 
         /// <summary>
         /// Send a CounterChangedMessage when the counter changes.
@@ -1790,17 +1900,32 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             /// <summary>
             /// The current amount that this counter is at.
             /// </summary>
-            public int Amount
+            public int IntAmount
             {
-                get { return _amount; }
+                get { return _intAmount; }
                 set
                 {
-                    if (value < CounterConfigurationEntry.Minimum)
-                        value = CounterConfigurationEntry.Minimum;
-                    _amount = value;
+                    if (value < CounterConfigurationEntry.IntMinimum)
+                        value = CounterConfigurationEntry.IntMinimum;
+                    _intAmount = value;
                 }
             }
-            int _amount;
+            int _intAmount;
+
+            /// <summary>
+            /// The current amount that this counter is at.
+            /// </summary>
+            public float FloatAmount
+            {
+                get { return _floatAmount; }
+                set
+                {
+                    if (value < CounterConfigurationEntry.FloatMinimum)
+                        value = CounterConfigurationEntry.FloatMinimum;
+                    _floatAmount = value;
+                }
+            }
+            float _floatAmount;
 
             ///// <summary>
             ///// The highest amount that this counter has reached.
@@ -1815,9 +1940,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             public void LoadFromPrefs(GameItem container)
             {
                 if (CounterConfigurationEntry.PersistChanges)
-                    Amount = container.GetSettingInt("Ctr." + CounterConfigurationEntry.Key, 0);
+                    IntAmount = container.GetSettingInt("Ctr." + CounterConfigurationEntry.Key, 0);
                 else
-                    Amount = 0;
+                    IntAmount = 0;
             }
 
             /// <summary>
@@ -1827,7 +1952,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             public void UpdatePlayerPrefs(GameItem container)
             {
                 if (CounterConfigurationEntry.PersistChanges)
-                    container.SetSetting("Ctr." + CounterConfigurationEntry.Key, Amount);
+                    container.SetSetting("Ctr." + CounterConfigurationEntry.Key, IntAmount);
             }
         }
         #endregion extra classes for configuration

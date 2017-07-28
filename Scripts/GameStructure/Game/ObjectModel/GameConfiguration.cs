@@ -153,6 +153,8 @@ namespace GameFramework.GameStructure.Game.ObjectModel
     [System.Serializable]
     public class CounterConfigurationEntry
     {
+        public enum CounterTypeEnum { Int, Float }
+
         #region Configuration Properties
         /// <summary>
         /// A unique key that identifies this counter.
@@ -173,40 +175,94 @@ namespace GameFramework.GameStructure.Game.ObjectModel
         string _key;
 
         /// <summary>
-        /// The lowest value that this counter can take.
+        /// The type that this counter represents.
         /// </summary>
-        public int Minimum
+        public CounterTypeEnum CounterType
         {
             get
             {
-                return _minimum;
+                return _counterType;
             }
             set
             {
-                _minimum = value;
+                _counterType = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The type that this counter represents.")]
+        CounterTypeEnum _counterType;
+
+        /// <summary>
+        /// The lowest value that this counter can take (if it is an int type).
+        /// </summary>
+        public int IntMinimum
+        {
+            get
+            {
+                return _intMinimum;
+            }
+            set
+            {
+                _intMinimum = value;
             }
         }
         [SerializeField]
         [Tooltip("The lowest value that this counter can take.")]
-        int _minimum;
+        int _intMinimum;
 
         /// <summary>
-        /// The highest value that this counter can take.
+        /// The lowest value that this counter can take (if it is an float type).
         /// </summary>
-        public int Maximum
+        public float FloatMinimum
         {
             get
             {
-                return _maximum;
+                return _floatMinimum;
             }
             set
             {
-                _maximum = value;
+                _floatMinimum = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The lowest value that this counter can take.")]
+        float _floatMinimum;
+
+        /// <summary>
+        /// The lowest value that this counter can take (if it is an int type).
+        /// </summary>
+        public int IntMaximum
+        {
+            get
+            {
+                return _intMaximum;
+            }
+            set
+            {
+                _intMaximum = value;
             }
         }
         [SerializeField]
         [Tooltip("The highest value that this counter can take.")]
-        int _maximum;
+        int _intMaximum = int.MaxValue;
+
+        /// <summary>
+        /// The lowest value that this counter can take (if it is an float type).
+        /// </summary>
+        public float FloatMaximum
+        {
+            get
+            {
+                return _floatMaximum;
+            }
+            set
+            {
+                _floatMaximum = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The highest value that this counter can take.")]
+        float _floatMaximum = float.MaxValue;
 
         /// <summary>
         /// Whether changes should be saved across game sessions

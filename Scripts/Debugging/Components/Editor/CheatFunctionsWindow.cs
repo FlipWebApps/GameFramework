@@ -368,7 +368,7 @@ namespace GameFramework.Debugging.Components.Editor {
             foreach (var counterEntry in counters)
             {
                 GUILayout.BeginHorizontal();
-                var amount = gameItem.GetCounter(counterEntry.Key);
+                var amount = gameItem.GetCounterInt(counterEntry.Key);
                 GUILayout.Label(string.Format("{0} ({1})", counterEntry.Key, amount), GUILayout.Width(100));
                 if (GUILayout.Button("-100", GUILayout.Width(50)))
                 {
