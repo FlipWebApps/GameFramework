@@ -19,7 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Characters.ObjectModel
@@ -39,5 +41,15 @@ namespace GameFramework.GameStructure.Characters.ObjectModel
         /// A unique shortened version of IdentifierBase to save memory.
         /// </summary>
         public override string IdentifierBasePrefs { get { return "C"; } }
+
+        /// <summary>
+        /// Override in subclasses to return a list of custom counter configuration entries that should also
+        /// be added to this GameItem.
+        /// </summary>
+        /// <returns></returns>
+        public override List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        {
+            return GameConfiguration.Instance.CharacterCounterConfigurationEntries;
+        }
     }
 }

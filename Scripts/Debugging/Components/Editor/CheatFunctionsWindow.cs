@@ -26,6 +26,8 @@ using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
+using System.Collections.Generic;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 
 namespace GameFramework.Debugging.Components.Editor {
 
@@ -120,68 +122,48 @@ namespace GameFramework.Debugging.Components.Editor {
 
         private void PlayerMenuOptions()
         {
+            if (!Application.isPlaying)
+            {
+                GUILayout.Label("These functions are only available in play mode.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+            if (!GameManager.IsActive || GameManager.Instance.Players == null || GameManager.Instance.Players.Selected == null)
+            {
+                GUILayout.Label("These functions are only available when a GameManager is active and a player selected.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+
             // player
             GUILayout.Label("Player", EditorStyles.boldLabel);
             // lives
             GUILayout.BeginHorizontal();
-            var playerLives = GameManager.IsActive ? " (" + GameManager.Instance.Player.Lives + ")" : "";
-            GUILayout.Label("Lives" + playerLives, GUILayout.Width(100));
+            GUILayout.Label("Lives (" + GameManager.Instance.Player.Lives + ")", GUILayout.Width(100));
             if (GUILayout.Button("-1", GUILayout.Width(50)))
             {
-                if (Application.isPlaying && GameManager.IsActive)
-                {
-                    GameManager.Instance.Player.Lives -= 1;
-                }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
-                }
+                GameManager.Instance.Player.Lives -= 1;
             }
             if (GUILayout.Button("+1", GUILayout.Width(50)))
             {
-                if (Application.isPlaying && GameManager.IsActive)
-                {
-                    GameManager.Instance.Player.Lives += 1;
-                }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
-                }
+                GameManager.Instance.Player.Lives += 1;
             }
             GUILayout.EndHorizontal();
             // health
             GUILayout.BeginHorizontal();
-            var playerHealth = GameManager.IsActive ? " (" + GameManager.Instance.Player.Health + ")" : "";
-            GUILayout.Label("Health" + playerHealth, GUILayout.Width(100));
+            GUILayout.Label("Health (" + GameManager.Instance.Player.Health + ")", GUILayout.Width(100));
             if (GUILayout.Button("-0.1", GUILayout.Width(50)))
             {
-                if (Application.isPlaying && GameManager.IsActive)
-                {
-                    // only assign once!
-                    GameManager.Instance.Player.Health = GameManager.Instance.Player.Health - 0.1f < 0 ? 0 : GameManager.Instance.Player.Health - 0.1f;
-                }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
-                }
+                // only assign once!
+                GameManager.Instance.Player.Health = GameManager.Instance.Player.Health - 0.1f < 0 ? 0 : GameManager.Instance.Player.Health - 0.1f;
             }
             if (GUILayout.Button("+0.1", GUILayout.Width(50)))
             {
-                if (Application.isPlaying && GameManager.IsActive)
-                {
-                    GameManager.Instance.Player.Health += 0.1f;
-                    GameManager.Instance.Player.Health = Mathf.Min(GameManager.Instance.Player.Health, 1);
-                }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager.");
-                }
+                GameManager.Instance.Player.Health += 0.1f;
+                GameManager.Instance.Player.Health = Mathf.Min(GameManager.Instance.Player.Health, 1);
             }
             GUILayout.EndHorizontal();
             // player score
             GUILayout.BeginHorizontal();
-            string playerScore = GameManager.IsActive ? " (" + GameManager.Instance.Player.Score + ")" : "";
-            GUILayout.Label("Score" + playerScore, GUILayout.Width(100));
+            GUILayout.Label("Score (" + GameManager.Instance.Player.Score + ")", GUILayout.Width(100));
             if (GUILayout.Button("-100", GUILayout.Width(50)))
             {
                 UpdatePlayerScore(-100);
@@ -206,8 +188,7 @@ namespace GameFramework.Debugging.Components.Editor {
 
             // player coins
             GUILayout.BeginHorizontal();
-            string playerCoins = GameManager.IsActive ? " (" + GameManager.Instance.Player.Coins + ")" : "";
-            GUILayout.Label("Coins" + playerCoins, GUILayout.Width(100));
+            GUILayout.Label("Coins (" + GameManager.Instance.Player.Coins + ")", GUILayout.Width(100));
             if (GUILayout.Button("-100", GUILayout.Width(50)))
             {
                 UpdatePlayerCoins(-100);
@@ -229,49 +210,50 @@ namespace GameFramework.Debugging.Components.Editor {
                 UpdatePlayerCoins(100);
             }
             GUILayout.EndHorizontal();
+
+            ShowCounters(GameConfiguration.Instance.PlayerCounterConfigurationEntries, GameManager.Instance.Players.Selected);
         }
 
         private void WorldMenuOptions()
         {
+            if (!Application.isPlaying)
+            {
+                GUILayout.Label("These functions are only available in play mode.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+            if (!GameManager.IsActive || GameManager.Instance.Worlds == null || GameManager.Instance.Worlds .Selected == null)
+            {
+                GUILayout.Label("These functions are only available when a GameManager is active and a world selected.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
+                return;
+            }
+
             GUILayout.Label("World", EditorStyles.boldLabel);
             // general
             GUILayout.BeginHorizontal();
             GUILayout.Label("Current Worlds", GUILayout.Width(100));
             if (GUILayout.Button("Unlock All", GUILayout.Width(100)))
             {
-                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Worlds != null)
+                foreach (var world in GameManager.Instance.Worlds.Items)
                 {
-                    foreach (var world in GameManager.Instance.Worlds.Items)
-                    {
-                        world.IsUnlocked = true;
-                        world.IsUnlockedAnimationShown = true;
-                        world.UpdatePlayerPrefs();
-                    }
-                    PlayerPrefs.Save();
+                    world.IsUnlocked = true;
+                    world.IsUnlockedAnimationShown = true;
+                    world.UpdatePlayerPrefs();
                 }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have worlds setup.");
-                }
+                PlayerPrefs.Save();
             }
             if (GUILayout.Button("Lock All", GUILayout.Width(100)))
             {
-                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Worlds != null)
+                foreach (var world in GameManager.Instance.Worlds.Items)
                 {
-                    foreach (var world in GameManager.Instance.Worlds.Items)
-                    {
-                        world.IsUnlocked = false;
-                        world.IsUnlockedAnimationShown = false;
-                        world.UpdatePlayerPrefs();
-                    }
-                    PlayerPrefs.Save();
+                    world.IsUnlocked = false;
+                    world.IsUnlockedAnimationShown = false;
+                    world.UpdatePlayerPrefs();
                 }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have worlds setup.");
-                }
+                PlayerPrefs.Save();
             }
             GUILayout.EndHorizontal();
+
+            ShowCounters(GameConfiguration.Instance.WorldCounterConfigurationEntries, GameManager.Instance.Worlds.Selected);
         }
 
         private void LevelMenuOptions()
@@ -281,7 +263,7 @@ namespace GameFramework.Debugging.Components.Editor {
                 GUILayout.Label("These functions are only available in play mode.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
                 return;
             }
-            if (!GameManager.IsActive || GameManager.Instance.Levels == null)
+            if (!GameManager.IsActive || GameManager.Instance.Levels == null || GameManager.Instance.Levels.Selected == null)
             {
                 GUILayout.Label("These functions are only available when a GameManager is active and a level selected.", EditorHelper.ItalicLabelStyle(TextAnchor.MiddleCenter), GUILayout.ExpandWidth(true));
                 return;
@@ -303,20 +285,13 @@ namespace GameFramework.Debugging.Components.Editor {
             }
             if (GUILayout.Button("Lock All", GUILayout.Width(100)))
             {
-                if (Application.isPlaying && GameManager.IsActive && GameManager.Instance.Levels != null)
+                foreach (var level in GameManager.Instance.Levels.Items)
                 {
-                    foreach (var level in GameManager.Instance.Levels.Items)
-                    {
-                        level.IsUnlocked = false;
-                        level.IsUnlockedAnimationShown = false;
-                        level.UpdatePlayerPrefs();
-                    }
-                    PlayerPrefs.Save();
+                    level.IsUnlocked = false;
+                    level.IsUnlockedAnimationShown = false;
+                    level.UpdatePlayerPrefs();
                 }
-                else
-                {
-                    Debug.LogWarning("This only works in play mode. You also need to add a GameManager and have levels setup.");
-                }
+                PlayerPrefs.Save();
             }
             GUILayout.EndHorizontal();
 
@@ -385,33 +360,35 @@ namespace GameFramework.Debugging.Components.Editor {
                 GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(4), "4", GUILayout.Width(50)));
             GUILayout.EndHorizontal();
 
+            ShowCounters(GameConfiguration.Instance.LevelCounterConfigurationEntries, GameManager.Instance.Levels.Selected);
+        }
 
-            // level score
-            foreach (var counterEntry in GameConfiguration.Instance.CharacterCounterConfigurationEntries)
+        static void ShowCounters(List<CounterConfigurationEntry> counters, GameItem gameItem)
+        {
+            foreach (var counterEntry in counters)
             {
                 GUILayout.BeginHorizontal();
-                var level = GameManager.Instance.Levels.Selected;
-                var amount = level.GetCounter(counterEntry.Key);
+                var amount = gameItem.GetCounter(counterEntry.Key);
                 GUILayout.Label(string.Format("{0} ({1})", counterEntry.Key, amount), GUILayout.Width(100));
                 if (GUILayout.Button("-100", GUILayout.Width(50)))
                 {
-                    level.DecreaseCounter(counterEntry.Key, 100);
+                    gameItem.DecreaseCounter(counterEntry.Key, 100);
                 }
                 if (GUILayout.Button("-10", GUILayout.Width(50)))
                 {
-                    level.DecreaseCounter(counterEntry.Key, 10);
+                    gameItem.DecreaseCounter(counterEntry.Key, 10);
                 }
                 if (GUILayout.Button("0", GUILayout.Width(50)))
                 {
-                    level.SetCounter(counterEntry.Key, 0);
+                    gameItem.SetCounter(counterEntry.Key, 0);
                 }
                 if (GUILayout.Button("+10", GUILayout.Width(50)))
                 {
-                    level.IncreaseCounter(counterEntry.Key, 10);
+                    gameItem.IncreaseCounter(counterEntry.Key, 10);
                 }
                 if (GUILayout.Button("+100", GUILayout.Width(50)))
                 {
-                    level.IncreaseCounter(counterEntry.Key, 100);
+                    gameItem.IncreaseCounter(counterEntry.Key, 100);
                 }
                 GUILayout.EndHorizontal();
             }

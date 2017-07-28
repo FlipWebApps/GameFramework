@@ -82,6 +82,12 @@ namespace GameFramework.GameStructure.Editor
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            // reload singleton so changes are available to other components.
+            if (GUI.changed)
+            {
+                GameConfiguration.ReloadSingletonGameConfiguration();
+            }
         }
 
 
@@ -123,11 +129,9 @@ namespace GameFramework.GameStructure.Editor
 
         private void DrawCounters(SerializedProperty arrayProperty)
         {
-            _countersHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow.Counter", "By default GameItems such as Player, Level, etc. have support for scores and coins.\n\nYou can add additional 'Counter' counters here that you might need in your game e.g. Gems, ... These will then be available for use in all GameItems from code or within the components that reference a counter such as 'ShowCounter'.", _countersHelpRect);
-
-
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField(new GUIContent("Counters", "By default GameItems such as Player, Level, etc. have support for scores and coins.\n\nYou can add additional 'Counter' counters here that you might need in your game e.g. Gems, ... These will then be available for use in all GameItems from code or within the components that reference a counter such as 'ShowCounter'."), EditorStyles.boldLabel);
+            _countersHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow.Counter", "By default GameItems such as Player, Level, etc. have support for scores and coins.\n\nYou can add additional 'Counter' counters here that you might need in your game e.g. Gems, ... These will then be available for use in all GameItems from code or within the components that reference a counter such as 'ShowCounter'.", _countersHelpRect);
 
             if (arrayProperty.arraySize > 0)
             {
@@ -159,7 +163,27 @@ namespace GameFramework.GameStructure.Editor
                     if (!deleted && elementProperty.isExpanded)
                     {
                         EditorGUILayout.PropertyField(keyProperty);
-                        EditorGUILayout.PropertyField(minimumProperty);
+
+                        GUILayout.BeginHorizontal();
+                        var minimumToggle = EditorGUILayout.Toggle(new GUIContent(minimumProperty.displayName, minimumProperty.tooltip), minimumProperty.intValue != int.MinValue);
+                        if (minimumToggle && minimumProperty.intValue == int.MinValue)
+                            minimumProperty.intValue = 0;
+                        else if (!minimumToggle && minimumProperty.intValue != int.MinValue)
+                            minimumProperty.intValue = int.MinValue;
+                        if (minimumToggle)
+                            EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
+                        GUILayout.EndHorizontal();
+
+                        //GUILayout.BeginHorizontal();
+                        //var maximumToggle = EditorGUILayout.Toggle(new GUIContent(minimumProperty.displayName, minimumProperty.tooltip), minimumProperty.intValue != int.MinValue);
+                        //if (minimumToggle && minimumProperty.intValue == int.MinValue)
+                        //    minimumProperty.intValue = 0;
+                        //else if (!minimumToggle && minimumProperty.intValue != int.MinValue)
+                        //    minimumProperty.intValue = int.MinValue;
+                        //if (minimumToggle)
+                        //    EditorGUILayout.PropertyField(minimumProperty, GUIContent.none);
+                        //GUILayout.EndHorizontal();
+
                         EditorGUILayout.PropertyField(persistChangesProperty);
                     }
                     EditorGUILayout.EndVertical();

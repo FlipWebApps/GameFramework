@@ -19,8 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.ObjectModel;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -48,6 +50,16 @@ namespace GameFramework.GameStructure.Worlds.ObjectModel
         /// A unique shortened version of IdentifierBase to save memory.
         /// </summary>
         public override string IdentifierBasePrefs { get { return "W"; } }
+
+        /// <summary>
+        /// Override in subclasses to return a list of custom counter configuration entries that should also
+        /// be added to this GameItem.
+        /// </summary>
+        /// <returns></returns>
+        public override List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        {
+            return GameConfiguration.Instance.LevelCounterConfigurationEntries;
+        }
 
         /// <summary>
         /// Return the total star count for all levels contained within this world.

@@ -45,17 +45,27 @@ namespace GameFramework.GameStructure.Game.ObjectModel
                 if (_instance == null)
                     _instance = LoadSingletonGameConfiguration();
                 if (_instance == null)
-                    _instance = CreateInstance<GameConfiguration>();
+                    _instance = CreateInstance<GameConfiguration>(); // fallback to default
                 return _instance;
             }
         }
 
         /// <summary>
-        /// To allow for reloading - e.g. so the static instance gets updated if we make changes in the editor
+        /// Load the default GameConfiguration
         /// </summary>
-        public static GameConfiguration LoadSingletonGameConfiguration()
+        static GameConfiguration LoadSingletonGameConfiguration()
         {
             return GameManager.LoadResource<GameConfiguration>("GameConfiguration");
+        }
+
+        /// <summary>
+        /// To allow for reloading - e.g. so the static instance gets updated if we make changes in the editor
+        /// </summary>
+        public static void ReloadSingletonGameConfiguration()
+        {
+            var config = LoadSingletonGameConfiguration();
+            if (config != null)
+                _instance = config;
         }
         #endregion Static Singleton Reference
 
@@ -179,6 +189,24 @@ namespace GameFramework.GameStructure.Game.ObjectModel
         [SerializeField]
         [Tooltip("The lowest value that this counter can take.")]
         int _minimum;
+
+        /// <summary>
+        /// The highest value that this counter can take.
+        /// </summary>
+        public int Maximum
+        {
+            get
+            {
+                return _maximum;
+            }
+            set
+            {
+                _maximum = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The highest value that this counter can take.")]
+        int _maximum;
 
         /// <summary>
         /// Whether changes should be saved across game sessions

@@ -19,8 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Players.Messages;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Players.ObjectModel
@@ -41,6 +43,15 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// </summary>
         public override string IdentifierBasePrefs { get { return "P"; } }
 
+        /// <summary>
+        /// Override in subclasses to return a list of custom counter configuration entries that should also
+        /// be added to this GameItem.
+        /// </summary>
+        /// <returns></returns>
+        public override List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        {
+            return GameConfiguration.Instance.PlayerCounterConfigurationEntries;
+        }
 
         /// <summary>
         /// A custom name that you can assign to the player. 
