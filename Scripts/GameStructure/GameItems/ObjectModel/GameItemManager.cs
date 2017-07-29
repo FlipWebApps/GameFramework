@@ -31,6 +31,7 @@ using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using GameFramework.GameStructure.Game.ObjectModel;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
@@ -199,7 +200,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 if (loadedItem != null)
                 {
                     Items[i] = loadedItem;
-                    Items[i].InitialiseNonScriptableObjectValues();
+                    Items[i].InitialiseNonScriptableObjectValues(GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger);
                 }
                 else
                 {
@@ -209,8 +210,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                     containsCreatedGameItemsMessage += TypeName + "\\" + TypeName + "_" + (startNumber + i) + "\n";
 #endif
                     Items[i] = ScriptableObject.CreateInstance<T>();
-                    Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
-                        LocalisableText.CreateLocalised(), valueToUnlock: 10);
+                    Items[i].Initialise(GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger,
+                        startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: 10);
                     Items[i].UnlockWithCoins = true;
                 }
             }
@@ -238,8 +239,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             for (var i = 0; i < count; i++)
             {
                 Items[i] = ScriptableObject.CreateInstance<T>();
-                Items[i].Initialise(startNumber + i, LocalisableText.CreateLocalised(),
-                    LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
+                Items[i].Initialise(GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger,
+                    startNumber + i, LocalisableText.CreateLocalised(), LocalisableText.CreateLocalised(), valueToUnlock: valueToUnlock);
                 Items[i].UnlockWithCompletion = unlockWithCompletion;
                 Items[i].UnlockWithCoins = unlockWithCoins;
             }
@@ -282,7 +283,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 var gameItem = UnityEngine.Object.Instantiate(instance) as T; // create a copy so we don't overwrite values.
                 Assert.IsNotNull(gameItem, "The gameItem for item " + i + " is not of type " + TypeName);
                 gameItem.Number = i;
-                gameItem.InitialiseNonScriptableObjectValues();
+                gameItem.InitialiseNonScriptableObjectValues(GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger);
                 Items[i-1] = gameItem;
             }
 

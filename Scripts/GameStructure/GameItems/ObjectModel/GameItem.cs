@@ -25,13 +25,13 @@ using GameFramework.Preferences;
 using GameFramework.Debugging;
 using GameFramework.GameStructure.GameItems.Messages;
 using GameFramework.GameStructure.Players.ObjectModel;
-using GameFramework.GameStructure.Variables.ObjectModel;
 using GameFramework.Helper;
 using GameFramework.Localisation;
 using GameFramework.Localisation.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.Messaging;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel
 {
@@ -462,26 +462,30 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #endregion Extension Data
 
         bool _isPlayer;
+        GameConfiguration _gameConfiguration;
+        Messenger _messenger;
 
         #region Initialisation
 
         /// <summary>
-        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
-        /// want to provide your own custom initialisation.
+        /// Setup and initialise this gameitem.
         /// </summary>
+        /// <param name="gameConfiguration"></param>
+        /// <param name="player"></param>
+        /// <param name="messenger">Messenger for sending notifications of changes etc.</param>
         /// <param name="number"></param>
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="sprite"></param>
         /// <param name="valueToUnlock"></param>
-        /// <param name="player"></param>
         /// <param name="identifierBase"></param>
         /// <param name="identifierBasePrefs"></param>
-        /// <param name="loadFromResources"></param>
-        public void Initialise(int number, LocalisableText name = null, LocalisableText description = null, Sprite sprite = null, int valueToUnlock = -1, Player player = null, string identifierBase = "", string identifierBasePrefs = "", bool loadFromResources = false) //GameItem parent = null, 
+        /// You should only call this method if you are manually creating the GameItem.
+        /// Loaded GameItems will have these values set and configured via the editor.
+        /// This will invoke InitialiseNonScriptableObjectValues() via that CustomInitialisation() 
+        /// which you can override if you want to provide your own custom initialisation.
+        public void Initialise(GameConfiguration gameConfiguration, Player player, Messenger messenger, int number, LocalisableText name = null, LocalisableText description = null, Sprite sprite = null, int valueToUnlock = -1, string identifierBase = "", string identifierBasePrefs = "")
         {
-            if (loadFromResources) Debug.LogWarning("Obsolete in v4.4: The loadFromResources Initialise parameter no longer does anything. Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually.");
-
             IdentifierBase = identifierBase;
             IdentifierBasePrefs = identifierBasePrefs;
             Number = number;
@@ -490,25 +494,25 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Sprite = sprite;
             ValueToUnlock = valueToUnlock;
 
-            InitialiseNonScriptableObjectValues(player);
+            InitialiseNonScriptableObjectValues(gameConfiguration, player, messenger);
         }
 
 
         /// <summary>
-        /// Setup and initialise this gameitem. This will invoke CustomInitialisation() which you can override if you 
-        /// want to provide your own custom initialisation.
+        /// Setup and initialise this gameitem excluding serialisable properties that are set through a
+        /// call to Initialise or within the Unity editor. 
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="loadFromResources"></param>
-        public void InitialiseNonScriptableObjectValues(Player player = null, bool loadFromResources = false)
+        /// <param name="messenger">Messenger for sending notifications of changes etc.</param>
+        /// This method will invoke CustomInitialisation() which you can override if you 
+        /// want to provide your own custom initialisation.
+        public void InitialiseNonScriptableObjectValues(GameConfiguration gameConfiguration, Player player, Messenger messenger)
         {
-            if (loadFromResources) Debug.LogWarning("Obsolete in v4.4: The loadFromResources Initialise parameter no longer does anything. Either subclass the GameItem if you need custom data or call LoadData() on the GameItem manually.");
-
             _isPlayer = IdentifierBase == "Player";
-
-            // if not already set and not a player game item then set Player to the current player so that we can have per player scores etc.
-            if (player == null) Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene and possibly increase the priority in ScriptExecutionOrder");
-            Player = player ?? GameManager.Instance.Player;
+            Player = player;
+            _messenger = messenger;
+            if (!_isPlayer)
+                Assert.IsNotNull(Player, "Currently non Player GameItems have to have a valid Player specified.");
 
             PrefsPrefixShared = IdentifierBasePrefs + Number + ".";
             PrefsPrefixPlayer = _isPlayer ? PrefsPrefixShared : Player.FullKey(PrefsPrefixShared);
@@ -1342,7 +1346,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendScoreChangedMessage(int newScore, int oldScore)
         {
-            GameManager.Messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
+            _messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
         }
 
         /// <summary>
@@ -1353,7 +1357,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
-            GameManager.Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
+            _messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
         }
         #endregion
 
@@ -1403,7 +1407,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         public virtual void SendCoinsChangedMessage(int newCoins, int oldCoins)
         {
-            GameManager.Messenger.QueueMessage(new CoinsChangedMessage(this, newCoins, oldCoins));
+            _messenger.QueueMessage(new CoinsChangedMessage(this, newCoins, oldCoins));
         }
 
         #endregion
@@ -1677,7 +1681,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         ///// You may want to override this in your derived classes to send custom messages.
         //public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         //{
-        //    GameManager.Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
+        //    _messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
         //}
         #endregion
 

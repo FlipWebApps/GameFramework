@@ -19,12 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Text;
-using GameFramework.Debugging;
-using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.Game.ObjectModel
 {

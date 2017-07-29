@@ -33,6 +33,7 @@ using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.GenericGameItems.Components;
 using GameFramework.Messaging;
 using UnityEngine.Assertions;
+using GameFramework.GameStructure.Game.ObjectModel;
 
 /// <summary>
 /// Extended support and integration of In App Purchasing.
@@ -118,7 +119,7 @@ namespace GameFramework.Billing
             if (multiPurposeGameItem == null)
             {
                 multiPurposeGameItem = new TGameItem();
-                multiPurposeGameItem.Initialise(number);
+                multiPurposeGameItem.Initialise(GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger, number);
             }
 
             // mark the item as bought and unlocked
