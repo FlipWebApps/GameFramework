@@ -203,7 +203,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// be added to this GameItem.
         /// </summary>
         /// <returns></returns>
-        public override List<CounterConfigurationEntry> GetCustomCounterConfigurationEntries()
+        public override List<CounterConfigurationEntry> GetCounterConfigurationEntries()
         {
             return GameConfiguration.Instance.LevelCounterConfigurationEntries;
         }
