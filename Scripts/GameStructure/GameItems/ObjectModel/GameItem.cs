@@ -244,16 +244,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public virtual string IdentifierBasePrefs { get; protected set; }
 
         /// <summary>
-        /// A prefix that will be used for preferences entries for this item that can be shared across all players. [IdentifierBasePrefs][Number].
-        /// </summary>
-        public string PrefsPrefixShared { get; protected set; }
-
-        /// <summary>
-        /// A prefix that will be used for preferences entries for this item on a per player basis. P[PlayerNumber].[IdentifierBasePrefs][Number].
-        /// </summary>
-        public string PrefsPrefixPlayer { get; protected set; }
-
-        /// <summary>
         /// Returns whether this GameItem is setup and initialised.
         /// </summary>
         public bool IsInitialised { get; private set; }
@@ -470,7 +460,15 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #endregion Extension Data
 
+        // whether this represents a player GameItem
         bool _isPlayer;
+
+        // A prefix that will be used for preferences entries for this item that can be shared across all players. [IdentifierBasePrefs][Number].
+        string _prefsPrefix { get; set; }
+
+        // A prefix that will be used for preferences entries for this item on a per player basis. P[PlayerNumber].[IdentifierBasePrefs][Number].
+        string _prefsPrefixPlayer { get; set; }
+
         GameConfiguration _gameConfiguration;
         Messenger _messenger;
 
@@ -523,8 +521,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (!_isPlayer)
                 Assert.IsNotNull(Player, "Currently non Player GameItems have to have a valid Player specified.");
 
-            PrefsPrefixShared = IdentifierBasePrefs + Number + ".";
-            PrefsPrefixPlayer = _isPlayer ? PrefsPrefixShared : Player.FullKey(PrefsPrefixShared);
+            _prefsPrefix = IdentifierBasePrefs + Number + ".";
+            _prefsPrefixPlayer = _isPlayer ? _prefsPrefix : Player.FullKey(_prefsPrefix);
 
             HighScoreLocalPlayers = PreferencesFactory.GetInt(FullKey("HSLP"), 0);	                // saved at global level rather than per player.
             HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
@@ -562,7 +560,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
             }
 
-            Variables.Load(PrefsPrefixPlayer);
+            Variables.Load(_prefsPrefixPlayer);
 
             // allow for any custom game item specific initialisation
             CustomInitialisation();
@@ -761,7 +759,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (HighScoreLocalPlayersPlayerNumber != -1)
                 PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber); // saved at global level rather than per player.
 
-            Variables.UpdatePlayerPrefs(PrefsPrefixPlayer);
+            Variables.UpdatePlayerPrefs(_prefsPrefixPlayer);
 
             foreach (var counterEntry in _counterEntries)
                 counterEntry.UpdatePlayerPrefs();
@@ -2030,7 +2028,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <returns></returns>
         public string FullKey(string key)
         {
-            return IdentifierBasePrefs + Number + "." + key;
+            return _prefsPrefix + key;
         }
         #endregion
 
