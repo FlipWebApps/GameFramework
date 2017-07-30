@@ -23,39 +23,24 @@
 #else
 using System;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.GameStructure.Characters.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.Messaging;
 using NUnit.Framework;
 using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.Players.ObjectModel;
+using GameFramework.GameStructure.GameItems;
 
-namespace GameFramework.GameStructure.GameItems
+namespace GameFramework.GameStructure.Characters
 {
     /// <summary>
-    /// Test cases for GameItems. You can also view these to see how you might use the API.
+    /// Test cases for Player GameItems. You can also view these to see how you might use the API.
     /// </summary>
-    public class GameItemTests
+    public class CharactersTests
     {
 
         #region Helper functions for verifying testing
-
-        internal static void SetCommonPreferences(int playerNumber, int number, string identifierBasePrefs, int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought)
-        {
-            PlayerPrefs.SetInt(string.Format("P{0}.{1}{2}.HS", playerNumber, identifierBasePrefs, number), highScore);
-            PlayerPrefs.SetInt(string.Format("P{0}.{1}{2}.IsU", playerNumber, identifierBasePrefs, number), isUnlocked ? 1 : 0);
-            PlayerPrefs.SetInt(string.Format("P{0}.{1}{2}.IsUAS", playerNumber, identifierBasePrefs, number), isUnlockedAnimationShown ? 1 : 0);
-            PlayerPrefs.SetInt(string.Format("{0}{1}.IsB", identifierBasePrefs, number), isBought ? 1 : 0);
-        }
-
-        internal static void AssertCommonPreferences(int playerNumber, int number, string identifierBasePrefs, GameItem gameItem)
-        {
-            Assert.AreEqual(PlayerPrefs.GetInt(string.Format("P{0}.{1}{2}.HS", playerNumber, identifierBasePrefs, number), 0), gameItem.HighScore, "HighScore not set correctly");
-            // note for the below, unlocked is changed by setting bought - we should have a test for this somewhere... 
-            Assert.AreEqual(PlayerPrefs.GetInt(string.Format("P{0}.{1}{2}.IsU", playerNumber, identifierBasePrefs, number), 0) == 1, gameItem.IsUnlocked, "IsUnlocked not set correctly when not bought");
-            Assert.AreEqual(PlayerPrefs.GetInt(string.Format("P{0}.{1}{2}.IsUAS", playerNumber, identifierBasePrefs, number), 0) == 1, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
-            Assert.AreEqual(PlayerPrefs.GetInt(string.Format("{0}{1}.IsB", identifierBasePrefs, number), 0) == 1, gameItem.IsBought, "IsBought not set correctly");
-        }
 
         #endregion Helper functions for verifying testing
 
@@ -74,7 +59,7 @@ namespace GameFramework.GameStructure.GameItems
             player.Initialise(gameConfiguration, null, messenger, 1);
 
             //// Act
-            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            var gameItem = ScriptableObject.CreateInstance<Character>();
             gameItem.Initialise(gameConfiguration, player, messenger, number);
 
             //// Assert
@@ -83,20 +68,20 @@ namespace GameFramework.GameStructure.GameItems
             //TODO: Verify if we can test the below, or if localisation setup will interfere?
             //Assert.AreEqual("Name", gameItem.Name, "Name not set correctly");
             //Assert.AreEqual("Desc", gameItem.Description, "Description not set correctly");
-            Assert.AreEqual("", gameItem.IdentifierBase, "IdentifierBase not set correctly");
-            Assert.AreEqual("", gameItem.IdentifierBasePrefs, "IdentifierBasePrefs not set correctly");
+            Assert.AreEqual("Character", gameItem.IdentifierBase, "IdentifierBase not set correctly");
+            Assert.AreEqual("C", gameItem.IdentifierBasePrefs, "IdentifierBasePrefs not set correctly");
             Assert.AreEqual(0, gameItem.Score, "Score not set correctly");
             Assert.AreEqual(0, gameItem.Coins, "Coins not set correctly");
             Assert.AreEqual(0, gameItem.HighScore, "HighScore not set correctly");
-            Assert.AreEqual(false, gameItem.IsBought, "IsBought not set correctly");
+            Assert.AreEqual(false, player.IsBought, "IsBought not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlocked, "IsUnlocked not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
         }
 
 
-        [TestCase(1, "Name", "Desc", "Test", "T")]
-        [TestCase(2, "Name2", "Desc2", "Another", "A")]
-        public void BasicInitialisationSpecifiedValues(int number, string name, string desc, string identifierBase, string identifierBasePrefs)
+        [TestCase(1, "Name", "Desc")]
+        [TestCase(2, "Name2", "Desc2")]
+        public void BasicInitialisationSpecifiedValues(int number, string name, string desc)
         {
             //// Arrange
             PlayerPrefs.DeleteAll();
@@ -106,18 +91,18 @@ namespace GameFramework.GameStructure.GameItems
             player.Initialise(gameConfiguration, null, messenger, 1);
 
             //// Act
-            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            var gameItem = ScriptableObject.CreateInstance<Character>();
             gameItem.Initialise(gameConfiguration, player, messenger,
-                number, LocalisableText.CreateNonLocalised(name), LocalisableText.CreateNonLocalised(desc), 
-                identifierBase: identifierBase, identifierBasePrefs: identifierBasePrefs);
+                number, LocalisableText.CreateNonLocalised(name), LocalisableText.CreateNonLocalised(desc),
+                identifierBase: "Test_Should_Not_Override", identifierBasePrefs: "T");
 
             //// Assert
             Assert.IsNotNull(gameItem, "GameItem not setup.");
             Assert.AreEqual(number, gameItem.Number, "Number not set correctly");
             Assert.AreEqual(name, gameItem.Name, "Name not set correctly");
             Assert.AreEqual(desc, gameItem.Description, "Description not set correctly");
-            Assert.AreEqual(identifierBase, gameItem.IdentifierBase, "IdentifierBase not set correctly");
-            Assert.AreEqual(identifierBasePrefs, gameItem.IdentifierBasePrefs, "IdentifierBasePrefs not set correctly");
+            Assert.AreEqual("Character", gameItem.IdentifierBase, "IdentifierBase not set correctly");
+            Assert.AreEqual("C", gameItem.IdentifierBasePrefs, "IdentifierBasePrefs not set correctly");
             Assert.AreEqual(0, gameItem.Score, "Score not set correctly");
             Assert.AreEqual(0, gameItem.Coins, "Coins not set correctly");
             Assert.AreEqual(0, gameItem.HighScore, "HighScore not set correctly");
@@ -131,30 +116,29 @@ namespace GameFramework.GameStructure.GameItems
         /// Seperate test from creating, saving and then loadina GameItem to verify the consistency of saved preferences
         /// across different versions of the framework (that we use the same preferences keys).
         /// </summary>
-        [TestCase(0, 1, "Test", "T", 10, false, false, false)]
-        [TestCase(1, 2, "Another", "A", 10, false, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, true, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, true, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, true)]
-        public void PersistentValuesLoaded(int playerNumber, int number, string identifierBase, string identifierBasePrefs, 
+        [TestCase(0, 1, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(1, 2, 10, false, false, false)]
+        [TestCase(0, 1, 20, false, false, false)]
+        [TestCase(0, 1, 20, true, false, false)]
+        [TestCase(0, 1, 20, false, true, false)]
+        [TestCase(0, 1, 20, false, false, true)]
+        public void PersistentValuesLoaded(int playerNumber, int number,
             int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought)
         {
             //// Arrange
             PlayerPrefs.DeleteAll();
-            SetCommonPreferences(playerNumber, number, identifierBasePrefs, highScore, isUnlocked, isUnlockedAnimationShown, isBought);
+            GameItemTests.SetCommonPreferences(playerNumber, number, "C", highScore, isUnlocked, isUnlockedAnimationShown, isBought);
             var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
             var messenger = new Messenger();
             var player = ScriptableObject.CreateInstance<Player>();
             player.Initialise(gameConfiguration, null, messenger, playerNumber);
 
             //// Act
-            var gameItem = ScriptableObject.CreateInstance<GameItem>();
-            gameItem.Initialise(gameConfiguration, player, messenger,
-                number, identifierBase: identifierBase, identifierBasePrefs: identifierBasePrefs);
+            var gameItem = ScriptableObject.CreateInstance<Character>();
+            gameItem.Initialise(gameConfiguration, player, messenger, number);
 
             //// Assert
-            Assert.IsNotNull(gameItem, "GameItem not setup.");
+            Assert.IsNotNull(player, "GameItem not setup.");
             Assert.AreEqual(highScore, gameItem.HighScore, "HighScore not set correctly");
             Assert.AreEqual(isBought, gameItem.IsBought, "IsBought not set correctly");
             if (isBought)
@@ -166,16 +150,16 @@ namespace GameFramework.GameStructure.GameItems
 
 
         /// <summary>
-        /// Seperate test from creating, saving and then loadina GameItem to verify the consistency of saved preferences
+        /// Seperate test from creating, saving and then loading a GameItem to verify the consistency of saved preferences
         /// across different versions of the framework (that we use the same preferences keys).
         /// </summary>
-        [TestCase(0, 1, "Test", "T", 10, false, false, false)]
-        [TestCase(1, 2, "Another", "A", 10, false, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, true, false, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, true, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, true)]
-        public void PersistentValuesSaved(int playerNumber, int number, string identifierBase, string identifierBasePrefs,
+        [TestCase(0, 1, 10, false, false, false)]
+        [TestCase(1, 2, 10, false, false, false)]
+        [TestCase(0, 1, 20, false, false, false)]
+        [TestCase(0, 1, 20, true, false, false)]
+        [TestCase(0, 1, 20, false, true, false)]
+        [TestCase(0, 1, 20, false, false, true)]
+        public void PersistentValuesSaved(int playerNumber, int number,
             int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought)
         {
             //// Arrange
@@ -186,9 +170,8 @@ namespace GameFramework.GameStructure.GameItems
             player.Initialise(gameConfiguration, null, messenger, playerNumber);
 
             //// Act
-            var gameItem = ScriptableObject.CreateInstance<GameItem>();
-            gameItem.Initialise(gameConfiguration, player, messenger,
-                number, identifierBase: identifierBase, identifierBasePrefs: identifierBasePrefs);
+            var gameItem = ScriptableObject.CreateInstance<Character>();
+            gameItem.Initialise(gameConfiguration, player, messenger, number);
             gameItem.HighScore = highScore;
             gameItem.IsUnlocked = isUnlocked;
             gameItem.IsUnlockedAnimationShown = isUnlockedAnimationShown;
@@ -198,39 +181,10 @@ namespace GameFramework.GameStructure.GameItems
 
             //// Assert
             Assert.IsNotNull(gameItem, "GameItem not setup.");
-            AssertCommonPreferences(playerNumber, number, identifierBasePrefs, gameItem);
+            GameItemTests.AssertCommonPreferences(playerNumber, number, "C", gameItem);
         }
-
-
-        //TODO: 
-        // Test startUnlocked flag
-        // IsBought changes Unlocked flag.
 
         #endregion Initialisation
-
-        #region Unlocking
-
-        [Test]
-        public void Unlocking()
-        {
-            ////// Arrange
-            //var gameItemManager = new GameItemManager<GameItem, GameItem>();
-            ////var messenger = new Messenger();
-            ////_testHandlerCalled = false;
-            ////messenger.AddListener<BaseMessage>(TestHandler);
-
-            ////// Act
-            ////messenger.TriggerMessage(new BaseMessage());
-
-            ////// Assert
-            //Assert.IsNotNull(gameItemmanager.Items, "The items array should be initialised");
-            //Assert.AreEqual(gameItemmanager.Items.Length, 0, "The items array should be be empty on initialisation");
-
-            ////// Cleanup
-            ////messenger.RemoveListener<BaseMessage>(TestHandler);
-        }
-
-        #endregion Unlocking
     }
 }
 #endif

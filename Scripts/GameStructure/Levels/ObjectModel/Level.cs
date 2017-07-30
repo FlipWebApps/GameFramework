@@ -218,7 +218,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
                 var oldStarsWon = _starsWon;
                 _starsWon = value;
                 if (IsInitialised && oldStarsWon != StarsWon)
-                    GameManager.SafeQueueMessage(new StarsWonMessage(this, StarsWon, oldStarsWon));
+                    Messenger.QueueMessage(new StarsWonMessage(this, StarsWon, oldStarsWon));
             }
         }
         int _starsWon;
@@ -316,7 +316,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// <param name="oldScore"></param>
         public override void SendScoreChangedMessage(int newScore, int oldScore)
         {
-            GameManager.Messenger.QueueMessage(new LevelScoreChangedMessage(this, newScore, oldScore));
+            Messenger.QueueMessage(new LevelScoreChangedMessage(this, newScore, oldScore));
         }
 
 
@@ -327,7 +327,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// <param name="oldHighScore"></param>
         public override void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
-            GameManager.Messenger.QueueMessage(new LevelHighScoreChangedMessage(this, newHighScore, oldHighScore));
+            Messenger.QueueMessage(new LevelHighScoreChangedMessage(this, newHighScore, oldHighScore));
         }
 
 
@@ -338,7 +338,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// <param name="oldCoins"></param>
         public override void SendCoinsChangedMessage(int newCoins, int oldCoins)
         {
-            GameManager.Messenger.QueueMessage(new LevelCoinsChangedMessage(this, newCoins, oldCoins));
+            Messenger.QueueMessage(new LevelCoinsChangedMessage(this, newCoins, oldCoins));
         }
 
         #endregion Score and Coin Messaging Overrides

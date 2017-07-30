@@ -50,7 +50,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// <returns></returns>
         public override List<CounterConfigurationEntry> GetCounterConfigurationEntries()
         {
-            return GameConfiguration.Instance.PlayerCounterConfigurationEntries;
+            return GameConfiguration.PlayerCounterConfigurationEntries;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
                 var oldValue = CustomName;
                 _customName = value;
                 if (IsInitialised && oldValue != CustomName)
-                    GameManager.SafeQueueMessage(new CustomNameChangedMessage(CustomName, oldValue));
+                    Messenger.QueueMessage(new CustomNameChangedMessage(CustomName, oldValue));
             }
         }
         string _customName;
@@ -84,7 +84,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
                 var oldValue = Lives;
                 _lives = value;
                 if (IsInitialised && oldValue != Lives)
-                    GameManager.SafeQueueMessage(new LivesChangedMessage(Lives, oldValue));
+                    Messenger.QueueMessage(new LivesChangedMessage(Lives, oldValue));
             }
         }
         int _lives;
@@ -102,7 +102,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
                 var oldValue = Health;
                 _health = value;
                 if (IsInitialised && !Mathf.Approximately(oldValue, Health))
-                    GameManager.SafeQueueMessage(new HealthChangedMessage(Health, oldValue));
+                    Messenger.QueueMessage(new HealthChangedMessage(Health, oldValue));
             }
         }
         float _health;
@@ -120,7 +120,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
                 var oldValue = IsGameWon;
                 _isGameWon = value;
                 if (IsInitialised && oldValue != IsGameWon && IsGameWon)
-                    GameManager.SafeTriggerMessage(new GameWonMessage());
+                    Messenger.QueueMessage(new GameWonMessage());
             }
         }
         bool _isGameWon;
@@ -210,7 +210,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// <param name="oldScore"></param>
         public override void SendScoreChangedMessage(int newScore, int oldScore)
         {
-            GameManager.Messenger.QueueMessage(new PlayerScoreChangedMessage(this, newScore, oldScore));
+            Messenger.QueueMessage(new PlayerScoreChangedMessage(this, newScore, oldScore));
         }
 
 
@@ -221,7 +221,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// <param name="oldHighScore"></param>
         public override void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
-            GameManager.Messenger.QueueMessage(new PlayerHighScoreChangedMessage(this, newHighScore, oldHighScore));
+            Messenger.QueueMessage(new PlayerHighScoreChangedMessage(this, newHighScore, oldHighScore));
         }
 
 
@@ -232,7 +232,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// <param name="oldCoins"></param>
         public override void SendCoinsChangedMessage(int newCoins, int oldCoins)
         {
-            GameManager.Messenger.QueueMessage(new PlayerCoinsChangedMessage(this, newCoins, oldCoins));
+            Messenger.QueueMessage(new PlayerCoinsChangedMessage(this, newCoins, oldCoins));
         }
 
         #endregion Score and Coin Messaging Overrides

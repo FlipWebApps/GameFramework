@@ -249,6 +249,16 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public bool IsInitialised { get; private set; }
 
         /// <summary>
+        /// Currently active GameConfiguration to use
+        /// </summary>
+        protected GameConfiguration GameConfiguration { get; set; }
+
+        /// <summary>
+        /// Currently active Messenger to use for sending messages
+        /// </summary>
+        protected Messenger Messenger { get; set; }
+
+        /// <summary>
         /// A reference to the current Player
         /// </summary>
         /// Many game items will hold unique values depending upon the player e.g. high score. This field is used to identify 
@@ -314,9 +324,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         bool _spriteTriedLoading;
 
         /// <summary>
-        /// Whether the current item has been is purchased. Saved at the root level for all players.
+        /// Whether the current item has been purchased (if so then it is also unlocked). 
+        /// Saved at the root level for all players.
         /// </summary>
-        public bool IsBought { get; set; }
+        public bool IsBought
+        {
+            get { return _isBought; }
+            set
+            {
+                if (value == true) IsUnlocked = true;
+                _isBought = value;
+            }
+        }
+        bool _isBought;
 
         /// <summary>
         /// A global high score for this GameItem for all local players
@@ -469,9 +489,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         // A prefix that will be used for preferences entries for this item on a per player basis. P[PlayerNumber].[IdentifierBasePrefs][Number].
         string _prefsPrefixPlayer { get; set; }
 
-        GameConfiguration _gameConfiguration;
-        Messenger _messenger;
-
         #region Initialisation
 
         /// <summary>
@@ -515,9 +532,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// want to provide your own custom initialisation.
         public void InitialiseNonScriptableObjectValues(GameConfiguration gameConfiguration, Player player, Messenger messenger)
         {
-            _isPlayer = IdentifierBase == "Player";
+            GameConfiguration = gameConfiguration;
             Player = player;
-            _messenger = messenger;
+            Messenger = messenger;
+
+            _isPlayer = IdentifierBase == "Player";
             if (!_isPlayer)
                 Assert.IsNotNull(Player, "Currently non Player GameItems have to have a valid Player specified.");
 
@@ -553,8 +572,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 IsUnlocked = IsUnlockedAnimationShown = true;
             }
             else {
+                // saved at global level rather than per player.
                 IsBought = PreferencesFactory.GetInt(FullKey("IsB"), 0) == 1;
-                    // saved at global level rather than per player.
                 if (IsBought || GetSettingInt("IsU", 0) == 1)
                     IsUnlocked = true;
                 IsUnlockedAnimationShown = GetSettingInt("IsUAS", 0) == 1;
@@ -735,7 +754,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public void MarkAsBought()
         {
             IsBought = true;
-            IsUnlocked = true;
             PreferencesFactory.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
             PreferencesFactory.Save();
         }
@@ -1354,7 +1372,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendScoreChangedMessage(int newScore, int oldScore)
         {
-            _messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
+            Messenger.QueueMessage(new ScoreChangedMessage(this, newScore, oldScore));
         }
 
         /// <summary>
@@ -1365,7 +1383,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// You may want to override this in your derived classes to send custom messages.
         public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
         {
-            _messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
+            Messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
         }
         #endregion
 
@@ -1415,7 +1433,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         public virtual void SendCoinsChangedMessage(int newCoins, int oldCoins)
         {
-            _messenger.QueueMessage(new CoinsChangedMessage(this, newCoins, oldCoins));
+            Messenger.QueueMessage(new CoinsChangedMessage(this, newCoins, oldCoins));
         }
 
         #endregion
@@ -1574,7 +1592,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// base implementation as some components require the standard message to work.
         public virtual void SendCounterChangedMessage(string key, int index, int newAmount, int oldAmount)
         {
-            _messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
+            Messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
         }
 
         #endregion IntCounter
@@ -1695,7 +1713,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// base implementation as some components require the standard message to work.
         public virtual void SendCounterChangedMessage(string key, int index, float newAmount, float oldAmount)
         {
-            _messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
+            Messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
         }
 
         #endregion Float Counter
