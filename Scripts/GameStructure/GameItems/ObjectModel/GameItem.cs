@@ -368,7 +368,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             set
             {
                 var oldValue = Coins;
-                _coins = value;
+                _coins = Mathf.Max(value, 0);
                 if (IsInitialised && oldValue != Coins)
                     SendCoinsChangedMessage(Coins, oldValue);
             }
@@ -388,9 +388,19 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             set
             {
                 var oldValue = Score;
-                _score = value;
+                _score = Mathf.Max(value, 0);
                 if (IsInitialised && oldValue != Score)
                     SendScoreChangedMessage(Score, oldValue);
+
+                if (Score > HighScore)
+                {
+                    HighScore = Score;
+                    if (HighScore > HighScoreLocalPlayers)
+                    {
+                        HighScoreLocalPlayers = HighScore;
+                        HighScoreLocalPlayersPlayerNumber = _isPlayer ? Number : Player.Number;
+                    }
+                }
             }
         }
         int _score;
@@ -1332,18 +1342,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Add the specified number of points onto this GameItems Score.
         /// </summary>
-        public void AddPoints(int points, int playerNumber = 0)
+        public void AddPoints(int points)
         {
             Score += points;
-            if (Score > HighScore)
-            {
-                HighScore = Score;
-                if (HighScore > HighScoreLocalPlayers)
-                {
-                    HighScoreLocalPlayers = HighScore;
-                    HighScoreLocalPlayersPlayerNumber = playerNumber;
-                }
-            }
         }
 
         /// <summary>
@@ -1361,8 +1362,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         public void RemovePoints(int points)
         {
-            var tempScore = Score - points; // batch updates to avoid sending multiple messages.
-            Score = Mathf.Max(tempScore, 0);
+            Score -= points;
         }
 
         /// <summary>
@@ -1421,8 +1421,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// </summary>
         public void RemoveCoins(int coins)
         {
-            var tempCoins = Coins - coins; // batch updates to avoid sending multiple messages.
-            Coins = Mathf.Max(tempCoins, 0);
+            Coins -= coins;
         }
 
         /// <summary>

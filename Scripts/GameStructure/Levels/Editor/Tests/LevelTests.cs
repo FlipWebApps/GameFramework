@@ -31,6 +31,8 @@ using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.GameStructure.GameItems;
+using System.Collections.Generic;
+using GameFramework.GameStructure.Levels.Messages;
 
 namespace GameFramework.GameStructure.Levels
 {
@@ -232,6 +234,109 @@ namespace GameFramework.GameStructure.Levels
         }
 
         #endregion Initialisation
+
+        #region Score
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void ScoreMessageSent(int score1, int score2)
+        {
+            //// Arrange
+            List<LevelScoreChangedMessage> messages = new List<LevelScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<Level>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(LevelScoreChangedMessage), (x) => {
+                messages.Add(x as LevelScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score2;
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score1, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(score2, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void HighScoreMessageSent(int score1, int score2)
+        {
+            //// Arrange
+            List<LevelHighScoreChangedMessage> messages = new List<LevelHighScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<Level>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(LevelHighScoreChangedMessage), (x) => {
+                messages.Add(x as LevelHighScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score2;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score1, messages[0].OldHighScore, "Incorrect old score in message2.");
+            Assert.AreEqual(score2, messages[0].NewHighScore, "Incorrect new score in message2.");
+        }
+        #endregion Score
+
+        #region Coins
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void CoinsMessageSent(int coins1, int coins2)
+        {
+            //// Arrange
+            List<LevelCoinsChangedMessage> messages = new List<LevelCoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<Level>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(LevelCoinsChangedMessage), (x) => {
+                messages.Add(x as LevelCoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Coins = coins2;
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins1, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(coins2, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+        #endregion Coins    
     }
 }
 #endif

@@ -29,12 +29,19 @@ using GameFramework.Messaging;
 using NUnit.Framework;
 using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.GameItems.Messages;
+using System.Collections.Generic;
 
 namespace GameFramework.GameStructure.GameItems
 {
     /// <summary>
     /// Test cases for GameItems. You can also view these to see how you might use the API.
     /// </summary>
+    /// 
+    /// TODO: 
+    /// Test startUnlocked flag
+    /// IsBought changes Unlocked flag.
+    /// ...
     public class GameItemTests
     {
 
@@ -64,7 +71,7 @@ namespace GameFramework.GameStructure.GameItems
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(2)]
-        public void BasicInitialisationDefaults(int number)
+        public void InitialisationDefaults(int number)
         {
             //// Arrange
             PlayerPrefs.DeleteAll();
@@ -96,7 +103,7 @@ namespace GameFramework.GameStructure.GameItems
 
         [TestCase(1, "Name", "Desc", "Test", "T")]
         [TestCase(2, "Name2", "Desc2", "Another", "A")]
-        public void BasicInitialisationSpecifiedValues(int number, string name, string desc, string identifierBase, string identifierBasePrefs)
+        public void InitialisationBasicSpecifiedValues(int number, string name, string desc, string identifierBase, string identifierBasePrefs)
         {
             //// Arrange
             PlayerPrefs.DeleteAll();
@@ -124,6 +131,28 @@ namespace GameFramework.GameStructure.GameItems
             Assert.AreEqual(false, gameItem.IsBought, "IsBought not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlocked, "IsUnlocked not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
+        }
+
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void InitialisationStartUnlocked(int number)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            //// Act
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.StartUnlocked = true;
+            gameItem.Initialise(gameConfiguration, player, messenger, number);
+
+            //// Assert
+            Assert.AreEqual(true, gameItem.IsUnlocked, "IsUnlocked not set correctly");
+            Assert.AreEqual(true, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
         }
 
 
@@ -201,34 +230,565 @@ namespace GameFramework.GameStructure.GameItems
             AssertCommonPreferences(playerNumber, number, identifierBasePrefs, gameItem);
         }
 
-
-        //TODO: 
-        // Test startUnlocked flag
-        // IsBought changes Unlocked flag.
-
         #endregion Initialisation
+
+        #region Score
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void ScoreMessageSent(int score1, int score2)
+        {
+            //// Arrange
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score2;
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score1, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(score2, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        [TestCase(0)]
+        [TestCase(20)]
+        [TestCase(30)]
+        public void ScoreUnchangedNoMessageSent(int score)
+        {
+            //// Arrange
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messages.Count, "Incorrect number of messages sent.");
+        }
+
+
+        /// <summary>
+        /// Expected score to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20)]
+        [TestCase(30)]
+        public void ScoreAddPoint(int score)
+        {
+            //// Arrange
+            int expectedScore = score + 1;
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.AddPoint();
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedScore, gameItem.Score, "Score is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(expectedScore, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected score to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20, 10)]
+        [TestCase(30, 5)]
+        [TestCase(100, -10)]
+        public void ScoreAddPoints(int score, int pointsToAdd)
+        {
+            //// Arrange
+            int expectedScore = score + pointsToAdd;
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.AddPoints(pointsToAdd);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedScore, gameItem.Score, "Score is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(expectedScore, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected score to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20)]
+        [TestCase(30)]
+        public void ScoreRemovePoint(int score)
+        {
+            //// Arrange
+            int expectedScore = score - 1;
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.RemovePoint();
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedScore, gameItem.Score, "Score is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(expectedScore, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected score to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20, 10)]
+        [TestCase(30, 5)]
+        [TestCase(100, -10)]
+        public void ScoreRemovePoints(int score, int pointsToRemove)
+        {
+            //// Arrange
+            int expectedScore = score - pointsToRemove;
+            List<ScoreChangedMessage> messages = new List<ScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(ScoreChangedMessage), (x) => {
+                messages.Add(x as ScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.RemovePoints(pointsToRemove);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedScore, gameItem.Score, "Score is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score, messages[0].OldScore, "Incorrect old score in message2.");
+            Assert.AreEqual(expectedScore, messages[0].NewScore, "Incorrect new score in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected score to allow for testing of any limits.
+        /// </summary>
+        [TestCase(-1)]
+        [TestCase(-10)]
+        public void ScoreCantBeNegative(int score)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var player = ScriptableObject.CreateInstance<Player>();
+            var messenger = new Messenger();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Act
+            gameItem.Score = score;
+
+            //// Assert
+            Assert.AreEqual(0, gameItem.Score, "Score is incorrect.");
+        }
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void HighScoreMessageSent(int score1, int score2)
+        {
+            //// Arrange
+            List<HighScoreChangedMessage> messages = new List<HighScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(HighScoreChangedMessage), (x) => {
+                messages.Add(x as HighScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score2;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(score1, messages[0].OldHighScore, "Incorrect old score in message2.");
+            Assert.AreEqual(score2, messages[0].NewHighScore, "Incorrect new score in message2.");
+        }
+
+
+        [TestCase(0, 0)]
+        [TestCase(20, 10)]
+        [TestCase(30, 0)]
+        [TestCase(40, 40)]
+        public void HighScoreUnchangedNoMessageSent(int score1, int score2)
+        {
+            //// Arrange
+            List<HighScoreChangedMessage> messages = new List<HighScoreChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Score = score1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(HighScoreChangedMessage), (x) => {
+                messages.Add(x as HighScoreChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Score = score2;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messages.Count, "Incorrect number of messages sent.");
+        }
+        #endregion
+
+        #region Coins
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void CoinsMessageSent(int coins1, int coins2)
+        {
+            //// Arrange
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Coins = coins2;
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins1, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(coins2, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+
+        [TestCase(0)]
+        [TestCase(20)]
+        [TestCase(30)]
+        public void CoinsUnchangedNoMessageSent(int coins)
+        {
+            //// Arrange
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.Coins = coins;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messages.Count, "Incorrect number of messages sent.");
+        }
+
+
+        /// <summary>
+        /// Expected coins to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20)]
+        [TestCase(30)]
+        public void CoinsAddCoin(int coins)
+        {
+            //// Arrange
+            int expectedCoins = coins + 1;
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.AddCoin();
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedCoins, gameItem.Coins, "Coins is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(expectedCoins, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected coins to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20, 10)]
+        [TestCase(30, 5)]
+        [TestCase(100, -10)]
+        public void CoinsAddCoins(int coins, int pointsToAdd)
+        {
+            //// Arrange
+            int expectedCoins = coins + pointsToAdd;
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.AddCoins(pointsToAdd);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedCoins, gameItem.Coins, "Coins is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(expectedCoins, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected coins to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20)]
+        [TestCase(30)]
+        public void CoinsRemoveCoin(int coins)
+        {
+            //// Arrange
+            int expectedCoins = coins - 1;
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.RemoveCoin();
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedCoins, gameItem.Coins, "Coins is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(expectedCoins, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected coins to allow for testing of any limits.
+        /// </summary>
+        [TestCase(20, 10)]
+        [TestCase(30, 5)]
+        [TestCase(100, -10)]
+        public void CoinsRemoveCoins(int coins, int pointsToRemove)
+        {
+            //// Arrange
+            int expectedCoins = coins - pointsToRemove;
+            List<CoinsChangedMessage> messages = new List<CoinsChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.Coins = coins;                 // initialise
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CoinsChangedMessage), (x) => {
+                messages.Add(x as CoinsChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.RemoveCoins(pointsToRemove);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(expectedCoins, gameItem.Coins, "Coins is incorrect.");
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(coins, messages[0].OldCoins, "Incorrect old coins in message2.");
+            Assert.AreEqual(expectedCoins, messages[0].NewCoins, "Incorrect new coins in message2.");
+        }
+
+
+        /// <summary>
+        /// Expected coins to allow for testing of any limits.
+        /// </summary>
+        [TestCase(-1)]
+        [TestCase(-10)]
+        public void CoinsCantBeNegative(int coins)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var player = ScriptableObject.CreateInstance<Player>();
+            var messenger = new Messenger();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Act
+            gameItem.Coins = coins;
+
+            //// Assert
+            Assert.AreEqual(0, gameItem.Coins, "Coins is incorrect.");
+        }
+
+        #endregion
 
         #region Unlocking
 
-        [Test]
-        public void Unlocking()
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void IsBoughtSetsUnlocked(int number)
         {
-            ////// Arrange
-            //var gameItemManager = new GameItemManager<GameItem, GameItem>();
-            ////var messenger = new Messenger();
-            ////_testHandlerCalled = false;
-            ////messenger.AddListener<BaseMessage>(TestHandler);
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, number);
 
-            ////// Act
-            ////messenger.TriggerMessage(new BaseMessage());
+            //// Act
+            gameItem.IsBought = true;
 
-            ////// Assert
-            //Assert.IsNotNull(gameItemmanager.Items, "The items array should be initialised");
-            //Assert.AreEqual(gameItemmanager.Items.Length, 0, "The items array should be be empty on initialisation");
-
-            ////// Cleanup
-            ////messenger.RemoveListener<BaseMessage>(TestHandler);
+            //// Assert
+            Assert.AreEqual(true, gameItem.IsUnlocked, "IsUnlocked not set correctly");
+            Assert.AreEqual(false, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
         }
+
 
         #endregion Unlocking
     }
