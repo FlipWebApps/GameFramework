@@ -123,7 +123,7 @@ namespace GameFramework.Billing
             }
 
             // mark the item as bought and unlocked
-            multiPurposeGameItem.MarkAsBought();
+            multiPurposeGameItem.MarkAndSaveAsBought();
 
             // notify all subscribers of the purchase
             GameManager.SafeQueueMessage(createMessage(number));

@@ -613,6 +613,45 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             return gameItem;
         }
 
+        /// <summary>
+        /// Mark an item as bought and save.
+        /// </summary>
+        /// This is seperate from IsBought so that we can save the bought status (e.g. from in app purchase) without affecting any of the other 
+        /// settings. This way we can temporarily setup a gameitem and save this Value from IAP code without worrying about it being used 
+        /// elsewhere.
+        public void MarkAndSaveAsBought()
+        {
+            IsBought = true;
+            PreferencesFactory.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
+            PreferencesFactory.Save();
+        }
+
+        /// <summary>
+        /// Update PlayerPrefs with setting or preferences for this item.
+        /// </summary>
+        /// Note: This does not call PlayerPrefs.Save()
+        /// 
+        /// If overriding from a base class be sure to call base.ParseGameData()
+        public virtual void UpdatePlayerPrefs()
+        {
+            SetSetting("IsU", IsUnlocked ? 1 : 0);
+            SetSetting("IsUAS", IsUnlockedAnimationShown ? 1 : 0);
+            SetSetting("HS", HighScore);
+
+            if (IsBought)
+                PreferencesFactory.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
+            if (HighScoreLocalPlayers != 0)
+                PreferencesFactory.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
+            if (HighScoreLocalPlayersPlayerNumber != -1)
+                PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber); // saved at global level rather than per player.
+
+            Variables.UpdatePlayerPrefs(_prefsPrefixPlayer);
+
+            foreach (var counterEntry in _counterEntries)
+                counterEntry.UpdatePlayerPrefs();
+        }
+
+
         #endregion Initialisation
 
         #region Extension Data
@@ -744,44 +783,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             return GameItemExtensionData as T;
         }
         #endregion Extension Data
-
-        /// <summary>
-        /// Mark an item as bought and save.
-        /// </summary>
-        /// This is seperate from IsBought so that we can save the bought status (e.g. from in app purchase) without affecting any of the other 
-        /// settings. This way we can temporarily setup a gameitem and save this Value from IAP code without worrying about it being used 
-        /// elsewhere.
-        public void MarkAsBought()
-        {
-            IsBought = true;
-            PreferencesFactory.SetInt(FullKey("IsB"), 1);	                                    // saved at global level rather than per player.
-            PreferencesFactory.Save();
-        }
-
-        /// <summary>
-        /// Update PlayerPrefs with setting or preferences for this item.
-        /// </summary>
-        /// Note: This does not call PlayerPrefs.Save()
-        /// 
-        /// If overriding from a base class be sure to call base.ParseGameData()
-        public virtual void UpdatePlayerPrefs()
-        {
-            SetSetting("IsU", IsUnlocked ? 1 : 0);
-            SetSetting("IsUAS", IsUnlockedAnimationShown ? 1 : 0);
-            SetSetting("HS", HighScore);
-
-            if (IsBought)
-                PreferencesFactory.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
-            if (HighScoreLocalPlayers != 0)
-                PreferencesFactory.SetInt(FullKey("HSLP"), HighScoreLocalPlayers);	            // saved at global level rather than per player.
-            if (HighScoreLocalPlayersPlayerNumber != -1)
-                PreferencesFactory.SetInt(FullKey("HSLPN"), HighScoreLocalPlayersPlayerNumber); // saved at global level rather than per player.
-
-            Variables.UpdatePlayerPrefs(_prefsPrefixPlayer);
-
-            foreach (var counterEntry in _counterEntries)
-                counterEntry.UpdatePlayerPrefs();
-        }
 
         #region Get Prefab Related
 
