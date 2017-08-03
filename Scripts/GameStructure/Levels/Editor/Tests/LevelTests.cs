@@ -215,7 +215,8 @@ namespace GameFramework.GameStructure.Levels
             //// Act
             var gameItem = ScriptableObject.CreateInstance<Level>();
             gameItem.Initialise(gameConfiguration, player, messenger, number);
-            gameItem.HighScore = highScore;
+            gameItem.Score = highScore; // score should set high score automatically which is saved
+            //gameItem.HighScore = highScore;
             gameItem.IsUnlocked = isUnlocked;
             gameItem.IsUnlockedAnimationShown = isUnlockedAnimationShown;
             gameItem.IsBought = isBought;
@@ -337,6 +338,50 @@ namespace GameFramework.GameStructure.Levels
         }
 
         #endregion Coins    
+
+        #region Counters
+
+        [Test]
+        public void CounterInitialisationDefaults()
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            //// Act
+            var gameItem = ScriptableObject.CreateInstance<Level>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Assert
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex("Score"), "Score counter not setup.");
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex("Coins"), "Coins counter not setup.");
+        }
+
+        [TestCase("Test")]
+        [TestCase("Test2")]
+        public void CounterInitialisationSpecifiedCounters(string counterKey)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.LevelCounterConfiguration.Add(new CounterConfiguration() { Name = counterKey });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            //// Act
+            var gameItem = ScriptableObject.CreateInstance<Level>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Assert
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex("Score"), "Score counter not setup.");
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex("Coins"), "Coins counter not setup.");
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex(counterKey), "Test counter not setup.");
+        }
+        #endregion Counters    
     }
 }
 #endif

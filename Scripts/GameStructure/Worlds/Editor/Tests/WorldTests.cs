@@ -116,7 +116,7 @@ namespace GameFramework.GameStructure.Worlds
         /// Seperate test from creating, saving and then loadina GameItem to verify the consistency of saved preferences
         /// across different versions of the framework (that we use the same preferences keys).
         /// </summary>
-        [TestCase(0, 1, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 10, false, false, false)]
         [TestCase(1, 2, 10, false, false, false)]
         [TestCase(0, 1, 20, false, false, false)]
         [TestCase(0, 1, 20, true, false, false)]
@@ -172,7 +172,8 @@ namespace GameFramework.GameStructure.Worlds
             //// Act
             var gameItem = ScriptableObject.CreateInstance<World>();
             gameItem.Initialise(gameConfiguration, player, messenger, number);
-            gameItem.HighScore = highScore;
+            gameItem.Score = highScore; // score should set high score automatically which is saved
+            //gameItem.HighScore = highScore;
             gameItem.IsUnlocked = isUnlocked;
             gameItem.IsUnlockedAnimationShown = isUnlockedAnimationShown;
             gameItem.IsBought = isBought;

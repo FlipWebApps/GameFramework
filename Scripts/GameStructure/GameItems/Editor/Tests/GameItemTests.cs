@@ -36,12 +36,9 @@ namespace GameFramework.GameStructure.GameItems
 {
     /// <summary>
     /// Test cases for GameItems. You can also view these to see how you might use the API.
+    /// TODO:
+    /// Test persisted values loaded
     /// </summary>
-    /// 
-    /// TODO: 
-    /// Test startUnlocked flag
-    /// IsBought changes Unlocked flag.
-    /// ...
     public class GameItemTests
     {
 
@@ -218,7 +215,8 @@ namespace GameFramework.GameStructure.GameItems
             var gameItem = ScriptableObject.CreateInstance<GameItem>();
             gameItem.Initialise(gameConfiguration, player, messenger,
                 number, identifierBase: identifierBase, identifierBasePrefs: identifierBasePrefs);
-            gameItem.HighScore = highScore;
+            gameItem.Score = highScore; // score should set high score automatically which is saved
+            //gameItem.HighScore = highScore;
             gameItem.IsUnlocked = isUnlocked;
             gameItem.IsUnlockedAnimationShown = isUnlockedAnimationShown;
             gameItem.IsBought = isBought;
@@ -767,7 +765,6 @@ namespace GameFramework.GameStructure.GameItems
 
         #region Unlocking
 
-
         [TestCase(1)]
         [TestCase(2)]
         public void IsBoughtSetsUnlocked(int number)
@@ -791,6 +788,375 @@ namespace GameFramework.GameStructure.GameItems
 
 
         #endregion Unlocking
+
+        #region Counters
+
+        [Test]
+        public void CounterInitialisationDefaults()
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            //// Act
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Assert
+            Assert.AreEqual("Score", gameItem.GetCounter("Score").Configuration.Name, "Score counter not setup.");
+            Assert.AreEqual("Coins", gameItem.GetCounter("Coins").Configuration.Name, "Coins counter not setup.");
+        }
+
+        [TestCase("NewCounter")]
+        [TestCase("AnotherCounter")]
+        public void CounterInitialisationCustom(string counterKey)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            //// Act
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            //// Assert
+            Assert.AreNotEqual(-1, gameItem.GetCounterIndex(counterKey), "Counter index not found.");
+            Assert.IsNotNull(gameItem.GetCounter(gameItem.GetCounterIndex(counterKey)), "Counter not found from index.");
+            Assert.IsNotNull(gameItem.GetCounter(counterKey), "Counter not found from name.");
+            Assert.AreEqual(counterKey, gameItem.GetCounter(counterKey).Configuration.Name, "Counter not setup.");
+        }
+
+
+        [TestCase("NewCounter", 0, 10)]
+        [TestCase("NewCounter", 20, 30)]
+        [TestCase("AnotherCounter", 30, 40)]
+        public void CounterIntAmountChangedMessageSent(string counterKey, int amount1, int amount2)
+        {
+            //// Arrange
+            List<CounterIntAmountChangedMessage> messages = new List<CounterIntAmountChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount1);
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CounterIntAmountChangedMessage), (x) => {
+                messages.Add(x as CounterIntAmountChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.GetCounter(counterKey).Set(amount2);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(amount1, messages[0].OldAmount, "Incorrect old amount in message.");
+            Assert.AreEqual(amount2, messages[0].NewAmount, "Incorrect new amount in message.");
+        }
+
+
+        [TestCase("NewCounter", 0, 10)]
+        [TestCase("NewCounter", 20, 30)]
+        [TestCase("AnotherCounter", 30, 40)]
+        public void CounterIntAmountBestChangedMessageSent(string counterKey, int amount1, int amount2)
+        {
+            //// Arrange
+            List<CounterIntAmountBestChangedMessage> messages = new List<CounterIntAmountBestChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount1);
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CounterIntAmountBestChangedMessage), (x) => {
+                messages.Add(x as CounterIntAmountBestChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.GetCounter(counterKey).Set(amount2);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(amount1, messages[0].OldAmount, "Incorrect old amount in message.");
+            Assert.AreEqual(amount2, messages[0].NewAmount, "Incorrect new amount in message.");
+        }
+
+
+        [TestCase("NewCounter", 0, 10)]
+        [TestCase("NewCounter", 20, 30)]
+        [TestCase("AnotherCounter", 30, 40)]
+        public void CounterFloatAmountChangedMessageSent(string counterKey, float amount1, float amount2)
+        {
+            //// Arrange
+            List<CounterFloatAmountChangedMessage> messages = new List<CounterFloatAmountChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                CounterType = CounterConfiguration.CounterTypeEnum.Float
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount1);
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CounterFloatAmountChangedMessage), (x) => {
+                messages.Add(x as CounterFloatAmountChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.GetCounter(counterKey).Set(amount2);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(amount1, messages[0].OldAmount, "Incorrect old amount in message.");
+            Assert.AreEqual(amount2, messages[0].NewAmount, "Incorrect new amount in message.");
+        }
+
+
+        [TestCase("NewCounter", 0, 10)]
+        [TestCase("NewCounter", 20, 30)]
+        [TestCase("AnotherCounter", 30, 40)]
+        public void CounterFloatAmountBestChangedMessageSent(string counterKey, float amount1, float amount2)
+        {
+            //// Arrange
+            List<CounterFloatAmountBestChangedMessage> messages = new List<CounterFloatAmountBestChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                CounterType = CounterConfiguration.CounterTypeEnum.Float
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount1);
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(CounterFloatAmountBestChangedMessage), (x) => {
+                messages.Add(x as CounterFloatAmountBestChangedMessage);
+                return true;
+            });
+
+            //// Act
+            gameItem.GetCounter(counterKey).Set(amount2);
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(amount1, messages[0].OldAmount, "Incorrect old amount in message.");
+            Assert.AreEqual(amount2, messages[0].NewAmount, "Incorrect new amount in message.");
+        }
+
+
+        [TestCase("NewCounter", 0)]
+        [TestCase("NewCounter", 20)]
+        [TestCase("AnotherCounter", 30)]
+        public void CounterIntAmountChangedMessageNotSentBeforeInitialised(string counterKey, int amount)
+        {
+            //// Arrange - setup and create some prefs data for later loading
+            int messageCount = 0;
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                Save = CounterConfiguration.SaveType.Always       // persist to true so we load / set defaults in initialise.
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            // save some data to prefs.
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount);
+            gameItem.UpdatePlayerPrefs();
+            PlayerPrefs.Save();
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Act
+            messenger.AddListener(typeof(CounterIntAmountChangedMessage), (x) => {
+                messageCount++;
+                return true;
+            });
+
+            gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messageCount, "No messages should have been sent.");
+        }
+
+
+        [TestCase("NewCounter", 0)]
+        [TestCase("NewCounter", 20)]
+        [TestCase("AnotherCounter", 30)]
+        public void CounterIntAmountBestChangedMessageNotSentBeforeInitialised(string counterKey, int amount)
+        {
+            //// Arrange - setup and create some prefs data for later loading
+            int messageCount = 0;
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                Save = CounterConfiguration.SaveType.Always       // persist to true so we load / set defaults in initialise.
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            // save some data to prefs.
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount);
+            gameItem.UpdatePlayerPrefs();
+            PlayerPrefs.Save();
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Act
+            messenger.AddListener(typeof(CounterIntAmountBestChangedMessage), (x) => {
+                messageCount++;
+                return true;
+            });
+
+            gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messageCount, "No messages should have been sent.");
+        }
+
+
+        [TestCase("NewCounter", 0)]
+        [TestCase("NewCounter", 20)]
+        [TestCase("AnotherCounter", 30)]
+        public void CounterFloatAmountChangedMessageNotSentBeforeInitialised(string counterKey, float amount)
+        {
+            //// Arrange - setup and create some prefs data for later loading
+            int messageCount = 0;
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                Save = CounterConfiguration.SaveType.Always,       // persist to true so we load / set defaults in initialise.
+                CounterType = CounterConfiguration.CounterTypeEnum.Float
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            // save some data to prefs.
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount);
+            gameItem.UpdatePlayerPrefs();
+            PlayerPrefs.Save();
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Act - add listener, create new game item that will try and load prefs
+            messenger.AddListener(typeof(CounterFloatAmountChangedMessage), (x) => {
+                messageCount++;
+                return true;
+            });
+
+            gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messageCount, "No messages should have been sent.");
+        }
+
+
+        [TestCase("NewCounter", 0)]
+        [TestCase("NewCounter", 20)]
+        [TestCase("AnotherCounter", 30)]
+        public void CounterFloatAmountBestChangedMessageNotSentBeforeInitialised(string counterKey, float amount)
+        {
+            //// Arrange - setup and create some prefs data for later loading
+            int messageCount = 0;
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            gameConfiguration.DefaultGameItemCounterConfiguration.Add(new CounterConfiguration()
+            {
+                Name = counterKey,
+                Save = CounterConfiguration.SaveType.Always,       // persist to true so we load / set defaults in initialise.
+                CounterType = CounterConfiguration.CounterTypeEnum.Float
+            });
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+
+            // save some data to prefs.
+            var gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+            gameItem.GetCounter(counterKey).Set(amount);
+            gameItem.UpdatePlayerPrefs();
+            PlayerPrefs.Save();
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Act - add listener, create new game item that will try and load prefs
+            messenger.AddListener(typeof(CounterFloatAmountBestChangedMessage), (x) => {
+                messageCount++;
+                return true;
+            });
+
+            gameItem = ScriptableObject.CreateInstance<GameItem>();
+            gameItem.Initialise(gameConfiguration, player, messenger, 1);
+
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(0, messageCount, "No messages should have been sent.");
+        }
+
+        #endregion Counters
     }
 }
 #endif

@@ -19,45 +19,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.GameItems.Messages;
 using GameFramework.Messaging;
 
 namespace GameFramework.GameStructure.GameItems.Messages
 {
     /// <summary>
-    /// A message that is generated when GameItem counter changes (assuming no overrides are in place).
+    /// A message that is generated when GameItem counter FloatAmountBest changes (assuming no overrides are in place).
     /// </summary>
-    public class CounterChangedMessage : BaseMessage
+    public class CounterFloatAmountBestChangedMessage : BaseMessage
     {
         public readonly GameItem GameItem;
-        public readonly string Key;
-        public readonly int Index;
-        public readonly CounterConfigurationEntry.CounterTypeEnum CounterType;
-        public readonly int NewIntAmount;
-        public readonly int OldIntAmount;
-        public readonly float NewFloatAmount;
-        public readonly float OldFloatAmount;
+        public readonly Counter Counter;
+        public readonly float NewAmount;
+        public readonly float OldAmount;
 
-        public CounterChangedMessage(GameItem gameItem,string key, int index, int newAmount, int oldAmount)
+        public CounterFloatAmountBestChangedMessage(GameItem gameItem, Counter counter, float oldAmount)
         {
             GameItem = gameItem;
-            Key = key;
-            Index = index;
-            NewIntAmount = newAmount;
-            OldIntAmount = oldAmount;
-            CounterType = CounterConfigurationEntry.CounterTypeEnum.Int;
-        }
-
-        public CounterChangedMessage(GameItem gameItem, string key, int index, float newAmount, float oldAmount)
-        {
-            GameItem = gameItem;
-            Key = key;
-            Index = index;
-            NewFloatAmount = newAmount;
-            OldFloatAmount = oldAmount;
-            CounterType = CounterConfigurationEntry.CounterTypeEnum.Float;
+            Counter = counter;
+            NewAmount = counter.FloatAmountBest;
+            OldAmount = oldAmount;
         }
 
         /// <summary>
@@ -66,10 +48,7 @@ namespace GameFramework.GameStructure.GameItems.Messages
         /// <returns></returns>
         public override string ToString()
         {
-            if (CounterType == CounterConfigurationEntry.CounterTypeEnum.Int)
-                return string.Format("GameItem Type {0}, GameItem Number {1}, Counter {2}, New Amount {3}, Old Amount {4}", GameItem.IdentifierBase, GameItem.Number, Key, NewIntAmount, OldIntAmount);
-            else
-                return string.Format("GameItem Type {0}, GameItem Number {1}, Counter {2}, New Amount {3}, Old Amount {4}", GameItem.IdentifierBase, GameItem.Number, Key, NewFloatAmount, OldFloatAmount);
+             return string.Format("GameItem Type {0}, GameItem Number {1}, Counter {2}, New Amount {3}, Old Amount {4}", GameItem.IdentifierBase, GameItem.Number, Counter.Configuration.Name, NewAmount, OldAmount);
         }
     }
 }

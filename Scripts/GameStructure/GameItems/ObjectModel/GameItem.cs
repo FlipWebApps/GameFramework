@@ -40,7 +40,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
     /// </summary>
     /// This provides many of the common features that game items need such as a name and description, 
     /// localisation support, the ability to unlock, a score or value etc.
-    public class GameItem : ScriptableObject
+    public class GameItem : ScriptableObject, ICounterChangedCallback
     {
         #region Enums
         /// <summary>
@@ -355,27 +355,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #endregion General Variables
 
-        #region User Specific Settings
-
-        /// <summary>
-        /// The number of coins that are currently assigned to the current GameItem. 
-        /// </summary>
-        /// CoinsChangedMessage or some other GameItem specific varient is usually sent whenever this value changes outside of initialisation.
-        /// Coins is contained within this items Counters collection however exposed through this property for convenience.
-        public int Coins
-        {
-            get { return _coins; }
-            set
-            {
-                var oldValue = Coins;
-                _coins = Mathf.Max(value, 0);
-                if (IsInitialised && oldValue != Coins)
-                    SendCoinsChangedMessage(Coins, oldValue);
-            }
-        }
-        int _coins;
-        int _coinsCounterIndex;
-
+        #region Per User Settings
 
         /// <summary>
         /// The score associated with the current GameItem. 
@@ -384,27 +364,29 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Score is contained within this items Counters collection however exposed through this property for convenience.
         public int Score
         {
-            get { return _score; }
-            set
-            {
-                var oldValue = Score;
-                _score = Mathf.Max(value, 0);
-                if (IsInitialised && oldValue != Score)
-                    SendScoreChangedMessage(Score, oldValue);
+            get { return _scoreCounter.IntAmount; }
+            set { _scoreCounter.IntAmount = value; }
+            //get { return _score; }
+            //set
+            //{
+            //    var oldValue = Score;
+            //    _score = Mathf.Max(value, 0);
+            //    if (IsInitialised && oldValue != Score)
+            //        SendScoreChangedMessage(Score, oldValue);
 
-                if (Score > HighScore)
-                {
-                    HighScore = Score;
-                    if (HighScore > HighScoreLocalPlayers)
-                    {
-                        HighScoreLocalPlayers = HighScore;
-                        HighScoreLocalPlayersPlayerNumber = _isPlayer ? Number : Player.Number;
-                    }
-                }
-            }
+            //    if (Score > HighScore)
+            //    {
+            //        HighScore = Score;
+            //        if (HighScore > HighScoreLocalPlayers)
+            //        {
+            //            HighScoreLocalPlayers = HighScore;
+            //            HighScoreLocalPlayersPlayerNumber = _isPlayer ? Number : Player.Number;
+            //        }
+            //    }
+            //}
         }
-        int _score;
-        int _scoreCounterIndex;
+        //int _score;
+        Counter _scoreCounter;
 
 
         /// <summary>
@@ -414,16 +396,18 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// HighScore is contained within this items Counters collection however exposed through this property for convenience.
         public int HighScore
         {
-            get { return _highScore; }
-            set
-            {
-                var oldValue = _highScore;
-                _highScore = value;
-                if (IsInitialised && oldValue != HighScore)
-                    SendHighScoreChangedMessage(HighScore, oldValue);
-            }
+            get { return _scoreCounter.IntAmountBest; }
+            //set { _scoreCounter.IntAmountBest = value; }
+            //get { return _highScore; }
+            //set
+            //{
+            //    var oldValue = _highScore;
+            //    _highScore = value;
+            //    if (IsInitialised && oldValue != HighScore)
+            //        SendHighScoreChangedMessage(HighScore, oldValue);
+            //}
         }
-        int _highScore;
+        //int _highScore;
 
         /// <summary>
         /// The initial high score before this turn / game...
@@ -434,7 +418,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Collection of counters including built in counters.
         /// </summary>
-        CounterEntry[] _counterEntries { get; set; }
+        Counter[] _counterEntries { get; set; }
 
         /// <summary>
         /// Whether the current item is unlocked. 
@@ -452,7 +436,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Saved per player.
         public bool IsUnlockedAnimationShown { get; set; }
 
-        #endregion User Specific Settings
+        #endregion Per User Settings
 
         #region Extension Data
         /// <summary>
@@ -557,25 +541,24 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             HighScoreLocalPlayersPlayerNumber = PreferencesFactory.GetInt(FullKey("HSLPN"), -1);	// saved at global level rather than per player.
             OldHighScoreLocalPlayers = HighScoreLocalPlayers;
 
-            Coins = 0;
-            Score = 0;
-            HighScore = GetSettingInt("HS", 0);
-            OldHighScore = HighScore;
+            //TODO: Load!!
+            //HighScore = GetSettingInt("HS", 0);
+            //OldHighScore = HighScore;
 
             // Setup counters.
-            var counterConfigurationEntries = GetCounterConfigurationEntries();
+            var counterConfigurationEntries = GetCounterConfiguration();
             var numberOfCounterEntries = counterConfigurationEntries == null ? 0 : counterConfigurationEntries.Count;
-            _counterEntries = new CounterEntry[numberOfCounterEntries];
+            _counterEntries = new Counter[numberOfCounterEntries];
             for (var counterEntryCount = 0; counterEntryCount < numberOfCounterEntries; counterEntryCount++)
             {
-                var counterEntry = new CounterEntry(counterConfigurationEntries[counterEntryCount], this, counterEntryCount);
+                var counterEntry = new Counter(counterConfigurationEntries[counterEntryCount], _prefsPrefixPlayer, counterEntryCount, this);
                 counterEntry.LoadFromPrefs();
                 _counterEntries[counterEntryCount] = counterEntry;
             }
-            _coinsCounterIndex = GetCounterIndex("Coins");
-            _scoreCounterIndex = GetCounterIndex("Score");
-            Assert.AreNotEqual(-1, _coinsCounterIndex, "All GamItems must have a counter defined with the Key 'Coins'");
-            Assert.AreNotEqual(-1, _scoreCounterIndex, "All GamItems must have a counter defined with the Key 'Score'");
+            _coinsCounter = GetCounter("Coins");
+            _scoreCounter = GetCounter("Score");
+            Assert.IsNotNull(_coinsCounter, "All GameItems must have a counter defined with the Key 'Coins'");
+            Assert.IsNotNull(_scoreCounter, "All GamItems must have a counter defined with the Key 'Score'");
 
             // If the default state is unlocked then default to animation shown also, otherwise we check for bought / unlocked in prefs.
             if (StartUnlocked) {
@@ -1389,6 +1372,20 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #endregion
 
         #region Coins Related
+
+        /// <summary>
+        /// The number of coins that are currently assigned to the current GameItem. 
+        /// </summary>
+        /// CoinsChangedMessage and CounterChangedMessage or some other GameItem specific varients are usually sent whenever 
+        /// this value changes outside of initialisation.
+        /// Coins is contained within this items Counters collection however exposed through this property for convenience.
+        public int Coins
+        {
+            get { return _coinsCounter.IntAmount; }
+            set { _coinsCounter.IntAmount = value; }
+        }
+        Counter _coinsCounter;
+
         /// <summary>
         /// Add a coin onto this GameItems coin count.
         /// </summary>
@@ -1440,434 +1437,116 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         #region Counter Related
 
-        #region Counter Setup
         /// <summary>
         /// Override in subclasses to return a list of custom counter configuration entries that should also
         /// be added to this GameItem.
         /// </summary>
         /// <returns></returns>
-        public virtual List<CounterConfigurationEntry> GetCounterConfigurationEntries()
+        public virtual List<CounterConfiguration> GetCounterConfiguration()
         {
-            return new List<CounterConfigurationEntry>
-            {
-                new CounterConfigurationEntry() { Key = "Coins" },
-                new CounterConfigurationEntry() { Key = "Score" }
-            };
+            return GameConfiguration.DefaultGameItemCounterConfiguration;
         }
 
-        #endregion Counter Setup 
-        #region Counter Access
 
-        CounterEntry GetCounterEntry(int index)
+        /// <summary>
+        /// Get a reference to the specified counter by index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Counter GetCounter(int index)
         {
             return _counterEntries[index];
+        }
+
+
+        /// <summary>
+        /// Get a reference to the specified counter by index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Counter GetCounter(string name)
+        {
+            Assert.AreNotEqual(-1, GetCounterIndex(name), string.Format("A counter with the name {0} could not be found", name));
+            return GetCounter(GetCounterIndex(name));
         }
 
         /// <summary>
         /// Get the index of a counter so this can be passed for performance later on rather than looking up
         /// by name each time.
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns>Index of the counter for later use when increasing / decreasing / getting the value or -1 if a counter with key is not defined.</returns>
-        public int GetCounterIndex(string key)
+        /// <param name="name"></param>
+        /// <returns>Index of the counter for later use when increasing / decreasing / getting the value or -1 if a counter with name is not defined.</returns>
+        public int GetCounterIndex(string name)
         {
             for (var i = 0; i < _counterEntries.Length; i++)
-                if (_counterEntries[i].CounterConfigurationEntry.Key.Equals(key)) return i;
+                if (_counterEntries[i].Configuration.Name.Equals(name)) return i;
             return -1;
         }
-        #endregion Counter Access
-        #region Int Counter
-        /// <summary>
-        /// Get the amount that a counter is currently set to
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public int GetCounterInt(int index)
-        {
-            return GetCounterEntry(index).IntAmount;
-        }
 
 
         /// <summary>
-        /// Get the amount that a counter is currently set to
+        /// Counter IntAmount changed handler that generates a CounterIntAmountChangedMessage
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public int GetCounterInt(string key)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                return GetCounterInt(index);
-            return 0;
-        }
-
-        /// <summary>
-        /// Set the amount of a counter
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        public void SetCounter(int index, int amount)
-        {
-            GetCounterEntry(index).IntAmount = amount;
-        }
-
-
-        /// <summary>
-        /// Set the amount of a counter
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        public void SetCounter(string key, int amount)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                SetCounter(index, amount);
-        }
-
-        /// <summary>
-        /// Increase a counter by the specified amount
-        /// </summary>
-        public void IncreaseCounter(int index, int amount = 1)
-        {
-            var counter = GetCounterEntry(index);
-            if (counter != null)
-            {
-                counter.IntAmount += amount;
-                //if (Score > HighScore)
-                //{
-                //    HighScore = Score;
-                //}
-            }
-        }
-
-        /// <summary>
-        /// Increase a counter by the specified amount
-        /// </summary>
-        public void IncreaseCounter(string key, int amount = 1)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                IncreaseCounter(index, amount);
-        }
-
-
-        /// <summary>
-        /// Decrease a counter by the specified amount
-        /// </summary>
-        public void DecreaseCounter(int index, int amount = 1)
-        {
-            var counter = GetCounterEntry(index);
-            if (counter != null)
-            {
-                counter.IntAmount -= amount;
-                //if (Score > HighScore)
-                //{
-                //    HighScore = Score;
-                //}
-            }
-        }
-
-        /// <summary>
-        /// Decrease a counter by the specified amount
-        /// </summary>
-
-        public void DecreaseCounter(string key, int amount = 1)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                DecreaseCounter(index, amount);
-        }
-
-
-        /// <summary>
-        /// Send a CounterChangedMessage when the counter changes.
-        /// </summary>
-        /// <param name="newAmount"></param>
+        /// <param name="counter"></param>
         /// <param name="oldAmount"></param>
-        /// <param name="key"></param>
-        /// <param name="index"></param>
-        /// You may want to override this in your derived classes to send custom messages however always call through to the
-        /// base implementation as some components require the standard message to work.
-        public virtual void SendCounterChangedMessage(string key, int index, int newAmount, int oldAmount)
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        /// Overrides are in place for coin and score counters to send specific messages in adition
+        public virtual void CounterIntAmountChanged(Counter counter, int oldAmount)
         {
-            Messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
-        }
-
-        #endregion IntCounter
-        #region Float Counter
-
-        /// <summary>
-        /// Get the amount that a counter is currently set to
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public float GetCounterFloat(int index)
-        {
-            return GetCounterEntry(index).FloatAmount;
-        }
-
-
-        /// <summary>
-        /// Get the amount that a counter is currently set to
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public float GetCounterFloat(string key)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                return GetCounterFloat(index);
-            return 0;
-        }
-
-        /// <summary>
-        /// Set the amount of a counter
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        public void SetCounter(int index, float amount)
-        {
-            GetCounterEntry(index).FloatAmount = amount;
-        }
-
-
-        /// <summary>
-        /// Set the amount of a counter
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        public void SetCounter(string key, float amount)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                SetCounter(index, amount);
-        }
-
-        /// <summary>
-        /// Increase a counter by the specified amount
-        /// </summary>
-        public void IncreaseCounter(int index, float amount = 1)
-        {
-            var counter = GetCounterEntry(index);
-            if (counter != null)
+            if (IsInitialised)
             {
-                counter.FloatAmount += amount;
-                //if (Score > HighScore)
-                //{
-                //    HighScore = Score;
-                //}
+                if (counter.Identifier == _coinsCounter.Identifier)
+                    SendCoinsChangedMessage(counter.IntAmount, oldAmount);
+                else if (counter.Identifier == _scoreCounter.Identifier)
+                    SendScoreChangedMessage(counter.IntAmount, oldAmount);
+                Messenger.QueueMessage(new CounterIntAmountChangedMessage(this, counter, oldAmount));
             }
         }
 
-        /// <summary>
-        /// Increase a counter by the specified amount
-        /// </summary>
-        public void IncreaseCounter(string key, float amount = 1)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                IncreaseCounter(index, amount);
-        }
-
 
         /// <summary>
-        /// Decrease a counter by the specified amount
+        /// Counter IntAmountBest changed handler that generates a CounterIntAmountBestChangedMessage
         /// </summary>
-        public void DecreaseCounter(int index, float amount = 1)
-        {
-            var counter = GetCounterEntry(index);
-            if (counter != null)
-            {
-                counter.FloatAmount -= amount;
-                //if (Score > HighScore)
-                //{
-                //    HighScore = Score;
-                //}
-            }
-        }
-
-        /// <summary>
-        /// Decrease a counter by the specified amount
-        /// </summary>
-
-        public void DecreaseCounter(string key, float amount = 1)
-        {
-            var index = GetCounterIndex(key);
-            if (index != -1)
-                DecreaseCounter(index, amount);
-        }
-
-
-        /// <summary>
-        /// Send a CounterChangedMessage when the counter changes.
-        /// </summary>
-        /// <param name="newAmount"></param>
+        /// <param name="counter"></param>
         /// <param name="oldAmount"></param>
-        /// <param name="key"></param>
-        /// <param name="index"></param>
-        /// You may want to override this in your derived classes to send custom messages however always call through to the
-        /// base implementation as some components require the standard message to work.
-        public virtual void SendCounterChangedMessage(string key, int index, float newAmount, float oldAmount)
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        /// Overrides are in place for score counters to send specific messages in adition
+        public virtual void CounterIntAmountBestChanged(Counter counter, int oldAmount)
         {
-            Messenger.QueueMessage(new CounterChangedMessage(this, key, index, newAmount, oldAmount));
+            if (IsInitialised)
+            {
+                if (counter.Identifier == _scoreCounter.Identifier)
+                    SendHighScoreChangedMessage(counter.IntAmountBest, oldAmount);
+                Messenger.QueueMessage(new CounterIntAmountBestChangedMessage(this, counter, oldAmount));
+            }
         }
 
-        #endregion Float Counter
-        #region Counter Configuration Class
+
         /// <summary>
-        /// Runtime information about a single counter entry including the key that identifies it.
+        /// Counter FloatAmount changed handler that generates a CounterFloatAmountChangedMessage
         /// </summary>
-        class CounterEntry
+        /// <param name="counter"></param>
+        /// <param name="oldAmount"></param>
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        public virtual void CounterFloatAmountChanged(Counter counter, float oldAmount)
         {
-            /// <summary>
-            /// A reference to the CounterConfigurationEntry that this entry is based upon.
-            /// </summary>
-            public CounterConfigurationEntry CounterConfigurationEntry { get; set; }
-
-            GameItem _parent;   // parent GameItem this instance is contained within
-            int _index;         // index within the GameItem collection (used for referencing)
-
-            #region Runtime Properties
-
-            /// <summary>
-            /// The current amount that this counter is at.
-            /// </summary>
-            public int IntAmount
-            {
-                get { return _intAmount; }
-                set
-                {
-                    if (value < CounterConfigurationEntry.IntMinimum)
-                        value = CounterConfigurationEntry.IntMinimum;
-                    else if (value > CounterConfigurationEntry.IntMaximum)
-                        value = CounterConfigurationEntry.IntMaximum;
-                    var oldAmount = _intAmount;
-                    _intAmount = value;
-                    if (_parent.IsInitialised && oldAmount != _intAmount)
-                    {
-                        _parent.SendCounterChangedMessage(CounterConfigurationEntry.Key, _index, _intAmount, oldAmount);
-                        //if (Score > HighScore)
-                        //{
-                        //    HighScore = Score;
-                        //}                    }
-                    }
-                }
-            }
-            int _intAmount;
-
-            /// <summary>
-            /// THe highest value that the int variable has reached.
-            /// </summary>
-            public int HighestIntAmount { get; set; }
-
-            /// <summary>
-            /// The current amount that this counter is at.
-            /// </summary>
-            public float FloatAmount
-            {
-                get { return _floatAmount; }
-                set
-                {
-                    if (value < CounterConfigurationEntry.FloatMinimum)
-                        value = CounterConfigurationEntry.FloatMinimum;
-                    else if (value > CounterConfigurationEntry.FloatMaximum)
-                        value = CounterConfigurationEntry.FloatMaximum;
-                    var oldAmount = _floatAmount;
-                    _floatAmount = value;
-                    if (_parent.IsInitialised && !Mathf.Approximately(oldAmount, _floatAmount))
-                    {
-                        _parent.SendCounterChangedMessage(CounterConfigurationEntry.Key, _index, _floatAmount, oldAmount);
-                        // TODO High Score!
-                    }
-                }
-            }
-            float _floatAmount;
-
-            /// <summary>
-            /// THe highest value that the float variable has reached.
-            /// </summary>
-            public float HighestFloatAmount { get; set; }
-
-            #endregion Runtime Properties
-
-            /// <summary>
-            /// Constructor to hold necessary references.
-            /// </summary>
-            /// <param name="counterConfigurationEntry"></param>
-            /// <param name="parent"></param>
-            /// <param name="index">Index of this item within the GameItem (used for access / performance)</param>
-            public CounterEntry(CounterConfigurationEntry counterConfigurationEntry, GameItem parent, int index)
-            {
-                CounterConfigurationEntry = counterConfigurationEntry;
-                _parent = parent;
-                _index = index;
-            }
-
-
-            /// <summary>
-            /// Load this item from perferences within the context of the specified GameItem
-            /// </summary>
-            /// <param name="container"></param>
-            public void LoadFromPrefs()
-            {
-                if (CounterConfigurationEntry.PersistChanges)
-                {
-                    if (CounterConfigurationEntry.CounterType == CounterConfigurationEntry.CounterTypeEnum.Int)
-                    {
-                        IntAmount = _parent.GetSettingInt("CI." + CounterConfigurationEntry.Key, 0); // CI = CounterInt)
-                        HighestIntAmount = _parent.GetSettingInt("CIH." + CounterConfigurationEntry.Key, 0); // CIH = CounterIntHighest)
-                    }
-                    else
-                    {
-                        FloatAmount = _parent.GetSettingFloat("CF." + CounterConfigurationEntry.Key, 0);
-                        HighestFloatAmount = _parent.GetSettingFloat("CFH." + CounterConfigurationEntry.Key, 0);
-                    }
-                }
-                else
-                {
-                    IntAmount = 0;
-                    FloatAmount = 0;
-                }
-            }
-
-            /// <summary>
-            /// Set this item to perferences within the context of the specified GameItem
-            /// </summary>
-            /// <param name="container"></param>
-            public void UpdatePlayerPrefs()
-            {
-                if (CounterConfigurationEntry.PersistChanges)
-                {
-                    if (CounterConfigurationEntry.CounterType == CounterConfigurationEntry.CounterTypeEnum.Int)
-                    {
-                        _parent.SetSetting("CI." + CounterConfigurationEntry.Key, IntAmount);
-                        _parent.SetSetting("CIH." + CounterConfigurationEntry.Key, IntAmount);
-                    }
-                    else
-                    {
-                        _parent.SetSettingFloat("CF." + CounterConfigurationEntry.Key, FloatAmount);
-                        _parent.SetSettingFloat("CFH." + CounterConfigurationEntry.Key, FloatAmount);
-                    }
-                }
-            }
+            if (IsInitialised)
+                Messenger.QueueMessage(new CounterFloatAmountChangedMessage(this, counter, oldAmount));
         }
-        #endregion Counter Configuration Class
 
-        ///// <summary>
-        ///// Send a HidhScoreChangedMessage when the high score changes.
-        ///// </summary>
-        ///// <param name="newHighScore"></param>
-        ///// <param name="oldHighScore"></param>
-        ///// You may want to override this in your derived classes to send custom messages.
-        //public virtual void SendHighScoreChangedMessage(int newHighScore, int oldHighScore)
-        //{
-        //    _messenger.QueueMessage(new HighScoreChangedMessage(this, newHighScore, oldHighScore));
-        //}
-        #endregion
+
+        /// <summary>
+        /// Counter FloatAmountBest changed handler that generates a CounterFloatAmountBestChangedMessage
+        /// </summary>
+        /// <param name="counter"></param>
+        /// <param name="oldAmount"></param>
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        public virtual void CounterFloatAmountBestChanged(Counter counter, float oldAmount)
+        {
+            if (IsInitialised)
+                Messenger.QueueMessage(new CounterFloatAmountBestChangedMessage(this, counter, oldAmount));
+        }
+        #endregion Counter Related
 
         #region For setting gameitem instance specific settings
         /// <summary>
@@ -2048,6 +1727,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             return _prefsPrefix + key;
         }
+
         #endregion
 
         #region extra classes for configuration
