@@ -65,80 +65,99 @@ namespace GameFramework.GameStructure.Game.ObjectModel
         }
         #endregion Static Singleton Reference
 
-        #region Character Settings
+
+        #region Default Settings
         /// <summary>
-        /// List of counter configurations. You can read from this, but should not manipulate this - use the other methods.
+        /// List of counter configurations.
         /// </summary>
-        public List<CounterConfigurationEntry> CharacterCounterConfigurationEntries
+        public List<CounterConfiguration> DefaultGameItemCounterConfiguration
         {
             get
             {
-                return _characterCounterConfigurationEntries;
+                return _defaultGameItemCounterConfiguration;
+            }
+        }
+        [SerializeField]
+        [Tooltip("A default list of custom counters to be used unless otherwise overridden.")]
+        List<CounterConfiguration> _defaultGameItemCounterConfiguration = new List<CounterConfiguration>();
+        #endregion Default Settings
+
+        #region Character Settings
+        /// <summary>
+        /// List of counter configurations.
+        /// </summary>
+        public List<CounterConfiguration> CharacterCounterConfiguration
+        {
+            get
+            {
+                return _characterCounterConfiguration;
             }
         }
         [SerializeField]
         [Tooltip("A list of custom counters to be used by all characters.")]
-        List<CounterConfigurationEntry> _characterCounterConfigurationEntries = new List<CounterConfigurationEntry>();
+        List<CounterConfiguration> _characterCounterConfiguration = new List<CounterConfiguration>();
         #endregion Character Settings
 
         #region Level Settings
         /// <summary>
-        /// List of counter configurations. You can read from this, but should not manipulate this - use the other methods.
+        /// List of counter configurations.
         /// </summary>
-        public List<CounterConfigurationEntry> LevelCounterConfigurationEntries
+        public List<CounterConfiguration> LevelCounterConfiguration
         {
             get
             {
-                return _levelCounterConfigurationEntries;
+                return _levelCounterConfiguration;
             }
         }
         [SerializeField]
         [Tooltip("A list of custom counters to be used by all levels.")]
-        List<CounterConfigurationEntry> _levelCounterConfigurationEntries = new List<CounterConfigurationEntry>();
+        List<CounterConfiguration> _levelCounterConfiguration = new List<CounterConfiguration>();
         #endregion Level Settings
 
         #region Player Settings
         /// <summary>
-        /// List of counter configurations. You can read from this, but should not manipulate this - use the other methods.
+        /// List of counter configurations.
         /// </summary>
-        public List<CounterConfigurationEntry> PlayerCounterConfigurationEntries
+        public List<CounterConfiguration> PlayerCounterConfiguration
         {
             get
             {
-                return _playerCounterConfigurationEntries;
+                return _playerCounterConfiguration;
             }
         }
         [SerializeField]
         [Tooltip("A list of custom counters to be used by all players.")]
-        List<CounterConfigurationEntry> _playerCounterConfigurationEntries = new List<CounterConfigurationEntry>();
+        List<CounterConfiguration> _playerCounterConfiguration = new List<CounterConfiguration>();
         #endregion Player Settings
 
         #region World Settings
         /// <summary>
-        /// List of counter configurations. You can read from this, but should not manipulate this - use the other methods.
+        /// List of counter configurations.
         /// </summary>
-        public List<CounterConfigurationEntry> WorldCounterConfigurationEntries
+        public List<CounterConfiguration> WorldCounterConfiguration
         {
             get
             {
-                return _worldCounterConfigurationEntries;
+                return _worldCounterConfiguration;
             }
         }
         [SerializeField]
         [Tooltip("A list of custom counters to be used by all worlds.")]
-        List<CounterConfigurationEntry> _worldCounterConfigurationEntries = new List<CounterConfigurationEntry>();
+        List<CounterConfiguration> _worldCounterConfiguration = new List<CounterConfiguration>();
         #endregion World Settings
 
         public GameConfiguration()
         {
-            CharacterCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Coins" });
-            CharacterCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Score" });
-            LevelCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Coins" });
-            LevelCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Score" });
-            PlayerCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Coins", PersistChanges = true });
-            PlayerCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Score", PersistChanges = true });
-            WorldCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Coins" });
-            WorldCounterConfigurationEntries.Add(new CounterConfigurationEntry() { Key = "Score" });
+            DefaultGameItemCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
+            DefaultGameItemCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
+            CharacterCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
+            CharacterCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
+            LevelCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
+            LevelCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
+            PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins", Save = CounterConfiguration.SaveType.Always });
+            PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Score", Save = CounterConfiguration.SaveType.Always });
+            WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
+            WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
         }
     }
 
@@ -147,28 +166,30 @@ namespace GameFramework.GameStructure.Game.ObjectModel
     /// Configuration information about a single counter entry including the key that identifies it.
     /// </summary>
     [System.Serializable]
-    public class CounterConfigurationEntry
+    public class CounterConfiguration
     {
         public enum CounterTypeEnum { Int, Float }
+
+        public enum SaveType { None, Always }
 
         #region Configuration Properties
         /// <summary>
         /// A unique key that identifies this counter.
         /// </summary>
-        public string Key
+        public string Name
         {
             get
             {
-                return _key;
+                return _name;
             }
             set
             {
-                _key = value;
+                _name = value;
             }
         }
         [SerializeField]
-        [Tooltip("A unique key that identifies this counter.")]
-        string _key;
+        [Tooltip("A unique name that identifies this counter.")]
+        string _name;
 
         /// <summary>
         /// The type that this counter represents.
@@ -261,25 +282,41 @@ namespace GameFramework.GameStructure.Game.ObjectModel
         float _floatMaximum = float.MaxValue;
 
         /// <summary>
-        /// Whether changes should be saved across game sessions
+        /// If and when the counter should be saved for use across game sessions.
         /// </summary>
-        public bool PersistChanges
+        public SaveType Save
         {
             get
             {
-                return _persistChanges;
+                return _save;
             }
             set
             {
-                _persistChanges = value;
+                _save = value;
             }
         }
-        [Tooltip("Whether runtime changes should be saved across game sessions.")]
+        [Tooltip("If and when the counter should be saved for use across game sessions.")]
         [SerializeField]
-        bool _persistChanges;
+        SaveType _save;
 
-        // Persist
-        // Persist Key
+        /// <summary>
+        /// If and when the best value for the counter should be saved for use across game sessions.
+        /// </summary>
+        public SaveType SaveBest
+        {
+            get
+            {
+                return _saveBest;
+            }
+            set
+            {
+                _saveBest = value;
+            }
+        }
+        [Tooltip("If and when the counter should be saved for use across game sessions.")]
+        [SerializeField]
+        SaveType _saveBest = SaveType.Always;
+
         #endregion Configuration Properties
     }
 }

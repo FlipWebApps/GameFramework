@@ -47,9 +47,9 @@ namespace GameFramework.GameStructure.Characters.ObjectModel
         /// be added to this GameItem.
         /// </summary>
         /// <returns></returns>
-        public override List<CounterConfigurationEntry> GetCounterConfigurationEntries()
+        public override List<CounterConfiguration> GetCounterConfiguration()
         {
-            return GameConfiguration.Instance.CharacterCounterConfigurationEntries;
+            return GameConfiguration.CharacterCounterConfiguration;
         }
     }
 }

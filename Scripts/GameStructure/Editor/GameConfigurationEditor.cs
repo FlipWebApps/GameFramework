@@ -30,13 +30,13 @@ namespace GameFramework.GameStructure.Editor
     [CustomEditor(typeof(GameConfiguration))]
     public class GameConfigurationEditor : UnityEditor.Editor
     {
-        SerializedProperty _characterCounterConfigurationEntriesProperty;
+        SerializedProperty _characterCounterConfigurationProperty;
 
-        SerializedProperty _levelCounterConfigurationEntriesProperty;
+        SerializedProperty _levelCounterConfigurationProperty;
 
-        SerializedProperty _playerCounterConfigurationEntriesProperty;
+        SerializedProperty _playerCounterConfigurationProperty;
 
-        SerializedProperty _worldCounterConfigurationEntriesProperty;
+        SerializedProperty _worldCounterConfigurationProperty;
 
         Rect _mainHelpRect;
         int _currentTab;
@@ -46,13 +46,13 @@ namespace GameFramework.GameStructure.Editor
 
         void OnEnable()
         {
-            _characterCounterConfigurationEntriesProperty = serializedObject.FindProperty("_characterCounterConfigurationEntries");
+            _characterCounterConfigurationProperty = serializedObject.FindProperty("_characterCounterConfiguration");
 
-            _levelCounterConfigurationEntriesProperty = serializedObject.FindProperty("_levelCounterConfigurationEntries");
+            _levelCounterConfigurationProperty = serializedObject.FindProperty("_levelCounterConfiguration");
 
-            _playerCounterConfigurationEntriesProperty = serializedObject.FindProperty("_playerCounterConfigurationEntries");
+            _playerCounterConfigurationProperty = serializedObject.FindProperty("_playerCounterConfiguration");
 
-            _worldCounterConfigurationEntriesProperty = serializedObject.FindProperty("_worldCounterConfigurationEntries");
+            _worldCounterConfigurationProperty = serializedObject.FindProperty("_worldCounterConfiguration");
         }
 
         public override void OnInspectorGUI()
@@ -98,7 +98,7 @@ namespace GameFramework.GameStructure.Editor
 
         //    EditorGUILayout.BeginVertical("Box");
         //    EditorGUI.indentLevel++;
-        //    EditorGUILayout.PropertyField(_globalCounterConfigurationEntriesProperty, new GUIContent("Custom Counters"), true);
+        //    EditorGUILayout.PropertyField(_globalCounterConfigurationProperty, new GUIContent("Custom Counters"), true);
         //    EditorGUI.indentLevel--;
         //    EditorGUILayout.EndVertical();
         //}
@@ -106,25 +106,25 @@ namespace GameFramework.GameStructure.Editor
 
         void DrawCharacters()
         {
-            DrawCounters(_characterCounterConfigurationEntriesProperty);
+            DrawCounters(_characterCounterConfigurationProperty);
         }
 
 
         void DrawLevels()
         {
-            DrawCounters(_levelCounterConfigurationEntriesProperty);
+            DrawCounters(_levelCounterConfigurationProperty);
         }
 
 
         void DrawPlayers()
         {
-            DrawCounters(_playerCounterConfigurationEntriesProperty);
+            DrawCounters(_playerCounterConfigurationProperty);
         }
 
 
         void DrawWorlds()
         {
-            DrawCounters(_worldCounterConfigurationEntriesProperty);
+            DrawCounters(_worldCounterConfigurationProperty);
         }
 
 
@@ -139,17 +139,18 @@ namespace GameFramework.GameStructure.Editor
                 for (var i = 0; i < arrayProperty.arraySize; i++)
                 {
                     var elementProperty = arrayProperty.GetArrayElementAtIndex(i);
-                    var keyProperty = elementProperty.FindPropertyRelative("_key");
+                    var nameProperty = elementProperty.FindPropertyRelative("_name");
                     var counterTypeProperty = elementProperty.FindPropertyRelative("_counterType");
-                    var persistChangesProperty = elementProperty.FindPropertyRelative("_persistChanges");
+                    var saveProperty = elementProperty.FindPropertyRelative("_save");
+                    var saveBestProperty = elementProperty.FindPropertyRelative("_saveBest");
                     var deleted = false;
-                    var isSystemEntry = keyProperty.stringValue.Equals("Score") || keyProperty.stringValue.Equals("Coins");
+                    var isSystemEntry = nameProperty.stringValue.Equals("Score") || nameProperty.stringValue.Equals("Coins");
                     EditorGUILayout.BeginHorizontal(GuiStyles.BoxLightStyle);
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    var name = string.IsNullOrEmpty(keyProperty.stringValue) ? "<missing name>" :
-                        keyProperty.stringValue + (isSystemEntry ? " (Built in)" : "");
+                    var name = string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" :
+                        nameProperty.stringValue + (isSystemEntry ? " (Built in)" : "");
                     elementProperty.isExpanded = EditorGUILayout.Foldout(elementProperty.isExpanded, name);
                     if (!isSystemEntry)
                         if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
@@ -163,7 +164,7 @@ namespace GameFramework.GameStructure.Editor
 
                     if (!deleted && elementProperty.isExpanded)
                     {
-                        EditorGUILayout.PropertyField(keyProperty);
+                        EditorGUILayout.PropertyField(nameProperty);
 
                         counterTypeProperty.enumValueIndex = EditorGUILayout.Popup("Type", counterTypeProperty.enumValueIndex, _counterTypeNames);
 
@@ -221,7 +222,8 @@ namespace GameFramework.GameStructure.Editor
                             GUILayout.EndHorizontal();
                         }
 
-                        EditorGUILayout.PropertyField(persistChangesProperty);
+                        EditorGUILayout.PropertyField(saveProperty);
+                        EditorGUILayout.PropertyField(saveBestProperty);
                     }
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
@@ -249,13 +251,14 @@ namespace GameFramework.GameStructure.Editor
             var newElement =
                 arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
             newElement.isExpanded = true;
-            newElement.FindPropertyRelative("_key").stringValue = null;
+            newElement.FindPropertyRelative("_name").stringValue = null;
             newElement.FindPropertyRelative("_counterType").enumValueIndex = 0;
             newElement.FindPropertyRelative("_intMinimum").intValue = 0;
             newElement.FindPropertyRelative("_floatMinimum").floatValue = 0;
             newElement.FindPropertyRelative("_intMaximum").intValue = int.MaxValue;
             newElement.FindPropertyRelative("_floatMaximum").floatValue = float.MaxValue;
-            newElement.FindPropertyRelative("_persistChanges").boolValue = false;
+            newElement.FindPropertyRelative("_save").enumValueIndex = 0;
+            newElement.FindPropertyRelative("_saveBest").enumValueIndex = 1;
         }
     }
 }

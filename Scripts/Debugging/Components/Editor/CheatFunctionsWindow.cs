@@ -161,57 +161,8 @@ namespace GameFramework.Debugging.Components.Editor {
                 GameManager.Instance.Player.Health = Mathf.Min(GameManager.Instance.Player.Health, 1);
             }
             GUILayout.EndHorizontal();
-            // player score
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Score (" + GameManager.Instance.Player.Score + ")", GUILayout.Width(100));
-            if (GUILayout.Button("-100", GUILayout.Width(50)))
-            {
-                UpdatePlayerScore(-100);
-            }
-            if (GUILayout.Button("-10", GUILayout.Width(50)))
-            {
-                UpdatePlayerScore(-10);
-            }
-            if (GUILayout.Button("0", GUILayout.Width(50)))
-            {
-                UpdatePlayerScore(int.MinValue);
-            }
-            if (GUILayout.Button("+10", GUILayout.Width(50)))
-            {
-                UpdatePlayerScore(10);
-            }
-            if (GUILayout.Button("+100", GUILayout.Width(50)))
-            {
-                UpdatePlayerScore(100);
-            }
-            GUILayout.EndHorizontal();
 
-            // player coins
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Coins (" + GameManager.Instance.Player.Coins + ")", GUILayout.Width(100));
-            if (GUILayout.Button("-100", GUILayout.Width(50)))
-            {
-                UpdatePlayerCoins(-100);
-            }
-            if (GUILayout.Button("-10", GUILayout.Width(50)))
-            {
-                UpdatePlayerCoins(-10);
-            }
-            if (GUILayout.Button("0", GUILayout.Width(50)))
-            {
-                UpdatePlayerCoins(int.MinValue);
-            }
-            if (GUILayout.Button("+10", GUILayout.Width(50)))
-            {
-                UpdatePlayerCoins(10);
-            }
-            if (GUILayout.Button("+100", GUILayout.Width(50)))
-            {
-                UpdatePlayerCoins(100);
-            }
-            GUILayout.EndHorizontal();
-
-            ShowCounters(GameConfiguration.Instance.PlayerCounterConfigurationEntries, GameManager.Instance.Players.Selected);
+            ShowCounters(GameConfiguration.Instance.PlayerCounterConfiguration, GameManager.Instance.Players.Selected);
         }
 
         private void WorldMenuOptions()
@@ -253,7 +204,7 @@ namespace GameFramework.Debugging.Components.Editor {
             }
             GUILayout.EndHorizontal();
 
-            ShowCounters(GameConfiguration.Instance.WorldCounterConfigurationEntries, GameManager.Instance.Worlds.Selected);
+            ShowCounters(GameConfiguration.Instance.WorldCounterConfiguration, GameManager.Instance.Worlds.Selected);
         }
 
         private void LevelMenuOptions()
@@ -295,58 +246,6 @@ namespace GameFramework.Debugging.Components.Editor {
             }
             GUILayout.EndHorizontal();
 
-            // level score
-            GUILayout.BeginHorizontal();
-            string levelScore = (GameManager.IsActive && GameManager.Instance.Levels != null) ? " (" + GameManager.Instance.Levels.Selected.Score + ")" : "";
-            GUILayout.Label("Score" + levelScore, GUILayout.Width(100));
-            if (GUILayout.Button("-100", GUILayout.Width(50)))
-            {
-                UpdateLevelScore(-100);
-            }
-            if (GUILayout.Button("-10", GUILayout.Width(50)))
-            {
-                UpdateLevelScore(-10);
-            }
-            if (GUILayout.Button("0", GUILayout.Width(50)))
-            {
-                UpdateLevelScore(int.MinValue);
-            }
-            if (GUILayout.Button("+10", GUILayout.Width(50)))
-            {
-                UpdateLevelScore(10);
-            }
-            if (GUILayout.Button("+100", GUILayout.Width(50)))
-            {
-                UpdateLevelScore(100);
-            }
-            GUILayout.EndHorizontal();
-
-            // level coins
-            GUILayout.BeginHorizontal();
-            string levelCoins = (GameManager.IsActive && GameManager.Instance.Levels != null) ? " (" + GameManager.Instance.Levels.Selected.Coins + ")" : "";
-            GUILayout.Label("Coins" + levelCoins, GUILayout.Width(100));
-            if (GUILayout.Button("-100", GUILayout.Width(50)))
-            {
-                UpdateLevelCoins(-100);
-            }
-            if (GUILayout.Button("-10", GUILayout.Width(50)))
-            {
-                UpdateLevelCoins(-10);
-            }
-            if (GUILayout.Button("0", GUILayout.Width(50)))
-            {
-                UpdateLevelCoins(int.MinValue);
-            }
-            if (GUILayout.Button("+10", GUILayout.Width(50)))
-            {
-                UpdateLevelCoins(10);
-            }
-            if (GUILayout.Button("+100", GUILayout.Width(50)))
-            {
-                UpdateLevelCoins(100);
-            }
-            GUILayout.EndHorizontal();
-
             // level stars
             GUILayout.BeginHorizontal();
             GUILayout.Label("Stars", GUILayout.Width(100));
@@ -360,35 +259,54 @@ namespace GameFramework.Debugging.Components.Editor {
                 GUILayout.Toggle(GameManager.Instance.Levels.Selected.IsStarWon(4), "4", GUILayout.Width(50)));
             GUILayout.EndHorizontal();
 
-            ShowCounters(GameConfiguration.Instance.LevelCounterConfigurationEntries, GameManager.Instance.Levels.Selected);
+            ShowCounters(GameConfiguration.Instance.LevelCounterConfiguration, GameManager.Instance.Levels.Selected);
         }
 
-        static void ShowCounters(List<CounterConfigurationEntry> counters, GameItem gameItem)
+        static void ShowCounters(List<CounterConfiguration> counterConfigurationList, GameItem gameItem)
         {
-            foreach (var counterEntry in counters)
+            foreach (var counterConfiguration in counterConfigurationList)
             {
                 GUILayout.BeginHorizontal();
-                var amount = gameItem.GetCounterInt(counterEntry.Key);
-                GUILayout.Label(string.Format("{0} ({1})", counterEntry.Key, amount), GUILayout.Width(100));
-                if (GUILayout.Button("-100", GUILayout.Width(50)))
+                var counter = gameItem.GetCounter(counterConfiguration.Name);
+                if (counter.Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
                 {
-                    gameItem.DecreaseCounter(counterEntry.Key, 100);
+                    GUILayout.Label(string.Format("{0} ({1}, {2})", counterConfiguration.Name, counter.IntAmount, counter.IntAmountBest), GUILayout.Width(100));
+                    if (GUILayout.Button("-100", GUILayout.Width(50)))
+                        counter.Decrease(100);
+                    if (GUILayout.Button("-10", GUILayout.Width(50)))
+                        counter.Decrease(10);
+                    if (GUILayout.Button("-1", GUILayout.Width(50)))
+                        counter.Decrease(10);
+                    if (GUILayout.Button("0", GUILayout.Width(50)))
+                        counter.Set(0);
+                    if (GUILayout.Button("+1", GUILayout.Width(50)))
+                        counter.Increase(1);
+                    if (GUILayout.Button("+10", GUILayout.Width(50)))
+                        counter.Increase(10);
+                    if (GUILayout.Button("+100", GUILayout.Width(50)))
+                        counter.Increase(100);
                 }
-                if (GUILayout.Button("-10", GUILayout.Width(50)))
+                else
                 {
-                    gameItem.DecreaseCounter(counterEntry.Key, 10);
-                }
-                if (GUILayout.Button("0", GUILayout.Width(50)))
-                {
-                    gameItem.SetCounter(counterEntry.Key, 0);
-                }
-                if (GUILayout.Button("+10", GUILayout.Width(50)))
-                {
-                    gameItem.IncreaseCounter(counterEntry.Key, 10);
-                }
-                if (GUILayout.Button("+100", GUILayout.Width(50)))
-                {
-                    gameItem.IncreaseCounter(counterEntry.Key, 100);
+                    GUILayout.Label(string.Format("{0} ({1}, {2})", counterConfiguration.Name, counter.FloatAmount, counter.FloatAmountBest), GUILayout.Width(100));
+                    if (GUILayout.Button("-100", GUILayout.Width(50)))
+                        counter.Decrease(100f);
+                    if (GUILayout.Button("-10", GUILayout.Width(50)))
+                        counter.Decrease(10f);
+                    if (GUILayout.Button("-1", GUILayout.Width(50)))
+                        counter.Decrease(1f);
+                    if (GUILayout.Button("-0.1", GUILayout.Width(50)))
+                        counter.Decrease(0.1f);
+                    if (GUILayout.Button("0", GUILayout.Width(50)))
+                        counter.Set(0f);
+                    if (GUILayout.Button("+0.1", GUILayout.Width(50)))
+                        counter.Increase(0.1f);
+                    if (GUILayout.Button("+1", GUILayout.Width(50)))
+                        counter.Increase(1f);
+                    if (GUILayout.Button("+10", GUILayout.Width(50)))
+                        counter.Increase(10f);
+                    if (GUILayout.Button("+100", GUILayout.Width(50)))
+                        counter.Increase(100f);
                 }
                 GUILayout.EndHorizontal();
             }
