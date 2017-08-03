@@ -19,31 +19,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
-using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
+using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.GameItems.Editor.AbstractClasses;
+using GameFramework.GameStructure.Worlds.Components;
+using System.Collections.Generic;
+using UnityEditor;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Worlds.Editor
 {
-    /// <summary>
-    /// Show a counter from the specified Level
-    /// </summary>
-    [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Show Level Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class ShowLevelCounter : ShowGameItemCounter<Level>
+    [CustomEditor(typeof (ShowWorldCounter))]
+    public class ShowWorldCounterEditor : ShowGameItemCounterEditor
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// Return a list of custom counter configuration entries that should be used
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        public override List<CounterConfiguration> GetCounterConfiguration()
         {
-            Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelCounter");
-            return GameManager.Instance.Levels;
+            return GameConfiguration.Instance.WorldCounterConfiguration;
         }
     }
 }

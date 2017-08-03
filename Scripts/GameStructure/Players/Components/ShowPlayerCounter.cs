@@ -21,29 +21,29 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.Players.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Players.Components
 {
     /// <summary>
-    /// Show a counter from the specified Level
+    /// Show a counter from the specified Player
     /// </summary>
     [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Show Level Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class ShowLevelCounter : ShowGameItemCounter<Level>
+    [AddComponentMenu("Game Framework/GameStructure/Players/Show Player Counter")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
+    public class ShowPlayerCounter : ShowGameItemCounter<Player>
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// Returns the current Player GameItem
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        protected override GameItemManager<Player, GameItem> GetGameItemManager()
         {
-            Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelCounter");
-            return GameManager.Instance.Levels;
+            Assert.IsNotNull(GameManager.Instance.Players, "Players are not setup when referenced from ShowPlayerCounter");
+            return GameManager.Instance.Players;
         }
     }
 }

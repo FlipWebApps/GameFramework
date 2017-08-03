@@ -21,29 +21,29 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Levels.Components
+namespace GameFramework.GameStructure.Worlds.Components
 {
     /// <summary>
-    /// Show a counter from the specified Level
+    /// Show a counter from the specified World
     /// </summary>
     [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Levels/Show Level Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class ShowLevelCounter : ShowGameItemCounter<Level>
+    [AddComponentMenu("Game Framework/GameStructure/Worlds/Show World Counter")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
+    public class ShowWorldCounter : ShowGameItemCounter<World>
     {
         /// <summary>
-        /// Returns the current Level GameItem
+        /// Returns the current World GameItem
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        protected override GameItemManager<World, GameItem> GetGameItemManager()
         {
-            Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelCounter");
-            return GameManager.Instance.Levels;
+            Assert.IsNotNull(GameManager.Instance.Worlds, "Worlds are not setup when referenced from ShowWorldCounter");
+            return GameManager.Instance.Worlds;
         }
     }
 }
