@@ -157,7 +157,7 @@ namespace GameFramework.GameStructure.Editor
             //DrawDefaultInspector();
             serializedObject.Update();
 
-            EditorGUILayout.HelpBox("In addition to this runtime configuration, additional static configuration options are now also available by adding a GameConfiguration file to a /Resources/ folder within your project (right click the folder -> Create -> Game Framework -> Game Configuration)", MessageType.Info);
+            EditorGUILayout.HelpBox("In addition to this runtime configuration, additional static configuration options such as custom counters are now also available by adding a GameConfiguration file to a /Resources/ folder within your project (right click the folder -> Create -> Game Framework -> Game Configuration)", MessageType.Info);
 
             DrawGameDetails();
             DrawGameStructure();
