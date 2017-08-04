@@ -163,8 +163,9 @@ namespace GameFramework.GameStructure
         /// <summary>
         /// The default number of lives players will have (optional if not using lives).
         /// </summary>
-        [Tooltip("The default number of lives players will have (optional if not using lives).")]
-        public int DefaultLives = 3;
+        public int DefaultLives {
+            get { return Player.GetCounter("Lives").Configuration.IntDefault; }
+        }
 
         /// <summary>
         /// The number of local players to setup

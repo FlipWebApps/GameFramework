@@ -57,7 +57,6 @@ namespace GameFramework.GameStructure.Editor
         SerializedProperty _variablesProperty;
 
         SerializedProperty _playerSetupModeProperty;
-        SerializedProperty _defaultLivesProperty;
         SerializedProperty _playerCountProperty;
 
         SerializedProperty _worldSetupModeProperty;
@@ -103,7 +102,6 @@ namespace GameFramework.GameStructure.Editor
 
             _playerSetupModeProperty = serializedObject.FindProperty("PlayerSetupMode");
             _playerCountProperty = serializedObject.FindProperty("PlayerCount");
-            _defaultLivesProperty = serializedObject.FindProperty("DefaultLives");
 
             _worldSetupModeProperty = serializedObject.FindProperty("WorldSetupMode");
             _autoCreateWorldsProperty = serializedObject.FindProperty("AutoCreateWorlds");
@@ -158,6 +156,8 @@ namespace GameFramework.GameStructure.Editor
         {
             //DrawDefaultInspector();
             serializedObject.Update();
+
+            EditorGUILayout.HelpBox("In addition to this runtime configuration, additional static configuration options are now also available by adding a GameConfiguration file to a /Resources/ folder within your project (right click the folder -> Create -> Game Framework -> Game Configuration)", MessageType.Info);
 
             DrawGameDetails();
             DrawGameStructure();
@@ -229,7 +229,6 @@ namespace GameFramework.GameStructure.Editor
             EditorGUILayout.PropertyField(_playerSetupModeProperty, new GUIContent("Player Setup"));
             if (_playerSetupModeProperty.enumValueIndex == 1 || _playerSetupModeProperty.enumValueIndex == 2)
             {
-                EditorGUILayout.PropertyField(_defaultLivesProperty);
                 EditorGUI.indentLevel += 1;
                 _showPlayerAdvanced = EditorGUILayout.Foldout(_showPlayerAdvanced, "Advanced");
                 if (_showPlayerAdvanced)
