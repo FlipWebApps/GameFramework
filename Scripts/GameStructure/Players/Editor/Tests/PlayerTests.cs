@@ -75,7 +75,7 @@ namespace GameFramework.GameStructure.Players
             Assert.AreEqual(false, player.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
 
             Assert.AreEqual(0, player.HighScore, "HighScore not set correctly");
-            Assert.AreEqual(0, player.Lives, "HighScore not set correctly");
+            Assert.AreEqual(3, player.Lives, "Lives not set correctly");
             Assert.AreEqual(1, player.Health, "Health not set correctly");
         }
 
@@ -110,7 +110,7 @@ namespace GameFramework.GameStructure.Players
             Assert.AreEqual(false, player.IsUnlocked, "IsUnlocked not set correctly");
             Assert.AreEqual(false, player.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
 
-            Assert.AreEqual(0, player.Lives, "HighScore not set correctly");
+            Assert.AreEqual(3, player.Lives, "Lives not set correctly");
             Assert.AreEqual(1, player.Health, "Health not set correctly");
             Assert.AreEqual(false, player.IsGameWon, "IsGameWon not set correctly");
         }
@@ -120,18 +120,18 @@ namespace GameFramework.GameStructure.Players
         /// Seperate test from creating, saving and then loadina GameItem to verify the consistency of saved preferences
         /// across different versions of the framework (that we use the same preferences keys).
         /// </summary>
-        [TestCase(0, 1, "Test", "T", 10, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(1, 2, "Another", "A", 10, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, true, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, true, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, true, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 10, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 20, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 3, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0.5f, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0, true)]
-        public void PersistentValuesLoaded(int playerNumber, int number, string identifierBase, string identifierBasePrefs, 
+        [TestCase(0, 1, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(1, 2, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, true, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, true, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, true, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 10, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 20, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 3, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0.5f, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0, true)]
+        public void PersistentValuesLoaded(int playerNumber, int number,  
             int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought, int score,
             int coins, int lives, float health, bool isGameWon)
         {
@@ -174,18 +174,18 @@ namespace GameFramework.GameStructure.Players
         /// Seperate test from creating, saving and then loadina GameItem to verify the consistency of saved preferences
         /// across different versions of the framework (that we use the same preferences keys).
         /// </summary>
-        [TestCase(0, 1, "Test", "T", 10, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(1, 2, "Another", "A", 10, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, true, false, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, true, false, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, true, 0, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 10, 0, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 20, 0, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 3, 0, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0.5f, false)]
-        [TestCase(0, 1, "Test", "T", 20, false, false, false, 0, 0, 0, 0, true)]
-        public void PersistentValuesSaved(int playerNumber, int number, string identifierBase, string identifierBasePrefs,
+        [TestCase(0, 1, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(1, 2, 10, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, true, false, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, true, false, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, true, 0, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 10, 0, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 20, 0, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 3, 0, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0.5f, false)]
+        [TestCase(0, 1, 20, false, false, false, 0, 0, 0, 0, true)]
+        public void PersistentValuesSaved(int playerNumber, int number, 
             int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought, int score,
             int coins, int lives, float health, bool isGameWon)
         {
@@ -318,6 +318,72 @@ namespace GameFramework.GameStructure.Players
         }
 
         #endregion Coins
+
+        #region Lives
+
+        [TestCase(0, 10)]
+        [TestCase(20, 30)]
+        [TestCase(30, 40)]
+        public void LivesMessageSent(int lives1, int lives2)
+        {
+            //// Arrange
+            List<LivesChangedMessage> messages = new List<LivesChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            player.Lives = lives1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(LivesChangedMessage), (x) => {
+                messages.Add(x as LivesChangedMessage);
+                return true;
+            });
+
+            //// Act
+            player.Lives = lives2;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(lives1, messages[0].OldLives, "Incorrect old lives in message2.");
+            Assert.AreEqual(lives2, messages[0].NewLives, "Incorrect new lives in message2.");
+        }
+
+        #endregion Lives
+
+        #region Health
+
+        [TestCase(0f, 0.1f)]
+        [TestCase(0.2f, 0.3f)]
+        [TestCase(0f, 1f)]
+        public void HealthMessageSent(float health1, float health2)
+        {
+            //// Arrange
+            List<HealthChangedMessage> messages = new List<HealthChangedMessage>();
+            PlayerPrefs.DeleteAll();
+            var gameConfiguration = ScriptableObject.CreateInstance<GameConfiguration>();
+            var messenger = new Messenger();
+            var player = ScriptableObject.CreateInstance<Player>();
+            player.Initialise(gameConfiguration, null, messenger, 1);
+            player.Health = health1;
+            messenger.ProcessQueue();               // clear queue incase initialisation generated a message.
+            messenger.AddListener(typeof(HealthChangedMessage), (x) => {
+                messages.Add(x as HealthChangedMessage);
+                return true;
+            });
+
+            //// Act
+            player.Health = health2;
+            messenger.ProcessQueue();   // force processing of messages.
+
+            //// Assert
+            Assert.AreEqual(1, messages.Count, "Incorrect number of messages sent.");
+            Assert.AreEqual(health1, messages[0].OldHealth, "Incorrect old health in message2.");
+            Assert.AreEqual(health2, messages[0].NewHealth, "Incorrect new health in message2.");
+        }
+
+        #endregion Health
 
         #region Counters
 

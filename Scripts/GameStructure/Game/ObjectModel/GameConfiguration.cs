@@ -154,8 +154,11 @@ namespace GameFramework.GameStructure.Game.ObjectModel
             CharacterCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
             LevelCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
             LevelCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
+            LevelCounterConfiguration.Add(new CounterConfiguration() { Name = "Progress", CounterType = CounterConfiguration.CounterTypeEnum.Float, FloatMaximum = 1 });
             PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins", Save = CounterConfiguration.SaveType.Always });
             PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Score", Save = CounterConfiguration.SaveType.Always });
+            PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Lives", Save = CounterConfiguration.SaveType.Always, IntDefault = 3 });
+            PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Health", Save = CounterConfiguration.SaveType.Always, CounterType = CounterConfiguration.CounterTypeEnum.Float, FloatMaximum = 1, FloatDefault = 1 });
             WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
             WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
         }
@@ -280,6 +283,42 @@ namespace GameFramework.GameStructure.Game.ObjectModel
         [SerializeField]
         [Tooltip("The highest value that this counter can take.")]
         float _floatMaximum = float.MaxValue;
+
+        /// <summary>
+        /// The default value that this counter should take (if it is an int type).
+        /// </summary>
+        public int IntDefault
+        {
+            get
+            {
+                return _intDefault;
+            }
+            set
+            {
+                _intDefault = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The default value that this counter should take.")]
+        int _intDefault;
+
+        /// <summary>
+        /// The default value that this counter should take (if it is an float type).
+        /// </summary>
+        public float FloatDefault
+        {
+            get
+            {
+                return _floatDefault;
+            }
+            set
+            {
+                _floatDefault = value;
+            }
+        }
+        [SerializeField]
+        [Tooltip("The default value that this counter should take.")]
+        float _floatDefault;
 
         /// <summary>
         /// If and when the counter should be saved for use across game sessions.

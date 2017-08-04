@@ -144,12 +144,18 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                 if (_counterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
                 {
                     _textComponent.text = _cachedText == null ? _counterReference.IntAmount.ToString() :
-                        string.Format(_cachedText, _counterReference.IntAmount, _counterReference.IntAmountBest, _counterReference.IntAmountSaved, _counterReference.IntAmountBestSaved);
+                        string.Format(_cachedText, _counterReference.IntAmount, _counterReference.IntAmountBest, 
+                        _counterReference.IntAmountSaved, _counterReference.IntAmountBestSaved,
+                        _counterReference.Configuration.IntMinimum, _counterReference.Configuration.IntMaximum,
+                        (100 / (float)(_counterReference.Configuration.IntMaximum - _counterReference.Configuration.IntMinimum)) * (_counterReference.IntAmount - _counterReference.Configuration.IntMinimum));
                 }
                 else
                 {
                     _textComponent.text = _cachedText == null ? _counterReference.FloatAmount.ToString("n2") :
-                        string.Format(_cachedText, _counterReference.FloatAmount, _counterReference.FloatAmountBest, _counterReference.FloatAmountSaved, _counterReference.FloatAmountBestSaved);
+                        string.Format(_cachedText, _counterReference.FloatAmount, _counterReference.FloatAmountBest, 
+                        _counterReference.FloatAmountSaved, _counterReference.FloatAmountBestSaved,
+                        _counterReference.Configuration.FloatMinimum, _counterReference.Configuration.FloatMaximum,
+                        (100 / (_counterReference.Configuration.FloatMaximum - _counterReference.Configuration.FloatMinimum)) * (_counterReference.FloatAmount - _counterReference.Configuration.FloatMinimum));
                 }
             }
         }

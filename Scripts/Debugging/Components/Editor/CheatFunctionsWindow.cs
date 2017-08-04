@@ -276,7 +276,7 @@ namespace GameFramework.Debugging.Components.Editor {
                     if (GUILayout.Button("-10", GUILayout.Width(50)))
                         counter.Decrease(10);
                     if (GUILayout.Button("-1", GUILayout.Width(50)))
-                        counter.Decrease(10);
+                        counter.Decrease(1);
                     if (GUILayout.Button("0", GUILayout.Width(50)))
                         counter.Set(0);
                     if (GUILayout.Button("+1", GUILayout.Width(50)))

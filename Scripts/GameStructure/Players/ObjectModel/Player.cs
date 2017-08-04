@@ -24,6 +24,7 @@ using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Players.Messages;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.Players.ObjectModel
 {
@@ -78,16 +79,10 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// </summary>
         public int Lives
         {
-            get { return _lives; }
-            set
-            {
-                var oldValue = Lives;
-                _lives = value;
-                if (IsInitialised && oldValue != Lives)
-                    Messenger.QueueMessage(new LivesChangedMessage(Lives, oldValue));
-            }
+            get { return _livesCounter.IntAmount; }
+            set { _livesCounter.IntAmount = value; }
         }
-        int _lives;
+        Counter _livesCounter;
 
 
         /// <summary>
@@ -96,16 +91,10 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         /// </summary>
         public float Health
         {
-            get { return _health; }
-            set
-            {
-                var oldValue = Health;
-                _health = value;
-                if (IsInitialised && !Mathf.Approximately(oldValue, Health))
-                    Messenger.QueueMessage(new HealthChangedMessage(Health, oldValue));
-            }
+            get { return _healthCounter.FloatAmount; }
+            set { _healthCounter.FloatAmount = value; }
         }
-        float _health;
+        Counter _healthCounter;
 
 
         /// <summary>
@@ -140,13 +129,14 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         public override void CustomInitialisation()
         {
             Reset();
-            
+
+            _livesCounter = GetCounter("Lives");
+            _healthCounter = GetCounter("Health");
+            Assert.IsNotNull(_livesCounter, "All GameItems must have a counter defined with the Key 'Lives'");
+            Assert.IsNotNull(_healthCounter, "All GamItems must have a counter defined with the Key 'Health'");
+
             //Name = GetSettingString("CustomName", CustomName);
 
-            Score = GetSettingInt("TotalScore", Score);
-            Coins = GetSettingInt("TotalCoins", Coins);
-            Lives = GetSettingInt("Lives", Lives);
-            Health = GetSettingFloat("Health", Health);
             IsGameWon = GetSettingBool("IsGameWon", IsGameWon);
 
             MaximumWorld = GetSettingInt("MaximumWorld", MaximumWorld);
@@ -166,14 +156,6 @@ namespace GameFramework.GameStructure.Players.ObjectModel
             SelectedWorld = 0;
             SelectedLevel = 0;
             IsGameWon = false;
-
-            Score = 0;
-            Coins = 0;
-            Lives = 0;
-            Health = 1;
-
-            if (GameManager.IsActive)
-                Lives = GameManager.Instance.DefaultLives;
         }
 
 
@@ -186,12 +168,6 @@ namespace GameFramework.GameStructure.Players.ObjectModel
         public override void UpdatePlayerPrefs()
         {
             SetSetting("CustomName", CustomName);
-
-            SetSetting("TotalScore", Score);
-            SetSetting("TotalCoins", Coins);
-            SetSetting("Lives", Lives);
-            SetSettingFloat("Health", Health);
-
             SetSetting("IsGameWon", IsGameWon);
 
             SetSetting("MaximumWorld", MaximumWorld);
@@ -202,7 +178,44 @@ namespace GameFramework.GameStructure.Players.ObjectModel
             base.UpdatePlayerPrefs();
         }
 
-        #region Score and Coin Messaging Overrides
+        #region Counter, Score and Coin Messaging Overrides
+
+        /// <summary>
+        /// Counter IntAmount changed handler that generates a CounterIntAmountChangedMessage
+        /// </summary>
+        /// <param name="counter"></param>
+        /// <param name="oldAmount"></param>
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        /// Overrides are in place for lives, coin and score counters to send specific messages in adition
+        public override void CounterIntAmountChanged(Counter counter, int oldAmount)
+        {
+            if (IsInitialised)
+            {
+                if (counter.Identifier == _livesCounter.Identifier)
+                    Messenger.QueueMessage(new LivesChangedMessage(counter.IntAmount, oldAmount));
+                else if (counter.Identifier == _healthCounter.Identifier)
+                    Messenger.QueueMessage(new HealthChangedMessage(counter.IntAmount, oldAmount));
+            }
+            // call base always
+            base.CounterIntAmountChanged(counter, oldAmount);
+        }
+
+
+        /// <summary>
+        /// Counter FloatAmount changed handler that generates a CounterFloatAmountChangedMessage
+        /// </summary>
+        /// <param name="counter"></param>
+        /// <param name="oldAmount"></param>
+        /// Messages are only sent after the GameItem is initialised to avoid changes during startup.
+        /// Overrides are in place for health to send specific messages in adition
+        public override void CounterFloatAmountChanged(Counter counter, float oldAmount)
+        {
+            if (IsInitialised)
+                Messenger.QueueMessage(new HealthChangedMessage(counter.FloatAmount, oldAmount));
+            base.CounterFloatAmountChanged(counter, oldAmount);
+        }
+
+
         /// <summary>
         /// Sends a PlayerScoreChangedMessage whenever the players score changes.
         /// </summary>
@@ -235,7 +248,7 @@ namespace GameFramework.GameStructure.Players.ObjectModel
             Messenger.QueueMessage(new PlayerCoinsChangedMessage(this, newCoins, oldCoins));
         }
 
-        #endregion Score and Coin Messaging Overrides
+        #endregion Cointer, Score and Coin Messaging Overrides
 
     }
 }

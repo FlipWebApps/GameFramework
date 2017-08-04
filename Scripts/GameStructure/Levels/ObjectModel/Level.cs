@@ -24,6 +24,7 @@ using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.Messages;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.Levels.ObjectModel
 {
@@ -243,12 +244,20 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// <summary>
         /// A field that you can optionally use for recording the progress. Typically this should be in the range 0..1
         /// </summary>
-        public float Progress { get; set; }
+        public float Progress
+        {
+            get { return _progressCounter.FloatAmount; }
+            set { _progressCounter.FloatAmount = value; }
+        }
+        Counter _progressCounter;
 
         /// <summary>
         /// A field that you can optionally use for recording the highest progress obtained. Typically this should be in the range 0..1
         /// </summary>
-        public float ProgressBest { get; set; }
+        public float ProgressBest
+        {
+            get { return _progressCounter.FloatAmountBest; }
+        }
 
         /// <summary>
         /// A field that you can optionally use for recording the best time that the player has achieved.
@@ -264,9 +273,14 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// </summary>
         public override void CustomInitialisation()
         {
+            //_timeCounter = GetCounter("Time");
+            _progressCounter = GetCounter("Progress");
+            //Assert.IsNotNull(_timeCounter, "All GameItems must have a counter defined with the Key 'Time'");
+            Assert.IsNotNull(_progressCounter, "All GamItems must have a counter defined with the Key 'Progress'");
+
             StarsWon = GetSettingInt("SW", 0);
             TimeBest = GetSettingFloat("TimeBest", 0);
-            ProgressBest = GetSettingFloat("ProgressBest", 0);
+            //ProgressBest = GetSettingFloat("ProgressBest", 0);
         }
 
         /// <summary>
@@ -304,7 +318,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
             base.UpdatePlayerPrefs();
             SetSetting("SW", StarsWon);
             SetSettingFloat("TimeBest", TimeBest);
-            SetSettingFloat("ProgressBest", ProgressBest);
+            //SetSettingFloat("ProgressBest", ProgressBest);
         }
 
 

@@ -200,7 +200,7 @@ namespace GameFramework.GameStructure.Levels
         [TestCase(0, 1, 20, false, false, true, 0, 0, 0)]
         [TestCase(0, 1, 20, false, false, true, 3, 0, 0)]
         [TestCase(0, 1, 20, false, false, true, 0, 20, 0)]
-        [TestCase(0, 1, 20, false, false, true, 0, 0, 30)]
+        [TestCase(0, 1, 20, false, false, true, 0, 0, 0.7f)]
         public void PersistentValuesSaved(int playerNumber, int number,
             int highScore, bool isUnlocked, bool isUnlockedAnimationShown, bool isBought,
             int starsWon, float timeBest, float progressBest)
@@ -222,16 +222,16 @@ namespace GameFramework.GameStructure.Levels
             gameItem.IsBought = isBought;
             gameItem.StarsWon = starsWon;
             gameItem.TimeBest = timeBest;
-            gameItem.ProgressBest = progressBest;
+            gameItem.Progress = progressBest; // progress should set ProgressBest automatically which is saved
             gameItem.UpdatePlayerPrefs();
             PlayerPrefs.Save();
 
             //// Assert
             Assert.IsNotNull(gameItem, "GameItem not setup.");
             GameItemTests.AssertCommonPreferences(playerNumber, number, "L", gameItem);
-            Assert.AreEqual(PlayerPrefs.GetInt(string.Format("P{0}.L{1}.SW", playerNumber, number), 0), gameItem.StarsWon, "StarsWon not set correctly");
-            Assert.AreEqual(PlayerPrefs.GetFloat(string.Format("P{0}.L{1}.TimeBest", playerNumber, number), 0), gameItem.TimeBest, "TimeBest not set correctly");
-            Assert.AreEqual(PlayerPrefs.GetFloat(string.Format("P{0}.L{1}.ProgressBest", playerNumber, number), 0), gameItem.ProgressBest, "ProgressBest not set correctly");
+            Assert.AreEqual(starsWon, PlayerPrefs.GetInt(string.Format("P{0}.L{1}.SW", playerNumber, number), 0), "StarsWon not set correctly");
+            Assert.AreEqual(timeBest, PlayerPrefs.GetFloat(string.Format("P{0}.L{1}.TimeBest", playerNumber, number), 0), "TimeBest not set correctly");
+            Assert.AreEqual(progressBest, PlayerPrefs.GetFloat(string.Format("P{0}.L{1}.ProgressBest", playerNumber, number), 0), "ProgressBest not set correctly");
         }
 
         #endregion Initialisation

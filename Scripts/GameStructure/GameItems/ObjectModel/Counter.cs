@@ -51,6 +51,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
         string _prefsPrefix;
         ICounterChangedCallback _counterChangedCallbacks;
+        string _prefsKey, _prefsKeyBest;
 
         #region Runtime Properties
 
@@ -204,6 +205,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             Identifier = identifier;
             _prefsPrefix = prefsPrefix;
             _counterChangedCallbacks = counterChangedCallbacks;
+
+            SetupPrefsKeys();
         }
 
 
@@ -216,27 +219,27 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
             {
                 if (Configuration.Save == CounterConfiguration.SaveType.None)
-                    IntAmountSaved = IntAmount = 0;
+                    IntAmountSaved = IntAmount = Configuration.IntDefault;
                 else
-                    IntAmountSaved = IntAmount = PreferencesFactory.GetInt(_prefsPrefix + "CI." + Configuration.Name, 0);         // CI = CounterInt)
+                    IntAmountSaved = IntAmount = PreferencesFactory.GetInt(_prefsKey, Configuration.IntDefault); 
 
                 if (Configuration.SaveBest == CounterConfiguration.SaveType.None)
-                    IntAmountBestSaved = IntAmountBest = 0;
+                    IntAmountBestSaved = IntAmountBest = Configuration.IntDefault;
                 else
-                    IntAmountBestSaved = IntAmountBest = PreferencesFactory.GetInt(_prefsPrefix + "CIH." + Configuration.Name, 0); // CIH = CounterIntHighest)
+                    IntAmountBestSaved = IntAmountBest = PreferencesFactory.GetInt(_prefsKeyBest, Configuration.IntDefault);
             }
             else
             {
                 if (Configuration.Save == CounterConfiguration.SaveType.None)
-                    FloatAmountSaved = FloatAmount = 0;
+                    FloatAmountSaved = FloatAmount = Configuration.FloatDefault;
                 else
-                    FloatAmountSaved = FloatAmount = PreferencesFactory.GetFloat(_prefsPrefix + "CF." + Configuration.Name, 0);
+                    FloatAmountSaved = FloatAmount = PreferencesFactory.GetFloat(_prefsKey, Configuration.FloatDefault);
                 
 
-                if (Configuration.Save == CounterConfiguration.SaveType.None)
-                    FloatAmountBestSaved = FloatAmountBest = 0;
+                if (Configuration.SaveBest == CounterConfiguration.SaveType.None)
+                    FloatAmountBestSaved = FloatAmountBest = Configuration.FloatDefault;
                 else
-                    FloatAmountBestSaved = FloatAmountBest = PreferencesFactory.GetFloat(_prefsPrefix + "CFH." + Configuration.Name, 0);
+                    FloatAmountBestSaved = FloatAmountBest = PreferencesFactory.GetFloat(_prefsKeyBest, Configuration.FloatDefault);
             }
         }
 
@@ -251,19 +254,79 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
             {
                 if (Configuration.Save != CounterConfiguration.SaveType.None)
-                    PreferencesFactory.SetInt(_prefsPrefix + "CI." + Configuration.Name, IntAmountSaved);
+                    PreferencesFactory.SetInt(_prefsKey, IntAmountSaved);       // CI = CounterInt)
 
                 if (Configuration.SaveBest != CounterConfiguration.SaveType.None)
-                    PreferencesFactory.SetInt(_prefsPrefix + "CIH." + Configuration.Name, IntAmountBestSaved);
+                    PreferencesFactory.SetInt(_prefsKeyBest, IntAmountBestSaved);  // CIH = CounterIntHighest)
             }
             else
             {
                 if (Configuration.Save != CounterConfiguration.SaveType.None)
-                    PreferencesFactory.SetFloat(_prefsPrefix + "CF." + Configuration.Name, FloatAmountSaved);
+                    PreferencesFactory.SetFloat(_prefsKey, FloatAmountSaved);
 
                 if (Configuration.SaveBest != CounterConfiguration.SaveType.None)
-                    PreferencesFactory.SetFloat(_prefsPrefix + "CFH." + Configuration.Name, FloatAmountBestSaved);
+                    PreferencesFactory.SetFloat(_prefsKeyBest, FloatAmountBestSaved);
             }
+        }
+
+
+        /// <summary>
+        /// For legacy settings, set an override for the default counter prefs key format
+        /// </summary>
+        /// <returns></returns>
+        void SetupPrefsKeys()
+        {
+            // defaults
+            if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
+            {
+                _prefsKey = "CI." + Configuration.Name;
+                _prefsKeyBest = "CIH." + Configuration.Name;
+            }
+            else
+            {
+                _prefsKey = "CF." + Configuration.Name;
+                _prefsKeyBest = "CFH." + Configuration.Name;
+            }
+
+            // overrides for legacy properties
+            if (_counterChangedCallbacks is Players.ObjectModel.Player)
+            {
+                if (Configuration.Name.Equals("Score")) {
+                    _prefsKey = "TotalScore";
+                    _prefsKeyBest = "HS";
+                }
+                else if (Configuration.Name.Equals("Coins")) {
+                    _prefsKey = "TotalCoins";
+                }
+                if (Configuration.Name.Equals("Lives")) {
+                    _prefsKey = "Lives";
+                }
+                else if (Configuration.Name.Equals("Health")) {
+                    _prefsKey = "Health";
+                }
+            }
+            else if (_counterChangedCallbacks is Levels.ObjectModel.Level) {
+                if (Configuration.Name.Equals("Score"))
+                {
+                    _prefsKey = "TotalScore";
+                    _prefsKeyBest = "HS";
+                }
+                if (Configuration.Name.Equals("Progress"))
+                {
+                    _prefsKeyBest = "ProgressBest";
+                }
+            }
+            else if (_counterChangedCallbacks is GameItem)
+            {
+                if (Configuration.Name.Equals("Score")) {
+                    _prefsKeyBest = "HS";
+                }
+
+            }
+
+            // append prefix
+            _prefsKey = _prefsPrefix + _prefsKey;
+            _prefsKeyBest = _prefsPrefix + _prefsKeyBest;
         }
 
         #endregion Initialisation

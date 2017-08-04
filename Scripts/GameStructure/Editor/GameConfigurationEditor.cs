@@ -171,6 +171,9 @@ namespace GameFramework.GameStructure.Editor
                         // display appropriate minimum / maximum field using type min / max as bounds if we are not restricting the limits
                         if (counterTypeProperty.enumValueIndex == 0)
                         {
+                            var defaultProperty = elementProperty.FindPropertyRelative("_intDefault");
+                            EditorGUILayout.PropertyField(defaultProperty, new GUIContent("Default", defaultProperty.tooltip));
+
                             var minimumProperty = elementProperty.FindPropertyRelative("_intMinimum");
                             GUILayout.BeginHorizontal();
                             var minimumToggle = EditorGUILayout.Toggle(new GUIContent("Minimum", "The lowest value that this counter can take."), minimumProperty.intValue != int.MinValue);
@@ -197,6 +200,9 @@ namespace GameFramework.GameStructure.Editor
                         }
                         else if (counterTypeProperty.enumValueIndex == 1)
                         {
+                            var defaultProperty = elementProperty.FindPropertyRelative("_floatDefault");
+                            EditorGUILayout.PropertyField(defaultProperty, new GUIContent("Default", defaultProperty.tooltip));
+
                             var minimumProperty = elementProperty.FindPropertyRelative("_floatMinimum");
                             GUILayout.BeginHorizontal();
                             var minimumToggle = EditorGUILayout.Toggle(new GUIContent("Minimum", "The lowest value that this counter can take."), !Mathf.Approximately(minimumProperty.floatValue, float.MinValue));

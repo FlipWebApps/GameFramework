@@ -366,26 +366,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             get { return _scoreCounter.IntAmount; }
             set { _scoreCounter.IntAmount = value; }
-            //get { return _score; }
-            //set
-            //{
-            //    var oldValue = Score;
-            //    _score = Mathf.Max(value, 0);
-            //    if (IsInitialised && oldValue != Score)
-            //        SendScoreChangedMessage(Score, oldValue);
-
-            //    if (Score > HighScore)
-            //    {
-            //        HighScore = Score;
-            //        if (HighScore > HighScoreLocalPlayers)
-            //        {
-            //            HighScoreLocalPlayers = HighScore;
-            //            HighScoreLocalPlayersPlayerNumber = _isPlayer ? Number : Player.Number;
-            //        }
-            //    }
-            //}
         }
-        //int _score;
         Counter _scoreCounter;
 
 
@@ -397,23 +378,15 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         public int HighScore
         {
             get { return _scoreCounter.IntAmountBest; }
-            //set { _scoreCounter.IntAmountBest = value; }
-            //get { return _highScore; }
-            //set
-            //{
-            //    var oldValue = _highScore;
-            //    _highScore = value;
-            //    if (IsInitialised && oldValue != HighScore)
-            //        SendHighScoreChangedMessage(HighScore, oldValue);
-            //}
         }
-        //int _highScore;
 
         /// <summary>
         /// The initial high score before this turn / game...
         /// </summary>
         /// OldHighScore is contained within this items Counters collection however exposed through this property for convenience.
-        public int OldHighScore { get; set; }
+        public int OldHighScore {
+            get { return _scoreCounter.IntAmountBestSaved; }
+        }
 
         /// <summary>
         /// Collection of counters including built in counters.
@@ -629,7 +602,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             SetSetting("IsU", IsUnlocked ? 1 : 0);
             SetSetting("IsUAS", IsUnlockedAnimationShown ? 1 : 0);
-            SetSetting("HS", HighScore);
+            //SetSetting("HS", HighScore);
 
             if (IsBought)
                 PreferencesFactory.SetInt(FullKey("IsB"), 1);                                  // saved at global level rather than per player.
