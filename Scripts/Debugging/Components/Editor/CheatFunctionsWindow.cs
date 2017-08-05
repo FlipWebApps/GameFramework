@@ -262,6 +262,7 @@ namespace GameFramework.Debugging.Components.Editor {
             ShowCounters(GameConfiguration.Instance.LevelCounterConfiguration, GameManager.Instance.Levels.Selected);
         }
 
+        // show counters - int then float to keep the interface nice due to different buttons.
         static void ShowCounters(List<CounterConfiguration> counterConfigurationList, GameItem gameItem)
         {
             foreach (var counterConfiguration in counterConfigurationList)
@@ -286,7 +287,13 @@ namespace GameFramework.Debugging.Components.Editor {
                     if (GUILayout.Button("+100", GUILayout.Width(50)))
                         counter.Increase(100);
                 }
-                else
+                GUILayout.EndHorizontal();
+            }
+            foreach (var counterConfiguration in counterConfigurationList)
+            {
+                GUILayout.BeginHorizontal();
+                var counter = gameItem.GetCounter(counterConfiguration.Name);
+                if (counter.Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Float)
                 {
                     GUILayout.Label(string.Format("{0} ({1}, {2})", counterConfiguration.Name, counter.FloatAmount, counter.FloatAmountBest), GUILayout.Width(100));
                     if (GUILayout.Button("-100", GUILayout.Width(50)))
