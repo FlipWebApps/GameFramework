@@ -21,6 +21,7 @@
 
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.ObjectModel;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -106,29 +107,29 @@ namespace GameFramework.GameStructure.Editor
 
         void DrawCharacters()
         {
-            DrawCounters(_characterCounterConfigurationProperty);
+            DrawCounters(_characterCounterConfigurationProperty, new string[] { "Score", "Coins" });
         }
 
 
         void DrawLevels()
         {
-            DrawCounters(_levelCounterConfigurationProperty);
+            DrawCounters(_levelCounterConfigurationProperty, new string[] { "Score", "Coins", "Progress" });
         }
 
 
         void DrawPlayers()
         {
-            DrawCounters(_playerCounterConfigurationProperty);
+            DrawCounters(_playerCounterConfigurationProperty, new string[] { "Score", "Coins", "Lives", "Health" });
         }
 
 
         void DrawWorlds()
         {
-            DrawCounters(_worldCounterConfigurationProperty);
+            DrawCounters(_worldCounterConfigurationProperty, new string[] { "Score", "Coins" });
         }
 
 
-        private void DrawCounters(SerializedProperty arrayProperty)
+        private void DrawCounters(SerializedProperty arrayProperty, string[] systemCounters)
         {
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.LabelField(new GUIContent("Counters", "By default GameItems such as Player, Level, etc. have support for scores and coins.\n\nYou can add additional 'Counter' counters here that you might need in your game e.g. Gems, ... These will then be available for use in all GameItems from code or within the components that reference a counter such as 'ShowCounter'."), EditorStyles.boldLabel);
@@ -144,7 +145,7 @@ namespace GameFramework.GameStructure.Editor
                     var saveProperty = elementProperty.FindPropertyRelative("_save");
                     var saveBestProperty = elementProperty.FindPropertyRelative("_saveBest");
                     var deleted = false;
-                    var isSystemEntry = nameProperty.stringValue.Equals("Score") || nameProperty.stringValue.Equals("Coins");
+                    var isSystemEntry = systemCounters.Contains(nameProperty.stringValue);
                     EditorGUILayout.BeginHorizontal(GuiStyles.BoxLightStyle);
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();

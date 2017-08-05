@@ -37,6 +37,7 @@ namespace GameFramework.GameStructure.Editor
         bool _showAdvanced;
         bool _showPrefs;
         bool _showPlayerAdvanced;
+        Rect _mainHelpRect;
 
         ReorderableList _numberedLevelReferencesList;
 
@@ -157,7 +158,7 @@ namespace GameFramework.GameStructure.Editor
             //DrawDefaultInspector();
             serializedObject.Update();
 
-            EditorGUILayout.HelpBox("In addition to this runtime configuration, additional static configuration options such as custom counters are now also available by adding a GameConfiguration file to a /Resources/ folder within your project (right click the folder -> Create -> Game Framework -> Game Configuration)", MessageType.Info);
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameManagerEditorWindow", "In GameManager you can configure and access various global settings for your game.\n\nIn addition to this runtime configuration, additional static configuration options such as custom counters are now also available by adding a GameConfiguration file to a /Resources/ folder within your project (right click the folder -> Create -> Game Framework -> Game Configuration)\n\nNote that as of v4.5 Default Lives is moved to GameConfiguration.", _mainHelpRect);
 
             DrawGameDetails();
             DrawGameStructure();
