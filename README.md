@@ -1,5 +1,5 @@
 # Game Framework for Unity
-Game Framework is a free, community supported  framework provided with full source code that will help drastically increase the development speed and feature set of Unity games. The aim is to provide the features most games need in a flexible manner with a minimum of coding
+Game Framework is a free framework provided with full source code that will help drastically increase the development speed and feature set of Unity games. The aim is to provide the features most games need in a fast, flexible manner with a minimum of coding.
 
 Features include:
 
@@ -7,6 +7,7 @@ Features include:
 * Simple setup of worlds, levels, characters and other game items including all the menus that you need.
 * Tracking of scores and progress.
 * Unlockable items
+* Custom counters
 * Simple in app purchase.
 * Dialog handling including standard dialog for settings and game over.
 * Advertising support
@@ -18,15 +19,15 @@ Features include:
 * Debugging and test functions
 * Support for secured prefs 
 * Many helper classes and components from Animation through UI
-* Works on Unity Free and Pro.
+* Works on Unity Free and Paid.
 * And more...
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
-Note: The main branch of this repostiroy should be considered experimental. For ease of use we will now only release stable versions through the Unity asset store although such releases will be tagged here also.
+Note: The main branch of this repository should be considered experimental. For ease of use we will now only release stable versions through the Unity asset store although such releases will be tagged here also.
 
 * [Asset store download (Free Version)](https://www.assetstore.unity3d.com/#!/content/55334?aid=1011lGnE)
-* [Asset store download (Pro Bundle)](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE)
+* [Asset store download (Extras Bundle)](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE)
 * [Documentation](http://www.flipwebapps.com/game-framework/)
 * [Tutorials](http://www.flipwebapps.com/game-framework/tutorials/)
 
@@ -37,7 +38,7 @@ The framework is free, however there is also a [paid version](https://www.assets
 	- The full Beautiful Transitions asset for beautiful screen and UI wipes and transitions
 	- The full Pro Pooling asset for advanced gameobject pooling
 	- The full Prefs Editor Secured asset.
-	- Alpha version of the upcoming Game Framework PlayMaker Extensions asset.
+	- The full PlayMaker Actions for Game Framework asset
 	- Full 2D runner framework and game sample.
 	- Advanced parallex scrolling script.
 	- Additional 3D models and animations including for free prize

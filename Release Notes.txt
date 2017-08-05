@@ -1,9 +1,28 @@
-IMPORTANT NOTE: Before upgrading always take a backup copy. If upgrade errors occur then delete the old /FlipWebApps folder to cater for possible conflicts and import the asset again.
+
+IMPORTANT NOTE: Before upgrading always take a backup copy of you project. 
+
+If upgrade errors occur then delete the old /FlipWebApps folder to cater for possible 
+conflicts and import the asset again. Please also read the changes for documentation
+of any breaking changes.
 	
 - - - - - - - - - -
 
 CHANGE LOG
 
+v4.5
+
+	Game Framework Core - Improvements
+	- Game Framework: Added PlayMaker Actions for Game Framework to integration window.
+	- GameStructure: New GameConfiguration with configurable counters.
+	- GameStructure: Added new configurable counter system
+	- GameStructure: Added unit tests for all GameItem types
+	- GameStructure: Added Show<GameItem>Counter components for Players, Worlds, Levels, Characters
+	- GameStructure: GameItem Score / Coins migrated to use the new Counter system.
+	- GameStructure: Cheat Functions Windows has options for changing user counters
+	- GameStructure: Changed signature to GameItem Initialise() and InitialiseNonScriptableObjectValues() - injection of dependencies to allow for unit testing. Incase of errors pass parameters GameConfiguration.Instance, GameManager.Instance.Player, GameManager.Messenger
+	- GameStructure: GameItem MarkBought() renamed to MarkAndSaveAsBought()
+	- GameStructure: GameManager DefaultLives is set through the Lives counter property in any GameConfiguration
+	- Localisation: Improved LocaliseText Editor
 
 v4.4
 Important: This version contains a rewritten localisation system. Please take a backup before you upgrade and see any in game warnings for further upgrade information.
