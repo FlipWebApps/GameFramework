@@ -1,4 +1,7 @@
 # Game Framework for Unity
+| [:rocket: Download](#download) | [:books: Getting Started](#getting-started) | [:camera: Screenshots](#screenshots) |
+| --------------- | -------- | ----------- |
+<img src="http://www.flipwebapps.com/wp-content/uploads/2016/01/feature-2-300x224.png" align="right"/>
 Game Framework is a free framework provided with full source code that will help drastically increase the development speed and feature set of Unity games. The aim is to provide the features most games need in a fast, flexible manner with a minimum of coding.
 
 Features include:
@@ -24,12 +27,27 @@ Features include:
 
 The source code is open and free to use in your games under a license similar to other assets from the Unity Asset Store. If you make modification or improvements please consider submitting them back for inclusion.
 
+## Download
 Note: The main branch of this repository should be considered experimental. For ease of use we will now only release stable versions through the Unity asset store although such releases will be tagged here also.
 
 * [Asset store download (Free Version)](https://www.assetstore.unity3d.com/#!/content/55334?aid=1011lGnE)
 * [Asset store download (Extras Bundle)](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE)
+
+## Getting Started
+There is a demo included that shows some of the features available. In addition you will find documentation and tutorials on our website:
+
 * [Documentation](http://www.flipwebapps.com/game-framework/)
 * [Tutorials](http://www.flipwebapps.com/game-framework/tutorials/)
+
+## Screenshots
+
+<p align="center">
+  <img src="http://www.flipwebapps.com/wp-content/uploads/2016/01/Menu-After.png" />
+</p>
+
+<p align="center">
+  <img src="http://www.flipwebapps.com/wp-content/uploads/2016/01/Game-After.png" />
+</p>
 
 ## Your Support
 The framework is free, however there is also a [paid version](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE) which contains additional content to get you up and running including:
@@ -49,9 +67,9 @@ The framework is free, however there is also a [paid version](https://www.assets
 	- Secures future development of this framework
 	
 Feel free to try and use the free version, however if you like the framework then please consider the small price of purchasing the 
-paid version to support our efforts in maintaining and developing this framework further.
+[extras bundle](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE) to support our efforts in maintaining and developing this framework further. 
 
-* [Download from Unity Asset Store](https://www.assetstore.unity3d.com/#!/content/50893?aid=1011lGnE)
+All reviews on the [asset store](https://www.assetstore.unity3d.com/#!/content/55334?aid=1011lGnE) are also very much appreciated and encourage us to continue developing this framework.
 
 ## Background
 While developing games, we have slowly built up our own internal framework that lets us quickly and easily create and release new games. It is our wish to contribute and make this available to the community to help others. It is freely available so even those with little or no budget can use it. We appreciate however if you are able to download and rate the [Asset Store Package](http://u3d.as/mtk) to help support the effort needed to maintain this framework.
