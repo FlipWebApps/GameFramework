@@ -19,7 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.ObjectModel;
+using System;
+using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -34,10 +35,30 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
         SerializedProperty _onlyWhenLevelRunningProperty;
 
         SerializedProperty _enterProperty;
+        SerializedProperty _actionsProperty;
+
         SerializedProperty _processWithinProperty;
         SerializedProperty _runIntervalProperty;
         SerializedProperty _withinProperty;
         SerializedProperty _exitProperty;
+
+        public const float RemoveButtonWidth = 30f;
+
+        readonly string[] _conditionNames = Enum.GetNames(typeof(GenericCollider.ActionTypes));
+        readonly int[] _conditionValues = (int[])Enum.GetValues(typeof(GenericCollider.ActionTypes));
+        readonly string[] _conditionTooltips = {
+            "Whether this GameItem can be unlocked by coins",
+            "Whether this GameItem can be unlocked by completion",
+            "Whether this GameItem can be unlocked by payment",
+            "Compare the GameItems coins with a specified value",
+            "Whether the current player can unlock this GameItem (combine if needed with Unlocked condition)",
+            "Compare the GameItems score with a specified value",
+            "Whether this GameItem is selected",
+            "Whether this GameItem is unlocked",
+            "A custom Condition that you should add a reference to",
+            "Whether an unlocked animation has been show for this GameItem",
+        };
+
 
         protected virtual void OnEnable()
         {
@@ -47,6 +68,7 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
             _disableAfterUseProperty = serializedObject.FindProperty("_disableAfterUse");
             _onlyWhenLevelRunningProperty = serializedObject.FindProperty("_onlyWhenLevelRunning");
             _enterProperty = serializedObject.FindProperty("_enter");
+            _actionsProperty = serializedObject.FindProperty("ActionReferences");
             _processWithinProperty = serializedObject.FindProperty("_processWithin");
             _runIntervalProperty = serializedObject.FindProperty("_runInterval");
             _withinProperty = serializedObject.FindProperty("_within");
@@ -78,6 +100,55 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
             EditorGUILayout.PropertyField(_disableAfterUseProperty);
             EditorGUILayout.PropertyField(_onlyWhenLevelRunningProperty);
             DrawTriggerData(_enterProperty, "When Entering a Trigger", "The actions that should happen when a GameObject with a matching tag enters a trigger.");
+
+
+            // Display all items - use a for loop rather than a foreach loop in case of deletion.
+            //EditorGUILayout.PropertyField(_conditionsProperty, true);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(new GUIContent("Conditions", "The different conditions that this component should react to."), EditorStyles.boldLabel);
+            for (var i = 0; i < _actionsProperty.arraySize; i++)
+            {
+                // draw built in editor 
+                EditorGUILayout.BeginHorizontal(GUI.skin.box);
+
+                var actionReference = _actionsProperty.GetArrayElementAtIndex(i);
+                var actionType = (GenericCollider.ActionTypes)((GenericCollider)target).ActionReferences[i].Identifier;
+                EditorGUILayout.PrefixLabel(new GUIContent(EditorHelper.PrettyPrintCamelCase(_conditionNames[(int)actionType]), _conditionTooltips[(int)actionType]));
+                switch (actionType)
+                {
+                    case GenericCollider.ActionTypes.InstantiatePrefab:
+                        var scriptableObjectProperty = actionReference.FindPropertyRelative("_scriptableObject");
+                        var prefabProperty = scriptableObjectProperty.FindPropertyRelative("_prefab");
+                        //EditorGUILayout.PropertyField(prefabProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        break;
+                    case GenericCollider.ActionTypes.Custom:
+                        scriptableObjectProperty = actionReference.FindPropertyRelative("_scriptableObject");
+                        EditorGUILayout.PropertyField(scriptableObjectProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        break;
+                    default:
+                        Debug.LogError("Unknown built in type : " + ((GenericCollider)target).ActionReferences[i].Identifier);
+                        break;
+                }
+                if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
+                {
+                    _actionsProperty.DeleteArrayElementAtIndex(i);
+                    break;
+                }
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            //            if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Plus More", "Add to list"), EditorStyles.miniButton))
+            if (GUILayout.Button(new GUIContent("Add Action", "Add a new action to the list"), EditorStyles.miniButton))
+            {
+                var menu = new GenericMenu();
+                for (var i = 0; i < _conditionNames.Length; i++)
+                {
+                    menu.AddItem(new GUIContent(_conditionNames[i]), false, AddAction,
+                        _conditionValues[i]);
+                }
+                menu.ShowAsContext();
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(new GUIContent("When Within a Trigger", "The actions that should happen when a GameObject with a matching tag has entered and remains within a trigger."), EditorStyles.boldLabel);
@@ -115,5 +186,23 @@ namespace GameFramework.GameStructure.Colliders.Editor.AbstractClasses
 
 
         protected abstract void DrawCustomProperties();
+
+
+        void AddAction(object conditionValue)
+        {
+            var conditionType = (GenericCollider.ActionTypes)conditionValue;
+
+            _actionsProperty.arraySize++;
+            var newElement = _actionsProperty.GetArrayElementAtIndex(_actionsProperty.arraySize - 1);
+            var propName = newElement.FindPropertyRelative("_identifier");
+            propName.intValue = (int)conditionType;
+            var propUseScriptableObject = newElement.FindPropertyRelative("_useScriptableObject");
+            if (conditionType == GenericCollider.ActionTypes.Custom)
+            {
+                propUseScriptableObject.boolValue = true;
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

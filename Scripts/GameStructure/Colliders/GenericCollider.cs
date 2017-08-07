@@ -21,6 +21,7 @@
 
 using System;
 using GameFramework.Helper.UnityEvents;
+using GameFramework.GameStructure.GameItems.ObjectModel.Actions;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -36,6 +37,9 @@ namespace GameFramework.GameStructure.Colliders
     public class GenericCollider : MonoBehaviour
     {
         public enum DisableAfterUseType { None, ThisComponent, GameObject, Colliders}
+
+        // NOTE: don't change the order of the below as this is recorded - add to the end and sort
+        public enum ActionTypes { Custom, InstantiatePrefab }
 
         /// <summary>
         /// Tag with which this gameobject can collide.
@@ -125,6 +129,9 @@ namespace GameFramework.GameStructure.Colliders
         }
         [SerializeField]
         TriggerData _enter;
+
+        public ActionReference[] ActionReferences = new ActionReference[0];
+
 
         /// <summary>
         /// Whether to continuously process when within a trigger (process trigger / collider stay events)
