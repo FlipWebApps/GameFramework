@@ -58,6 +58,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
     public interface IBaseGameItemManager
     {
         /// <summary>
+        /// Action that is called when teh selection changes.
+        /// </summary>
+        Action<GameItem, GameItem> BaseSelectedChanged { get; set; }
+
+        /// <summary>
         /// The currently selected item
         /// </summary>
         /// The selected item number is persisted and loaded next time this GameItemManager is created.
@@ -120,6 +125,8 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
                 {
                     if (SelectedChanged != null)
                         SelectedChanged(oldItem, Selected);
+                    if (BaseSelectedChanged != null)
+                        BaseSelectedChanged(oldItem, Selected);
                     OnSelectedChanged(Selected, oldItem);
 
                     if (_holdsPlayers)
@@ -655,6 +662,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #endregion IEnumerable
 
         #region IBaseGameItemManager
+
         public GameItem BaseSelected {
             get { return Selected;  }
             set { Selected = (T)value; }
@@ -669,6 +677,10 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             return GetItem(number);
         }
+
+        public Action<GameItem, GameItem> BaseSelectedChanged { get; set; }
+
         #endregion IBaseGameItemManager
+
     }
 }

@@ -34,13 +34,13 @@ namespace GameFramework.GameStructure.Characters.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Characters/Show Character Counter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/characters/")]
-    public class ShowCharacterCounter : ShowGameItemCounter<Character>
+    public class ShowCharacterCounter : ShowGameItemCounter
     {
         /// <summary>
         /// Returns the current Character GameItem
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Character, GameItem> GetGameItemManager()
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
             Assert.IsNotNull(GameManager.Instance.Characters, "Characters are not setup when referenced from ShowCharacterCounter");
             return GameManager.Instance.Characters;

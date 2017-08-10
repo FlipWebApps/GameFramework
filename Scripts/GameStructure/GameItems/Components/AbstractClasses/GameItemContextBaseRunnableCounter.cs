@@ -30,7 +30,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// <summary>
     /// Show a counter from the specified GameItem
     /// </summary>
-    public abstract class GameItemContextBaseRunnableCounter<T> : GameItemContextBaseRunnable<T> where T : GameItem
+    public abstract class GameItemContextBaseRunnableCounter : GameItemContextBaseMultiRunnable
     {
         /// <summary>
         /// The counter that we want to use.

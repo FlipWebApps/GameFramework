@@ -28,10 +28,10 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {
     public abstract class GameItemContextBaseRunnableCounterEditor : UnityEditor.Editor
     {
+        SerializedProperty _gameItemTypeProperty;
         SerializedProperty _contextProperty;
         SerializedProperty _counterProperty;
 
-        string[] _counters;
         int _counterIndex;
 
         /// <summary>
@@ -41,17 +41,9 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 
         protected virtual void OnEnable()
         {
+            _gameItemTypeProperty = serializedObject.FindProperty("_gameItemType");
             _contextProperty = serializedObject.FindProperty("_context");
             _counterProperty = serializedObject.FindProperty("_counter");
-
-            var counterConfiguration = GetCounterConfiguration();
-            _counters = new string[counterConfiguration.Count];
-            for (int i = 0; i < counterConfiguration.Count; i++)
-            {
-                _counters[i] = counterConfiguration[i].Name;
-                if (_counters[i] == _counterProperty.stringValue)
-                    _counterIndex = i;
-            }
         }
 
         public override void OnInspectorGUI()
@@ -60,8 +52,17 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 
             ShowHeaderGUI();
 
+            EditorGUILayout.PropertyField(_gameItemTypeProperty);
             EditorGUILayout.PropertyField(_contextProperty);
 
+            var counterConfiguration = GameConfiguration.Instance.GetCounterConfiguration((GameConfiguration.GameItemType)_gameItemTypeProperty.enumValueIndex);
+            string[] _counters = new string[counterConfiguration.Count];
+            for (int i = 0; i < counterConfiguration.Count; i++)
+            {
+                _counters[i] = counterConfiguration[i].Name;
+                if (_counters[i] == _counterProperty.stringValue)
+                    _counterIndex = i;
+            }
             int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, _counters);
             if (newIndex != _counterIndex)
             {

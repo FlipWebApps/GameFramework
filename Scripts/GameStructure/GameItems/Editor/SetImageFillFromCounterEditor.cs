@@ -19,31 +19,23 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
-using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.GameItems.Components;
+using GameFramework.GameStructure.GameItems.Editor.AbstractClasses;
+using UnityEditor;
 
-namespace GameFramework.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.GameItems.Editor
 {
-    /// <summary>
-    /// Show a counter from the specified World
-    /// </summary>
-    [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Show World Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class ShowWorldCounter : ShowGameItemCounter
+    [CustomEditor(typeof(SetImageFillFromCounter))]
+    public class SetImageFillFromCounterEditor : GameItemContextBaseRunnableCounterEditor
     {
         /// <summary>
-        /// Returns the current World GameItem
+        /// Show GUI elements before context / counter.
         /// </summary>
         /// <returns></returns>
-        protected override IBaseGameItemManager GetIBaseGameItemManager()
+        protected override void ShowHeaderGUI()
         {
-            Assert.IsNotNull(GameManager.Instance.Worlds, "Worlds are not setup when referenced from ShowWorldCounter");
-            return GameManager.Instance.Worlds;
+            HelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.SetImageFillFromCounterEditor", "Use this component to set the fill amount of an Image of type Filled from a gradient based upon the value of a built in or custom counter between it's minimum and maximum values for the specified GameItem.", HelpRect);
         }
     }
 }

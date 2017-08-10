@@ -32,6 +32,8 @@ namespace GameFramework.GameStructure.Game.ObjectModel
     [System.Serializable]
     public class GameConfiguration : ScriptableObject
     {
+        public enum GameItemType { Character, Level, Player, World }
+
         #region Static Singleton Reference
         static GameConfiguration _instance;
         public static GameConfiguration Instance
@@ -161,6 +163,27 @@ namespace GameFramework.GameStructure.Game.ObjectModel
             PlayerCounterConfiguration.Add(new CounterConfiguration() { Name = "Health", Save = CounterConfiguration.SaveType.Always, CounterType = CounterConfiguration.CounterTypeEnum.Float, FloatMaximum = 1, FloatDefault = 1 });
             WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Coins" });
             WorldCounterConfiguration.Add(new CounterConfiguration() { Name = "Score" });
+        }
+
+        /// <summary>
+        /// Returns the counter configuration for the specified GameItemType.
+        /// </summary>
+        /// <param name="gameItemType"></param>
+        /// <returns></returns>
+        public List<CounterConfiguration> GetCounterConfiguration(GameItemType gameItemType) {
+            switch (gameItemType)
+            {
+                case GameItemType.Character:
+                    return CharacterCounterConfiguration;
+                case GameItemType.Level:
+                    return LevelCounterConfiguration;
+                case GameItemType.Player:
+                    return PlayerCounterConfiguration;
+                case GameItemType.World:
+                    return WorldCounterConfiguration;
+                default:
+                    return null;
+            }
         }
     }
 

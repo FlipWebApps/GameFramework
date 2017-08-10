@@ -34,13 +34,13 @@ namespace GameFramework.GameStructure.Levels.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Levels/Show Level Counter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/levels/")]
-    public class ShowLevelCounter : ShowGameItemCounter<Level>
+    public class ShowLevelCounter : ShowGameItemCounter
     {
         /// <summary>
         /// Returns the current Level GameItem
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Level, GameItem> GetGameItemManager()
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
             Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelCounter");
             return GameManager.Instance.Levels;

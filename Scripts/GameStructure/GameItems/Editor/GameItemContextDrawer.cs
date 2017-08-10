@@ -35,7 +35,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
             var contextModeProperty = property.FindPropertyRelative("_contextMode");
 
             var rowPosition = new Rect(position) { height = EditorGUIUtility.singleLineHeight };
-            EditorGUI.PropertyField(rowPosition, contextModeProperty, new GUIContent("GameItem Context", "The context that we are working within for determining what GameItem to use."));
+            EditorGUI.PropertyField(rowPosition, contextModeProperty, new GUIContent("Game Item Context", "The context that we are working within for determining what GameItem to use."));
             //if (contextModeProperty.enumValueIndex == 0)
             //{
             //    EditorGUI.indentLevel++;

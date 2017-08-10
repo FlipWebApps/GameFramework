@@ -34,13 +34,13 @@ namespace GameFramework.GameStructure.Players.Components
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Players/Show Player Counter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/players/")]
-    public class ShowPlayerCounter : ShowGameItemCounter<Player>
+    public class ShowPlayerCounter : ShowGameItemCounter
     {
         /// <summary>
         /// Returns the current Player GameItem
         /// </summary>
         /// <returns></returns>
-        protected override GameItemManager<Player, GameItem> GetGameItemManager()
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
             Assert.IsNotNull(GameManager.Instance.Players, "Players are not setup when referenced from ShowPlayerCounter");
             return GameManager.Instance.Players;

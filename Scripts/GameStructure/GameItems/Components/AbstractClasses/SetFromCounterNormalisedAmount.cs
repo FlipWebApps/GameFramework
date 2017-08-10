@@ -29,7 +29,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
     /// <typeparam name="TC">Component type to target</typeparam>    
-    public abstract class SetFromCounterNormalisedAmount<TC, T> : GameItemContextBaseRunnableCounter<T> where TC : Component where T : GameItem
+    public abstract class SetFromCounterNormalisedAmount<TC> : GameItemContextBaseRunnableCounter where TC : Component
     {
         TC _component;
 

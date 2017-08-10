@@ -35,17 +35,17 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// </summary>
     /// Includes performance enhancements to cache localised text and update on localisation changes
     [RequireComponent(typeof(Text))]
-    public abstract class ShowGameItemCounter<T> : GameItemContextBaseRunnableCounter<T> where T : GameItem
+    public abstract class ShowGameItemCounter : GameItemContextBaseRunnableCounter
     {
         /// <summary>
-        /// A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.
+        /// A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\n {4} - The minimum allowed amount\n {5} - The maximum allowed amount\n {6} - Amount as a percentage between min and max\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.
         /// </summary>
         public LocalisableText Text
         {
             get { return _text; }
             set { _text = value;}
         }
-        [Tooltip("A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.")]
+        [Tooltip("A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\n {4} - The minimum allowed amount\n {5} - The maximum allowed amount\n {6} - Amount as a percentage between min and max\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.")]
         [SerializeField]
         LocalisableText _text;
 
@@ -104,7 +104,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                         string.Format(_cachedText, CounterReference.IntAmount, CounterReference.IntAmountBest, 
                         CounterReference.IntAmountSaved, CounterReference.IntAmountBestSaved,
                         CounterReference.Configuration.IntMinimum, CounterReference.Configuration.IntMaximum,
-                        (100 / (float)(CounterReference.Configuration.IntMaximum - CounterReference.Configuration.IntMinimum)) * (CounterReference.IntAmount - CounterReference.Configuration.IntMinimum));
+                        CounterReference.GetAsPercent());
                 }
                 else
                 {
@@ -112,7 +112,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                         string.Format(_cachedText, CounterReference.FloatAmount, CounterReference.FloatAmountBest, 
                         CounterReference.FloatAmountSaved, CounterReference.FloatAmountBestSaved,
                         CounterReference.Configuration.FloatMinimum, CounterReference.Configuration.FloatMaximum,
-                        (100 / (CounterReference.Configuration.FloatMaximum - CounterReference.Configuration.FloatMinimum)) * (CounterReference.FloatAmount - CounterReference.Configuration.FloatMinimum));
+                        CounterReference.GetAsPercent());
                 }
             }
         }

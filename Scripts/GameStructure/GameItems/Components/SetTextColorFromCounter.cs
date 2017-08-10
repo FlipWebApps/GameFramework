@@ -20,30 +20,38 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.GameItems.Components
 {
     /// <summary>
-    /// Show a counter from the specified World
+    /// Set Text color from a counter from the specified GameItem
     /// </summary>
     [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Show World Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class ShowWorldCounter : ShowGameItemCounter
+    [AddComponentMenu("Game Framework/GameStructure/Common/Set Text Color From Counter")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
+    public class SetTextColorFromCounter : SetFromCounterNormalisedAmount<Text>
     {
         /// <summary>
-        /// Returns the current World GameItem
+        /// A gradient to use to set the images color based upon the specified counter amount relative to min / max.
+        /// </summary>
+        public Gradient Gradient
+        {
+            get { return _gradient; }
+            set { _gradient = value; }
+        }
+        [Tooltip("A gradient to use to set the images color based upon the specified counter amount relative to min / max.")]
+        [SerializeField]
+        Gradient _gradient;
+
+        /// <summary>
+        /// Assigns the amount to the target component.
         /// </summary>
         /// <returns></returns>
-        protected override IBaseGameItemManager GetIBaseGameItemManager()
+        protected override void AssignAmount(Text component, float normalisedAmount)
         {
-            Assert.IsNotNull(GameManager.Instance.Worlds, "Worlds are not setup when referenced from ShowWorldCounter");
-            return GameManager.Instance.Worlds;
+            component.color = Gradient.Evaluate(normalisedAmount);
         }
     }
 }

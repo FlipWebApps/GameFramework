@@ -20,30 +20,26 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
-using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.ObjectModel;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Worlds.Components
+namespace GameFramework.GameStructure.GameItems.Components
 {
     /// <summary>
-    /// Show a counter from the specified World
+    /// Set Image color from a counter from the specified GameItem
     /// </summary>
-    [RequireComponent(typeof(Text))]
-    [AddComponentMenu("Game Framework/GameStructure/Worlds/Show World Counter")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/worlds/")]
-    public class ShowWorldCounter : ShowGameItemCounter
+    [RequireComponent(typeof(Image))]
+    [AddComponentMenu("Game Framework/GameStructure/Common/Set Image Fill From Counter")]
+    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
+    public class SetImageFillFromCounter : SetFromCounterNormalisedAmount<Image>
     {
         /// <summary>
-        /// Returns the current World GameItem
+        /// Assigns the amount to the target component.
         /// </summary>
         /// <returns></returns>
-        protected override IBaseGameItemManager GetIBaseGameItemManager()
+        protected override void AssignAmount(Image component, float normalisedAmount)
         {
-            Assert.IsNotNull(GameManager.Instance.Worlds, "Worlds are not setup when referenced from ShowWorldCounter");
-            return GameManager.Instance.Worlds;
+            component.fillAmount = normalisedAmount;
         }
     }
 }
