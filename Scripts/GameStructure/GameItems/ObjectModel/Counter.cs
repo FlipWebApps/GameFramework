@@ -396,6 +396,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             return FloatAmount;
         }
 
+
         /// <summary>
         /// Get the amount that this counter is currently set to
         /// </summary>
@@ -405,6 +406,30 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         {
             return IntAmount;
         }
+
+
+        /// <summary>
+        /// Get the normalised amount (0..1) as factor of the minimum and maximum values.
+        /// </summary>
+        /// <returns></returns>
+        public float GetNormalisedAmount()
+        {
+            if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Float)
+                return (FloatAmount - Configuration.FloatMinimum) / (Configuration.FloatMaximum - Configuration.FloatMinimum);
+            else
+                return ((float)(IntAmount - Configuration.IntMinimum)) / ((float)(Configuration.IntMaximum - Configuration.IntMinimum));
+        }
+
+
+        /// <summary>
+        /// Get the amount as a percent of the minimum and maximum values.
+        /// </summary>
+        /// <returns></returns>
+        public float GetAsPercent()
+        {
+            return GetNormalisedAmount() * 100;
+        }
+
 
         /// <summary>
         /// Push values to the XxxSaved properties if saved mode is not set to none. 

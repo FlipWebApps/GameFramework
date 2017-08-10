@@ -33,11 +33,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// <summary>
     /// Show a counter from the specified GameItem
     /// </summary>
+    /// Includes performance enhancements to cache localised text and update on localisation changes
     [RequireComponent(typeof(Text))]
-    public abstract class ShowGameItemCounter<T> : GameItemContextBaseRunnable<T> where T : GameItem
+    public abstract class ShowGameItemCounter<T> : GameItemContextBaseRunnableCounter<T> where T : GameItem
     {
         /// <summary>
-        /// A localisation key or text string to use to display the counter. Use the placeholder {0} to identify where in teh string the counter should be placed.
+        /// A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.
         /// </summary>
         public LocalisableText Text
         {
@@ -48,70 +49,26 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [SerializeField]
         LocalisableText _text;
 
-        /// <summary>
-        /// The counter that we want to display.
-        /// </summary>
-        public string Counter
-        {
-            get { return _counter; }
-            set { _counter = value; }
-        }
-        [Tooltip("The counter that we want to display.")]
-        [SerializeField]
-        string _counter;
-
         Text _textComponent;
-        Counter _counterReference;
         string _cachedText;
 
         protected override void Awake()
         {
             base.Awake();
             _textComponent = GetComponent<Text>();
-            _counterReference = GameItem.GetCounter(Counter);
             CacheTextValue();
-
-            Assert.IsNotNull(_counterReference, string.Format("The specified Counter '{0}' was not found. Check that is exists in the game configuration.", Counter));
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            Assert.IsTrue(GameManager.IsActive, "Please ensure that you have a GameManager added to your scene to use the ShowXxxCounter components.");
-
-            if (_counterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-            {
-                GameManager.SafeAddListener<CounterIntAmountChangedMessage>(CounterChangedHandler);
-            }
-            else
-            {
-                GameManager.SafeAddListener<CounterFloatAmountChangedMessage>(CounterChangedHandler);
-            }
+            base.OnEnable();
             GameManager.SafeAddListener<LocalisationChangedMessage>(LocalisationChangedHandler);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             GameManager.SafeRemoveListener<LocalisationChangedMessage>(LocalisationChangedHandler);
-            if (_counterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-            {
-                GameManager.SafeRemoveListener<CounterIntAmountChangedMessage>(CounterChangedHandler);
-            }
-            else
-            {
-                GameManager.SafeRemoveListener<CounterFloatAmountChangedMessage>(CounterChangedHandler);
-            }
-        }
-
-
-        /// <summary>
-        /// Called when a counter is changed - for now we just use the counters latest value.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        bool CounterChangedHandler(BaseMessage message)
-        {
-            RunMethod(false);
-            return true;
+            base.OnDisable();
         }
 
 
@@ -141,21 +98,21 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         {
             if (GameItem != null)
             {
-                if (_counterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
+                if (CounterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
                 {
-                    _textComponent.text = _cachedText == null ? _counterReference.IntAmount.ToString() :
-                        string.Format(_cachedText, _counterReference.IntAmount, _counterReference.IntAmountBest, 
-                        _counterReference.IntAmountSaved, _counterReference.IntAmountBestSaved,
-                        _counterReference.Configuration.IntMinimum, _counterReference.Configuration.IntMaximum,
-                        (100 / (float)(_counterReference.Configuration.IntMaximum - _counterReference.Configuration.IntMinimum)) * (_counterReference.IntAmount - _counterReference.Configuration.IntMinimum));
+                    _textComponent.text = _cachedText == null ? CounterReference.IntAmount.ToString() :
+                        string.Format(_cachedText, CounterReference.IntAmount, CounterReference.IntAmountBest, 
+                        CounterReference.IntAmountSaved, CounterReference.IntAmountBestSaved,
+                        CounterReference.Configuration.IntMinimum, CounterReference.Configuration.IntMaximum,
+                        (100 / (float)(CounterReference.Configuration.IntMaximum - CounterReference.Configuration.IntMinimum)) * (CounterReference.IntAmount - CounterReference.Configuration.IntMinimum));
                 }
                 else
                 {
-                    _textComponent.text = _cachedText == null ? _counterReference.FloatAmount.ToString("n2") :
-                        string.Format(_cachedText, _counterReference.FloatAmount, _counterReference.FloatAmountBest, 
-                        _counterReference.FloatAmountSaved, _counterReference.FloatAmountBestSaved,
-                        _counterReference.Configuration.FloatMinimum, _counterReference.Configuration.FloatMaximum,
-                        (100 / (_counterReference.Configuration.FloatMaximum - _counterReference.Configuration.FloatMinimum)) * (_counterReference.FloatAmount - _counterReference.Configuration.FloatMinimum));
+                    _textComponent.text = _cachedText == null ? CounterReference.FloatAmount.ToString("n2") :
+                        string.Format(_cachedText, CounterReference.FloatAmount, CounterReference.FloatAmountBest, 
+                        CounterReference.FloatAmountSaved, CounterReference.FloatAmountBestSaved,
+                        CounterReference.Configuration.FloatMinimum, CounterReference.Configuration.FloatMaximum,
+                        (100 / (CounterReference.Configuration.FloatMaximum - CounterReference.Configuration.FloatMinimum)) * (CounterReference.FloatAmount - CounterReference.Configuration.FloatMinimum));
                 }
             }
         }
