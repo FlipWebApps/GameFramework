@@ -203,6 +203,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
 
             Configuration = counterConfigurationEntry;
             Identifier = identifier;
+            if (counterConfigurationEntry.CounterType == CounterConfiguration.CounterTypeEnum.Int)
+                IntAmount = counterConfigurationEntry.IntDefault;
+            else
+                FloatAmount = counterConfigurationEntry.FloatDefault;
+
             _prefsPrefix = prefsPrefix;
             _counterChangedCallbacks = counterChangedCallbacks;
 
@@ -327,6 +332,17 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             // append prefix
             _prefsKey = _prefsPrefix + _prefsKey;
             _prefsKeyBest = _prefsPrefix + _prefsKeyBest;
+        }
+
+        /// <summary>
+        /// Reset the counter to the default amount
+        /// </summary>
+        public void Reset()
+        {
+            if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
+                IntAmount = Configuration.IntDefault;
+            else
+                FloatAmount = Configuration.FloatDefault;
         }
 
         #endregion Initialisation

@@ -76,6 +76,7 @@ namespace GameFramework.GameStructure.GameItems.Components
         /// <param name="isStart"></param>
         public override void RunMethod(bool isStart = true)
         {
+            // only set on start.
             if (isStart && GameItem != null)
             {
                 if (UseDefaultAmount)

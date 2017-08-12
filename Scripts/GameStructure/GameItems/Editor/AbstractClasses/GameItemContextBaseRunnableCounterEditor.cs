@@ -32,6 +32,8 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         SerializedProperty _contextProperty;
         SerializedProperty _counterProperty;
 
+        protected CounterConfiguration CounterConfiguration;
+
         int _counterIndex;
 
         /// <summary>
@@ -61,7 +63,9 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             {
                 _counters[i] = counterConfiguration[i].Name;
                 if (_counters[i] == _counterProperty.stringValue)
+                {
                     _counterIndex = i;
+                }
             }
             int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, _counters);
             if (newIndex != _counterIndex)
@@ -69,6 +73,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 _counterProperty.stringValue = _counters[newIndex];
                 _counterIndex = newIndex;
             }
+            CounterConfiguration = counterConfiguration[_counterIndex];
 
             ShowFooterGUI();
 

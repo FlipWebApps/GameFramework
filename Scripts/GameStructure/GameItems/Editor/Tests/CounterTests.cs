@@ -500,6 +500,58 @@ namespace GameFramework.GameStructure.GameItems
         }
 
 
+        [TestCase(0, 10)]
+        [TestCase(0, 0)]
+        [TestCase(10, 100)]
+        public void CounterResetFloat(float defaultAmount, float amount)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+
+            var counterConfiguration = new CounterConfiguration()
+            {
+                Name = "Counter",
+                CounterType = CounterConfiguration.CounterTypeEnum.Float,
+                FloatDefault = defaultAmount,
+                SaveBest = CounterConfiguration.SaveType.None,
+            };
+            var counter = new Counter(counterConfiguration);
+            counter.Set(amount);
+
+            //// Act
+            counter.Reset();
+
+            //// Assert
+            Assert.AreEqual(defaultAmount, counter.FloatAmount, "Reset did not set default amount correctly.");
+        }
+
+
+        [TestCase(0, 10)]
+        [TestCase(0, 0)]
+        [TestCase(10, 100)]
+        public void CounterResetInt(int defaultAmount, int amount)
+        {
+            //// Arrange
+            PlayerPrefs.DeleteAll();
+
+            var counterConfiguration = new CounterConfiguration()
+            {
+                Name = "Counter",
+                CounterType = CounterConfiguration.CounterTypeEnum.Int,
+                IntDefault = defaultAmount,
+                SaveBest = CounterConfiguration.SaveType.None,
+            };
+            var counter = new Counter(counterConfiguration);
+            counter.Set(amount);
+
+            //// Act
+            counter.Reset();
+
+            //// Assert
+            Assert.AreEqual(defaultAmount, counter.IntAmount, "Reset did not set default amount correctly.");
+        }
+
+
         [TestCase(10, 10, CounterConfiguration.SaveType.Always, CounterConfiguration.SaveType.Always)]
         [TestCase(20000, 10, CounterConfiguration.SaveType.Always, CounterConfiguration.SaveType.Always)]
         [TestCase(0, 10, CounterConfiguration.SaveType.Always, CounterConfiguration.SaveType.Always)]
