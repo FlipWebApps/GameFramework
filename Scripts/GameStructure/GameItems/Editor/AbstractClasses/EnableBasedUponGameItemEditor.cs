@@ -57,7 +57,8 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             "Compare the GameItems score with a specified value",
             "Whether this GameItem is selected",
             "Whether this GameItem is unlocked",
-            "A custom Condition that you should add a reference to"
+            "A custom Condition that you should add a reference to",
+            "Compare a counter with a specified value"
         };
 
         public void OnEnable()
@@ -120,6 +121,23 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                         EditorGUILayout.PropertyField(comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
                         EditorGUILayout.PropertyField(conditionIntProperty, GUIContent.none, GUILayout.ExpandWidth(true));
                         break;
+                    case EnableBasedUponGameItem<T>.ConditionTypes.Counter:
+                        var counter = (ObjectModel.Conditions.CounterValue)_gameItemEditor.ConditionReferences[i].ScriptableObject;
+                        //Debug.LogError("Counter type : " + _gameItemEditor.ConditionReferences[i].ScriptableObject + "," + _gameItemEditor.ConditionReferences[i].Data);
+                        EditorGUILayout.BeginVertical();
+                        var val = counter.Counter;
+                        val = EditorGUILayout.TextField(val);
+                        counter.Counter = val;
+                        EditorGUILayout.BeginHorizontal();
+                        comparisonProperty = conditionReference.FindPropertyRelative("_comparison");
+                        conditionIntProperty = conditionReference.FindPropertyRelative("_intValue");
+                        EditorGUILayout.PropertyField(comparisonProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.PropertyField(conditionIntProperty, GUIContent.none, GUILayout.ExpandWidth(true));
+                        counter.Comparison = (ObjectModel.Conditions.Condition.ComparisonTypeNumber)comparisonProperty.enumValueIndex;
+                        counter.IntValue = conditionIntProperty.intValue;
+                        EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.EndVertical();
+                        break;
                     case EnableBasedUponGameItem<T>.ConditionTypes.Custom:
                         var scriptableObjectProperty = conditionReference.FindPropertyRelative("_scriptableObject");
                         EditorGUILayout.PropertyField(scriptableObjectProperty, GUIContent.none, GUILayout.ExpandWidth(true));
@@ -161,10 +179,14 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             var newElement = _conditionsProperty.GetArrayElementAtIndex(_conditionsProperty.arraySize - 1);
             var propName = newElement.FindPropertyRelative("_identifier");
             propName.intValue = (int)conditionType;
-            var propUseScriptableObject = newElement.FindPropertyRelative("_useScriptableObject");
-            if (conditionType == EnableBasedUponGameItem<T>.ConditionTypes.Custom)
+            var propClassName = newElement.FindPropertyRelative("_className");
+            if (conditionType == EnableBasedUponGameItem<T>.ConditionTypes.Counter)
             {
-                propUseScriptableObject.boolValue = true;
+                propClassName.stringValue = typeof(ObjectModel.Conditions.CounterValue).Name;
+            }
+            else
+            {
+                propClassName.stringValue = null;
             }
 
             serializedObject.ApplyModifiedProperties();

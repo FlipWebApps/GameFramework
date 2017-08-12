@@ -32,6 +32,103 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
     [Serializable]
     public abstract class Condition : ScriptableObject
     {
+        #region Default Condition variables
+
+        public enum ComparisonTypeNumber
+        {
+            LessThan,
+            LessThanOrEqual,
+            Equal,
+            GreaterThanOrEqual,
+            GreaterThan,
+            NotEqual
+        }
+
+        /// <summary>
+        /// The type of the condition for boolean types.
+        /// </summary>
+        public bool BoolValue
+        {
+            get
+            {
+                return _boolValue;
+            }
+            set
+            {
+                _boolValue = value;
+            }
+        }
+        [Tooltip("The type of the condition for boolean types.")]
+        [SerializeField]
+        bool _boolValue;
+
+        /// <summary>
+        /// The type of the condition for boolean types.
+        /// </summary>
+        public int IntValue
+        {
+            get
+            {
+                return _intValue;
+            }
+            set
+            {
+                _intValue = value;
+            }
+        }
+        [Tooltip("The type of the condition for int types.")]
+        [SerializeField]
+        int _intValue;
+
+        /// <summary>
+        /// The type of the condition for number types.
+        /// </summary>
+        public ComparisonTypeNumber Comparison
+        {
+            get
+            {
+                return _comparison;
+            }
+            set
+            {
+                _comparison = value;
+            }
+        }
+        [Tooltip("The type of the condition for number types.")]
+        [SerializeField]
+        ComparisonTypeNumber _comparison;
+
+        #endregion Default Condition variables
+
+
+        /// <summary>
+        /// Evaluate the passed number against this condition
+        /// </summary>
+        /// <param name="referenceNumber"></param>
+        /// <param name="comparison"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool EvaluateNumber(int referenceNumber, ComparisonTypeNumber comparison, int value)
+        {
+            switch (comparison)
+            {
+                case ComparisonTypeNumber.LessThan:
+                    return referenceNumber < value;
+                case ComparisonTypeNumber.LessThanOrEqual:
+                    return referenceNumber <= value;
+                case ComparisonTypeNumber.Equal:
+                    return referenceNumber == value;
+                case ComparisonTypeNumber.GreaterThanOrEqual:
+                    return referenceNumber >= value;
+                case ComparisonTypeNumber.GreaterThan:
+                    return referenceNumber > value;
+                case ComparisonTypeNumber.NotEqual:
+                    return referenceNumber != value;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         /// <summary>
         /// Evaluate the current condition
         /// </summary>

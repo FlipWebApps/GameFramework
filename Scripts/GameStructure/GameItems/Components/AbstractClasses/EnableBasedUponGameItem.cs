@@ -35,7 +35,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     public abstract class EnableBasedUponGameItem<T> : GameItemContextConditionallyEnable<T> where T : GameItem
     {
         // NOTE: don't change the order of the below as this is recorded - add to the end and sort
-        public enum ConditionTypes { CanUnlockWithCoins, CanUnlockWithCompletion, CanUnlockWithPayment, Coins, PlayerHasCoinsToUnlock, Score, Selected, Unlocked, Custom }
+        public enum ConditionTypes { CanUnlockWithCoins, CanUnlockWithCompletion, CanUnlockWithPayment, Coins, PlayerHasCoinsToUnlock, Score, Selected, Unlocked, Custom, Counter }
 
         [Header("Conditions")]
         public ConditionReference[] ConditionReferences = new ConditionReference[0];
@@ -196,9 +196,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                         conditionsAreAllTrue &= ObjectModel.Conditions.Unlocked.EvaluateCondition(GameItem,
                             conditionReference.BoolValue);
                         break;
+                    case ConditionTypes.Counter:
+                        conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
+                        break;
                     case ConditionTypes.Custom:
-                        if (conditionReference.UseScriptableObject)
-                            conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
+                        if (conditionReference.ScriptableObjectReference != null)
+                            conditionsAreAllTrue &= conditionReference.ScriptableObjectReference.EvaluateCondition(GameItem);
                         break;
                 }
             }
