@@ -32,14 +32,14 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     public abstract class GameItemContextBaseMultiRunnable : GameItemContextBase
     {
         /// <summary>
-        /// Shared context that other GameItemContext's can reference
+        /// Type of the GameItem that we are referencing
         /// </summary>
         public GameConfiguration.GameItemType GameItemType
         {
             get { return _gameItemType; }
             set { _gameItemType = value; }
         }
-        [Tooltip("The context that we are working within for determining what GameItem to use or for reference from other items.")]
+        [Tooltip("Type of the GameItem that we are referencing.")]
         [SerializeField]
         GameConfiguration.GameItemType _gameItemType;
 
@@ -70,24 +70,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// <returns></returns>
         protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
-            switch (GameItemType)
-            {
-                case GameConfiguration.GameItemType.Character:
-                    Assert.IsNotNull(GameManager.Instance.Characters, string.Format("Characters are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Characters;
-                case GameConfiguration.GameItemType.Level:
-                    Assert.IsNotNull(GameManager.Instance.Levels, string.Format("Levels are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Levels;
-                case GameConfiguration.GameItemType.Player:
-                    Assert.IsNotNull(GameManager.Instance.Players, string.Format("Players are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Players;
-                case GameConfiguration.GameItemType.World:
-                    Assert.IsNotNull(GameManager.Instance.Worlds, string.Format("Worlds are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Worlds;
-                default:
-                    return null;
-            }
+            return GameManager.Instance.GetIBaseGameItemManager(GameItemType);
         }
+
 
 
         /// <summary>

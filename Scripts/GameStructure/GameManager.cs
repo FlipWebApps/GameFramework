@@ -42,6 +42,7 @@ using GameFramework.GameStructure.Game.Messages;
 using GameFramework.Preferences;
 using GameFramework.Audio.Messages;
 using GameFramework.GameStructure.GameItems.Messages;
+using GameFramework.GameStructure.Game.ObjectModel;
 #pragma warning disable 618
 
 #if BEAUTIFUL_TRANSITIONS
@@ -549,6 +550,32 @@ namespace GameFramework.GameStructure
             }
         }
 
+
+        /// <summary>
+        /// Get an IBaseGameItemManager for the specified GameItemType
+        /// </summary>
+        /// <param name="gameItemType"></param>
+        /// <returns></returns>
+        public IBaseGameItemManager GetIBaseGameItemManager(GameConfiguration.GameItemType gameItemType)
+        {
+            switch (gameItemType)
+            {
+                case GameConfiguration.GameItemType.Character:
+                    Assert.IsNotNull(GameManager.Instance.Characters, string.Format("Characters are not setup when referenced from {0}", this.GetType().Name));
+                    return GameManager.Instance.Characters;
+                case GameConfiguration.GameItemType.Level:
+                    Assert.IsNotNull(GameManager.Instance.Levels, string.Format("Levels are not setup when referenced from {0}", this.GetType().Name));
+                    return GameManager.Instance.Levels;
+                case GameConfiguration.GameItemType.Player:
+                    Assert.IsNotNull(GameManager.Instance.Players, string.Format("Players are not setup when referenced from {0}", this.GetType().Name));
+                    return GameManager.Instance.Players;
+                case GameConfiguration.GameItemType.World:
+                    Assert.IsNotNull(GameManager.Instance.Worlds, string.Format("Worlds are not setup when referenced from {0}", this.GetType().Name));
+                    return GameManager.Instance.Worlds;
+                default:
+                    return null;
+            }
+        }
         #endregion Game Structure Properties
 
         #region Messaging properties 
