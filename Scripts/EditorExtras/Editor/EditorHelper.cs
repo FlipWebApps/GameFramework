@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -176,6 +177,38 @@ namespace GameFramework.EditorExtras.Editor
             }
             return sb.ToString();
         }
+
+
+        /// <summary>
+        /// This method will use reflection for finding all actions and add them to the list dynamically.
+        /// </summary>
+        public static List<Type> FindTypes(Type type)
+        {
+            // Go through all the types in the Assembly and find non abstract subclasses
+            var actionSubTypeList = new List<Type>();
+            var allTypes = type.Assembly.GetTypes();
+            foreach (var typeInstance in allTypes)
+            {
+                if (typeInstance.IsSubclassOf(type) && !typeInstance.IsAbstract)
+                {
+                    actionSubTypeList.Add(typeInstance);
+                }
+            }
+            return actionSubTypeList;
+        }
+
+
+        /// <summary>
+        /// Convert a list of types to pretty printed names.
+        /// </summary>
+        public static List<string> TypeListToNames(IEnumerable<Type> types)
+        {
+            var typeNameList = new List<string>();
+            foreach (var type in types)
+                typeNameList.Add(PrettyPrintCamelCase(type.Name));
+            return typeNameList;
+        }
+
 
         #endregion string processing
 
