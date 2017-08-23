@@ -29,7 +29,7 @@ namespace GameFramework.GameStructure.Game.Components
     /// <summary>
     /// Shows one of two gameobjects based upon whether the game is unlocked.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Game/EnableBasedUponGameUnlocked")]
+    [AddComponentMenu("Game Framework/GameStructure/Common/EnableBasedUponGameUnlocked")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
     public class EnableBasedUponGameUnlocked : EnableDisableGameObjectMessaging<GameUnlockedMessage>
     {
