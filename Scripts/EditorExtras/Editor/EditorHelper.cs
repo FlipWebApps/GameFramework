@@ -19,6 +19,8 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Debugging;
+using GameFramework.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -199,14 +201,46 @@ namespace GameFramework.EditorExtras.Editor
 
 
         /// <summary>
-        /// Convert a list of types to pretty printed names.
+        /// Convert a list of types to pretty printed names using a ClassDetails attribute if found.
         /// </summary>
         public static List<string> TypeListToNames(IEnumerable<Type> types)
         {
             var typeNameList = new List<string>();
             foreach (var type in types)
-                typeNameList.Add(PrettyPrintCamelCase(type.Name));
+            {
+                var attributes = type.GetCustomAttributes(typeof(ClassDetailsAttribute), true);
+                if (attributes.Length > 0)
+                    typeNameList.Add(((ClassDetailsAttribute)attributes[0]).Name);
+                else
+                    typeNameList.Add(PrettyPrintCamelCase(type.Name));
+            }
             return typeNameList;
+        }
+
+
+        /// <summary>
+        /// Get a list of ClassDetailsAttribute for a list of types.
+        /// </summary>
+        public static List<ClassDetailsAttribute> TypeListClassDetails(IEnumerable<Type> types)
+        {
+            var typeClassDetailsList = new List<ClassDetailsAttribute>();
+            foreach (var type in types)
+            {
+                var attributes = type.GetCustomAttributes(typeof(ClassDetailsAttribute), true);
+                ClassDetailsAttribute classDetailsAttribute = null;
+                if (attributes.Length > 0)
+                {
+                    classDetailsAttribute = (ClassDetailsAttribute)attributes[0];
+                }
+                else
+                {
+                    Debug.LogError(string.Format("Missing ClassDetailsAttribute for type {0}.", type.Name));
+                    classDetailsAttribute = new ClassDetailsAttribute(type.Name + " <Missing>", "Missing/" + type.Name);
+                }
+                classDetailsAttribute.ClassType = type;
+                typeClassDetailsList.Add(classDetailsAttribute);
+            }
+            return typeClassDetailsList;
         }
 
 
