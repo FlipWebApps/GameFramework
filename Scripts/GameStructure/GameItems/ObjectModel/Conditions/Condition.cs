@@ -23,6 +23,7 @@ using System;
 using GameFramework.GameStructure.GameItems.Messages;
 using UnityEngine;
 using UnityEngine.Networking;
+using GameFramework.Helper;
 
 namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 {
@@ -30,7 +31,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
     /// Class that holds information about a gameitem condition.
     /// </summary>
     [Serializable]
-    public abstract class Condition : ScriptableObject
+    public abstract class Condition : ScriptableObject, IScriptableObjectContainerSyncReferences
     {
         #region Default Condition variables
 
@@ -100,6 +101,61 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
 
         #endregion Default Condition variables
 
+        public Condition() { }
+
+        /// <summary>
+        /// Perform any common initialisation for all Conditions before invoking Initialise
+        /// </summary>
+        /// <returns></returns>
+        public void InitialiseCommon()
+        {
+            Initialise();
+        }
+
+        /// <summary>
+        /// Override this method if you need to do any specific initialisation for the Conditions implementation.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual void Initialise() { }
+
+        /// <summary>
+        /// Returns whether this condition can process the specified GameItem / GameItem derived class
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool CanProcessGameItem(GameItem gameItem)
+        {
+            return true; // works for all GameItems
+        }
+
+
+        /// <summary>
+        /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
+        /// </summary>
+        /// The base implementation returns UpdateMessage so that this will be evaluated every frame.
+        /// <returns></returns>
+        public virtual Type[] GetTriggerMessages()
+        {
+            return new[] { typeof(UpdateMessage) };
+        }
+
+
+        /// <summary>
+        /// Returns whether this condition is built in or extensible using scriptable objects
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsBuiltIn()
+        {
+            return false;
+        }
+
+
+        /// <summary>
+        /// Evaluate the current condition
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool EvaluateCondition(GameItem gameItem);
+
+
 
         /// <summary>
         /// Evaluate the passed number against this condition
@@ -129,41 +185,25 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel.Conditions
             }
         }
 
-        /// <summary>
-        /// Evaluate the current condition
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool EvaluateCondition(GameItem gameItem);
-
+        #region IScriptableObjectContainerSyncReferences
 
         /// <summary>
-        /// Returns whether this condition can process the specified GameItem / GameItem derived class
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <returns></returns>
-        public virtual bool CanProcessGameItem(GameItem gameItem)
+        /// <param name="References"></param>
+        public void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
-            return true; // works for all GameItems
         }
 
-
         /// <summary>
-        /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// The base implementation returns UpdateMessage so that this will be evaluated every frame.
-        /// <returns></returns>
-        public virtual Type[] GetTriggerMessages()
+        /// <param name="References"></param>
+        public UnityEngine.Object[] GetReferencesForContainer()
         {
-            return new [] {typeof(UpdateMessage)};
+            return null;
         }
 
-
-        /// <summary>
-        /// Returns whether this condition is built in or extensible using scriptable objects
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool IsBuiltIn()
-        {
-            return false;
-        }
+        #endregion IScriptableObjectContainerSyncReferences
     }
 }

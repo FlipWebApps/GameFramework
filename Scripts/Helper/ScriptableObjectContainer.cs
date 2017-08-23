@@ -25,20 +25,21 @@ using UnityEngine;
 namespace GameFramework.Helper
 {
     /// <summary>
-    /// Container class to allow for arrays of multiple scriptable objects that derive from 
-    /// a common base class, including dynamic loading.
+    /// Container class to allow for arrays of multiple objects that derive from a common base class, 
+    /// including dynamic loading.
     /// </summary>
     /// Standard Unity arrays that are to be serialised can only contain items of a specific type 
     /// (and do not support derived classes). The only way we can reference and save an array of 
     /// potentially different items that inherit from a single base class is to use scriptable objects.
     /// 
-    /// ScriptableObjects themselves have a limitation that it we want dynamically setup such a 
-    /// collection that references ScriptableObjects then we can't then create a prefab of the gameobject 
-    /// as all scriptable object references in a prefab must be to external assets or they will become 
-    /// null when part of a prefab (at least verified to be the case upto Unity 5.5).
+    /// ScriptableObjects themselves have a limitation in that reference to other GameObjects don't work
+    /// in both scene view and when using a prefab - If the ScriptableObject is saved into the scene then we
+    /// can't create prefabls as references will be lost, if we save the ScriptableObject to an external asset
+    /// then prefab references will not update and always refer the prefab. Saving the ScriptableObject to
+    /// an internal string and using custom serialisation / deserialisation also exhibits the same problems
     /// 
-    /// This class gives a workaround where you create an array of a non generic derived class of 
-    /// ScriptableObjectContainer where ScriptableObjectContainer can contain either:
+    /// This class gives a (ugly, horrible) workaround where you create an array of a non generic derived class of 
+    /// ScriptableObjectContainer where ScriptableObjectContainer can contain:
     ///  - A reference to a ScriptableObject asset on disk deriving from type T (exposed through the 
     ///    ScriptableObjectReference property
     ///  - A dynamically created ScriptableObject deriving from type T whose class name is specifying in
@@ -46,9 +47,15 @@ namespace GameFramework.Helper
     ///    Scriptable Object is held in the Data property. ClassName must be specified for dynamic creation to work.
     ///    Referencing the serialised object will dynamically serialise and deserialise correctly.
     /// 
-    /// The Identier and UseScriptableObject parameters can additionally be used to allow for the use of built in types.
+    /// The references array on this class will work and update correctly across scene items / prefabs and can be
+    /// used for storage of such references by the child class as needed. We need ScriptableObjects rather than
+    /// additionally providing further arrays of common types (e.g. float, string) to allow support for arrays of
+    /// structs.
+    /// 
+    /// When Unity supports polymorphic serialisation this class can die a happy death!
     [Serializable]
-    public class ScriptableObjectContainer<T> : ISerializationCallbackReceiver where T : ScriptableObject
+    public class ScriptableObjectContainer<T> : IScriptableObjectContainerReferences where T : ScriptableObject, IScriptableObjectContainerSyncReferences
+
     {
         #region As reference to external asset
 
@@ -62,6 +69,17 @@ namespace GameFramework.Helper
         }
         [SerializeField]
         T _scriptableObjectReference;
+
+        /// <summary>
+        /// Whether to use the ScriptableObjectReference (which could be null) rather than the DynamicScriptableObject
+        /// </summary>
+        public bool IsReference
+        {
+            get { return _isReference; }
+            set { _isReference = value; }
+        }
+        [SerializeField]
+        bool _isReference = false;
 
         #endregion As reference to external asset
 
@@ -81,6 +99,21 @@ namespace GameFramework.Helper
 
 
         /// <summary>
+        /// An array of Unity object references that can be used for your own purposes.
+        /// </summary>
+        /// (Ugly) workaround due to the limitations of object reference serialisation.
+        public UnityEngine.Object[] ObjectReferences
+        {
+            get { return _objectReferences; }
+            set { _objectReferences = value; }
+        }
+        [SerializeField]
+        UnityEngine.Object[] _objectReferences;
+
+
+        public GameObject ObjectReference;
+
+        /// <summary>
         /// Data to use for (de)serialising the scriptable object.
         /// </summary>
         public string Data
@@ -93,7 +126,7 @@ namespace GameFramework.Helper
 
 
         /// <summary>
-        /// A reference to the contained scriptableobject
+        /// A reference to the contained scriptableobject - dynamically created on first access.
         /// </summary>
         public T ScriptableObject
         {
@@ -104,8 +137,12 @@ namespace GameFramework.Helper
                     if (!string.IsNullOrEmpty(ClassName))
                     {
                         _scriptableObject = UnityEngine.ScriptableObject.CreateInstance(ClassName) as T;
-                        if (_scriptableObject != null && !string.IsNullOrEmpty(Data))
-                            JsonUtility.FromJsonOverwrite(Data, _scriptableObject);
+                        if (_scriptableObject != null)
+                        {
+                            if (!string.IsNullOrEmpty(Data))
+                                JsonUtility.FromJsonOverwrite(Data, _scriptableObject);
+                            _scriptableObject.SetReferencesFromContainer(ObjectReferences);
+                        }
                     }
                 }
                 return _scriptableObject;
@@ -116,16 +153,33 @@ namespace GameFramework.Helper
 
         #endregion Dynamically loaded from JSON in Data
 
-        #region ISerializationCallbackReceiver
+        // removed for now - ensure this is update in the editor so that things work with Prefabs etc.
+        //#region ISerializationCallbackReceiver
 
-        public void OnBeforeSerialize()
-        {
-            if (_scriptableObject != null)
-                Data = JsonUtility.ToJson(ScriptableObject);
-        }
+        //public void OnBeforeSerialize()
+        //{
+        //    if (_scriptableObject != null)
+        //    {
+        //        //Data = JsonUtility.ToJson(ScriptableObject);
+        //        //ScriptableObject.PushReferencesToContainer(this);
+        //    }
+        //}
 
-        public void OnAfterDeserialize() { }
+        //public void OnAfterDeserialize() { }
 
-        #endregion ISerializationCallbackReceiver
+        //#endregion ISerializationCallbackReceiver
+    }
+
+
+    public interface IScriptableObjectContainerSyncReferences
+    {
+        void SetReferencesFromContainer(UnityEngine.Object[] objectReferences);
+        UnityEngine.Object[] GetReferencesForContainer();
+    }
+
+    public interface IScriptableObjectContainerReferences
+    {
+        UnityEngine.Object[] ObjectReferences { get; set; }
+        string Data { get; set; }
     }
 }

@@ -24,16 +24,17 @@ using GameFramework.Helper.UnityEvents;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Events;
+using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.Game;
 
-namespace GameFramework.GameStructure.Colliders
+namespace GameFramework.GameStructure.Game.Components
 {
     /// <summary>
     /// Generic collider for acting when a tagged gameobject touches the attached collider or trigger.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Colliders/Generic Collider")]
+    [AddComponentMenu("Game Framework/GameStructure/Game Collider")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/colliders/")]
-    public class GenericCollider : MonoBehaviour
+    public class GameCollider : MonoBehaviour
     {
         public enum DisableAfterUseType { None, ThisComponent, GameObject, Colliders}
 
@@ -198,7 +199,6 @@ namespace GameFramework.GameStructure.Colliders
         [SerializeField]
         TriggerData _exit;
 
-
         Collider[] _colliders;
         Collider2D[] _colliders2D;
 
@@ -210,7 +210,13 @@ namespace GameFramework.GameStructure.Colliders
         {
             _colliders = GetComponents<Collider>();
             _colliders2D = GetComponents<Collider2D>();
-            Debug.LogWarning(gameObject.name + " : All old colliders are replaced in favour of the new, more powerful, Game Collider (Add Component | Game Framework | Game Structure | Game Collider) and will in the future be removed. Please convert your game to use this new component.");
+        }
+
+        public void Start()
+        {
+            GameActionHelper.InitialiseGameActions(Enter.ActionReferences);
+            GameActionHelper.InitialiseGameActions(Within.ActionReferences);
+            GameActionHelper.InitialiseGameActions(Exit.ActionReferences);
         }
 
         #region Trigger / Collision Monobehaviour Methods
@@ -385,28 +391,7 @@ namespace GameFramework.GameStructure.Colliders
         /// <param name="triggerData"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
-            if (triggerData.InstantiatePrefab != null)
-                Instantiate(triggerData.InstantiatePrefab, transform.position, Quaternion.identity);
-
-#if PRO_POOLING
-            if (!string.IsNullOrEmpty(triggerData.AddPooledItem))
-                ProPooling.PoolManager.Instance.GetFromPool(triggerData.AddPooledItem, transform.position, Quaternion.identity);
-#endif
-
-            if (triggerData.AudioClip != null)
-            {
-                Assert.IsTrue(GameManager.Instance.IsInitialised, "Add a GameManager component to your scene to play audio effects.");
-                GameManager.Instance.PlayEffect(triggerData.AudioClip);
-            }
-
-            foreach (var gameobject in triggerData.EnableGameObjects)
-                if (gameobject != null)
-                    gameobject.SetActive(true);
-
-            foreach (var gameobject in triggerData.DisableGameObjects)
-                if (gameobject != null)
-                    gameobject.SetActive(false);
-
+            GameActionHelper.PerformActions(triggerData.ActionReferences, this);
             triggerData.Callback.Invoke(collidingGameObject);
         }
 
@@ -415,94 +400,22 @@ namespace GameFramework.GameStructure.Colliders
         public class TriggerData
         {
             /// <summary>
-            /// An optional prefab to instantiate
+            /// A list of actions that should be run.
             /// </summary>
-            public GameObject InstantiatePrefab
+            public GameActionReference[] ActionReferences
             {
                 get
                 {
-                    return _instantiatePrefab;
+                    return _actionReferences;
                 }
                 set
                 {
-                    _instantiatePrefab = value;
+                    _actionReferences = value;
                 }
             }
-            [Tooltip("An optional prefab to instantiate")]
+            [Tooltip("A list of actions that should be run.")]
             [SerializeField]
-            GameObject _instantiatePrefab;
-
-            /// <summary>
-            /// Get an item from a Pro Pooling PoolManager pool with the given name (requires Pro Pooling)
-            /// </summary>
-            public string AddPooledItem
-            {
-                get
-                {
-                    return _addPooledItem;
-                }
-                set
-                {
-                    _addPooledItem = value;
-                }
-            }
-            [Tooltip("Get an item from a Pro Pooling PoolManager pool with the given name (requires Pro Pooling)")]
-            [SerializeField]
-            string _addPooledItem;
-
-            /// <summary>
-            /// An audio clip to play
-            /// </summary>
-            public AudioClip AudioClip
-            {
-                get
-                {
-                    return _audioClip;
-                }
-                set
-                {
-                    _audioClip = value;
-                }
-            }
-            [Tooltip("An audio clip to play")]
-            [SerializeField]
-            AudioClip _audioClip;
-
-            /// <summary>
-            /// An optional list of gameobjects to enable
-            /// </summary>
-            public GameObject[] EnableGameObjects
-            {
-                get
-                {
-                    return _enableGameObjects;
-                }
-                set
-                {
-                    _enableGameObjects = value;
-                }
-            }
-            [Tooltip("An optional list of gameobjects to enable")]
-            [SerializeField]
-            GameObject[] _enableGameObjects;
-
-            /// <summary>
-            /// An optional list of gameobjects to disable
-            /// </summary>
-            public GameObject[] DisableGameObjects
-            {
-                get
-                {
-                    return _disableGameObjects;
-                }
-                set
-                {
-                    _disableGameObjects = value;
-                }
-            }
-            [Tooltip("An optional list of gameobjects to disable")]
-            [SerializeField]
-            GameObject[] _disableGameObjects;
+            GameActionReference[] _actionReferences = new GameActionReference[0];
 
             /// <summary>
             /// Methods that should be called.

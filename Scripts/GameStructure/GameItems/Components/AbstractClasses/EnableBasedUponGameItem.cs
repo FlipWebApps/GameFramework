@@ -200,8 +200,8 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
                         conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
                         break;
                     case ConditionTypes.Custom:
-                        if (conditionReference.ScriptableObjectReference != null)
-                            conditionsAreAllTrue &= conditionReference.ScriptableObjectReference.EvaluateCondition(GameItem);
+                        //if (conditionReference.ScriptableObjectReference != null)
+                        //    conditionsAreAllTrue &= conditionReference.ScriptableObjectReference.EvaluateCondition(GameItem);
                         break;
                 }
             }

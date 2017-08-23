@@ -128,6 +128,21 @@ namespace GameFramework.EditorExtras.Editor
         }
         static GUIStyle _wordWrapStyle;
 
+
+        public static GUIStyle CenteredLabelStyle
+        {
+            get
+            {
+                if (_centeredLabelStyle != null) return _centeredLabelStyle;
+
+                _centeredLabelStyle = new GUIStyle(GUI.skin.label)
+                {
+                    alignment = TextAnchor.MiddleCenter
+                };
+                return _centeredLabelStyle;
+            }
+        }
+        static GUIStyle _centeredLabelStyle;
         #endregion GUI Styles
 
     }

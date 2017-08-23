@@ -148,8 +148,7 @@ namespace GameFramework.Localisation.Editor
             if (_entryReferenceList.Count == 0)
             {
                 GUILayout.Space(20);
-                var style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
-                EditorGUILayout.LabelField("Create new localisation entries below.", style, GUILayout.ExpandWidth(true));
+                EditorGUILayout.LabelField("Create new localisation entries below.", GuiStyles.CenteredLabelStyle, GUILayout.ExpandWidth(true));
                 GUILayout.Space(20);
             }
             else

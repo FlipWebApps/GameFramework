@@ -139,7 +139,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                         EditorGUILayout.EndVertical();
                         break;
                     case EnableBasedUponGameItem<T>.ConditionTypes.Custom:
-                        var scriptableObjectProperty = conditionReference.FindPropertyRelative("_scriptableObject");
+                        var scriptableObjectProperty = conditionReference.FindPropertyRelative("_scriptableObjectReference");
                         EditorGUILayout.PropertyField(scriptableObjectProperty, GUIContent.none, GUILayout.ExpandWidth(true));
                         break;
                     default:
