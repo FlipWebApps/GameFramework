@@ -28,7 +28,6 @@ namespace GameFramework.GameStructure.Colliders
     /// <summary>
     /// Collider for winning the current level when a tagged gameobject touches the attached collider or trigger.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Colliders/Win Level Collider")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/colliders/")]
     public class WinLevelCollider : GenericCollider
     {

@@ -26,7 +26,6 @@ namespace GameFramework.GameStructure.Colliders
     /// <summary>
     /// Collider for increasing or decreasing a players / levels points when a tagged gameobject touches the attached collider or trigger.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Colliders/Points Collider")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/colliders/")]
     public class PointsCollider : GenericCollider
     {

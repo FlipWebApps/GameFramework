@@ -31,7 +31,6 @@ namespace GameFramework.GameStructure.Colliders
     /// <summary>
     /// Generic collider for acting when a tagged gameobject touches the attached collider or trigger.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Colliders/Generic Collider")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/colliders/")]
     public class GenericCollider : MonoBehaviour
     {

@@ -23,9 +23,7 @@ using System;
 using GameFramework.Helper.UnityEvents;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
-using UnityEngine.Assertions;
 using GameFramework.GameStructure.Game.ObjectModel;
-using GameFramework.GameStructure.Game;
 
 namespace GameFramework.GameStructure.Game.Components
 {
@@ -206,13 +204,13 @@ namespace GameFramework.GameStructure.Game.Components
         float _lastWithinTime;
         bool _processingDisabled;
 
-        public virtual void Awake()
+        void Awake()
         {
             _colliders = GetComponents<Collider>();
             _colliders2D = GetComponents<Collider2D>();
         }
 
-        public void Start()
+        void Start()
         {
             GameActionHelper.InitialiseGameActions(Enter.ActionReferences);
             GameActionHelper.InitialiseGameActions(Within.ActionReferences);
