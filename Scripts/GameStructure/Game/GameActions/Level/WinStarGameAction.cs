@@ -20,29 +20,37 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Levels;
 using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameActions.Level
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// GameAction class that unlocks a GameItem.
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    [ClassDetails("Level: Win Star", "Level/Win Star", "Win the specified star for the currently selected level.")]
+    public class WinStarGameAction : GameAction
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// A delay before the game over dialog is shown.
         /// </summary>
-        public int IntAmount
+        public int StarNumber
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get
+            {
+                return _starNumber;
+            }
+            set
+            {
+                _starNumber = value;
+            }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("The number of the star that should be won.")]
         [SerializeField]
-        int _intAmount;
+        int _starNumber = 1;
 
         /// <summary>
         /// Perform the action
@@ -50,12 +58,8 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
         /// <returns></returns>
         protected override void PerformAction()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            Assert.IsTrue(LevelManager.IsActive, "To use the Win Star Action, ensure that you have a LevelManager added to your scene.");
+            LevelManager.Instance.Level.StarWon(StarNumber, true);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
     /// </summary>
     [System.Serializable]
     [ClassDetails("GameItem: Unlock", "GameItem/Unlock", "Unlock the specified GameItem.")]
-    public class GameItemUnlockGameAction : GameActionGameItemContext
+    public class GameItemUnlockGameAction : GameActionGameItemTypeContext
     {
          /// <summary>
         /// Perform the action

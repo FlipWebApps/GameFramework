@@ -20,42 +20,28 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Levels;
 using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameActions.Level
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// GameAction class that unlocks a GameItem.
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    [ClassDetails("Level: Lose Level", "Level/Lose Level", "Lose the currently running level.")]
+    public class LoseLevelGameAction : GameAction
     {
-        /// <summary>
-        /// The amount to change the counter by.
-        /// </summary>
-        public int IntAmount
-        {
-            get { return _intAmount; }
-            set { _intAmount = value; }
-        }
-        [Tooltip("The amount to change the counter by.")]
-        [SerializeField]
-        int _intAmount;
-
-        /// <summary>
+         /// <summary>
         /// Perform the action
         /// </summary>
         /// <returns></returns>
         protected override void PerformAction()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            Assert.IsTrue(LevelManager.IsActive, "To use the Lose Level Action, ensure that you have a LevelManager added to your scene.");
+            LevelManager.Instance.GameOver(false);
         }
     }
 }

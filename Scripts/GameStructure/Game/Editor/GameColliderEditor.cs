@@ -47,12 +47,10 @@ namespace GameFramework.GameStructure.Game.Editor
         SerializedProperty _withinProperty;
         SerializedProperty _exitProperty;
 
-        float RemoveButtonWidth = 30f;
         GameCollider gameCollider;
 
-        //List<Type> _actionTypes;
-        List<ClassDetailsAttribute> _actionClassDetails;
-        //List<string> _actionTypeNames;
+        List<ClassDetailsAttribute> _gameActionClassDetails;
+        Rect _mainHelpRect;
 
         GameActionEditor[] actionEditorsEnter;
         GameActionEditor[] actionEditorsWithin;
@@ -74,24 +72,15 @@ namespace GameFramework.GameStructure.Game.Editor
             _exitProperty = serializedObject.FindProperty("_exit");
 
             // setup actions types
-            var actionTypes = EditorHelper.FindTypes(typeof(GameAction));
-            _actionClassDetails = EditorHelper.TypeListClassDetails(actionTypes);
-            //_actionTypes.Sort((type1, type2) => type1.Name.CompareTo(type2.Name));
-            //_actionTypeNames = EditorHelper.TypeListToNames(_actionTypes);
-            //for (int i = 0; i < _actionTypes.Count; i++)
-            //    if (_actionClassDetails[i] != null && !string.IsNullOrEmpty(_actionClassDetails[i].Name))
-            //        _actionTypeNames[i] = _actionClassDetails[i].Name;
-
-            //foreach (var type in _actionTypes)
-            //    foreach (var attr in type.GetCustomAttributes(typeof(ClassDetailsAttribute), true))
-            //        Debug.Log(((ClassDetailsAttribute)attr).Name + ", " + ((ClassDetailsAttribute)attr).Path);
+            _gameActionClassDetails = GameActionEditorHelper.FindTypesClassDetails();
         }
+
 
         protected void OnDisable()
         {
-            GameActionEditorHelper.CleanupSubEditors(actionEditorsEnter);
-            GameActionEditorHelper.CleanupSubEditors(actionEditorsWithin);
-            GameActionEditorHelper.CleanupSubEditors(actionEditorsExit);
+            EditorHelper.CleanupSubEditors(actionEditorsEnter);
+            EditorHelper.CleanupSubEditors(actionEditorsWithin);
+            EditorHelper.CleanupSubEditors(actionEditorsExit);
             actionEditorsEnter = null;
             actionEditorsWithin = null;
             actionEditorsExit = null;
@@ -107,9 +96,8 @@ namespace GameFramework.GameStructure.Game.Editor
 
         protected void DrawGUI()
         {
-#if !PRO_POOLING
-            EditorGUILayout.HelpBox("This component features enhancements when combined with the ProPooling asset (also included in the extras bundle) allowing you to add gameobjects to the scene from a pre-allocated pool. Adding from a pool gives performance gains over instantiating prefabs on the fly. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
-#endif
+            _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameColliderEditor", "With this component you can configure many different actions that can occur when a physics collision happens.\nMore actions will come over time - if there is something you are missing then let us know. Alternatively easily create your own custom actions or add a callback .", _mainHelpRect);
+
             EditorGUILayout.PropertyField(_collidingTagProperty);
             EditorGUILayout.PropertyField(_intervalProperty);
             EditorGUILayout.PropertyField(_disableAfterUseProperty);
@@ -130,85 +118,10 @@ namespace GameFramework.GameStructure.Game.Editor
         
         void DrawTriggerData(SerializedProperty triggerDataProperty, GameActionReference[] actionReferences, ref GameActionEditor[] actionEditors, string heading = null, string tooltip = null)
         {
-            if (heading != null)
-            {
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField(new GUIContent(heading, tooltip), EditorStyles.boldLabel);
-            }
-
-            EditorGUILayout.Space();
-
             var actionsProperty = triggerDataProperty.FindPropertyRelative("_actionReferences");
-            //EditorGUILayout.PropertyField(actionsProperty, true);
-            actionEditors = GameActionEditorHelper.CheckAndCreateSubEditors(actionEditors, actionReferences, serializedObject, actionsProperty);
-
-            if (actionsProperty.arraySize == 0)
-            {
-                EditorGUILayout.LabelField("No actions specified.", GuiStyles.CenteredLabelStyle, GUILayout.ExpandWidth(true));
-            }
-            else
-            {
-                // Display all items - use a for loop rather than a foreach loop in case of deletion.
-                for (var i = 0; i < actionsProperty.arraySize; i++)
-                {
-                    EditorGUILayout.BeginVertical(GUI.skin.box);
-
-                    if (actionEditors[i] == null)
-                    {
-                        var actionReference = actionsProperty.GetArrayElementAtIndex(i);
-                        var actionClassNameProperty = actionReference.FindPropertyRelative("_className");
-                        EditorGUILayout.LabelField("Error loading " + actionClassNameProperty.stringValue);
-                    }
-                    else
-                    {
-                        EditorGUILayout.BeginHorizontal();
-                        var currentActionClass = _actionClassDetails.Find(x => actionReferences[i].ScriptableObject.GetType() == x.ClassType);//  actionReferences[i].ScriptableObject.GetType() find match from _actionClassDetailsList
-                        EditorGUILayout.LabelField(new GUIContent(currentActionClass.Name, currentActionClass.Tooltip)); // actionEditors[i].GetLabel(), 
-                        if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
-                        {
-                            actionsProperty.DeleteArrayElementAtIndex(i);
-                            break;
-                        }
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginVertical();
-                        actionEditors[i].OnInspectorGUI();
-                        EditorGUILayout.EndVertical();
-                    }
-
-                    EditorGUILayout.EndVertical();
-                }
-            }
-
-            if (GUILayout.Button(new GUIContent("Add Action", "Add a new action to the list"), EditorStyles.miniButton))
-            {
-                var menu = new GenericMenu();
-                for (var i = 0; i < _actionClassDetails.Count; i++)
-                {
-                    var actionType = _actionClassDetails[i].ClassType;
-                    menu.AddItem(new GUIContent(_actionClassDetails[i].Path), false, () => {
-                        AddAction(actionType, actionsProperty);
-                    });
-                }
-                menu.ShowAsContext();
-            }
-
-            EditorGUILayout.Space();
-            var property = triggerDataProperty.FindPropertyRelative("_callback");
-            EditorGUILayout.PropertyField(property, true);
-        }
-
-        void AddAction(object userData, SerializedProperty arrayProperty)
-        {
-            arrayProperty.arraySize++;
-            var newElement = arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
-            var propClassName = newElement.FindPropertyRelative("_className");
-            var actionType = (Type)userData;
-            propClassName.stringValue = actionType.Name;
-            newElement.FindPropertyRelative("_data").stringValue = null;
-            newElement.FindPropertyRelative("_isReference").boolValue = false;
-            newElement.FindPropertyRelative("_objectReferences").arraySize = 0;
-            serializedObject.ApplyModifiedProperties();
+            var callbackProperty = triggerDataProperty.FindPropertyRelative("_callback");
+            GameActionEditorHelper.DrawActions(serializedObject, actionsProperty, actionReferences,
+                ref actionEditors, _gameActionClassDetails, callbackProperty);
         }
     }
 }

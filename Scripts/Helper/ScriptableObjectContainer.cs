@@ -111,8 +111,6 @@ namespace GameFramework.Helper
         UnityEngine.Object[] _objectReferences;
 
 
-        public GameObject ObjectReference;
-
         /// <summary>
         /// Data to use for (de)serialising the scriptable object.
         /// </summary>

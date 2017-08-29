@@ -201,6 +201,16 @@ namespace GameFramework.EditorExtras.Editor
 
 
         /// <summary>
+        /// Get a list of ClassDetailsAttribute for a list of types.
+        /// </summary>
+        public static List<ClassDetailsAttribute> FindTypesClassDetails(Type type)
+        {
+            var types = FindTypes(type);
+            return EditorHelper.TypeListClassDetails(types);
+        }
+
+
+        /// <summary>
         /// Convert a list of types to pretty printed names using a ClassDetails attribute if found.
         /// </summary>
         public static List<string> TypeListToNames(IEnumerable<Type> types)
@@ -297,5 +307,24 @@ namespace GameFramework.EditorExtras.Editor
             return labelStyle;
         }
         #endregion GUIStyle
+
+        #region Sub Editors
+        
+        /// <summary>
+        /// Destroy all subeditors
+        /// </summary>
+        internal static void CleanupSubEditors(UnityEditor.Editor[] subEditors)
+        {
+            if (subEditors == null) return;
+            for (var i = 0; i < subEditors.Length; i++)
+            {
+                if (subEditors[i] != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(subEditors[i]);
+                    subEditors[i] = null;
+                }
+            }
+        }
+        #endregion Sub Editors
     }
 }

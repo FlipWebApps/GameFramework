@@ -20,29 +20,37 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Levels;
 using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameActions.Level
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// GameAction class that changes the level coins
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    [ClassDetails("Level: Change Coins", "Level/Change Coins", "Increase of decrease the currently running level's coins.")]
+    public class ChangeLevelCoinsGameAction : GameAction
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// An amount that specifies how much the coins should change by. Put a minus value to decrease.
         /// </summary>
-        public int IntAmount
+        public int Amount
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                _amount = value;
+            }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("An amount that specifies how much the coins should change by. Put a minus value to decrease.")]
         [SerializeField]
-        int _intAmount;
+        int _amount = 1;
 
         /// <summary>
         /// Perform the action
@@ -50,12 +58,8 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
         /// <returns></returns>
         protected override void PerformAction()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            Assert.IsTrue(LevelManager.IsActive, "To use the Change Level Coins Action, ensure that you have a LevelManager added to your scene.");
+            LevelManager.Instance.Level.AddCoins(Amount);
         }
     }
 }

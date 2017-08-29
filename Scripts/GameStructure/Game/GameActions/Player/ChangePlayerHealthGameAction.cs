@@ -20,29 +20,37 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Players;
 using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameActions.Player
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// GameAction class that changes the players health
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    [ClassDetails("Player: Change Health", "Player/Change Health", "Increase of decrease the currently running players health.")]
+    public class ChangePlayerHealthGameAction : GameAction
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// An amount that specifies how much the health should change by. Put a minus value to decrease.
         /// </summary>
-        public int IntAmount
+        public float Amount
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                _amount = value;
+            }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("An amount that specifies how much the health should change by. Put a minus value to decrease.")]
         [SerializeField]
-        int _intAmount;
+        float _amount = -0.1f;
 
         /// <summary>
         /// Perform the action
@@ -50,12 +58,8 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
         /// <returns></returns>
         protected override void PerformAction()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            Assert.IsTrue(GameManager.IsActive, "To use the Change Player Health Action, ensure that you have a GameManager added to your scene.");
+            GameManager.Instance.Player.Health += Amount;
         }
     }
 }

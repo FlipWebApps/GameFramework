@@ -19,43 +19,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.Helper;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using System.Collections;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// Base GameCondition class that that allows for specifying the GameItem context
     /// </summary>
+    /// NOTE: FromLoop mode we need to do in awake so ensure this is setup so we don't support that mode here
+    /// jsut add a GameItemContext component and reference that if so needed.
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    public abstract class GameConditionGameItemTypeContext : GameConditionGameItemContext
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// Type of the GameItem that we are referencing
         /// </summary>
-        public int IntAmount
+        public GameConfiguration.GameItemType GameItemType
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get { return _gameItemType; }
+            set { _gameItemType = value; }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("Type of the GameItem that we are referencing.")]
         [SerializeField]
-        int _intAmount;
+        GameConfiguration.GameItemType _gameItemType;
 
         /// <summary>
-        /// Perform the action
+        /// Return an IBaseGameItemManager that contains the GameItems that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            return GameManager.Instance.GetIBaseGameItemManager(GameItemType);
         }
     }
 }

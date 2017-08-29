@@ -19,43 +19,57 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.Helper;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using System.Collections;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// Base GameCondition class that that allows for specifying the GameItem context
     /// </summary>
+    /// NOTE: FromLoop mode we need to do in awake so ensure this is setup so we don't support that mode here
+    /// jsut add a GameItemContext component and reference that if so needed.
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    public abstract class GameConditionGameItemContext : GameCondition
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// GameItem Context to operate within.
         /// </summary>
-        public int IntAmount
+        public GameItemContext Context
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get { return _context; }
+            set { _context = value; }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("The context that we are working within for determining what GameItem to use.")]
         [SerializeField]
-        int _intAmount;
+        GameItemContext _context = new GameItemContext();
+
 
         /// <summary>
-        /// Perform the action
+        /// Returns a reference to the GameItem that this context represents.
         /// </summary>
-        /// <returns></returns>
-        protected override void PerformAction()
+        public GameItem GameItem
         {
-            var gameItem = GameItem;
-            if (gameItem)
+            get
             {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
+                // refresh if needed
+                if (Context.ContextMode == GameItemContext.ContextModeType.Selected || Context.ContextMode == GameItemContext.ContextModeType.Reference || _gameItem == null)
+                    GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), this.GetType().Name);
+                return _gameItem;
+            }
+            private set
+            {
+                _gameItem = value;
             }
         }
+        GameItem _gameItem;
+
+
+        /// <summary>
+        /// Implement this method to return an IBaseGameItemManager that contains the GameItems that this works upon.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract IBaseGameItemManager GetIBaseGameItemManager();
     }
 }

@@ -23,39 +23,27 @@ using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameConditions.GameItem
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// GameCondition for testing the unlocked status of a GameItem.
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    [ClassDetails("GameItem: Unlocked", "GameItem/Unlocked", "Testing the unlocked status of a GameItem.")]
+    public class GameItemUnlockedGameCondition : GameConditionGameItemTypeContext
     {
         /// <summary>
-        /// The amount to change the counter by.
-        /// </summary>
-        public int IntAmount
-        {
-            get { return _intAmount; }
-            set { _intAmount = value; }
-        }
-        [Tooltip("The amount to change the counter by.")]
-        [SerializeField]
-        int _intAmount;
-
-        /// <summary>
-        /// Perform the action
+        /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
         {
             var gameItem = GameItem;
             if (gameItem)
             {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
+                return gameItem.IsUnlocked == BoolValue;
             }
+            return false;
         }
     }
 }

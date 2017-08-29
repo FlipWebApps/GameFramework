@@ -19,43 +19,42 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.Helper;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// Base GameCondition class that that allows for specifying the GameItem context and counter
     /// </summary>
+
     [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
+    public abstract class GameConditionGameItemTypeContextCounter : GameConditionGameItemTypeContext
     {
         /// <summary>
-        /// The amount to change the counter by.
+        /// The counter that we want to use.
         /// </summary>
-        public int IntAmount
+        public string Counter
         {
-            get { return _intAmount; }
-            set { _intAmount = value; }
+            get { return _counter; }
+            set { _counter = value; }
         }
-        [Tooltip("The amount to change the counter by.")]
+        [Tooltip("The counter that we want to use.")]
         [SerializeField]
-        int _intAmount;
+        string _counter;
+
+        protected Counter CounterReference;
 
         /// <summary>
-        /// Perform the action
+        /// Initialisation - call base.Initialise in sub classes.
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        protected override void Initialise()
         {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
+            base.Initialise();
+            CounterReference = GameItem.GetCounter(Counter);
+            Assert.IsNotNull(CounterReference, string.Format("The specified Counter '{0}' was not found. Check that is exists in the game configuration.", Counter));
         }
     }
 }

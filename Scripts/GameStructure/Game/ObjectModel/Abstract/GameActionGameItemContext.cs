@@ -34,19 +34,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
     public abstract class GameActionGameItemContext : GameAction
     {
         /// <summary>
-        /// Type of the GameItem that we are referencing
-        /// </summary>
-        public GameConfiguration.GameItemType GameItemType
-        {
-            get { return _gameItemType; }
-            set { _gameItemType = value; }
-        }
-        [Tooltip("Type of the GameItem that we are referencing.")]
-        [SerializeField]
-        GameConfiguration.GameItemType _gameItemType;
-
-
-        /// <summary>
         /// GameItem Context to operate within.
         /// </summary>
         public GameItemContext Context
@@ -83,9 +70,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// Implement this method to return an IBaseGameItemManager that contains the GameItems that this works upon.
         /// </summary>
         /// <returns></returns>
-        protected virtual IBaseGameItemManager GetIBaseGameItemManager()
-        {
-            return GameManager.Instance.GetIBaseGameItemManager(GameItemType);
-        }
+        protected abstract IBaseGameItemManager GetIBaseGameItemManager();
     }
 }

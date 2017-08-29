@@ -19,12 +19,12 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System.Collections.Generic;
 using GameFramework.GameStructure.GameItems.Messages;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.GameItems.ObjectModel.Conditions;
 using GameFramework.Messaging;
 using UnityEngine;
+using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.Game.GameConditions;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
@@ -38,7 +38,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         public enum ConditionTypes { CanUnlockWithCoins, CanUnlockWithCompletion, CanUnlockWithPayment, Coins, PlayerHasCoinsToUnlock, Score, Selected, Unlocked, Custom, Counter }
 
         [Header("Conditions")]
-        public ConditionReference[] ConditionReferences = new ConditionReference[0];
+        public GameConditionReference[] ConditionReferences = new GameConditionReference[0];
 
         public System.Type[] ListeningMessageTypes;
 
@@ -164,41 +164,41 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             {
                 switch ((ConditionTypes)conditionReference.Identifier)
                 {
-                    case ConditionTypes.CanUnlockWithCoins:
-                        conditionsAreAllTrue &= CanUnlockWithCoins.EvaluateCondition(GameItem,
-                            conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.CanUnlockWithCompletion:
-                        conditionsAreAllTrue &= CanUnlockWithCompletion.EvaluateCondition(GameItem,
-                            conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.CanUnlockWithPayment:
-                        conditionsAreAllTrue &= CanUnlockWithPayment.EvaluateCondition(GameItem,
-                            conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.Coins:
-                        conditionsAreAllTrue &= Coins.EvaluateCondition(GameItem,
-                            conditionReference.Comparison, conditionReference.IntValue);
-                        break;
-                    case ConditionTypes.PlayerHasCoinsToUnlock:
-                        conditionsAreAllTrue &= PlayerHasCoinsToUnlock.EvaluateCondition(GameItem,
-                            conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.Score:
-                        conditionsAreAllTrue &= Score.EvaluateCondition(GameItem,
-                            conditionReference.Comparison, conditionReference.IntValue);
-                        break;
-                    case ConditionTypes.Selected:
-                        conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
-                            GetGameItemManager().Selected, conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.Unlocked:
-                        conditionsAreAllTrue &= ObjectModel.Conditions.Unlocked.EvaluateCondition(GameItem,
-                            conditionReference.BoolValue);
-                        break;
-                    case ConditionTypes.Counter:
-                        conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
-                        break;
+                    //case ConditionTypes.CanUnlockWithCoins:
+                    //    conditionsAreAllTrue &= CanUnlockWithCoins.EvaluateCondition(GameItem,
+                    //        conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.CanUnlockWithCompletion:
+                    //    conditionsAreAllTrue &= CanUnlockWithCompletion.EvaluateCondition(GameItem,
+                    //        conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.CanUnlockWithPayment:
+                    //    conditionsAreAllTrue &= CanUnlockWithPayment.EvaluateCondition(GameItem,
+                    //        conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.Coins:
+                    //    conditionsAreAllTrue &= Coins.EvaluateCondition(GameItem,
+                    //        conditionReference.Comparison, conditionReference.IntValue);
+                    //    break;
+                    //case ConditionTypes.PlayerHasCoinsToUnlock:
+                    //    conditionsAreAllTrue &= PlayerHasCoinsToUnlock.EvaluateCondition(GameItem,
+                    //        conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.Score:
+                    //    conditionsAreAllTrue &= Score.EvaluateCondition(GameItem,
+                    //        conditionReference.Comparison, conditionReference.IntValue);
+                    //    break;
+                    //case ConditionTypes.Selected:
+                    //    conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
+                    //        GetGameItemManager().Selected, conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.Unlocked:
+                    //    conditionsAreAllTrue &= Unlocked.EvaluateCondition(GameItem,
+                    //        conditionReference.BoolValue);
+                    //    break;
+                    //case ConditionTypes.Counter:
+                    //    conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
+                    //    break;
                     case ConditionTypes.Custom:
                         //if (conditionReference.ScriptableObjectReference != null)
                         //    conditionsAreAllTrue &= conditionReference.ScriptableObjectReference.EvaluateCondition(GameItem);

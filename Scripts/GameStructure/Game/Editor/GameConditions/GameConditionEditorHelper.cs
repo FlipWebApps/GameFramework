@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameConditions.Abstract;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
@@ -33,7 +33,7 @@ namespace GameFramework.GameStructure.Game
     /// <summary>
     /// Helper class for GameAction Editors
     /// </summary>
-    public class GameActionEditorHelper
+    public class GameConditionEditorHelper
     {
         const float RemoveButtonWidth = 30f;
 
@@ -43,14 +43,13 @@ namespace GameFramework.GameStructure.Game
         /// <returns></returns>
         internal static List<ClassDetailsAttribute> FindTypesClassDetails()
         {
-            return EditorHelper.FindTypesClassDetails(typeof(GameAction));
+            return EditorHelper.FindTypesClassDetails(typeof(GameCondition));
         }
-
 
         #region Display
 
-        internal static void DrawActions(SerializedObject serializedObject, SerializedProperty actionsProperty, GameActionReference[] actionReferences, 
-            ref GameActionEditor[] actionEditors, List<ClassDetailsAttribute> classDetails, SerializedProperty callbackProperty, string heading = null, string tooltip = null)
+        internal static void DrawConditions(SerializedObject serializedObject, SerializedProperty conditionsProperty, GameConditionReference[] conditionReferences, 
+            ref GameConditionEditor[] conditionEditors, List<ClassDetailsAttribute> classDetails, string heading = null, string tooltip = null)
         {
             if (heading != null)
             {
@@ -60,39 +59,39 @@ namespace GameFramework.GameStructure.Game
 
             EditorGUILayout.Space();
 
-            actionEditors = GameActionEditorHelper.CheckAndCreateSubEditors(actionEditors, actionReferences, serializedObject, actionsProperty);
+            conditionEditors = GameConditionEditorHelper.CheckAndCreateSubEditors(conditionEditors, conditionReferences, serializedObject, conditionsProperty);
 
-            if (actionsProperty.arraySize == 0)
+            if (conditionsProperty.arraySize == 0)
             {
-                EditorGUILayout.LabelField("No actions specified.", GuiStyles.CenteredLabelStyle, GUILayout.ExpandWidth(true));
+                EditorGUILayout.LabelField("No conditions specified.", GuiStyles.CenteredLabelStyle, GUILayout.ExpandWidth(true));
             }
             else
             {
                 // Display all items - use a for loop rather than a foreach loop in case of deletion.
-                for (var i = 0; i < actionsProperty.arraySize; i++)
+                for (var i = 0; i < conditionsProperty.arraySize; i++)
                 {
                     EditorGUILayout.BeginVertical(GUI.skin.box);
 
-                    if (actionEditors[i] == null)
+                    if (conditionEditors[i] == null)
                     {
-                        var actionReference = actionsProperty.GetArrayElementAtIndex(i);
-                        var actionClassNameProperty = actionReference.FindPropertyRelative("_className");
-                        EditorGUILayout.LabelField("Error loading " + actionClassNameProperty.stringValue);
+                        var conditionReference = conditionsProperty.GetArrayElementAtIndex(i);
+                        var conditionClassNameProperty = conditionReference.FindPropertyRelative("_className");
+                        EditorGUILayout.LabelField("Error loading " + conditionClassNameProperty.stringValue);
                     }
                     else
                     {
                         EditorGUILayout.BeginHorizontal();
-                        var currentActionClass = classDetails.Find(x => actionReferences[i].ScriptableObject.GetType() == x.ClassType);//  actionReferences[i].ScriptableObject.GetType() find match from _actionClassDetailsList
-                        EditorGUILayout.LabelField(new GUIContent(currentActionClass.Name, currentActionClass.Tooltip)); // actionEditors[i].GetLabel(), 
+                        var currentConditionClass = classDetails.Find(x => conditionReferences[i].ScriptableObject.GetType() == x.ClassType);
+                        EditorGUILayout.LabelField(new GUIContent(currentConditionClass.Name, currentConditionClass.Tooltip));
                         if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
                         {
-                            actionsProperty.DeleteArrayElementAtIndex(i);
+                            conditionsProperty.DeleteArrayElementAtIndex(i);
                             break;
                         }
                         EditorGUILayout.EndHorizontal();
 
                         EditorGUILayout.BeginVertical();
-                        actionEditors[i].OnInspectorGUI();
+                        conditionEditors[i].OnInspectorGUI();
                         EditorGUILayout.EndVertical();
                     }
 
@@ -100,27 +99,21 @@ namespace GameFramework.GameStructure.Game
                 }
             }
 
-            if (GUILayout.Button(new GUIContent("Add Action", "Add a new action to the list"), EditorStyles.miniButton))
+            if (GUILayout.Button(new GUIContent("Add Condition", "Add a new condition to the list"), EditorStyles.miniButton))
             {
                 var menu = new GenericMenu();
                 for (var i = 0; i < classDetails.Count; i++)
                 {
-                    var actionType = classDetails[i].ClassType;
+                    var conditionType = classDetails[i].ClassType;
                     menu.AddItem(new GUIContent(classDetails[i].Path), false, () => {
-                        AddAction(actionType, actionsProperty, serializedObject);
+                        AddCondition(conditionType, conditionsProperty, serializedObject);
                     });
                 }
                 menu.ShowAsContext();
             }
-
-            if (callbackProperty != null)
-            {
-                EditorGUILayout.Space();
-                EditorGUILayout.PropertyField(callbackProperty, new GUIContent("Callbacks", callbackProperty.tooltip), true);
-            }
         }
 
-        internal static void AddAction(object userData, SerializedProperty arrayProperty, SerializedObject serializedObject)
+        internal static void AddCondition(object userData, SerializedProperty arrayProperty, SerializedObject serializedObject)
         {
             arrayProperty.arraySize++;
             var newElement = arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
@@ -140,27 +133,27 @@ namespace GameFramework.GameStructure.Game
         /// <summary>
         /// In case of changes create sub editors
         /// </summary>
-        internal static GameActionEditor[] CheckAndCreateSubEditors(GameActionEditor[] subEditors, GameActionReference[] actionReferences,
+        internal static GameConditionEditor[] CheckAndCreateSubEditors(GameConditionEditor[] subEditors, GameConditionReference[] conditionReferences,
             SerializedObject container, SerializedProperty _scriptableReferenceArrayProperty)
         {
             // If there are the correct number of subEditors then do nothing.
-            if (subEditors != null && subEditors.Length == actionReferences.Length)
+            if (subEditors != null && subEditors.Length == conditionReferences.Length)
                 return subEditors;
 
             // Otherwise get rid of any old editors.
             EditorHelper.CleanupSubEditors(subEditors);
 
             // Create an array of the subEditor type that is the right length for the targets.
-            subEditors = new GameActionEditor[actionReferences.Length];
+            subEditors = new GameConditionEditor[conditionReferences.Length];
 
             // Populate the array and setup each Editor.
             for (var i = 0; i < subEditors.Length; i++)
             {
                 subEditors[i] =
-                    UnityEditor.Editor.CreateEditor(actionReferences[i].ScriptableObject) as GameActionEditor;
+                    UnityEditor.Editor.CreateEditor(conditionReferences[i].ScriptableObject) as GameConditionEditor;
                 if (subEditors[i] != null)
                 {
-                    subEditors[i].Container = actionReferences[i];
+                    subEditors[i].Container = conditionReferences[i];
                     var scriptableObjectContainer = _scriptableReferenceArrayProperty.GetArrayElementAtIndex(i);
                     subEditors[i].ContainerSerializedObject = container;
                     subEditors[i].DataProperty =

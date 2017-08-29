@@ -20,42 +20,24 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.Helper;
-using UnityEngine;
+using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.GameItems.ObjectModel;
 
-namespace GameFramework.GameStructure.Game.GameActions.GameItem
+namespace GameFramework.GameStructure.Game.GameConditions
 {
     /// <summary>
-    /// GameAction class that changes a counters amount.
+    /// Class that holds information about a gameitem condition.
     /// </summary>
-    [System.Serializable]
-    [ClassDetails("GameItem: Change Counter Amount", "GameItem/Change Counter Amount", "Change the specified counter amount for a given GameItem")]
-    public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
-    {
-        /// <summary>
-        /// The amount to change the counter by.
-        /// </summary>
-        public int IntAmount
-        {
-            get { return _intAmount; }
-            set { _intAmount = value; }
-        }
-        [Tooltip("The amount to change the counter by.")]
-        [SerializeField]
-        int _intAmount;
-
-        /// <summary>
-        /// Perform the action
-        /// </summary>
-        /// <returns></returns>
-        protected override void PerformAction()
-        {
-            var gameItem = GameItem;
-            if (gameItem)
-            {
-                if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
-                    CounterReference.IntAmount += IntAmount;
-            }
-        }
-    }
+    //[System.Serializable]
+    //public class Score : GameConditionBuiltIn
+    //{
+    //    /// <summary>
+    //    /// Evaluate the current condition
+    //    /// </summary>
+    //    /// <returns></returns>
+    //    public static bool EvaluateCondition(GameItem gameItem, GameConditionReference.ComparisonTypeNumber comparison, int value)
+    //    {
+    //        return GameConditionReference.EvaluateNumber(gameItem.Score, comparison, value);
+    //    }
+    //}
 }
