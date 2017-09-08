@@ -52,6 +52,12 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         Text _textComponent;
         string _cachedText;
 
+        // set defaults from constructor.
+        public ShowGameItemCounter()
+        {
+            _text = LocalisableText.CreateNonLocalised("{0}");
+        }
+
         protected override void Awake()
         {
             base.Awake();

@@ -61,14 +61,15 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
             _helpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.ShowGameItemCounterEditor", "Use this component to display values from a built, in our your own custom counter for the given GameItem context.\nYou can setup your own counters by adding a Game Configuration to your Resources folder (named GameConfiguration).\nSee the Text tooltip for help on text format parameters.", _helpRect);
 
             EditorGUILayout.PropertyField(_contextProperty);
-            EditorGUILayout.PropertyField(_textProperty);
 
             int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, _counters);
-            if (newIndex != _counterIndex)
+            if (newIndex != _counterIndex || string.IsNullOrEmpty(_counterProperty.stringValue))
             {
                 _counterProperty.stringValue = _counters[newIndex];
                 _counterIndex = newIndex;
             }
+
+            EditorGUILayout.PropertyField(_textProperty);
 
             serializedObject.ApplyModifiedProperties();
         }
