@@ -32,74 +32,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
     [System.Serializable]
     public abstract class GameCondition : ScriptableObject, IScriptableObjectContainerSyncReferences
     {
-        #region Default Condition variables
-
-        public enum ComparisonTypeNumber
-        {
-            LessThan,
-            LessThanOrEqual,
-            Equal,
-            GreaterThanOrEqual,
-            GreaterThan,
-            NotEqual
-        }
-
-        /// <summary>
-        /// The type of the condition for boolean types.
-        /// </summary>
-        public bool BoolValue
-        {
-            get
-            {
-                return _boolValue;
-            }
-            set
-            {
-                _boolValue = value;
-            }
-        }
-        [Tooltip("The type of the condition for boolean types.")]
-        [SerializeField]
-        bool _boolValue;
-
-        /// <summary>
-        /// The type of the condition for boolean types.
-        /// </summary>
-        public int IntValue
-        {
-            get
-            {
-                return _intValue;
-            }
-            set
-            {
-                _intValue = value;
-            }
-        }
-        [Tooltip("The type of the condition for int types.")]
-        [SerializeField]
-        int _intValue;
-
-        /// <summary>
-        /// The type of the condition for number types.
-        /// </summary>
-        public ComparisonTypeNumber Comparison
-        {
-            get
-            {
-                return _comparison;
-            }
-            set
-            {
-                _comparison = value;
-            }
-        }
-        [Tooltip("The type of the condition for number types.")]
-        [SerializeField]
-        ComparisonTypeNumber _comparison;
-
-        #endregion Default Condition variables
-
         public GameCondition() { }
 
         /// <summary>
@@ -131,9 +63,9 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// Perform all common things for the Condition before invoking EvaluateCondition
         /// </summary>
         /// <returns></returns>
-        public void EvaluateConditionCommon(MonoBehaviour monoBehaviour)
+        public bool EvaluateConditionCommon(MonoBehaviour monoBehaviour)
         {
-            EvaluateCondition(monoBehaviour);
+            return EvaluateCondition(monoBehaviour);
         }
 
         /// <summary>
@@ -142,33 +74,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <returns></returns>
         public abstract bool EvaluateCondition(MonoBehaviour monoBehaviour);
 
-        /// <summary>
-        /// Evaluate the passed number against this condition
-        /// </summary>
-        /// <param name="referenceNumber"></param>
-        /// <param name="comparison"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool EvaluateNumber(int referenceNumber, ComparisonTypeNumber comparison, int value)
-        {
-            switch (comparison)
-            {
-                case ComparisonTypeNumber.LessThan:
-                    return referenceNumber < value;
-                case ComparisonTypeNumber.LessThanOrEqual:
-                    return referenceNumber <= value;
-                case ComparisonTypeNumber.Equal:
-                    return referenceNumber == value;
-                case ComparisonTypeNumber.GreaterThanOrEqual:
-                    return referenceNumber >= value;
-                case ComparisonTypeNumber.GreaterThan:
-                    return referenceNumber > value;
-                case ComparisonTypeNumber.NotEqual:
-                    return referenceNumber != value;
-                default:
-                    throw new System.ArgumentOutOfRangeException();
-            }
-        }
 
         #region IScriptableObjectContainerSyncReferences
 
@@ -176,7 +81,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
         /// <param name="References"></param>
-        public void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
+        public virtual void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
         }
 
@@ -184,7 +89,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
         /// <param name="References"></param>
-        public UnityEngine.Object[] GetReferencesForContainer()
+        public virtual UnityEngine.Object[] GetReferencesForContainer()
         {
             return null;
         }

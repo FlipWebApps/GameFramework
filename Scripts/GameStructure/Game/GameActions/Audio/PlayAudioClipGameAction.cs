@@ -64,6 +64,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Audio
             }
         }
 
+        #region IScriptableObjectContainerSyncReferences
 
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
@@ -85,5 +86,6 @@ namespace GameFramework.GameStructure.Game.GameActions.Audio
             objectReferences[0] = AudioClip;
             return objectReferences;
         }
+        #endregion IScriptableObjectContainerSyncReferences
     }
 }

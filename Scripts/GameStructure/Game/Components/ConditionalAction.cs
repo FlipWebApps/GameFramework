@@ -27,7 +27,7 @@ using GameFramework.Helper.UnityEvents;
 namespace GameFramework.GameStructure.Game.Components
 {
     /// <summary>
-    /// Generic collider for acting when a tagged gameobject touches the attached collider or trigger.
+    /// Generic component for taking user defined actions on specified conditions.
     /// </summary>
     [AddComponentMenu("Game Framework/GameStructure/Conditional Action")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]

@@ -59,6 +59,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 
             var counterConfiguration = GameConfiguration.Instance.GetCounterConfiguration((GameConfiguration.GameItemType)_gameItemTypeProperty.enumValueIndex);
             string[] _counters = new string[counterConfiguration.Count];
+            _counterIndex = 0; // initialise incase gameitem type changed
             for (int i = 0; i < counterConfiguration.Count; i++)
             {
                 _counters[i] = counterConfiguration[i].Name;
@@ -68,7 +69,7 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
                 }
             }
             int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, _counters);
-            if (newIndex != _counterIndex)
+            if (newIndex != _counterIndex || string.IsNullOrEmpty(_counterProperty.stringValue))
             {
                 _counterProperty.stringValue = _counters[newIndex];
                 _counterIndex = newIndex;
@@ -92,15 +93,5 @@ namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
         /// </summary>
         /// <returns></returns>
         protected virtual void ShowFooterGUI() { }
-
-
-        /// <summary>
-        /// Override in subclasses to return a list of custom counter configuration entries that should be used
-        /// </summary>
-        /// <returns></returns>
-        protected virtual List<CounterConfiguration> GetCounterConfiguration()
-        {
-            return GameConfiguration.Instance.DefaultGameItemCounterConfiguration;
-        }
     }
 }

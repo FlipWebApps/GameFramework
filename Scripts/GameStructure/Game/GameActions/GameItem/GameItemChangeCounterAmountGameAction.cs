@@ -33,18 +33,6 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
     public class GameItemChangeCounterAmountGameAction : GameActionGameItemTypeContextCounter
     {
         /// <summary>
-        /// The amount to change the counter by.
-        /// </summary>
-        public int IntAmount
-        {
-            get { return _intAmount; }
-            set { _intAmount = value; }
-        }
-        [Tooltip("The amount to change the counter by.")]
-        [SerializeField]
-        int _intAmount;
-
-        /// <summary>
         /// Perform the action
         /// </summary>
         /// <returns></returns>
@@ -55,6 +43,8 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
             {
                 if (CounterReference.Configuration.CounterType == ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
                     CounterReference.IntAmount += IntAmount;
+                else
+                    CounterReference.FloatAmount += FloatAmount;
             }
         }
     }

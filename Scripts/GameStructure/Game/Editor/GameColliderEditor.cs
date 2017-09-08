@@ -121,7 +121,7 @@ namespace GameFramework.GameStructure.Game.Editor
             var actionsProperty = triggerDataProperty.FindPropertyRelative("_actionReferences");
             var callbackProperty = triggerDataProperty.FindPropertyRelative("_callback");
             GameActionEditorHelper.DrawActions(serializedObject, actionsProperty, actionReferences,
-                ref actionEditors, _gameActionClassDetails, callbackProperty);
+                ref actionEditors, _gameActionClassDetails, callbackProperty, heading, tooltip);
         }
     }
 }

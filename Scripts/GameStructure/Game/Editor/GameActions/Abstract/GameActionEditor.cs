@@ -22,6 +22,7 @@
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -95,7 +96,7 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions.Abstract
         /// </summary>
         protected virtual void DrawGUI()
         {
-            DrawDefaultInspector();
+            EditorHelper.DrawDefaultInspector(serializedObject, new List<string>() { "m_Script" });
         }
     }
 }

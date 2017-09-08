@@ -27,11 +27,83 @@ using UnityEngine;
 
 namespace GameFramework.GameStructure.Game
 {
+    #region Comparison Types
+
     /// <summary>
     /// Helper class for GameCondition's
     /// </summary>
     public class GameConditionHelper
     {
+        public enum ComparisonType
+
+        {
+            LessThan,
+            LessThanOrEqual,
+            Equal,
+            GreaterThanOrEqual,
+            GreaterThan,
+            NotEqual
+        }
+
+
+        /// <summary>
+        /// Evaluate numbers against a condition
+        /// </summary>
+        /// <param name="actualValue"></param>
+        /// <param name="comparison"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool CompareNumbers(int actualValue, ComparisonType comparison, int value)
+        {
+            switch (comparison)
+            {
+                case ComparisonType.LessThan:
+                    return actualValue < value;
+                case ComparisonType.LessThanOrEqual:
+                    return actualValue <= value;
+                case ComparisonType.Equal:
+                    return actualValue == value;
+                case ComparisonType.GreaterThanOrEqual:
+                    return actualValue >= value;
+                case ComparisonType.GreaterThan:
+                    return actualValue > value;
+                case ComparisonType.NotEqual:
+                    return actualValue != value;
+                default:
+                    throw new System.ArgumentOutOfRangeException();
+            }
+        }
+
+
+        /// <summary>
+        /// Evaluate numbers against a condition
+        /// </summary>
+        /// <param name="actualValue"></param>
+        /// <param name="comparison"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool CompareNumbers(float actualValue, ComparisonType comparison, float value)
+        {
+            switch (comparison)
+            {
+                case ComparisonType.LessThan:
+                    return actualValue < value;
+                case ComparisonType.LessThanOrEqual:
+                    return actualValue <= value;
+                case ComparisonType.Equal:
+                    return Mathf.Approximately(value, actualValue);
+                case ComparisonType.GreaterThanOrEqual:
+                    return actualValue >= value;
+                case ComparisonType.GreaterThan:
+                    return actualValue > value;
+                case ComparisonType.NotEqual:
+                    return !Mathf.Approximately(value, actualValue);
+                default:
+                    throw new System.ArgumentOutOfRangeException();
+            }
+        }
+        #endregion Comparison Types
+
         /// <summary>
         /// Initialise gameConditions
         /// </summary>
@@ -100,53 +172,12 @@ namespace GameFramework.GameStructure.Game
                 if (gameConditionReference.IsReference)
                 {
                     if (gameConditionReference != null)
-                        gameConditionReference.ScriptableObjectReference.EvaluateConditionCommon(monoBehaviour);
+                        conditionsAreAllTrue &= gameConditionReference.ScriptableObjectReference.EvaluateConditionCommon(monoBehaviour);
                 }
                 else
                 {
                     var gameCondition = gameConditionReference.ScriptableObject;
-                   // switch (gameConditionReference.Identifier)
-                   // {
-                        //case ConditionTypes.CanUnlockWithCoins:
-                        //    conditionsAreAllTrue &= CanUnlockWithCoins.EvaluateCondition(GameItem,
-                        //        conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.CanUnlockWithCompletion:
-                        //    conditionsAreAllTrue &= CanUnlockWithCompletion.EvaluateCondition(GameItem,
-                        //        conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.CanUnlockWithPayment:
-                        //    conditionsAreAllTrue &= CanUnlockWithPayment.EvaluateCondition(GameItem,
-                        //        conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.Coins:
-                        //    conditionsAreAllTrue &= Coins.EvaluateCondition(GameItem,
-                        //        conditionReference.Comparison, conditionReference.IntValue);
-                        //    break;
-                        //case ConditionTypes.PlayerHasCoinsToUnlock:
-                        //    conditionsAreAllTrue &= PlayerHasCoinsToUnlock.EvaluateCondition(GameItem,
-                        //        conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.Score:
-                        //    conditionsAreAllTrue &= Score.EvaluateCondition(GameItem,
-                        //        conditionReference.Comparison, conditionReference.IntValue);
-                        //    break;
-                        //case ConditionTypes.Selected:
-                        //    conditionsAreAllTrue &= Selected.EvaluateCondition(GameItem,
-                        //        GetGameItemManager().Selected, conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.Unlocked:
-                        //    conditionsAreAllTrue &= Unlocked.EvaluateCondition(GameItem,
-                        //        conditionReference.BoolValue);
-                        //    break;
-                        //case ConditionTypes.Counter:
-                        //    conditionsAreAllTrue &= conditionReference.ScriptableObject.EvaluateCondition(GameItem);
-                        //    break;
-                        //case ConditionTypes.Custom:
-                            //if (conditionReference.ScriptableObjectReference != null)
-                            //    conditionsAreAllTrue &= conditionReference.ScriptableObjectReference.EvaluateCondition(GameItem);
-                        //    break;
-                   // }
+                    conditionsAreAllTrue &= gameCondition.EvaluateConditionCommon(monoBehaviour);
                 }
             }
             return conditionsAreAllTrue;

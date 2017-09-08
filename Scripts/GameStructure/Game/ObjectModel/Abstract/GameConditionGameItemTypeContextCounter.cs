@@ -44,17 +44,60 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         [SerializeField]
         string _counter;
 
-        protected Counter CounterReference;
+        /// <summary>
+        /// The type of the condition for number types.
+        /// </summary>
+        public GameConditionHelper.ComparisonType Comparison
+        {
+            get
+            {
+                return _comparison;
+            }
+            set
+            {
+                _comparison = value;
+            }
+        }
+        [Tooltip("The type of the condition for number types.")]
+        [SerializeField]
+        GameConditionHelper.ComparisonType _comparison;
 
         /// <summary>
-        /// Initialisation - call base.Initialise in sub classes.
+        /// A reference amount to compare the current amount against.
         /// </summary>
-        /// <returns></returns>
-        protected override void Initialise()
+        public int IntAmount
+
         {
-            base.Initialise();
-            CounterReference = GameItem.GetCounter(Counter);
-            Assert.IsNotNull(CounterReference, string.Format("The specified Counter '{0}' was not found. Check that is exists in the game configuration.", Counter));
+            get
+            {
+                return _intAmount;
+            }
+            set
+            {
+                _intAmount = value;
+            }
         }
+        [Tooltip("A reference amount to compare the current amount against.")]
+        [SerializeField]
+        int _intAmount;
+
+        /// <summary>
+        /// A reference amount to compare the current amount against.
+        /// </summary>
+        public float FloatAmount
+
+        {
+            get
+            {
+                return _floatAmount;
+            }
+            set
+            {
+                _floatAmount = value;
+            }
+        }
+        [Tooltip("A reference amount to compare the current amount against.")]
+        [SerializeField]
+        float _floatAmount;
     }
 }

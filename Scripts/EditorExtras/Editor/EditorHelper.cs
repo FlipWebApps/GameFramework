@@ -308,7 +308,7 @@ namespace GameFramework.EditorExtras.Editor
         }
         #endregion GUIStyle
 
-        #region Sub Editors
+        #region Editors
         
         /// <summary>
         /// Destroy all subeditors
@@ -325,6 +325,26 @@ namespace GameFramework.EditorExtras.Editor
                 }
             }
         }
-        #endregion Sub Editors
+
+
+        /// <summary>
+        /// Draw the default inspector excluding listed objects
+        /// </summary>
+        internal static bool DrawDefaultInspector(SerializedObject obj, List<string> excludePaths)
+        {
+            EditorGUI.BeginChangeCheck();
+            obj.Update();
+            SerializedProperty iterator = obj.GetIterator();
+            bool enterChildren = true;
+            while (iterator.NextVisible(enterChildren))
+            {
+                if (excludePaths == null || !excludePaths.Contains(iterator.propertyPath))
+                    EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
+                enterChildren = false;
+            }
+            obj.ApplyModifiedProperties();
+            return EditorGUI.EndChangeCheck();
+        }
+        #endregion Editors
     }
 }

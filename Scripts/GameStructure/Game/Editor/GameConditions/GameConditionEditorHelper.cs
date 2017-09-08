@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.Editor.GameConditions.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameConditions.Common;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
@@ -82,7 +82,12 @@ namespace GameFramework.GameStructure.Game
                     {
                         EditorGUILayout.BeginHorizontal();
                         var currentConditionClass = classDetails.Find(x => conditionReferences[i].ScriptableObject.GetType() == x.ClassType);
-                        EditorGUILayout.LabelField(new GUIContent(currentConditionClass.Name, currentConditionClass.Tooltip));
+                        var conditionReference = conditionsProperty.GetArrayElementAtIndex(i);
+                        EditorGUI.indentLevel++;
+                        conditionReference.isExpanded = EditorGUILayout.Foldout(conditionReference.isExpanded, new GUIContent(currentConditionClass.Name, currentConditionClass.Tooltip));
+                        EditorGUI.indentLevel--;
+                        //EditorGUILayout.LabelField(new GUIContent(currentConditionClass.Name, currentConditionClass.Tooltip));
+
                         if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
                         {
                             conditionsProperty.DeleteArrayElementAtIndex(i);
@@ -90,9 +95,12 @@ namespace GameFramework.GameStructure.Game
                         }
                         EditorGUILayout.EndHorizontal();
 
-                        EditorGUILayout.BeginVertical();
-                        conditionEditors[i].OnInspectorGUI();
-                        EditorGUILayout.EndVertical();
+                        if (conditionReference.isExpanded)
+                        {
+                            EditorGUILayout.BeginVertical();
+                            conditionEditors[i].OnInspectorGUI();
+                            EditorGUILayout.EndVertical();
+                        }
                     }
 
                     EditorGUILayout.EndVertical();
@@ -120,6 +128,7 @@ namespace GameFramework.GameStructure.Game
             var propClassName = newElement.FindPropertyRelative("_className");
             var actionType = (System.Type)userData;
             propClassName.stringValue = actionType.Name;
+            newElement.isExpanded = true;
             newElement.FindPropertyRelative("_data").stringValue = null;
             newElement.FindPropertyRelative("_isReference").boolValue = false;
             newElement.FindPropertyRelative("_objectReferences").arraySize = 0;

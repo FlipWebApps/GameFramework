@@ -22,11 +22,8 @@
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.Components;
 using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
-using GameFramework.GameStructure.Game.Editor.GameConditions.Abstract;
-using GameFramework.GameStructure.Game.ObjectModel;
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameConditions.Common;
 using GameFramework.Helper;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -97,7 +94,7 @@ namespace GameFramework.GameStructure.Game.Editor
                 ref actionEditorsMet, _gameActionClassDetails, _actionReferencesConditionMetCallbackProperty, "Condition Met", "Actions that will be run when the condition is met");
 
             GameActionEditorHelper.DrawActions(serializedObject, _actionReferencesConditionNotMetProperty, conditionalAction.ActionReferencesConditionNotMet,
-                ref actionEditorsMet, _gameActionClassDetails, _actionReferencesConditionNotMetCallbackProperty, "Condition Not Met", "Actions that will be run when the condition is not met");
+                ref actionEditorsNotMet, _gameActionClassDetails, _actionReferencesConditionNotMetCallbackProperty, "Condition Not Met", "Actions that will be run when the condition is not met");
         }
     }
 }

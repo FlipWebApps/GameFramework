@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.GameStructure.Levels;
 using GameFramework.Helper;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -32,7 +31,7 @@ namespace GameFramework.GameStructure.Game.GameConditions
     /// </summary>
     [System.Serializable]
     [ClassDetails("Level: Unlocked", "Level/Unlocked", "Testing the unlocked status for the currently selected level.")]
-    public class LevelUnlockedGameCondition : GameCondition
+    public class LevelUnlockedGameCondition : GameConditionBool
     {
         /// <summary>
         /// Evaluate the current condition - TODO: Pass in reference to common placeholder.
@@ -42,12 +41,7 @@ namespace GameFramework.GameStructure.Game.GameConditions
         {
             Assert.IsTrue(GameManager.IsActive, "To use the Level Unlocked Game Condition, ensure that you have a GameManager added to your scene.");
             Assert.IsNotNull(GameManager.Instance.Levels, "To use the Level Unlocked Game Condition, ensure that you have configured Levels to be setup in your scene.");
-            return GameManager.Instance.Levels.Selected.IsUnlocked == BoolValue;
+            return GameManager.Instance.Levels.Selected.IsUnlocked == Value;
         }
-
-        //public static bool EvaluateCondition(GameItem gameItem, bool boolValue)
-        //{
-        //    return gameItem.IsUnlocked == boolValue;
-        //}
     }
 }

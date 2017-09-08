@@ -82,8 +82,13 @@ namespace GameFramework.GameStructure.Game
                     else
                     {
                         EditorGUILayout.BeginHorizontal();
-                        var currentActionClass = classDetails.Find(x => actionReferences[i].ScriptableObject.GetType() == x.ClassType);//  actionReferences[i].ScriptableObject.GetType() find match from _actionClassDetailsList
-                        EditorGUILayout.LabelField(new GUIContent(currentActionClass.Name, currentActionClass.Tooltip)); // actionEditors[i].GetLabel(), 
+                        var currentActionClass = classDetails.Find(x => actionReferences[i].ScriptableObject.GetType() == x.ClassType);
+                        var actionReference = actionsProperty.GetArrayElementAtIndex(i);
+                        EditorGUI.indentLevel++;
+                        actionReference.isExpanded = EditorGUILayout.Foldout(actionReference.isExpanded, new GUIContent(currentActionClass.Name, currentActionClass.Tooltip));
+                        EditorGUI.indentLevel--;
+
+                        //EditorGUILayout.LabelField(new GUIContent(currentActionClass.Name, currentActionClass.Tooltip)); // actionEditors[i].GetLabel(), 
                         if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
                         {
                             actionsProperty.DeleteArrayElementAtIndex(i);
@@ -91,9 +96,12 @@ namespace GameFramework.GameStructure.Game
                         }
                         EditorGUILayout.EndHorizontal();
 
-                        EditorGUILayout.BeginVertical();
-                        actionEditors[i].OnInspectorGUI();
-                        EditorGUILayout.EndVertical();
+                        if (actionReference.isExpanded)
+                        {
+                            EditorGUILayout.BeginVertical();
+                            actionEditors[i].OnInspectorGUI();
+                            EditorGUILayout.EndVertical();
+                        }
                     }
 
                     EditorGUILayout.EndVertical();
@@ -116,7 +124,11 @@ namespace GameFramework.GameStructure.Game
             if (callbackProperty != null)
             {
                 EditorGUILayout.Space();
-                EditorGUILayout.PropertyField(callbackProperty, new GUIContent("Callbacks", callbackProperty.tooltip), true);
+                EditorGUI.indentLevel++;
+                callbackProperty.isExpanded = EditorGUILayout.Foldout(callbackProperty.isExpanded, "Custom Callbacks");
+                if (callbackProperty.isExpanded)
+                    EditorGUILayout.PropertyField(callbackProperty, new GUIContent("Callbacks", callbackProperty.tooltip), true);
+                EditorGUI.indentLevel--;
             }
         }
 
@@ -127,6 +139,7 @@ namespace GameFramework.GameStructure.Game
             var propClassName = newElement.FindPropertyRelative("_className");
             var actionType = (System.Type)userData;
             propClassName.stringValue = actionType.Name;
+            newElement.isExpanded = true;
             newElement.FindPropertyRelative("_data").stringValue = null;
             newElement.FindPropertyRelative("_isReference").boolValue = false;
             newElement.FindPropertyRelative("_objectReferences").arraySize = 0;

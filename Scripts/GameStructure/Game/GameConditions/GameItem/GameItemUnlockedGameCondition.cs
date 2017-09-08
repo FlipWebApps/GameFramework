@@ -30,7 +30,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
     /// </summary>
     [System.Serializable]
     [ClassDetails("GameItem: Unlocked", "GameItem/Unlocked", "Testing the unlocked status of a GameItem.")]
-    public class GameItemUnlockedGameCondition : GameConditionGameItemTypeContext
+    public class GameItemUnlockedGameCondition : GameConditionGameItemTypeContextBool
     {
         /// <summary>
         /// Evaluate the current condition
@@ -41,7 +41,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
             var gameItem = GameItem;
             if (gameItem)
             {
-                return gameItem.IsUnlocked == BoolValue;
+                return gameItem.IsUnlocked == Value;
             }
             return false;
         }

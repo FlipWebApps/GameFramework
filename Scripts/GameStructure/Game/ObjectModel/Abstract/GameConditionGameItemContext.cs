@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using System.Collections;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
@@ -71,5 +70,29 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// </summary>
         /// <returns></returns>
         protected abstract IBaseGameItemManager GetIBaseGameItemManager();
+
+        #region IScriptableObjectContainerSyncReferences
+
+        /// <summary>
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
+        /// </summary>
+        /// <param name="References"></param>
+        public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
+        {
+            if (objectReferences != null && objectReferences.Length >= 1)
+                Context.ReferencedGameItemContextBase = objectReferences[0] as GameItems.Components.AbstractClasses.GameItemContextBase;
+        }
+
+        /// <summary>
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
+        /// </summary>
+        /// <param name="References"></param>
+        public override UnityEngine.Object[] GetReferencesForContainer()
+        {
+            var objectReferences = new Object[1];
+            objectReferences[0] = Context.ReferencedGameItemContextBase;
+            return objectReferences;
+        }
+        #endregion IScriptableObjectContainerSyncReferences
     }
 }

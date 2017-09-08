@@ -44,6 +44,44 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         [SerializeField]
         string _counter;
 
+        /// <summary>
+        /// An amount to use to manipulate the counter.
+        /// </summary>
+        public int IntAmount
+
+        {
+            get
+            {
+                return _intAmount;
+            }
+            set
+            {
+                _intAmount = value;
+            }
+        }
+        [Tooltip("An amount to use to manipulate the counter.")]
+        [SerializeField]
+        int _intAmount;
+
+        /// <summary>
+        /// An amount to use to manipulate the counter.
+        /// </summary>
+        public float FloatAmount
+
+        {
+            get
+            {
+                return _floatAmount;
+            }
+            set
+            {
+                _floatAmount = value;
+            }
+        }
+        [Tooltip("An amount to use to manipulate the counter.")]
+        [SerializeField]
+        float _floatAmount;
+
         protected Counter CounterReference;
 
         /// <summary>
