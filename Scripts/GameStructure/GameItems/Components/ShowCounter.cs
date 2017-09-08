@@ -28,21 +28,12 @@ using UnityEngine.UI;
 namespace GameFramework.GameStructure.GameItems.Components
 {
     /// <summary>
-    /// Show a counter from the specified Level
+    /// Show a counter from the specified GameItem
     /// </summary>
     [RequireComponent(typeof(Text))]
     [AddComponentMenu("Game Framework/GameStructure/Common/Show Counter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
     public class ShowCounter : ShowGameItemCounter
     {
-        /// <summary>
-        /// Returns the current Level GameItem
-        /// </summary>
-        /// <returns></returns>
-        protected override IBaseGameItemManager GetIBaseGameItemManager()
-        {
-            Assert.IsNotNull(GameManager.Instance.Levels, "Levels are not setup when referenced from ShowLevelCounter");
-            return GameManager.Instance.Levels;
-        }
     }
 }
