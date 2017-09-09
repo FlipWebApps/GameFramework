@@ -56,7 +56,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Player
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        protected override void PerformAction(MonoBehaviour monoBehaviour)
         {
             Assert.IsTrue(GameManager.IsActive, "To use the Change Player Score Action, ensure that you have a GameManager added to your scene.");
             GameManager.Instance.Player.AddPoints(Amount);

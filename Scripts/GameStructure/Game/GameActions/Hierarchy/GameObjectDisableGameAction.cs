@@ -26,7 +26,7 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
 {
     /// <summary>
-    /// GameAction class that instantiates the specified prefab.
+    /// Disable the specified GameObject
     /// </summary>
     [System.Serializable]
     [ClassDetails("GameObject Disable", "Hierarchy/GameObject Disable", "Disable the specified GameObject.")]
@@ -54,7 +54,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        protected override void PerformAction(MonoBehaviour monoBehaviour)
         {
             Target.SetActive(false);
         }

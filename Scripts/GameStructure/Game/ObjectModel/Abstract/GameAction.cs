@@ -74,26 +74,27 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         public void PerformActionCommon(MonoBehaviour monoBehaviour)
         {
             if (_waitForSeconds != null)
-                monoBehaviour.StartCoroutine(ActionCoroutine());
+                monoBehaviour.StartCoroutine(ActionCoroutine(monoBehaviour));
             else
-                PerformAction();
+                PerformAction(monoBehaviour);
         }
 
         /// <summary>
         /// Coroutine to wait a specified number of seconds before callind PerformAction()
         /// </summary>
         /// <returns></returns>
-        protected System.Collections.IEnumerator ActionCoroutine()
+        protected System.Collections.IEnumerator ActionCoroutine(MonoBehaviour monoBehaviour)
         {
             yield return _waitForSeconds;
-            PerformAction();
+            if (monoBehaviour != null)  // check is still valid
+                PerformAction(monoBehaviour);
         }
 
         /// <summary>
         /// Implement this method to perform the actual action.
         /// </summary>
         /// <returns></returns>
-        protected abstract void PerformAction();
+        protected abstract void PerformAction(MonoBehaviour monoBehaviour);
 
         #region IScriptableObjectContainerSyncReferences
 

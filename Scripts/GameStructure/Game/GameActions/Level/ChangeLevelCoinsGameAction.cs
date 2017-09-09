@@ -56,7 +56,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Level
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction()
+        protected override void PerformAction(MonoBehaviour monoBehaviour)
         {
             Assert.IsTrue(LevelManager.IsActive, "To use the Change Level Coins Action, ensure that you have a LevelManager added to your scene.");
             LevelManager.Instance.Level.AddCoins(Amount);
