@@ -56,7 +56,7 @@ namespace GameFramework.GameStructure
     /// </summary>
     /// GameManager is where you can setup the structure of your game and holdes other key information and functionality relating to Preferences,
     /// GameStructure, Display, Localisation, Audio, Messaging and more. Please see the online help for full information.
-    [AddComponentMenu("Game Framework/GameStructure/GameManager")]
+    [AddComponentMenu("Game Framework/GameStructure/Game Manager")]
     [HelpURL("http://www.flipwebapps.com/game-framework/")]
     public class GameManager : SingletonPersistant<GameManager>
     {

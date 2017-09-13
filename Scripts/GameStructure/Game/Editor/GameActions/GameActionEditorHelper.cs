@@ -20,7 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameActions;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;

@@ -36,7 +36,7 @@ namespace GameFramework.GameStructure.Game.GameActions.GameItem
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour)
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
             var gameItem = GameItem;
             if (gameItem)

@@ -89,9 +89,9 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         bool _worldPositionStays;
 
         /// <summary>
-        /// Settings for how to animate changes
+        /// Settings for how to animate changes. This is used in cases when we are showing the selected item and the selection changes.
         /// </summary>
-        [Tooltip("Settings for how to animate changes")]
+        [Tooltip("Settings for how to animate changes. This is used in cases when we are showing the selected item and the selection changes.")]
         public GameObjectToGameObjectAnimation GameObjectToGameObjectAnimation;
 
         readonly Dictionary<int, GameObject> _cachedPrefabInstances = new Dictionary<int, GameObject>();

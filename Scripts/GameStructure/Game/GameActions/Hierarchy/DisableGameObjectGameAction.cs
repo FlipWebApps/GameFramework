@@ -20,37 +20,35 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.GameStructure.Players;
 using GameFramework.Helper;
 using UnityEngine;
-using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameActions.Player
+namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
 {
     /// <summary>
-    /// GameAction class that changes the level score
+    /// Disable the specified GameObject
     /// </summary>
     [System.Serializable]
-    [ClassDetails("Player: Change Score", "Player/Change Score", "Increase of decrease the currently running level's score.")]
-    public class ChangePlayerScoreGameAction : GameAction
+    [ClassDetails("Disable GameObject", "Hierarchy/Disable GameObject", "Disable the specified GameObject.")]
+    public class DisableGameObjectGameAction : GameAction
     {
         /// <summary>
-        /// An amount that specifies how much the score should change by. Put a minus value to decrease.
+        /// The GameObject to disable
         /// </summary>
-        public int Amount
+        public GameObject Target
         {
             get
             {
-                return _amount;
+                return _target;
             }
             set
             {
-                _amount = value;
+                _target = value;
             }
         }
-        [Tooltip("An amount that specifies how much the score should change by. Put a minus value to decrease.")]
+        [Tooltip("The GameObject to disable")]
         [SerializeField]
-        int _amount = 1;
+        GameObject _target;
 
         /// <summary>
         /// Perform the action
@@ -58,8 +56,32 @@ namespace GameFramework.GameStructure.Game.GameActions.Player
         /// <returns></returns>
         protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
-            Assert.IsTrue(GameManager.IsActive, "To use the Change Player Score Action, ensure that you have a GameManager added to your scene.");
-            GameManager.Instance.Player.AddPoints(Amount);
+            Target.SetActive(false);
         }
+
+        #region IScriptableObjectContainerSyncReferences
+
+        /// <summary>
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
+        /// </summary>
+        /// <param name="References"></param>
+        public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
+        {
+            if (objectReferences != null && objectReferences.Length == 1)
+                Target = objectReferences[0] as GameObject;
+        }
+
+        /// <summary>
+        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
+        /// </summary>
+        /// <param name="References"></param>
+        public override UnityEngine.Object[] GetReferencesForContainer()
+        {
+            var objectReferences = new Object[1];
+            objectReferences[0] = Target;
+            return objectReferences;
+        }
+
+        #endregion IScriptableObjectContainerSyncReferences
     }
 }

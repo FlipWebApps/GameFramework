@@ -27,7 +27,7 @@ using UnityEditorInternal;
 using UnityEngine;
 #pragma warning disable 618
 
-namespace GameFramework.GameStructure.Editor
+namespace GameFramework.GameStructure.Game.Editor
 {
     [CustomEditor(typeof(GameManager))]
     public class GameManagerEditor : UnityEditor.Editor

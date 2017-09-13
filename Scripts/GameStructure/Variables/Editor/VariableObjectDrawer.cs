@@ -23,7 +23,7 @@ using GameFramework.GameStructure.Variables.ObjectModel;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Variables.Editor.AbstractClasses
+namespace GameFramework.GameStructure.Variables.Editor
 {
     
     [CustomPropertyDrawer(typeof(StringVariable))]

@@ -72,7 +72,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour)
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
             if (Prefab != null && Location != null)
                 Instantiate(Prefab, Location.position, Location.rotation);

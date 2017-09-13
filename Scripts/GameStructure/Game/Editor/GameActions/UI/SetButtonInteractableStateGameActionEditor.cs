@@ -19,34 +19,46 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
-using GameFramework.GameStructure.Game.GameActions.ProPooling;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.Game.GameActions.UI;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions
+namespace GameFramework.GameStructure.Game.Editor.GameActions.UI
 {
-    [CustomEditor(typeof(AddPooledItemGameAction))]
-    public class AddPooledItemGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(SetButtonInteractableStateGameAction))]
+    public class SetButtonInteractableStateGameActionEditor : GameActionEditor
     {
-        SerializedProperty _poolNameProperty;
+        SerializedProperty _animateChangesProperty;
 
         /// <summary>
         /// Get a reference to properties
         /// </summary>
         protected override void Initialise()
         {
-            _poolNameProperty = serializedObject.FindProperty("_poolName");
+            _animateChangesProperty = serializedObject.FindProperty("_animateChanges");
         }
-
 
         /// <summary>
         /// Draw the Editor GUI
         /// </summary>
         protected override void DrawGUI()
         {
-            EditorGUILayout.PropertyField(DelayProperty);
-            EditorGUILayout.PropertyField(_poolNameProperty);
+#if BEAUTIFUL_TRANSITIONS
+            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.SetButtonInteractableStateGameActionEditor", "To animate state changes you need to have an animation added to your button's GameObject that uses the Beautiful Transitions DisplayItem Animation Controller as a base. See the Beautiful Transitions Display Item demo and online help for further details.", HideableHelpRect);
+#else
+            EditorGUILayout.HelpBox("Make your game more professional by adding the Beautiful Transitions asset to animate Button Interactable State changes. See the Menu | Window | Game Framework | Integrations Window for more information.", MessageType.Warning);
+#endif
+
+
+            EditorHelper.DrawDefaultInspector(serializedObject, new List<string>() { "m_Script", "_animateChanges" });
+
+#if !BEAUTIFUL_TRANSITIONS
+            GUI.enabled = false;
+#endif
+            EditorGUILayout.PropertyField(_animateChangesProperty);
+            GUI.enabled = true;
         }
     }
 }

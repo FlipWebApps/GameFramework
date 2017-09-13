@@ -19,34 +19,24 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
+using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.GameActions.Hierarchy;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions
+namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    [CustomEditor(typeof(InstantiatePrefabGameAction))]
-    public class InstantiatePrefabGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(DisableGameObjectGameAction))]
+    public class DisableGameObjectGameActionEditor : GameActionEditor
     {
-        SerializedProperty _prefabProperty;
-
-        /// <summary>
-        /// Get a reference to properties
-        /// </summary>
-        protected override void Initialise()
-        {
-            _prefabProperty = serializedObject.FindProperty("_prefab");
-        }
-
-
         /// <summary>
         /// Draw the Editor GUI
         /// </summary>
         protected override void DrawGUI()
         {
-            EditorGUILayout.PropertyField(DelayProperty);
-            EditorGUILayout.PropertyField(_prefabProperty);
+            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
+            base.DrawGUI();
         }
     }
 }

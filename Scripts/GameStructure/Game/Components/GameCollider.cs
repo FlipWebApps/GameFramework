@@ -389,7 +389,7 @@ namespace GameFramework.GameStructure.Game.Components
         /// <param name="triggerData"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
-            GameActionHelper.PerformActions(triggerData.ActionReferences, this);
+            GameActionHelper.PerformActions(triggerData.ActionReferences, this, false);
             triggerData.Callback.Invoke(collidingGameObject);
         }
 

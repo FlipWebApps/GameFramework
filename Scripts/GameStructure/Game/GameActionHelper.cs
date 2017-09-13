@@ -61,14 +61,14 @@ namespace GameFramework.GameStructure.Game
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        public static void PerformActions(IEnumerable<GameActionReference> actionReferences, MonoBehaviour monoBehaviour)
+        public static void PerformActions(IEnumerable<GameActionReference> actionReferences, MonoBehaviour monoBehaviour, bool isStart)
         {
             foreach (var actionReference in actionReferences)
             {
                 if (actionReference.IsReference)
                 {
                     if (actionReference != null)
-                        actionReference.ScriptableObjectReference.PerformActionCommon(monoBehaviour);
+                        actionReference.ScriptableObjectReference.PerformActionCommon(monoBehaviour, isStart);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace GameFramework.GameStructure.Game
                     //if (actionDelayed)
                     //    actionDelayed.PerformActionCommon(monoBehaviour);
                     //else
-                    action.PerformActionCommon(monoBehaviour);
+                    action.PerformActionCommon(monoBehaviour, isStart);
                 }
             }
         }

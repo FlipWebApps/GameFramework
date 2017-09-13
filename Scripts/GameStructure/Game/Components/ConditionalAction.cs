@@ -144,11 +144,11 @@ namespace GameFramework.GameStructure.Game.Components
 
                 if (_isConditionMet)
                 {
-                    GameActionHelper.PerformActions(_actionReferencesConditionMet, this);
+                    GameActionHelper.PerformActions(_actionReferencesConditionMet, this, isStart);
                 }
                 else
                 {
-                    GameActionHelper.PerformActions(_actionReferencesConditionNotMet, this);
+                    GameActionHelper.PerformActions(_actionReferencesConditionNotMet, this, isStart);
                 }
             }
         }

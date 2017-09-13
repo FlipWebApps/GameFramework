@@ -72,7 +72,7 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour)
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
 
 #if PRO_POOLING

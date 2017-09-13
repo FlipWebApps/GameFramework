@@ -55,7 +55,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Audio
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour)
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
             if (AudioClip != null)
             {

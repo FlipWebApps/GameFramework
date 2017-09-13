@@ -21,7 +21,7 @@
 
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.Components;
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameActions;
 using GameFramework.GameStructure.Game.Editor.GameConditions.Common;
 using GameFramework.Helper;
 using System.Collections.Generic;

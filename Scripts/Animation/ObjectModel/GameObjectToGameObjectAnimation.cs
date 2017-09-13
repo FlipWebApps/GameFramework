@@ -133,6 +133,7 @@ namespace GameFramework.Animation.ObjectModel
             //}
 #endif
 
+            // default to swap immediately
             SwapImmediately(fromGameObject, toGameObject);
         }
 

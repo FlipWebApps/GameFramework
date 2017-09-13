@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Abstract
+namespace GameFramework.GameStructure.Game.Editor.GameActions
 {
     [CustomEditor(typeof(GameAction), true)]
     public class GameActionEditor : UnityEditor.Editor
@@ -37,6 +37,8 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions.Abstract
         public SerializedProperty ObjectReferencesProperty;
 
         protected SerializedProperty DelayProperty;
+
+        protected Rect HideableHelpRect;    // incase anybase classed need to show help.
 
         GameAction _action;
         string _name;

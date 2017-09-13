@@ -21,11 +21,9 @@
 
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.Components;
-using GameFramework.GameStructure.Game.Editor.GameActions.Abstract;
+using GameFramework.GameStructure.Game.Editor.GameActions;
 using GameFramework.GameStructure.Game.ObjectModel;
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;

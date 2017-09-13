@@ -71,30 +71,30 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// Perform all common things for the GameAction before invoking PerformAction
         /// </summary>
         /// <returns></returns>
-        public void PerformActionCommon(MonoBehaviour monoBehaviour)
+        public void PerformActionCommon(MonoBehaviour monoBehaviour, bool isStart)
         {
             if (_waitForSeconds != null)
-                monoBehaviour.StartCoroutine(ActionCoroutine(monoBehaviour));
+                monoBehaviour.StartCoroutine(ActionCoroutine(monoBehaviour, isStart));
             else
-                PerformAction(monoBehaviour);
+                PerformAction(monoBehaviour, isStart);
         }
 
         /// <summary>
         /// Coroutine to wait a specified number of seconds before callind PerformAction()
         /// </summary>
         /// <returns></returns>
-        protected System.Collections.IEnumerator ActionCoroutine(MonoBehaviour monoBehaviour)
+        protected System.Collections.IEnumerator ActionCoroutine(MonoBehaviour monoBehaviour, bool isStart)
         {
             yield return _waitForSeconds;
             if (monoBehaviour != null)  // check is still valid
-                PerformAction(monoBehaviour);
+                PerformAction(monoBehaviour, isStart);
         }
 
         /// <summary>
         /// Implement this method to perform the actual action.
         /// </summary>
         /// <returns></returns>
-        protected abstract void PerformAction(MonoBehaviour monoBehaviour);
+        protected abstract void PerformAction(MonoBehaviour monoBehaviour, bool isStart);
 
         #region IScriptableObjectContainerSyncReferences
 

@@ -26,7 +26,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Editor
+namespace GameFramework.GameStructure.Game.Editor
 {
     [CustomEditor(typeof(GameConfiguration))]
     public class GameConfigurationEditor : UnityEditor.Editor

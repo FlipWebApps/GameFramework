@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.Animation.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
 using UnityEngine;
@@ -26,39 +27,67 @@ using UnityEngine;
 namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
 {
     /// <summary>
-    /// Disable the specified GameObject
+    /// Enable the specified GameObject
     /// </summary>
     [System.Serializable]
-    [ClassDetails("GameObject Disable", "Hierarchy/GameObject Disable", "Disable the specified GameObject.")]
-    public class GameObjectDisableGameAction : GameAction
+    [ClassDetails("Swap GameObjects", "Hierarchy/Swap GameObjects", "Switch between different GameObjects with optional animation.")]
+    public class SwapGameObjectsGameAction : GameAction
     {
         /// <summary>
-        /// The GameObject to disable
+        /// The GameObject to switch from
         /// </summary>
-        public GameObject Target
+        public GameObject SwitchFrom
         {
             get
             {
-                return _target;
+                return _switchFrom;
             }
             set
             {
-                _target = value;
+                _switchFrom = value;
             }
         }
-        [Tooltip("The GameObject to disable")]
+        [Tooltip("The GameObject to switch from")]
         [SerializeField]
-        GameObject _target;
+        GameObject _switchFrom;
+
+        /// <summary>
+        /// The GameObject to switch to
+        /// </summary>
+        public GameObject SwitchTo
+        {
+            get
+            {
+                return _switchTo;
+            }
+            set
+            {
+                _switchTo = value;
+            }
+        }
+        [Tooltip("The GameObject to switch to")]
+        [SerializeField]
+        GameObject _switchTo;
+
+        /// <summary>
+        /// Settings for how to animate changes
+        /// </summary>
+        [Tooltip("Settings for hwow to animate changes")]
+        public GameObjectToGameObjectAnimation GameObjectToGameObjectAnimation;
 
         /// <summary>
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour)
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
-            Target.SetActive(false);
+            if (isStart)
+                GameObjectToGameObjectAnimation.SwapImmediately(SwitchFrom, SwitchTo);
+            else
+                GameObjectToGameObjectAnimation.AnimatedSwap(monoBehaviour, SwitchFrom, SwitchTo);
         }
 
+        #region IScriptableObjectContainerSyncReferences
 
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
@@ -66,8 +95,11 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// <param name="References"></param>
         public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
-            if (objectReferences != null && objectReferences.Length == 1)
-                Target = objectReferences[0] as GameObject;
+            if (objectReferences != null && objectReferences.Length == 2)
+            {
+                SwitchFrom = objectReferences[0] as GameObject;
+                SwitchTo = objectReferences[1] as GameObject;
+            }
         }
 
         /// <summary>
@@ -76,9 +108,13 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// <param name="References"></param>
         public override UnityEngine.Object[] GetReferencesForContainer()
         {
-            var objectReferences = new Object[1];
-            objectReferences[0] = Target;
+            var objectReferences = new Object[2];
+            objectReferences[0] = SwitchFrom;
+            objectReferences[1] = SwitchTo;
             return objectReferences;
         }
+
+        #endregion IScriptableObjectContainerSyncReferences
+
     }
 }
