@@ -19,24 +19,14 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.Editor.GameConditions.Common
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(GameConditionGameItemContextSelectableTypeInt), true)]
+    public class GameConditionGameItemContextSelectedTypeIntEditor : Abstract.GameConditionGameItemContextSelectedTypeNumberEditor
     {
-        /// <summary>
-        /// Draw the Editor GUI
-        /// </summary>
-        protected override void DrawGUI()
-        {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
-        }
     }
 }

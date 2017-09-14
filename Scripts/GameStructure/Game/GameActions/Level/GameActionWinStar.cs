@@ -19,24 +19,47 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Levels;
+using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameActions.Level
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameAction class that unlocks a GameItem.
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("Level: Win Star", "Level/Win Star", "Win the specified star for the currently selected level.")]
+    public class GameActionWinStar : GameAction
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// A delay before the game over dialog is shown.
         /// </summary>
-        protected override void DrawGUI()
+        public int StarNumber
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            get
+            {
+                return _starNumber;
+            }
+            set
+            {
+                _starNumber = value;
+            }
+        }
+        [Tooltip("The number of the star that should be won.")]
+        [SerializeField]
+        int _starNumber = 1;
+
+        /// <summary>
+        /// Perform the action
+        /// </summary>
+        /// <returns></returns>
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        {
+            Assert.IsTrue(LevelManager.IsActive, "To use the Win Star Action, ensure that you have a LevelManager added to your scene.");
+            LevelManager.Instance.Level.StarWon(StarNumber, true);
         }
     }
 }

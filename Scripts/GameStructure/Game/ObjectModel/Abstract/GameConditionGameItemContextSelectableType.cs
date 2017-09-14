@@ -19,24 +19,39 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.GameItems.ObjectModel;
+using System.Collections;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// Base GameCondition class that that allows for specifying the GameItem context
+    /// </summary>
+    /// NOTE: FromLoop mode we need to do in awake so ensure this is setup so we don't support that mode here
+    /// jsut add a GameItemContext component and reference that if so needed.
+    [System.Serializable]
+    public abstract class GameConditionGameItemContextSelectableType : GameConditionGameItemContext
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// Type of the GameItem that we are referencing
         /// </summary>
-        protected override void DrawGUI()
+        public GameConfiguration.GameItemType GameItemType
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            get { return _gameItemType; }
+            set { _gameItemType = value; }
+        }
+        [Tooltip("Type of the GameItem that we are referencing.")]
+        [SerializeField]
+        GameConfiguration.GameItemType _gameItemType;
+
+        /// <summary>
+        /// Return an IBaseGameItemManager that contains the GameItems that this works upon.
+        /// </summary>
+        /// <returns></returns>
+        protected override IBaseGameItemManager GetIBaseGameItemManager()
+        {
+            return GameManager.Instance.GetIBaseGameItemManager(GameItemType);
         }
     }
 }

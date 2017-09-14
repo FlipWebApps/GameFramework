@@ -19,24 +19,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Levels;
+using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameActions.Level
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameAction class that unlocks a GameItem.
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("Level: Lose Level", "Level/Lose Level", "Lose the currently running level.")]
+    public class GameActionLoseLevel : GameAction
     {
-        /// <summary>
-        /// Draw the Editor GUI
+         /// <summary>
+        /// Perform the action
         /// </summary>
-        protected override void DrawGUI()
+        /// <returns></returns>
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            Assert.IsTrue(LevelManager.IsActive, "To use the Lose Level Action, ensure that you have a LevelManager added to your scene.");
+            LevelManager.Instance.GameOver(false);
         }
     }
 }

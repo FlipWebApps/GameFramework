@@ -19,46 +19,42 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.UI;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using GameFramework.GameStructure.Game.Editor.GameConditions.Common;
+using GameFramework.GameStructure.Game.GameConditions.GameItem;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.UI
+namespace GameFramework.GameStructure.Game.Editor.GameConditions.GameItem
 {
-    [CustomEditor(typeof(GameActionSetButtonInteractableState))]
-    public class SetButtonInteractableStateGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(GameConditionGameItemMatchesGameItem), true)]
+    public class GameItemMatchesGameItemGameConditionEditor : GameConditionEditor
     {
-        SerializedProperty _animateChangesProperty;
+        SerializedProperty _gameItemTypeProperty;
+        SerializedProperty _contextProperty;
+        SerializedProperty _secondContextProperty;
 
         /// <summary>
-        /// Get a reference to properties
+        /// Override this method if you need to do any specific initialisation for the ActionEditor implementation.
         /// </summary>
         protected override void Initialise()
         {
-            _animateChangesProperty = serializedObject.FindProperty("_animateChanges");
+            _gameItemTypeProperty = serializedObject.FindProperty("_gameItemType");
+            _contextProperty = serializedObject.FindProperty("_context");
+            _secondContextProperty = serializedObject.FindProperty("_secondContext");
+
         }
 
+
         /// <summary>
-        /// Draw the Editor GUI
+        /// This function can be overridden by inheriting classes, but if it isn't, draw the default for it's properties.
         /// </summary>
         protected override void DrawGUI()
         {
-#if BEAUTIFUL_TRANSITIONS
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.SetButtonInteractableStateGameActionEditor", "To animate state changes you need to have an animation added to your button's GameObject that uses the Beautiful Transitions DisplayItem Animation Controller as a base. See the Beautiful Transitions Display Item demo and online help for further details.", HideableHelpRect);
-#else
-            EditorGUILayout.HelpBox("Make your game more professional by adding the Beautiful Transitions asset to animate Button Interactable State changes. See the Menu | Window | Game Framework | Integrations Window for more information.", MessageType.Warning);
-#endif
-
-
-            EditorHelper.DrawDefaultInspector(serializedObject, new List<string>() { "m_Script", "_animateChanges" });
-
-#if !BEAUTIFUL_TRANSITIONS
-            GUI.enabled = false;
-#endif
-            EditorGUILayout.PropertyField(_animateChangesProperty);
-            GUI.enabled = true;
+            EditorGUILayout.PropertyField(_gameItemTypeProperty);
+            EditorGUILayout.LabelField(new GUIContent("First GameItem", "The first GameItem to compare"), EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_contextProperty);
+            EditorGUILayout.LabelField(new GUIContent("Second GameItem", "The second GameItem to compare"), EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_secondContextProperty, new GUIContent("Second GameItem", "The second GameItem to compare"));
         }
     }
 }

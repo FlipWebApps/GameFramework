@@ -19,24 +19,47 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.GameStructure.Players;
+using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameActions.Player
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameAction class that changes the players health
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("Player: Change Health", "Player/Change Health", "Increase of decrease the currently running players health.")]
+    public class GameActionChangePlayerHealth : GameAction
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// An amount that specifies how much the health should change by. Put a minus value to decrease.
         /// </summary>
-        protected override void DrawGUI()
+        public float Amount
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                _amount = value;
+            }
+        }
+        [Tooltip("An amount that specifies how much the health should change by. Put a minus value to decrease.")]
+        [SerializeField]
+        float _amount = -0.1f;
+
+        /// <summary>
+        /// Perform the action
+        /// </summary>
+        /// <returns></returns>
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        {
+            Assert.IsTrue(GameManager.IsActive, "To use the Change Player Health Action, ensure that you have a GameManager added to your scene.");
+            GameManager.Instance.Player.Health += Amount;
         }
     }
 }

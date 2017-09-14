@@ -19,24 +19,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameConditions
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameCondition for testing the number of Level Coins obtained.
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("Level Coins", "Level/Coins", "Testing the coins for the currently selected level.")]
+    public class GameConditionLevelCoins : GameConditionInt
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// Evaluate the current condition
         /// </summary>
-        protected override void DrawGUI()
+        /// <returns></returns>
+        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            Assert.IsTrue(GameManager.IsActive, "To use the Level Coins Condition, ensure that you have a GameManager added to your scene.");
+            Assert.IsNotNull(GameManager.Instance.Levels, "To use the Level Coins Game Condition, ensure that you have configured Levels to be setup in your scene.");
+            return GameConditionHelper.CompareNumbers(GameManager.Instance.Levels.Selected.Coins, Comparison, Value);
         }
     }
 }

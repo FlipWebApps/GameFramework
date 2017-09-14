@@ -19,24 +19,31 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.Helper;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameConditions.GameItem
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameCondition for testing the unlocked status of a GameItem.
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("GameItem: Unlocked", "GameItem/Unlocked", "Testing the unlocked status of a GameItem.")]
+    public class GameConditionGameItemUnlocked : GameConditionGameItemContextSelectableTypeBool
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// Evaluate the current condition
         /// </summary>
-        protected override void DrawGUI()
+        /// <returns></returns>
+        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            var gameItem = GameItem;
+            if (gameItem)
+            {
+                return gameItem.IsUnlocked == Value;
+            }
+            return false;
         }
     }
 }

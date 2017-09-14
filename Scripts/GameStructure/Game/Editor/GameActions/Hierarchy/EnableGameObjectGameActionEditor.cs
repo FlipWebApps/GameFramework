@@ -27,7 +27,7 @@ using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    [CustomEditor(typeof(EnableGameObjectGameAction))]
+    [CustomEditor(typeof(GameActionEnableGameObject))]
     public class EnableGameObjectGameActionEditor : GameActionEditor
     {
         /// <summary>

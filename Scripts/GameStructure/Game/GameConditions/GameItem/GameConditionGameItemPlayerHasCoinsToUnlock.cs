@@ -19,24 +19,41 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
-using UnityEditor;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.Helper;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.GameConditions.GameItem
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    /// <summary>
+    /// GameCondition for testing whether a GameItem can be unlocked with coins.
+    /// </summary>
+    [System.Serializable]
+    [ClassDetails("GameItem: Player Has Coins to Unlock", "GameItem/Player Has Coins to Unlock", "Tests whether the selected Player has enough coins to unlock a GameItem.")]
+    public class GameConditionGameItemPlayerHasCoinsToUnlock : GameConditionGameItemContextSelectableTypeBool
     {
         /// <summary>
-        /// Draw the Editor GUI
+        /// Evaluate the current condition
         /// </summary>
-        protected override void DrawGUI()
+        /// <returns></returns>
+        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            var gameItem = GameItem;
+            if (gameItem)
+            {
+                return (gameItem.UnlockWithCoins && GameManager.Instance.Player.Coins >= gameItem.ValueToUnlock) == Value;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
+        /// </summary>
+        /// The base implementation returns UpdateMessage so that this will be evaluated every frame.
+        /// <returns></returns>
+        public override System.Type[] GetTriggerMessages()
+        {
+            return null;    // condition never changes
         }
     }
 }
