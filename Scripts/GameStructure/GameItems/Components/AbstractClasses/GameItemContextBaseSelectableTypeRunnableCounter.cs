@@ -28,9 +28,9 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// Show a counter from the specified GameItem
+    /// Abstract base class to show a counter from the specified GameItem context and user selected type.
     /// </summary>
-    public abstract class GameItemContextBaseRunnableCounter : GameItemContextBaseMultiRunnable
+    public abstract class GameItemContextBaseSelectableTypeRunnableCounter : GameItemContextBaseSelectableTypeRunnable
     {
         /// <summary>
         /// The counter that we want to use.

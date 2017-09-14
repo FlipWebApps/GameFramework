@@ -35,7 +35,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// </summary>
     /// Includes performance enhancements to cache localised text and update on localisation changes
     [RequireComponent(typeof(Text))]
-    public abstract class ShowGameItemCounter : GameItemContextBaseRunnableCounter
+    public abstract class ShowGameItemCounter : GameItemContextBaseSelectableTypeRunnableCounter
     {
         /// <summary>
         /// A localisation key or text string to use to display the counter. Use the following optional placeholders in the string:\n {0} - The current amount\n {1} - The best amount\n {2} - The last saved amount\n {3} - The last saved best amount\n {4} - The minimum allowed amount\n {5} - The maximum allowed amount\n {6} - Amount as a percentage between min and max\ne.g. \"Score {0}, Best {1}\"\nGoogle \".net string format\" for further options.

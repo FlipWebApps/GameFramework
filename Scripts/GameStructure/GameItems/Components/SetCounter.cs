@@ -32,7 +32,7 @@ namespace GameFramework.GameStructure.GameItems.Components
     /// Used for initialisation purposes.
     [AddComponentMenu("Game Framework/GameStructure/Common/Set Counter")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/")]
-    public class SetCounter : GameItemContextBaseRunnableCounter
+    public class SetCounter : GameItemContextBaseSelectableTypeRunnableCounter
     {
         /// <summary>
         /// Whether to use the default counter amount.

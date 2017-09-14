@@ -27,9 +27,9 @@ using UnityEngine.Assertions;
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// abstract base for showing a prefab from the selected item including updating to a new prefab when the selection changes.
+    /// Abstract base for running a method for the selected GameItem context and type.
     /// </summary>
-    public abstract class GameItemContextBaseMultiRunnable : GameItemContextBase
+    public abstract class GameItemContextBaseSelectableTypeRunnable : GameItemContextBase
     {
         /// <summary>
         /// Type of the GameItem that we are referencing

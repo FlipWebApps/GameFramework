@@ -20,13 +20,11 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {
     /// <summary>
-    /// abstract base for showing a prefab from the selected item including updating to a new prefab when the selection changes.
+    /// Abstract base for running a method for a selected GameItem context of a fixed type.
     /// </summary>
     /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class GameItemContextBaseRunnable<T> : GameItemContextBase where T : GameItem
