@@ -22,7 +22,6 @@
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.GenericGameItems.ObjectModel;
-using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;

@@ -21,7 +21,6 @@
 
 #if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 #else
-using GameFramework.Messaging;
 using NUnit.Framework;
 using System;
 

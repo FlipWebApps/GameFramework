@@ -21,7 +21,6 @@
 
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace GameFramework.GameStructure.GameItems.Components
 {

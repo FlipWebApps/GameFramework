@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using System.Collections;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.ObjectModel.Abstract

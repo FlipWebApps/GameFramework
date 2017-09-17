@@ -24,7 +24,7 @@ using GameFramework.Helper;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameConditions
+namespace GameFramework.GameStructure.Game.GameConditions.Player
 {
     /// <summary>
     /// GameCondition for testing the lives of the currently selected player.

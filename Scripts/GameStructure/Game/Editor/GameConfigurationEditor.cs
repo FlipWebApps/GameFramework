@@ -23,7 +23,6 @@ using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.ObjectModel;
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.Editor
@@ -43,7 +42,7 @@ namespace GameFramework.GameStructure.Game.Editor
         int _currentTab;
 
         Rect _countersHelpRect;
-        string[] _counterTypeNames = new string[] { "Integer", "Float" };
+        readonly string[] _counterTypeNames = new string[] { "Integer", "Float" };
 
         void OnEnable()
         {
@@ -63,7 +62,7 @@ namespace GameFramework.GameStructure.Game.Editor
             _mainHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameConfigurationEditorWindow", "Add a Game Configuration to your Resources folder (named GameConfiguration) to control fixed aspects of your game.\n\nNOTE: These are seperate from the GameManager component so that they can be loaded and used independently.\n\nIf you experience any problems or have improvement suggestions then please get in contact. Your support is appreciated.", _mainHelpRect);
 
             // Main tabs and display
-            _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Characters", "Levels", "Players", "Worlds" });
+            _currentTab = GUILayout.Toolbar(_currentTab, new[] { "Characters", "Levels", "Players", "Worlds" });
             switch (_currentTab)
             {
                 //case 0:
@@ -107,25 +106,25 @@ namespace GameFramework.GameStructure.Game.Editor
 
         void DrawCharacters()
         {
-            DrawCounters(_characterCounterConfigurationProperty, new string[] { "Score", "Coins" });
+            DrawCounters(_characterCounterConfigurationProperty, new[] { "Score", "Coins" });
         }
 
 
         void DrawLevels()
         {
-            DrawCounters(_levelCounterConfigurationProperty, new string[] { "Score", "Coins", "Progress" });
+            DrawCounters(_levelCounterConfigurationProperty, new[] { "Score", "Coins", "Progress" });
         }
 
 
         void DrawPlayers()
         {
-            DrawCounters(_playerCounterConfigurationProperty, new string[] { "Score", "Coins", "Lives", "Health" });
+            DrawCounters(_playerCounterConfigurationProperty, new[] { "Score", "Coins", "Lives", "Health" });
         }
 
 
         void DrawWorlds()
         {
-            DrawCounters(_worldCounterConfigurationProperty, new string[] { "Score", "Coins" });
+            DrawCounters(_worldCounterConfigurationProperty, new[] { "Score", "Coins" });
         }
 
 
@@ -150,9 +149,9 @@ namespace GameFramework.GameStructure.Game.Editor
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    var name = string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" :
+                    var title = string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" :
                         nameProperty.stringValue + (isSystemEntry ? " (Built in)" : "");
-                    elementProperty.isExpanded = EditorGUILayout.Foldout(elementProperty.isExpanded, name);
+                    elementProperty.isExpanded = EditorGUILayout.Foldout(elementProperty.isExpanded, title);
                     if (!isSystemEntry)
                         if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
                             EditorUtility.DisplayDialog("Remove Entry?", "Are you sure you want to remove this entry?", "Yes",

@@ -21,7 +21,6 @@
 
 using GameFramework.GameObjects.Editor.AbstractClasses;
 using UnityEditor;
-using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Editor.AbstractClasses
 {

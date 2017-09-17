@@ -20,8 +20,6 @@
 //----------------------------------------------
 
 using System.Collections;
-using GameFramework.EditorExtras;
-using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using UnityEngine;
 
 #if BEAUTIFUL_TRANSITIONS
@@ -150,14 +148,13 @@ namespace GameFramework.Animation.ObjectModel
 #if BEAUTIFUL_TRANSITIONS
         IEnumerator TransitionOutIn(GameObject fromGameObject, GameObject toGameObject)
         {
-            float transitionOutTime = 0;
             if (fromGameObject != null)
             {
                 // is an out transition then run and wait for completion
                 if (TransitionHelper.ContainsTransition(fromGameObject))
                 {
                     var transitions = TransitionHelper.TransitionOut(fromGameObject);
-                    transitionOutTime = TransitionHelper.GetTransitionOutTime(transitions);
+                    var transitionOutTime = TransitionHelper.GetTransitionOutTime(transitions);
                     yield return new WaitForSeconds(transitionOutTime);
                 }
                 fromGameObject.SetActive(false);

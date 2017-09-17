@@ -338,9 +338,9 @@ namespace GameFramework.UI.Dialogs.Components
             // if just won then animate
             if ((newStarsWon & bitMask) == bitMask)
             {
-                var animation = starGameObject.GetComponent<UnityEngine.Animation>();
-                if (animation != null)
-                    animation.Play();
+                var siblingAnimation = starGameObject.GetComponent<UnityEngine.Animation>();
+                if (siblingAnimation != null)
+                    siblingAnimation.Play();
             }
         }
 

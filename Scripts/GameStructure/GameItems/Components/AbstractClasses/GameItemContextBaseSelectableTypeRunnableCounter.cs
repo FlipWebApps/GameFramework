@@ -61,7 +61,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         /// </summary>
         protected virtual void OnEnable()
         {
-            Assert.IsTrue(GameManager.IsActive, string.Format("Please ensure that you have a GameManager added to your scene to use the {0} component.", this.GetType().Name));
+            Assert.IsTrue(GameManager.IsActive, string.Format("Please ensure that you have a GameManager added to your scene to use the {0} component.", GetType().Name));
 
             if (CounterReference.Configuration.CounterType == Game.ObjectModel.CounterConfiguration.CounterTypeEnum.Int)
             {

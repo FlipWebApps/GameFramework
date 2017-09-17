@@ -19,11 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Debugging;
 using GameFramework.Helper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -52,7 +50,9 @@ namespace GameFramework.EditorExtras.Editor
         /// Show a button trimmed to the length of the text
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="texture"></param>
         /// <param name="style"></param>
+        /// <param name="tooltip"></param>
         /// <returns></returns>
         public static bool ButtonTrimmed(string text, Texture2D texture, GUIStyle style, string tooltip = null)
         {
@@ -66,8 +66,9 @@ namespace GameFramework.EditorExtras.Editor
         /// <summary>
         /// Show a button that is styled to look like a link
         /// </summary>
-        /// <param name="caption"></param>
-        /// <param name="url"></param>
+        /// <param name="text"></param>
+        /// <param name="restrictWidth"></param>
+        /// <param name="options"></param>
         public static bool LinkButton(string text, bool restrictWidth = false, params GUILayoutOption[] options)
         {
             var style = EditorStyles.whiteLabel;
@@ -162,6 +163,8 @@ namespace GameFramework.EditorExtras.Editor
         /// Helper method to split a camel case string with spaces
         /// </summary>
         /// <param name="s"></param>
+        /// <param name="prefixToStrip"></param>
+        /// <param name="postfixToStrip"></param>
         /// <returns></returns>
         public static string PrettyPrintCamelCase(string s, string prefixToStrip = null, string postfixToStrip = null)
         {
@@ -237,7 +240,7 @@ namespace GameFramework.EditorExtras.Editor
             foreach (var type in types)
             {
                 var attributes = type.GetCustomAttributes(typeof(ClassDetailsAttribute), true);
-                ClassDetailsAttribute classDetailsAttribute = null;
+                ClassDetailsAttribute classDetailsAttribute;
                 if (attributes.Length > 0)
                 {
                     classDetailsAttribute = (ClassDetailsAttribute)attributes[0];
@@ -339,7 +342,7 @@ namespace GameFramework.EditorExtras.Editor
             while (iterator.NextVisible(enterChildren))
             {
                 if (excludePaths == null || !excludePaths.Contains(iterator.propertyPath))
-                    EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
+                    EditorGUILayout.PropertyField(iterator, true);
                 enterChildren = false;
             }
             obj.ApplyModifiedProperties();

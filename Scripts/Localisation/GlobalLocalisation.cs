@@ -19,13 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using System.Linq;
-using GameFramework.GameObjects.Components;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.GameStructure;
 using UnityEngine;
-using UnityEngine.Assertions;
 using GameFramework.Preferences;
 using GameFramework.Localisation.Messages;
 using GameFramework.Localisation.Components;

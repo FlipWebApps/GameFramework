@@ -58,9 +58,8 @@ namespace GameFramework.Localisation.Editor
                     var menu = new GenericMenu();
                     var entries = new List<LocalisationEntry>(GlobalLocalisation.LocalisationData.Entries);
                     entries.Sort((x, y) => x.Key.CompareTo(y.Key));
-                    for (var i = 0; i < entries.Count; i++)
+                    foreach (var entry in entries)
                     {
-                        var entry = entries[i];
                         menu.AddItem(new GUIContent(entry.Key), false, SetKey, new KeyPropertyReference() { Key = entry.Key, Property = dataProperty });
                     }
                     menu.ShowAsContext();

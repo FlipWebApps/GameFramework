@@ -36,7 +36,6 @@ namespace GameFramework.GameStructure.Game.Editor.GameConditions.Common
         SerializedProperty _intAmountProperty;
         SerializedProperty _floatAmountProperty;
 
-        string[] _counters;
         int _counterIndex;
         protected CounterConfiguration CounterConfiguration;
 
@@ -64,21 +63,21 @@ namespace GameFramework.GameStructure.Game.Editor.GameConditions.Common
             EditorGUILayout.PropertyField(_contextProperty);
 
             var counterConfiguration = GameConfiguration.Instance.GetCounterConfiguration((GameConfiguration.GameItemType)_gameItemTypeProperty.enumValueIndex);
-            string[] _counters = new string[counterConfiguration.Count];
+            var counters = new string[counterConfiguration.Count];
             _counterIndex = 0; // initialise incase gameitem type changed
             for (int i = 0; i < counterConfiguration.Count; i++)
             {
-                _counters[i] = counterConfiguration[i].Name;
-                if (_counters[i] == _counterProperty.stringValue)
+                counters[i] = counterConfiguration[i].Name;
+                if (counters[i] == _counterProperty.stringValue)
                 {
                     _counterIndex = i;
                 }
             }
 
-            int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, _counters);
+            int newIndex = EditorGUILayout.Popup("Counter", _counterIndex, counters);
             if (newIndex != _counterIndex || string.IsNullOrEmpty(_counterProperty.stringValue))
             {
-                _counterProperty.stringValue = _counters[newIndex];
+                _counterProperty.stringValue = counters[newIndex];
                 _counterIndex = newIndex;
             }
             CounterConfiguration = counterConfiguration[_counterIndex];

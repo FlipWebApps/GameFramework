@@ -22,7 +22,6 @@
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 {

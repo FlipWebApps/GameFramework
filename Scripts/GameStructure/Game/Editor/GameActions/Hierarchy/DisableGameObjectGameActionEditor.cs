@@ -21,9 +21,7 @@
 
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.GameActions.Hierarchy;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {

@@ -40,8 +40,7 @@ namespace GameFramework.Localisation.Editor
         List<string> _categories = new List<string>();
         int _selectedCategory;
 
-        [System.NonSerialized]
-        ComponentHelp[] _componentHelps =
+        [System.NonSerialized] readonly ComponentHelp[] _componentHelps =
         {
             // Advertising
             new ComponentHelp("AdMobManager", "Manager class for setting up and accessing AdMob functionality. Add this with GameScope for automatic setup of AdMob functionality", typeof(Advertising.AdMob.Components.AdMobManager), "Advertising"),
@@ -342,7 +341,7 @@ namespace GameFramework.Localisation.Editor
             {
                 if (_selectedCategory == 0 || System.Array.IndexOf(c.Categories, _categories[_selectedCategory]) != -1)
                 {
-                    if (_searchString == null || _searchString.Length == 0 || c.Name.IndexOf(_searchString, System.StringComparison.InvariantCultureIgnoreCase) != -1)
+                    if (string.IsNullOrEmpty(_searchString) || c.Name.IndexOf(_searchString, System.StringComparison.InvariantCultureIgnoreCase) != -1)
                         filtered.Add(c);
                 }
             }

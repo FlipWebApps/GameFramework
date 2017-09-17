@@ -332,7 +332,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             get { return _isBought; }
             set
             {
-                if (value == true) IsUnlocked = true;
+                if (value) IsUnlocked = true;
                 _isBought = value;
             }
         }
@@ -493,6 +493,7 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Setup and initialise this gameitem excluding serialisable properties that are set through a
         /// call to Initialise or within the Unity editor. 
         /// </summary>
+        /// <param name="gameConfiguration"></param>
         /// <param name="player"></param>
         /// <param name="messenger">Messenger for sending notifications of changes etc.</param>
         /// This method will invoke CustomInitialisation() which you can override if you 
@@ -1435,7 +1436,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Get a reference to the specified counter by index.
         /// </summary>
-        /// <param name="index"></param>
         /// <returns></returns>
         public Counter GetCounter(string name)
         {

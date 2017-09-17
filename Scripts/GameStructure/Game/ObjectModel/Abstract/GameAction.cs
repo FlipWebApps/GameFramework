@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using GameFramework.Helper;
 using UnityEngine;
 
@@ -46,8 +45,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         float _delay;
 
         WaitForSeconds _waitForSeconds;
-
-        public GameAction() {}
 
         /// <summary>
         /// Perform any common initialisation for all GameActions before invoking Initialise
@@ -101,7 +98,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
+        /// <param name="objectReferences"></param>
         public virtual void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
         }
@@ -109,7 +106,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
         public virtual UnityEngine.Object[] GetReferencesForContainer()
         {
             return null;

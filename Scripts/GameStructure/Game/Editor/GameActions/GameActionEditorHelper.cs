@@ -111,10 +111,10 @@ namespace GameFramework.GameStructure.Game
             if (GUILayout.Button(new GUIContent("Add Action", "Add a new action to the list"), EditorStyles.miniButton))
             {
                 var menu = new GenericMenu();
-                for (var i = 0; i < classDetails.Count; i++)
+                foreach (var classDetailsAttribute in classDetails)
                 {
-                    var actionType = classDetails[i].ClassType;
-                    menu.AddItem(new GUIContent(classDetails[i].Path), false, () => {
+                    var actionType = classDetailsAttribute.ClassType;
+                    menu.AddItem(new GUIContent(classDetailsAttribute.Path), false, () => {
                         AddAction(actionType, actionsProperty, serializedObject);
                     });
                 }
@@ -179,7 +179,7 @@ namespace GameFramework.GameStructure.Game
                     subEditors[i].DataProperty =
                         scriptableObjectContainer.FindPropertyRelative("_data");
                     subEditors[i].ObjectReferencesProperty =
-                        scriptableObjectContainer.FindPropertyRelative("_objectReferences"); ;
+                        scriptableObjectContainer.FindPropertyRelative("_objectReferences"); 
                 }
             }
             return subEditors;

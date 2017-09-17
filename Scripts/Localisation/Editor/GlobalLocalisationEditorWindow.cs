@@ -366,7 +366,9 @@ namespace GameFramework.Localisation.Editor
         /// Show a button trimmed to the length of the text
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="texture"></param>
         /// <param name="style"></param>
+        /// <param name="tooltip"></param>
         /// <returns></returns>
         public static bool ButtonTrimmed(string text, Texture2D texture, GUIStyle style, string tooltip = null)
         {

@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameObjects.Components;
-using GameFramework.GameStructure;
 using UnityEngine;
 
 namespace GameFramework.Advertising.AdMob.Components

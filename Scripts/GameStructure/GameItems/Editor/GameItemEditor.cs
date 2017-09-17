@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using System;
-using System.Text;
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEditor;
@@ -139,10 +138,10 @@ namespace GameFramework.GameStructure.GameItems.Editor
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    var name = typeProperty.enumValueIndex == 0
+                    var title = typeProperty.enumValueIndex == 0
                         ? (string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue)
                         : typeProperty.enumDisplayNames[typeProperty.enumValueIndex];
-                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, name);
+                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, title);
                     if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
                         EditorUtility.DisplayDialog("Remove Entry?", "Are you sure you want to remove this entry?", "Yes",
                             "No"))
@@ -219,10 +218,10 @@ namespace GameFramework.GameStructure.GameItems.Editor
                     GUILayout.Space(15f);
                     EditorGUILayout.BeginVertical();
                     EditorGUILayout.BeginHorizontal();
-                    var name = typeProperty.enumValueIndex == 0
+                    var title = typeProperty.enumValueIndex == 0
                         ? (string.IsNullOrEmpty(nameProperty.stringValue) ? "<missing name>" : nameProperty.stringValue)
                         : typeProperty.enumDisplayNames[typeProperty.enumValueIndex];
-                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, name);
+                    arrayProperty.isExpanded = EditorGUILayout.Foldout(arrayProperty.isExpanded, title);
                     if (GUILayout.Button("X", GuiStyles.BorderlessButtonStyle, GUILayout.Width(12), GUILayout.Height(12)) &&
                         EditorUtility.DisplayDialog("Remove Entry?", "Are you sure you want to remove this entry?", "Yes",
                             "No"))

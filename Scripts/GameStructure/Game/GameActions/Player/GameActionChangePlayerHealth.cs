@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.GameStructure.Players;
 using GameFramework.Helper;
 using UnityEngine;
 using UnityEngine.Assertions;

@@ -21,7 +21,6 @@
 
 #if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 #else
-using System.Security.Cryptography;
 using GameFramework.Localisation.ObjectModel;
 using NUnit.Framework;
 using UnityEngine;
@@ -646,27 +645,27 @@ namespace GameFramework.Localisation
             // Last row doesn't end in new line
             yield return new TestCaseData(
                 "Key,English\nKey1,Value1\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
-                new string[,] { { "Value1" }, { "Value2" } }
+                new[,] { { "Value1" }, { "Value2" } }
                 );
             // Last row ends in new line
             yield return new TestCaseData(
                 "Key,English\nKey1,Value1\nKey2,Value2\n", new[] { "English" }, new[] { "Key1", "Key2" },
-                new string[,] { { "Value1" }, { "Value2" } }
+                new[,] { { "Value1" }, { "Value2" } }
                 );
             // Quoted value
             yield return new TestCaseData(
                 "Key,English\nKey1,\"Value1\"\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
-                new string[,] { { "Value1" }, { "Value2" } }
+                new[,] { { "Value1" }, { "Value2" } }
                 );
             // Quoted value with escaped quote
             yield return new TestCaseData(
                 "Key,English\nKey1,\"Value\"\"1\"\nKey2,Value2", new[] { "English" }, new[] { "Key1", "Key2" },
-                new string[,] { { "Value\"1" }, { "Value2" } }
+                new[,] { { "Value\"1" }, { "Value2" } }
                 );
             // Multiple languages value
             yield return new TestCaseData(
                 "Key,English,Spanish\nKey1,Value1,Value2\nKey2,Value3,Value4", new[] { "English", "Spanish" }, new[] { "Key1", "Key2" },
-                new string[,] { { "Value1", "Value2" }, { "Value3", "Value4" } }
+                new[,] { { "Value1", "Value2" }, { "Value3", "Value4" } }
                 );
         }
 

@@ -20,8 +20,6 @@
 //----------------------------------------------
 
 
-using UnityEngine;
-
 namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
     /// <summary>

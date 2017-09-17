@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.GameItems.Components;
 using UnityEditor;
 using UnityEngine;

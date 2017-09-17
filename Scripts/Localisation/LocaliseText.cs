@@ -19,19 +19,9 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
- 
-using System;
+
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using GameFramework.Debugging;
-using GameFramework.GameStructure;
 using UnityEngine;
-using GameFramework.Localisation.Messages;
-using GameFramework.Preferences;
-using GameFramework.Localisation.Components;
-using UnityEngine.Assertions;
 
 namespace GameFramework.Localisation
 {

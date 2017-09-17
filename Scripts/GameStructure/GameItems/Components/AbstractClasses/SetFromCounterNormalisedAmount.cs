@@ -19,7 +19,6 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.GameItems.ObjectModel;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
@@ -27,7 +26,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// <summary>
     /// Set an amount from a counter from the specified GameItem
     /// </summary>
-    /// <typeparam name="T">The type of the GameItem that we are getting the sprite from</typeparam>
     /// <typeparam name="TC">Component type to target</typeparam>    
     public abstract class SetFromCounterNormalisedAmount<TC> : GameItemContextBaseSelectableTypeRunnableCounter where TC : Component
     {

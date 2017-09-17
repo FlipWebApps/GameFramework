@@ -19,12 +19,10 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using System;
 using GameFramework.Helper.UnityEvents;
 using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Events;
 
 namespace GameFramework.GameStructure.Colliders
 {
@@ -198,8 +196,8 @@ namespace GameFramework.GameStructure.Colliders
         TriggerData _exit;
 
 
-        Collider[] _colliders;
-        Collider2D[] _colliders2D;
+        Collider[] _siblingColliders;
+        Collider2D[] _siblingColliders2D;
 
         float _lastTriggerTime = -1000;
         float _lastWithinTime;
@@ -207,8 +205,8 @@ namespace GameFramework.GameStructure.Colliders
 
         public virtual void Awake()
         {
-            _colliders = GetComponents<Collider>();
-            _colliders2D = GetComponents<Collider2D>();
+            _siblingColliders = GetComponents<Collider>();
+            _siblingColliders2D = GetComponents<Collider2D>();
             Debug.LogWarning(gameObject.name + " : All old colliders are replaced in favour of the new, more powerful, Game Collider (Add Component | Game Framework | Game Structure | Game Collider) and will in the future be removed. Please convert your game to use this new component.");
         }
 
@@ -306,10 +304,10 @@ namespace GameFramework.GameStructure.Colliders
                         gameObject.SetActive(false);
                         break;
                     case DisableAfterUseType.Colliders:
-                        foreach (var collider in _colliders)
-                            collider.enabled = false;
-                        foreach (var collider2D in _colliders2D)
-                            collider2D.enabled = false;
+                        foreach (var siblingCollider in _siblingColliders)
+                            siblingCollider.enabled = false;
+                        foreach (var siblingCollider2D in _siblingColliders2D)
+                            siblingCollider2D.enabled = false;
                         break;
                 }
             }
@@ -382,6 +380,7 @@ namespace GameFramework.GameStructure.Colliders
         /// Processing of any trigger data.
         /// </summary>
         /// <param name="triggerData"></param>
+        /// <param name="collidingGameObject"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
             if (triggerData.InstantiatePrefab != null)
@@ -410,7 +409,7 @@ namespace GameFramework.GameStructure.Colliders
         }
 
 
-        [Serializable]
+        [System.Serializable]
         public class TriggerData
         {
             /// <summary>

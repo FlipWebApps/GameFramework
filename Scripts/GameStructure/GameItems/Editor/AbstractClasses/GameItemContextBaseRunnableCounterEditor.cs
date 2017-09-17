@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 

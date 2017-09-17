@@ -197,8 +197,8 @@ namespace GameFramework.GameStructure.Game.Components
         [SerializeField]
         TriggerData _exit;
 
-        Collider[] _colliders;
-        Collider2D[] _colliders2D;
+        Collider[] _siblingColliders;
+        Collider2D[] _siblingColliders2D;
 
         float _lastTriggerTime = -1000;
         float _lastWithinTime;
@@ -206,8 +206,8 @@ namespace GameFramework.GameStructure.Game.Components
 
         void Awake()
         {
-            _colliders = GetComponents<Collider>();
-            _colliders2D = GetComponents<Collider2D>();
+            _siblingColliders = GetComponents<Collider>();
+            _siblingColliders2D = GetComponents<Collider2D>();
         }
 
         void Start()
@@ -311,10 +311,10 @@ namespace GameFramework.GameStructure.Game.Components
                         gameObject.SetActive(false);
                         break;
                     case DisableAfterUseType.Colliders:
-                        foreach (var collider in _colliders)
-                            collider.enabled = false;
-                        foreach (var collider2D in _colliders2D)
-                            collider2D.enabled = false;
+                        foreach (var siblingCollider in _siblingColliders)
+                            siblingCollider.enabled = false;
+                        foreach (var siblingCollider2D in _siblingColliders2D)
+                            siblingCollider2D.enabled = false;
                         break;
                 }
             }
@@ -387,6 +387,7 @@ namespace GameFramework.GameStructure.Game.Components
         /// Processing of any trigger data.
         /// </summary>
         /// <param name="triggerData"></param>
+        /// <param name="collidingGameObject"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
             GameActionHelper.PerformActions(triggerData.ActionReferences, this, false);

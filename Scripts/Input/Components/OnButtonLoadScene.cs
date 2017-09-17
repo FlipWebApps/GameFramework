@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure;
-using GameFramework.Input.Components.AbstractClasses;
 using UnityEngine;
 
 namespace GameFramework.Input.Components

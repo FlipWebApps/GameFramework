@@ -22,7 +22,6 @@
 using System;
 using System.Collections.Generic;
 using GameFramework.EditorExtras.Editor;
-using GameFramework.Helper;
 using GameFramework.Localisation.ObjectModel;
 using UnityEditor;
 using UnityEngine;
@@ -100,7 +99,7 @@ namespace GameFramework.Localisation.Editor
             }
 
             // Main tabs and display
-            _currentTab = GUILayout.Toolbar(_currentTab, new string[] { "Entries", "Languages", "Tools" });
+            _currentTab = GUILayout.Toolbar(_currentTab, new[] { "Entries", "Languages", "Tools" });
             switch (_currentTab)
             {
                 case 0:
@@ -362,7 +361,7 @@ namespace GameFramework.Localisation.Editor
                     });
                     _entriesScrollPosition.y = scrollOffset;
 
-                    var lastDot = _newKey.LastIndexOf(".");
+                    var lastDot = _newKey.LastIndexOf(".", StringComparison.Ordinal);
                     if (lastDot == -1)
                         _newKey = "";
                     else
@@ -485,10 +484,10 @@ namespace GameFramework.Localisation.Editor
             if (GUILayout.Button(new GUIContent("+", "Add a new language to the list"), EditorStyles.miniButton, GUILayout.Width(20)))
             {
                 var menu = new GenericMenu();
-                for (var i = 0; i < Languages.LanguageDefinitions.Length; i++)
+                foreach (var languageDefinition in Languages.LanguageDefinitions)
                 {
-                    if (!_targetLocalisationData.ContainsLanguage(Languages.LanguageDefinitions[i].Name))
-                        menu.AddItem(new GUIContent(Languages.LanguageDefinitions[i].Name + " (" + Languages.LanguageDefinitions[i].Code + ")"), false, AddLanguage, Languages.LanguageDefinitions[i].Name);
+                    if (!_targetLocalisationData.ContainsLanguage(languageDefinition.Name))
+                        menu.AddItem(new GUIContent(languageDefinition.Name + " (" + languageDefinition.Code + ")"), false, AddLanguage, languageDefinition.Name);
                 }
                 menu.ShowAsContext();
             }
@@ -506,7 +505,7 @@ namespace GameFramework.Localisation.Editor
 
         void AddLanguage(object languageObject)
         {
-            var language = languageObject as string;
+            var language = (string)languageObject;
             Undo.RecordObject(_targetLocalisationData, "Add Language");
             _targetLocalisationData.AddLanguage(language, Languages.LanguageDefinitionsDictionary[language].Code);
             _targetChanged = true;

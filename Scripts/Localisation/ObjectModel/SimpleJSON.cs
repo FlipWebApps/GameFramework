@@ -82,8 +82,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+// ReSharper disable All
 
 // Internal as there is no guarantee that we will use this in the future.
+// ReSharper disable once CheckNamespace
 namespace GameFramework.Localisation.ObjectModel.Internal.SimpleJSON
 {
     public enum JSONNodeType
@@ -1315,7 +1317,7 @@ namespace GameFramework.Localisation.ObjectModel.Internal.SimpleJSON
         {
             if (b == null)
                 return true;
-            return System.Object.ReferenceEquals(a, b);
+            return ReferenceEquals(a, b);
         }
 
         public static bool operator !=(JSONLazyCreator a, object b)
@@ -1327,7 +1329,7 @@ namespace GameFramework.Localisation.ObjectModel.Internal.SimpleJSON
         {
             if (obj == null)
                 return true;
-            return System.Object.ReferenceEquals(this, obj);
+            return ReferenceEquals(this, obj);
         }
 
         public override int GetHashCode()

@@ -20,9 +20,7 @@
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using GameFramework.GameObjects;
 
 namespace GameFramework.GameObjects.Editor
 {

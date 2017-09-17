@@ -22,7 +22,6 @@
 using GameFramework.GameStructure.GameItems.Messages;
 using UnityEngine;
 using GameFramework.Helper;
-using GameFramework.GameStructure.GameItems.ObjectModel;
 
 namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
@@ -32,7 +31,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
     [System.Serializable]
     public abstract class GameCondition : ScriptableObject, IScriptableObjectContainerSyncReferences
     {
-        public GameCondition() { }
 
         /// <summary>
         /// Perform any common initialisation for all Conditions before invoking Initialise
@@ -80,7 +78,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
+        /// <param name="objectReferences"></param>
         public virtual void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
         }
@@ -88,7 +86,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
         public virtual UnityEngine.Object[] GetReferencesForContainer()
         {
             return null;

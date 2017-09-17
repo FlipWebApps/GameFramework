@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 
-using System;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.Preferences;
 using UnityEngine;
@@ -192,8 +191,9 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// Constructor to hold necessary references.
         /// </summary>
         /// <param name="counterConfigurationEntry"></param>
-        /// <param name="parent"></param>
-        /// <param name="index">Index of this item within the GameItem (used for access / performance)</param>
+        /// <param name="prefsPrefix"></param>
+        /// <param name="identifier"></param>
+        /// <param name="counterChangedCallbacks"></param>
         public Counter(CounterConfiguration counterConfigurationEntry, string prefsPrefix = null,
             int identifier = -1, ICounterChangedCallback counterChangedCallbacks = null)
         {
@@ -218,7 +218,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Load this item from perferences within the context of the specified GameItem
         /// </summary>
-        /// <param name="container"></param>
         public void LoadFromPrefs()
         {
             if (Configuration.CounterType == CounterConfiguration.CounterTypeEnum.Int)
@@ -251,7 +250,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Set the saved properties to perferences within the context of the specified GameItem.
         /// </summary>
-        /// <param name="container"></param>
         /// Save / SaveBest mode of 'Always' will cause XxAmount(Best) be copied to the corresponding saved 
         /// variables before saving to prefs, other modes of updating the should be triggered coopied.
         public void UpdatePlayerPrefs()
@@ -383,7 +381,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Set the amount of this counter
         /// </summary>
-        /// <param name="index"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
         public void Set(float amount)
@@ -394,7 +391,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Set the amount of this counter
         /// </summary>
-        /// <param name="index"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
         public void Set(int amount)
@@ -405,7 +401,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Get the amount that this counter is currently set to
         /// </summary>
-        /// <param name="index"></param>
         /// <returns></returns>
         public float GetFloat()
         {
@@ -416,7 +411,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Get the amount that this counter is currently set to
         /// </summary>
-        /// <param name="index"></param>
         /// <returns></returns>
         public float GetInt()
         {

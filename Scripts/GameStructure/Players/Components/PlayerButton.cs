@@ -19,11 +19,9 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.Billing.Messages;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.Messaging;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Players.Components

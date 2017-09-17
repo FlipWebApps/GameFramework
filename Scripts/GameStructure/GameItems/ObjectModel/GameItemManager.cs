@@ -29,7 +29,6 @@ using GameFramework.Debugging;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.Localisation.ObjectModel;
 using GameFramework.Preferences;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 using GameFramework.GameStructure.Game.ObjectModel;
 
@@ -465,7 +464,6 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         /// <summary>
         /// Set the selected item to the previous item if one exists
         /// </summary>
-        /// <param name="item"></param>
         public void SelectPrevious()
         {
             var previousItem = GetPreviousItem(Selected);

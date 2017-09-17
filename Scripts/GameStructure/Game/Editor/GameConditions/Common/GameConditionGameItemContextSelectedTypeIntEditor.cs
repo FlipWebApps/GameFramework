@@ -21,7 +21,6 @@
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using UnityEditor;
-using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.Editor.GameConditions.Common
 {

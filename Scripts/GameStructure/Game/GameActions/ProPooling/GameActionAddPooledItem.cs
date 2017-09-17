@@ -77,7 +77,7 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
 
 #if PRO_POOLING
             if (!string.IsNullOrEmpty(PoolName))
-                ProPooling.PoolManager.Instance.GetFromPool(PoolName, Location.position, Location.rotation);
+                global::ProPooling.PoolManager.Instance.GetFromPool(PoolName, Location.position, Location.rotation);
 #endif
         }
     }

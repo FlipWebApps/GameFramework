@@ -29,7 +29,6 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
     /// Abstract base for setting a shared context that other GameItemContext's can reference.
     /// </summary>
     /// This uses non generic types so that we can add references to instances of this through the Unity editor
-    /// <typeparam name="T">The type of the GameItem that we are creating a button for</typeparam>
     public abstract class GameItemContextBase : MonoBehaviour
     {
         /// <summary>

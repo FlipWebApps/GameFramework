@@ -31,7 +31,6 @@ using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.ObjectModel;
 using GameFramework.GameStructure.Players.ObjectModel;
 using GameFramework.GameStructure.Worlds.ObjectModel;
-using GameFramework.Localisation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -561,17 +560,17 @@ namespace GameFramework.GameStructure
             switch (gameItemType)
             {
                 case GameConfiguration.GameItemType.Character:
-                    Assert.IsNotNull(GameManager.Instance.Characters, string.Format("Characters are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Characters;
+                    Assert.IsNotNull(Instance.Characters, "Characters are not setup but are being referenced.");
+                    return Instance.Characters;
                 case GameConfiguration.GameItemType.Level:
-                    Assert.IsNotNull(GameManager.Instance.Levels, string.Format("Levels are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Levels;
+                    Assert.IsNotNull(Instance.Levels, "Levels are not setup but are being referenced.");
+                    return Instance.Levels;
                 case GameConfiguration.GameItemType.Player:
-                    Assert.IsNotNull(GameManager.Instance.Players, string.Format("Players are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Players;
+                    Assert.IsNotNull(Instance.Players, "Players are not setup but are being referenced.");
+                    return Instance.Players;
                 case GameConfiguration.GameItemType.World:
-                    Assert.IsNotNull(GameManager.Instance.Worlds, string.Format("Worlds are not setup when referenced from {0}", this.GetType().Name));
-                    return GameManager.Instance.Worlds;
+                    Assert.IsNotNull(Instance.Worlds, "Worlds are not setup but are being referenced.");
+                    return Instance.Worlds;
                 default:
                     return null;
             }

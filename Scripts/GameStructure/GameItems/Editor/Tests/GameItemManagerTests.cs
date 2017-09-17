@@ -21,13 +21,8 @@
 
 #if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 #else
-using System;
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Players.ObjectModel;
-using GameFramework.Localisation.ObjectModel;
-using GameFramework.Messaging;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems
 {

@@ -26,7 +26,7 @@ using GameFramework.UI.Dialogs.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FlipWebApps.GameFramework._Demo.Scripts
+namespace GameFramework._Demo.About.Scripts
 {
     public class Demo : MonoBehaviour
     {

@@ -17,7 +17,7 @@ namespace GameFramework.EditorExtras
         /// <summary>
         /// The name of the bool field that will determine whether to hide this property
         /// </summary>
-        public string ConditionalSourceField = "";
+        public string ConditionalSourceField;
         public string ConditionalSourceField2 = "";
         /// <summary>
         /// Whether to hide or just disable the property.

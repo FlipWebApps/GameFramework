@@ -22,7 +22,6 @@
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
-using System.Collections;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.GameConditions.GameItem
@@ -58,7 +57,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
             {
                 // refresh if needed
                 if (SecondContext.ContextMode == GameItemContext.ContextModeType.Selected || SecondContext.ContextMode == GameItemContext.ContextModeType.Reference || _secondGameItem == null)
-                    SecondGameItem = GameItemContext.GetGameItemFromContextReference(SecondContext, GetIBaseGameItemManager(), this.GetType().Name);
+                    SecondGameItem = GameItemContext.GetGameItemFromContextReference(SecondContext, GetIBaseGameItemManager(), GetType().Name);
                 return _secondGameItem;
             }
             private set
@@ -89,7 +88,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
+        /// <param name="objectReferences"></param>
         public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
             if (objectReferences != null && objectReferences.Length == 2)
@@ -102,7 +101,6 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
         public override UnityEngine.Object[] GetReferencesForContainer()
         {
             var baseReferences = base.GetReferencesForContainer();

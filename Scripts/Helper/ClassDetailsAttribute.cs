@@ -32,9 +32,9 @@ namespace GameFramework.Helper
         /// <summary>
         /// The name of the bool field that will determine whether to hide this property
         /// </summary>
-        public string Name = "";
-        public string Path = "";
-        public string Tooltip = "";
+        public string Name;
+        public string Path;
+        public string Tooltip;
 
         public System.Type ClassType;
 

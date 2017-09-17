@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using NUnit.Framework;
-using GameFramework.Weighting;
 using System.Collections.Generic;
 using System.Linq;
 

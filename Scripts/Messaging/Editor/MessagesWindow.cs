@@ -47,7 +47,7 @@ namespace GameFramework.Messaging.Editor
         Vector2 _statisticsScrollPosition;
 
         //Serialise the logger field so that Unity doesn't forget about the logger when you hit Play
-        [UnityEngine.SerializeField]
+        [SerializeField]
         MessageLog _messageLog;
 
 

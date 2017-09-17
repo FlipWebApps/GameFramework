@@ -21,7 +21,6 @@
 
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace GameFramework.EditorExtras.Editor
 {
@@ -36,6 +35,7 @@ namespace GameFramework.EditorExtras.Editor
         /// Returns whether the Player Settings scripting define group contains the specified value
         /// </summary>
         /// <param name="value"></param>
+        /// <param name="buildTarget"></param>
         /// <returns></returns>
         public static bool IsScriptingDefineSet(string value, BuildTargetGroup buildTarget = BuildTargetGroup.Standalone)
         {

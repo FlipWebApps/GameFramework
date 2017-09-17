@@ -185,7 +185,6 @@ namespace GameFramework.Localisation.ObjectModel
         /// <summary>
         /// Gets an array of the localisation language names
         /// </summary>
-        /// <param name="language"></param>
         public string[] GetLanguageNames()
         {
             var languageNames = new string[Languages.Count];
@@ -282,6 +281,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// Gets a text translation from a LocalisationEntry
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="language"></param>
         public string GetText(string key, string language)
         {
             var languageIndex = GetLanguageIndex(language);
@@ -298,6 +298,7 @@ namespace GameFramework.Localisation.ObjectModel
         /// Gets a text translation from a LocalisationEntry
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="languageIndex"></param>
         public string GetText(string key, int languageIndex)
         {
             Assert.IsTrue(languageIndex >= 0 && languageIndex < Languages.Count, string.Format("language index {0} is out of bounds when getting key '{1}'", languageIndex, key));
@@ -418,7 +419,7 @@ namespace GameFramework.Localisation.ObjectModel
 
         public static LocalisationData LoadCsv(System.IO.TextReader rdr)
         {
-            var localisationData = ScriptableObject.CreateInstance<LocalisationData>();
+            var localisationData = CreateInstance<LocalisationData>();
             var isHeader = true;
             foreach (IList<string> columns in FromReader(rdr))
             {
@@ -544,7 +545,7 @@ namespace GameFramework.Localisation.ObjectModel
     [System.Serializable]
     public class LocalisationEntry
     {
-        public string Key = string.Empty;
+        public string Key;
         public string Description = string.Empty;
         public string[] Languages = new string[0];
 

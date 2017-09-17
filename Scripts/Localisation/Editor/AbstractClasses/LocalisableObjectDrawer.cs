@@ -40,7 +40,7 @@ namespace GameFramework.Localisation.Editor.AbstractClasses
 
             var rowPosition = new Rect(position) { height = EditorGUIUtility.singleLineHeight };
 
-            label = EditorGUI.BeginProperty(position, label, property);
+            EditorGUI.BeginProperty(position, label, property);
 
             defaultProperty.objectReferenceValue = EditorGUI.ObjectField(rowPosition, new GUIContent(DefaultName, DefaultTooltip),  defaultProperty.objectReferenceValue, LocalisableType, false);
             //EditorGUI.PropertyField(rowPosition, defaultProperty, label);

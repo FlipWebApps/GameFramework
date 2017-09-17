@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using System.Collections;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
@@ -55,7 +54,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
             {
                 // refresh if needed
                 if (Context.ContextMode == GameItemContext.ContextModeType.Selected || Context.ContextMode == GameItemContext.ContextModeType.Reference || _gameItem == null)
-                    GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), this.GetType().Name);
+                    GameItem = GameItemContext.GetGameItemFromContextReference(Context, GetIBaseGameItemManager(), GetType().Name);
                 return _gameItem;
             }
             private set
@@ -78,7 +77,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
+        /// <param name="objectReferences"></param>
         public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
             if (objectReferences != null && objectReferences.Length >= 1)
@@ -88,7 +87,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
         /// </summary>
-        /// <param name="References"></param>
         public override UnityEngine.Object[] GetReferencesForContainer()
         {
             var objectReferences = new Object[1];

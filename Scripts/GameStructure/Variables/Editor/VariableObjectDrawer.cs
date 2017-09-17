@@ -71,8 +71,7 @@ namespace GameFramework.GameStructure.Variables.Editor
             }
             EditorGUI.indentLevel -= 1;
 
-            label = EditorGUI.BeginProperty(position, label, property);
-
+            EditorGUI.BeginProperty(position, label, property);
 
             EditorGUI.EndProperty();
         }

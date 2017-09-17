@@ -24,7 +24,7 @@ using GameFramework.Helper;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace GameFramework.GameStructure.Game.GameConditions
+namespace GameFramework.GameStructure.Game.GameConditions.Level
 {
     /// <summary>
     /// GameCondition for testing the unlocked status of a GameItem.
