@@ -1636,9 +1636,9 @@ GameObject:
   - 33: {fileID: 1347754576}
   - 65: {fileID: 1347754575}
   - 23: {fileID: 1347754574}
-  - 114: {fileID: 1347754573}
   - 114: {fileID: 1347754577}
   - 114: {fileID: 1347754578}
+  - 114: {fileID: 1347754579}
   m_Layer: 0
   m_Name: Lose Health
   m_TagString: Untagged
@@ -1658,42 +1658,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2021857792}
   m_RootOrder: 0
---- !u!114 &1347754573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1347754571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 041f257942e05e249b58754c9d4ec55d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _collidingTag: Player
-  _interval: 0
-  _disableAfterUse: 0
-  _onlyWhenLevelRunning: 1
-  _enter:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 0}
-    _enableGameObjects: []
-    _disableGameObjects: []
-  _processWithin: 1
-  _runInterval: 0.1
-  _within:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 0}
-    _enableGameObjects: []
-    _disableGameObjects: []
-  _exit:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 0}
-    _enableGameObjects: []
-    _disableGameObjects: []
-  _healthChange: -0.05
 --- !u!23 &1347754574
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1772,6 +1736,70 @@ MonoBehaviour:
     _reactToChanges: 1
     _referencedGameItemContextBase: {fileID: 0}
   _tag: ObstacleScale
+--- !u!114 &1347754579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1347754571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7995d53bc342f8b488e11d4f1a0ef189, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collidingTag: Player
+  _interval: 0
+  _disableAfterUse: 0
+  _onlyWhenLevelRunning: 1
+  _enter:
+    _actionReferences:
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionChangePlayerHealth
+      _objectReferences: []
+      _data: '{"_delay":0.0,"_amount":-0.05000000074505806}'
+      _identifier: 0
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionPlayAudioClip
+      _objectReferences:
+      - {fileID: 8300000, guid: a7aada240edfd524fa1a5766cd9a88ca, type: 3}
+      _data: '{"_delay":0.0,"_audioClip":{"instanceID":41214}}'
+      _identifier: 0
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _processWithin: 1
+  _runInterval: 0.1
+  _within:
+    _actionReferences:
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionChangePlayerHealth
+      _objectReferences: []
+      _data: '{"_delay":0.0,"_amount":-0.05000000074505806}'
+      _identifier: 0
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionPlayAudioClip
+      _objectReferences:
+      - {fileID: 8300000, guid: a7aada240edfd524fa1a5766cd9a88ca, type: 3}
+      _data: '{"_delay":0.0,"_audioClip":{"instanceID":41214}}'
+      _identifier: 0
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _exit:
+    _actionReferences: []
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1679453244
 GameObject:
   m_ObjectHideFlags: 0
