@@ -75,9 +75,16 @@ namespace GameFramework.GameStructure.Game
 
                     if (actionEditors[i] == null)
                     {
+                        EditorGUILayout.BeginHorizontal();
                         var actionReference = actionsProperty.GetArrayElementAtIndex(i);
                         var actionClassNameProperty = actionReference.FindPropertyRelative("_className");
                         EditorGUILayout.LabelField("Error loading " + actionClassNameProperty.stringValue);
+                        if (GUILayout.Button("-", GUILayout.Width(RemoveButtonWidth)))
+                        {
+                            actionsProperty.DeleteArrayElementAtIndex(i);
+                            break;
+                        }
+                        EditorGUILayout.EndHorizontal();
                     }
                     else
                     {
