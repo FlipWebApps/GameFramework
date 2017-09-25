@@ -51,7 +51,7 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
         string _poolName;
 
         /// <summary>
-        /// A Transform that defines where to instantiate the prefab
+        /// A Transform that defines where to instantiate the prefab. If blank uses the containing GameObjects transform.
         /// </summary>
         public Transform Location
         {
@@ -64,7 +64,7 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
                 _location = value;
             }
         }
-        [Tooltip("A Transform that defines where to instantiate the prefab")]
+        [Tooltip("A Transform that defines where to instantiate the prefab. If blank uses the containing GameObjects transform.")]
         [SerializeField]
         Transform _location;
 
@@ -77,7 +77,9 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
 
 #if PRO_POOLING
             if (!string.IsNullOrEmpty(PoolName))
-                global::ProPooling.PoolManager.Instance.GetFromPool(PoolName, Location.position, Location.rotation);
+                global::ProPooling.PoolManager.Instance.GetFromPool(PoolName, 
+                    Location == null ? monoBehaviour.transform.position : Location.position,
+                    Location == null ? Quaternion.identity : Location.rotation);
 #endif
         }
     }
