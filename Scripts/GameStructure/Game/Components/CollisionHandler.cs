@@ -28,11 +28,11 @@ using GameFramework.GameStructure.Game.ObjectModel;
 namespace GameFramework.GameStructure.Game.Components
 {
     /// <summary>
-    /// Generic collider for acting when a tagged gameobject touches the attached collider or trigger.
+    /// Generic collision handler for acting when a tagged gameobject touches the attached collider or trigger.
     /// </summary>
-    [AddComponentMenu("Game Framework/GameStructure/Game Collider")]
+    [AddComponentMenu("Game Framework/GameStructure/Collision Handler")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/game-structure/colliders/")]
-    public class GameCollider : MonoBehaviour
+    public class CollisionHandler : MonoBehaviour
     {
         public enum DisableAfterUseType { None, ThisComponent, GameObject, Colliders}
 
@@ -139,7 +139,6 @@ namespace GameFramework.GameStructure.Game.Components
                 _processWithin = value;
             }
         }
-        //[Header("When Within a Trigger")]
         [Tooltip("Whether to continuously process when within a trigger (process trigger / collider stay events)")]
         [SerializeField]
         bool _processWithin;
@@ -180,6 +179,24 @@ namespace GameFramework.GameStructure.Game.Components
         TriggerData _within;
 
         /// <summary>
+        /// Whether to process when exiting a trigger (process trigger / collider exit events)
+        /// </summary>
+        public bool ProcessExit
+        {
+            get
+            {
+                return _processExit;
+            }
+            set
+            {
+                _processExit = value;
+            }
+        }
+        [Tooltip("Whether to continuously process when exiting a trigger (process trigger / collider exit events)")]
+        [SerializeField]
+        bool _processExit;
+
+        /// <summary>
         /// Trigger Data for when leaving a trigger
         /// </summary>
         public TriggerData Exit
@@ -218,68 +235,64 @@ namespace GameFramework.GameStructure.Game.Components
         }
 
         #region Trigger / Collision Monobehaviour Methods
-        public virtual void OnTriggerEnter2D(Collider2D otherCollider)
+        void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            ProcessEnter(otherCollider.gameObject);
+            ProcessEnterEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnTriggerStay2D(Collider2D otherCollider)
+        void OnTriggerStay2D(Collider2D otherCollider)
         {
-            if (ProcessWithin)
-                ProcessStay(otherCollider.gameObject);
+            ProcessStayEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnTriggerExit2D(Collider2D otherCollider)
+        void OnTriggerExit2D(Collider2D otherCollider)
         {
-            ProcessExit(otherCollider.gameObject);
+            ProcessExitEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnTriggerEnter(Collider otherCollider)
+        void OnTriggerEnter(Collider otherCollider)
         {
-            ProcessEnter(otherCollider.gameObject);
+            ProcessEnterEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnTriggerStay(Collider otherCollider)
+        void OnTriggerStay(Collider otherCollider)
         {
-            if (ProcessWithin)
-                ProcessStay(otherCollider.gameObject);
+            ProcessStayEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnTriggerExit(Collider otherCollider)
+        void OnTriggerExit(Collider otherCollider)
         {
-            ProcessExit(otherCollider.gameObject);
+            ProcessExitEvents(otherCollider.gameObject);
         }
 
-        public virtual void OnCollisionEnter2D(Collision2D collision)
+        void OnCollisionEnter2D(Collision2D collision)
         {
-            ProcessEnter(collision.gameObject);
+            ProcessEnterEvents(collision.gameObject);
         }
 
-        public virtual void OnCollisionStay2D(Collision2D collision)
+        void OnCollisionStay2D(Collision2D collision)
         {
-            if (ProcessWithin)
-                ProcessStay(collision.gameObject);
+            ProcessStayEvents(collision.gameObject);
         }
 
-        public virtual void OnCollisionExit2D(Collision2D collision)
+        void OnCollisionExit2D(Collision2D collision)
         {
-            ProcessExit(collision.gameObject);
+            ProcessExitEvents(collision.gameObject);
         }
 
-        public virtual void OnCollisionEnter(Collision collision)
+        void OnCollisionEnter(Collision collision)
         {
-            ProcessEnter(collision.gameObject);
+            ProcessEnterEvents(collision.gameObject);
         }
 
-        public virtual void OnCollisionStay(Collision collision)
+        void OnCollisionStay(Collision collision)
         {
-            if (ProcessWithin)
-                ProcessStay(collision.gameObject);
+            ProcessStayEvents(collision.gameObject);
         }
 
-        public virtual void OnCollisionExit(Collision collision)
+        void OnCollisionExit(Collision collision)
         {
-            ProcessExit(collision.gameObject);
+            ProcessExitEvents(collision.gameObject);
         }
 
         #endregion Trigger / Collision Monobehaviour Methods
@@ -288,7 +301,7 @@ namespace GameFramework.GameStructure.Game.Components
         /// Processes a trigger / collider enter event according to the current settings.
         /// </summary>
         /// <param name="collidingGameObject">The GameObject that we collided with</param>
-        public virtual void ProcessEnter(GameObject collidingGameObject)
+        void ProcessEnterEvents(GameObject collidingGameObject)
         {
             if ((!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
                 collidingGameObject.CompareTag(CollidingTag) && Time.time > _lastTriggerTime + Interval && !_processingDisabled)
@@ -335,9 +348,9 @@ namespace GameFramework.GameStructure.Game.Components
         /// Processes a trigger / collider stay event according to the current settings.
         /// </summary>
         /// <param name="collidingGameObject">The GameObject that we collided with</param>
-        public virtual void ProcessStay(GameObject collidingGameObject)
+        void ProcessStayEvents(GameObject collidingGameObject)
         {
-            if ((!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
+            if (ProcessWithin && (!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
                 collidingGameObject.CompareTag(CollidingTag) && Time.time > _lastWithinTime + RunInterval && !_processingDisabled)
             {
                 _lastWithinTime = Time.time;
@@ -362,9 +375,9 @@ namespace GameFramework.GameStructure.Game.Components
         /// Processes a trigger / collider exit event according to the current settings.
         /// </summary>
         /// <param name="collidingGameObject">The GameObject that we collided with</param>
-        public virtual void ProcessExit(GameObject collidingGameObject)
+        void ProcessExitEvents(GameObject collidingGameObject)
         {
-            if ((!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
+            if (ProcessExit && (!OnlyWhenLevelRunning || LevelManager.Instance.IsLevelRunning) &&
                 collidingGameObject.CompareTag(CollidingTag) && !_processingDisabled)
             {
                 ProcessTriggerData(Exit, collidingGameObject);

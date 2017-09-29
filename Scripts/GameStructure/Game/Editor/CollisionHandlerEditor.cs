@@ -30,8 +30,8 @@ using UnityEngine;
 
 namespace GameFramework.GameStructure.Game.Editor
 {
-    [CustomEditor(typeof(GameCollider))]
-    public class GameColliderEditor : UnityEditor.Editor
+    [CustomEditor(typeof(CollisionHandler))]
+    public class CollisionHandlerEditor : UnityEditor.Editor
     {
         //GameItem _gameItem;
         SerializedProperty _collidingTagProperty;
@@ -43,9 +43,10 @@ namespace GameFramework.GameStructure.Game.Editor
         SerializedProperty _processWithinProperty;
         SerializedProperty _runIntervalProperty;
         SerializedProperty _withinProperty;
+        SerializedProperty _processExitProperty;
         SerializedProperty _exitProperty;
 
-        GameCollider gameCollider;
+        CollisionHandler gameCollider;
 
         List<ClassDetailsAttribute> _gameActionClassDetails;
         Rect _mainHelpRect;
@@ -56,7 +57,7 @@ namespace GameFramework.GameStructure.Game.Editor
 
         protected virtual void OnEnable()
         {
-            gameCollider = (GameCollider)target;
+            gameCollider = (CollisionHandler)target;
 
             // get serialized objects so we can use attached property drawers (e.g. tooltips, ...)
             _collidingTagProperty = serializedObject.FindProperty("_collidingTag");
@@ -67,6 +68,7 @@ namespace GameFramework.GameStructure.Game.Editor
             _processWithinProperty = serializedObject.FindProperty("_processWithin");
             _runIntervalProperty = serializedObject.FindProperty("_runInterval");
             _withinProperty = serializedObject.FindProperty("_within");
+            _processExitProperty = serializedObject.FindProperty("_processExit");
             _exitProperty = serializedObject.FindProperty("_exit");
 
             // setup actions types
@@ -100,17 +102,27 @@ namespace GameFramework.GameStructure.Game.Editor
             EditorGUILayout.PropertyField(_intervalProperty);
             EditorGUILayout.PropertyField(_disableAfterUseProperty);
             EditorGUILayout.PropertyField(_onlyWhenLevelRunningProperty);
-            DrawTriggerData(_enterProperty, gameCollider.Enter.ActionReferences, ref actionEditorsEnter, "When Entering a Trigger", "The actions that should happen when a GameObject with a matching tag enters a trigger.");
+            DrawTriggerData(_enterProperty, gameCollider.Enter.ActionReferences, ref actionEditorsEnter, "When Entering a Collision", "The actions that should happen when a GameObject with a matching tag enters a trigger.");
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(new GUIContent("When Within a Trigger", "The actions that should happen when a GameObject with a matching tag has entered and remains within a trigger."), EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(_processWithinProperty);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(_processWithinProperty, new GUIContent(), GUILayout.MaxWidth(15));
+            EditorGUILayout.LabelField(new GUIContent("When Within a Collision", "The actions that should happen when a GameObject with a matching tag has entered and remains within a trigger."), EditorStyles.boldLabel);
+            EditorGUILayout.EndHorizontal();
             if (_processWithinProperty.boolValue)
             {
                 EditorGUILayout.PropertyField(_runIntervalProperty);
                 DrawTriggerData(_withinProperty, gameCollider.Within.ActionReferences, ref actionEditorsWithin);
             }
-            DrawTriggerData(_exitProperty, gameCollider.Exit.ActionReferences, ref actionEditorsExit, "When Exiting a Trigger", "The actions that should happen when a GameObject with a matching tag exits a trigger.");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(_processExitProperty, new GUIContent(), GUILayout.MaxWidth(15));
+            EditorGUILayout.LabelField(new GUIContent("When Exiting a Collision", "The actions that should happen when a GameObject with a matching tag exits a trigger."), EditorStyles.boldLabel);
+            EditorGUILayout.EndHorizontal();
+            if (_processExitProperty.boolValue)
+            {
+                DrawTriggerData(_exitProperty, gameCollider.Exit.ActionReferences, ref actionEditorsExit);
+            }
         }
 
         
