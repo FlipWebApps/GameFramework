@@ -12,7 +12,7 @@ GameObject:
   - 136: {fileID: 13678086}
   - 23: {fileID: 2366708}
   - 114: {fileID: 11435478}
-  - 114: {fileID: 11444690}
+  - 114: {fileID: 11478972}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -81,7 +81,7 @@ MonoBehaviour:
   YAngle: 50
   ZAngle: 0
   OnlyWhenLevelRunning: 0
---- !u!114 &11444690
+--- !u!114 &11478972
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 174424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48213b797be81404cb160b6bd4e88462, type: 3}
+  m_Script: {fileID: 11500000, guid: 7995d53bc342f8b488e11d4f1a0ef189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _collidingTag: Player
@@ -97,28 +97,47 @@ MonoBehaviour:
   _disableAfterUse: 2
   _onlyWhenLevelRunning: 1
   _enter:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 8300000, guid: e9f389d111d024f40b370ba27c319414, type: 3}
-    _enableGameObjects: []
-    _disableGameObjects: []
+    _actionReferences:
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionPlayAudioClip
+      _objectReferences:
+      - {fileID: 8300000, guid: e9f389d111d024f40b370ba27c319414, type: 3}
+      _data: '{"_delay":0.0,"_audioClip":{"instanceID":5242}}'
+      _identifier: 0
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionChangePlayerCoins
+      _objectReferences: []
+      _data: 
+      _identifier: 0
+    - _scriptableObjectReference: {fileID: 0}
+      _isReference: 0
+      _className: GameActionChangeLevelCoins
+      _objectReferences: []
+      _data: 
+      _identifier: 0
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _processWithin: 0
   _runInterval: 0
   _within:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 0}
-    _enableGameObjects: []
-    _disableGameObjects: []
+    _actionReferences: []
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _exit:
-    _instantiatePrefab: {fileID: 0}
-    _addPooledItem: 
-    _audioClip: {fileID: 0}
-    _enableGameObjects: []
-    _disableGameObjects: []
-  _coinChange: 1
-  _changePlayerCoins: 1
-  _changeLevelCoins: 1
+    _actionReferences: []
+    _callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!136 &13678086
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -140,6 +159,14 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: _enter._actionReferences.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _enter._actionReferences.Array.data[0]._objectReferences.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
@@ -157,6 +184,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _disableAfterUse
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _enter._actionReferences.Array.data[0]._data
+      value: '{"_delay":0.0,"_audioClip":{"instanceID":5242}}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _processWithin
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
