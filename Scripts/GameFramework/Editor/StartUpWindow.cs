@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -61,10 +62,16 @@ namespace GameFramework.GameFramework.Editor {
         /// </summary>
         static void Update()
         {
+            // Show startup window if do not show hasn't been set
             if (EditorPrefs.GetBool(AutoShowPrefsKey, true))
             {
                 ShowWindow();
             }
+
+            // Add GAME_FRAMEWORK define if not already set.
+            if (!PlayerSettingsHelper.IsScriptingDefineSet("GAME_FRAMEWORK"))
+                PlayerSettingsHelper.AddScriptingDefineAllTargets("GAME_FRAMEWORK");
+
             EditorApplication.update -= Update;
         }
 
