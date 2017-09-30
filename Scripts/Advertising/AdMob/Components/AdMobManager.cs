@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.GameObjects.Components;
+using GameFramework.GameStructure;
 using UnityEngine;
 
 namespace GameFramework.Advertising.AdMob.Components
@@ -69,7 +70,7 @@ namespace GameFramework.Advertising.AdMob.Components
         protected override void GameSetup()
         {
 #if GOOGLE_ADS
-            if (!GameManager.Instance.IsUnlocked && !string.IsNullOrEmpty(AdmobUnitIdAndroid) && !string.IsNullOrEmpty(AdmobUnitIdIos))
+            if (! GameManager.Instance.IsUnlocked && !string.IsNullOrEmpty(AdmobUnitIdAndroid) && !string.IsNullOrEmpty(AdmobUnitIdIos))
             {
                 Adverts = new AdMob(AdmobUnitIdAndroid, AdmobUnitIdIos);
                 Adverts.HideBanner();
