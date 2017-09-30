@@ -2,12 +2,55 @@
 IMPORTANT NOTE: Before upgrading always take a backup copy of you project. 
 
 If upgrade errors occur then delete the old /FlipWebApps folder to cater for possible 
-conflicts and import the asset again. Please also read the changes for documentation
-of any breaking changes.
+conflicts and import the asset again. Please read the Upgrade Guide.txt documentation
+for a high level overview of common upgrade notes and any breaking changes. Also
+refer the below for more detailed information on any changes.
+
+In case of problems please get in contact.
 	
 - - - - - - - - - -
 
 CHANGE LOG
+
+v5.0
+	Game Framework Core - Improvements
+	- EditorExtras: Added FindTypes and TypeListToNames methods
+	- GameStructure: All Old Colliders deprecated in favour of new, more powerful, Collision Handler component
+	- GameStructure: Removed all EnableBasedUpon[GameItem] components in favour of new, more powerful ConditionalAction component
+	- GameStructure: Reusable GameActions added
+	- GameStructure: Reusable Conditions added
+	- GameStructure: Added SetImageColorFromCounter, SetSpriteRendererColorFromCounter, SetTextColorFromCounter and SetImageFillAmountFromCounter components
+	- GameStructure: Refactor of ShowXxxCounter and generic ShowCounter component addedcomponents
+	- GameStructure: Added Change Counter Over time component for automatically increasing / decreasing a counter.
+	- GameStructure: Show Counter component sets sensible default values for the displayed text.
+	- GameStructure: Added Counter Reset method()
+	- GameStructure: Removed previously deprecated  EnableBasedUponSelected/Unlocked components - see ConditionalAction / ConditionalEnable instead
+	- GameStructure: Renamed GameItemContextBaseMultiRunnable -> GameItemContextBaseSelectableTypeRunnable and GameItemContextBaseRunnableCounter -> GameItemContextBaseSelectableTypeRunnableCounter
+	- Helper: SerialisedScriptableObjectContainer deleted and refactored into ScriptableObjectContainer
+	- Helper: Added ClassDetailsAttribute for specifying details about classes including actions and conditions.
+	- Code cleanup according to best practices
+
+	Game Framework Core - Fixes
+	- GameStructure: Fix for show counter always using Level Counters no matter the type set.
+
+	Game Framework Extras (Extras Bundle) - Improvements
+	- Code cleanup according to best practices
+
+	Game Framework Tutorials (Extras Bundle) - Improvements
+	- Code cleanup according to best practices
+	- Updates for GameFramework improvements
+	- Removed BasicDemo as superceeded by other samples
+
+	PlayMaker Actions for Game Framework (Extras Bundle) - Improvements
+	- Added DialogShow, DialogShowInfo and DialogShowError Actions
+
+	BeautifulTransitions (Extras Bundle):
+	- Code cleanup according to best practices
+
+	Prefs Editor (Extras Bundle): Updated to v2.1 that includes:
+	- Prefs Editor Window: Now supports EditorPrefs
+	- Prefs Editor Window: Added a filter to limit results
+	- Code cleanup according to best practices
 
 v4.5
 

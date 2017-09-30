@@ -266,7 +266,8 @@ namespace GameFramework.Localisation.Editor
         };
 
         // Add menu item for showing the window
-        [MenuItem("Window/Game Framework/Components Help", priority = 1)]
+        //[MenuItem("Window/Game Framework/Components Help", priority = 1)]
+        // Temporarily removed - does this give value? If so needs updating with all components.
         public static void ShowWindow() 
         {
             //Show existing window instance. If one doesn't exist, make one.

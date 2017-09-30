@@ -1,0 +1,38 @@
+
+This document contains information on important steps that you might need to
+take when upgrading Game Framework. If you have issues that are not covered
+by the below then please get in contact via our forums at 
+http://www.flipwebapps.com or send an email to me directly on me a mail 
+directly at mark_a_hewitt@yahoo.co.uk
+
+Check the latest version of this guide online at: 
+https://github.com/FlipWebApps/GameFramework/blob/master/Release%20Notes.txt
+
+GENERAL UPGRADE NOTES
+
+- Before upgrading always take a backup copy of you project so, incase of
+  problems, you have a working baseline and can refer old settings.
+- Delete the old /FlipWebApps folder before upgrading to cater for possible 
+  conflicts. 
+- Read the release notes for an overview of changes.
+	
+VERSION UPGRADE NOTES
+
+v5.0
+
+This version introduces the concept of conditions and actions which improves on
+and makes redundant several existing components. Some of these components 
+remain in place with deprecation warnings, others have been removed / rewritten
+due to not being compatible.
+
+- Several of the old EnableBasedUpon[GameItem] components have been removed as they
+were incompatible with the new API. You should replace these with ConditionalAction
+components, add the action that you want to enable / disable a GameObject based upon
+e.g. Player Score and then as Actions add Hierarcy->SwapGameObjects
+
+- All Old Colliders deprecated in favour of new, more powerful, Collision Handler 
+component. Replace old Collider components with Collision Handler and add actions
+corresponding to the desired behaviour e.g. Player -> Change Coins.
+
+
+Upgrading to V4.5 & Below - See Release Notes.txt for details
