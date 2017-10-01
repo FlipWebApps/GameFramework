@@ -1763,8 +1763,8 @@ MonoBehaviour:
       _isReference: 0
       _className: GameActionPlayAudioClip
       _objectReferences:
-      - {fileID: 8300000, guid: a7aada240edfd524fa1a5766cd9a88ca, type: 3}
-      _data: '{"_delay":0.0,"_audioClip":{"instanceID":41214}}'
+      - {fileID: 8300000, guid: 4692651237ac6764c9dc54f49b5e815d, type: 3}
+      _data: '{"_delay":0.0,"_audioClip":{"instanceID":11342}}'
       _identifier: 0
     _callback:
       m_PersistentCalls:
@@ -1785,14 +1785,15 @@ MonoBehaviour:
       _isReference: 0
       _className: GameActionPlayAudioClip
       _objectReferences:
-      - {fileID: 8300000, guid: a7aada240edfd524fa1a5766cd9a88ca, type: 3}
-      _data: '{"_delay":0.0,"_audioClip":{"instanceID":41214}}'
+      - {fileID: 8300000, guid: 4692651237ac6764c9dc54f49b5e815d, type: 3}
+      _data: '{"_delay":0.0,"_audioClip":{"instanceID":11342}}'
       _identifier: 0
     _callback:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: GameFramework.Helper.UnityEvents.UnityGameObjectEvent, Assembly-CSharp,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _processExit: 0
   _exit:
     _actionReferences: []
     _callback:
