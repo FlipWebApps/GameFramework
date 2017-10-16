@@ -22,7 +22,7 @@
 
 using System;
 #if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+using BeautifulTransitions.Scripts.Transitions;
 #endif
 
 using GameFramework.Display.Other;

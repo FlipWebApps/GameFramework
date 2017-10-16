@@ -22,22 +22,19 @@
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
 
-namespace GameFramework.GameStructure.Game.GameActions.UI
+namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 {
     /// <summary>
-    /// Set the specified Buttons interactable state.
+    /// Base GameAction class that that allows for specifying a target GameObject
     /// </summary>
     [System.Serializable]
-    [ClassDetails("Set Button Interactable State", "UI/Set Button Interactable State", "Set the specified Button's interactable state.")]
-    public class GameActionSetButtonInteractableState : GameAction
+    public abstract class GameActionTarget : GameAction
     {
         /// <summary>
-        /// The target Button
+        /// The target GameObject to act upon
         /// </summary>
-        public Button Target
+        public GameObject Target
         {
             get
             {
@@ -48,65 +45,9 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
                 _target = value;
             }
         }
-        [Tooltip("The target Button")]
+        [Tooltip("The target GameObject to act upon")]
         [SerializeField]
-        Button _target;
-
-        /// <summary>
-        /// The interactable state for the button
-        /// </summary>
-        public bool Interactable
-        {
-            get
-            {
-                return _interactable;
-            }
-            set
-            {
-                _interactable = value;
-            }
-        }
-        [Tooltip("The interactable state for the button")]
-        [SerializeField]
-        bool _interactable;
-
-        /// <summary>
-        /// Whether to animate state changes using Beautiful Transitions DsiaplyItem animation controller.
-        /// </summary>
-        public bool AnimateChanges
-        {
-            get
-            {
-                return _animateChanges;
-            }
-            set
-            {
-                _animateChanges = value;
-            }
-        }
-        [Tooltip("Whether to animate state changes using Beautiful Transitions DsiaplyItem animation controller.")]
-        [SerializeField]
-        bool _animateChanges;
-
-        /// <summary>
-        /// Perform the action
-        /// </summary>
-        /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
-        {
-            Assert.IsNotNull(Target,
-                "Ensure that you specify a Target button when using the 'Set Button Interactable' action.");
-
-            Target.interactable = Interactable;
-            if (AnimateChanges)
-            {
-                Debug.LogWarning("Animation of Button Interactable State changes is only supported if using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.");
-#if BEAUTIFUL_TRANSITIONS
-                BeautifulTransitions.Scripts.DisplayItem.DisplayItemHelper.SetActiveAnimated(monoBehaviour, Target.gameObject, Interactable);
-#else
-#endif
-            }
-        }
+        GameObject _target;
 
         #region IScriptableObjectContainerSyncReferences
 
@@ -117,7 +58,7 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
         public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
             if (objectReferences != null && objectReferences.Length == 1)
-                Target = objectReferences[0] as Button;
+                Target = objectReferences[0] as GameObject;
         }
 
         /// <summary>

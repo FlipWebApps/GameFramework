@@ -45,7 +45,7 @@ using GameFramework.GameStructure.Game.ObjectModel;
 #pragma warning disable 618
 
 #if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions.Components;
+using BeautifulTransitions.Scripts.Transitions.Components;
 #endif
 
 namespace GameFramework.GameStructure

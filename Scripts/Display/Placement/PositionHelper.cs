@@ -97,5 +97,23 @@ namespace GameFramework.Display.Placement
             return point; // return it
         }
 
+        /// <summary>
+        /// Gets the bounds for this and all children based upon their colliders.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <returns></returns>
+        public Bounds GetBoundsFromColliders(GameObject gameObject)
+        {
+            var totalBounds = new Bounds(Vector3.zero, Vector3.zero);
+            foreach (var collider in gameObject.GetComponentsInChildren<Collider>())
+            {
+                if (totalBounds.extents == Vector3.zero)
+                    totalBounds = collider.bounds;
+                else
+                    totalBounds.Encapsulate(collider.bounds);
+            }
+
+            return totalBounds;
+        }
     }
 }

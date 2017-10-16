@@ -23,7 +23,7 @@ using System.Collections;
 using UnityEngine;
 
 #if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+using BeautifulTransitions.Scripts.Transitions;
 #endif
 
 namespace GameFramework.Animation.ObjectModel

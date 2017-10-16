@@ -26,7 +26,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 #if BEAUTIFUL_TRANSITIONS
-using FlipWebApps.BeautifulTransitions.Scripts.Transitions;
+using BeautifulTransitions.Scripts.Transitions;
 #endif
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
