@@ -12,6 +12,15 @@ In case of problems please get in contact.
 
 CHANGE LOG
 
+v5.0.1
+	Game Framework Core - Improvements
+	- Display: GetBoundsFromColliders function
+	- GameStructure: Added GameActionTarget base class
+	- General: Various updates for Beautiful Transitions v5.0
+
+	BeautifulTransitions (Extras Bundle):
+	- Updated to v5.0 (see seperate release notes and upgrade guide)
+
 v5.0
 	Game Framework Core - Improvements
 	- EditorExtras: Added FindTypes and TypeListToNames methods
