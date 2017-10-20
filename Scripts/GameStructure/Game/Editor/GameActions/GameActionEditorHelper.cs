@@ -56,9 +56,8 @@ namespace GameFramework.GameStructure.Game
             {
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField(new GUIContent(heading, tooltip), EditorStyles.boldLabel);
+                EditorGUILayout.Space();
             }
-
-            EditorGUILayout.Space();
 
             actionEditors = GameActionEditorHelper.CheckAndCreateSubEditors(actionEditors, actionReferences, serializedObject, actionsProperty);
 
