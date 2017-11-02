@@ -22,8 +22,11 @@
 using GameFramework.EditorExtras.Editor;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
 
-namespace GameFramework.GameFramework.Editor {
+namespace GameFramework.GameFramework.Editor
+{
 
     /// <summary>
     /// Window displayed on startup to help users get up and running.
@@ -34,13 +37,14 @@ namespace GameFramework.GameFramework.Editor {
         Texture2D _startWindowIcon;
 
         static bool _autoShow;
+        static string _gameFrameworkRootFolder;
 
         const string AutoShowPrefsKey = "GameFramework.StartupWindow.AutoShow";
         const int WindowWidth = 300;
         const int WindowHeight = 340;
 
         // Add menu item
-        [MenuItem("Window/Game Framework/Startup Window", priority=1)]
+        [MenuItem("Window/Game Framework/Startup Window", priority = 1)]
         public static void ShowWindow()
         {
             var window = GetWindow<StartupWindow>(true, "Startup Window", true);
@@ -55,7 +59,7 @@ namespace GameFramework.GameFramework.Editor {
         static StartupWindow()
         {
             EditorApplication.update += Update;
-        } 
+        }
 
         /// <summary>
         /// Perform startup check to show window 1 time only.
@@ -77,7 +81,11 @@ namespace GameFramework.GameFramework.Editor {
 
         void OnEnable()
         {
-            _startWindowIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\StartWindow\StartWindow.png", typeof(Texture2D)) as Texture2D;
+            string basePathToStartWindowIcon = FindGameFrameworkRootFolder();
+            string relativePathToStartWindowIcon = @"\Sprites\StartWindow\StartWindow.png";
+            string pathTostartWindowIcon = string.Concat(basePathToStartWindowIcon, relativePathToStartWindowIcon);
+
+            _startWindowIcon = AssetDatabase.LoadAssetAtPath(pathTostartWindowIcon, typeof(Texture2D)) as Texture2D;
         }
 
         void OnGUI()
@@ -118,6 +126,37 @@ namespace GameFramework.GameFramework.Editor {
                 _autoShow = newAutoShow;
                 EditorPrefs.SetBool(AutoShowPrefsKey, _autoShow);
             }
+        }
+
+        string FindGameFrameworkRootFolder()
+        {
+            //perform BFS to find GameFramework folder
+            //source: https://stackoverflow.com/a/7296966/3183423 but heavily modified
+
+            string currentPath = @"Assets";
+            Queue<string> queue = new Queue<string>();
+            queue.Enqueue(currentPath);
+            bool found = false;
+
+            while (!found && queue.Count > 0)
+            {
+                currentPath = queue.Dequeue();
+
+                if (currentPath.EndsWith(@"GameFramework"))
+                {
+                    found = true;
+                    break;
+                }
+
+                string[] subPaths = Directory.GetDirectories(currentPath);
+
+                foreach (string subPath in subPaths)
+                {
+                    queue.Enqueue(subPath);
+                }
+            }
+
+            return currentPath;
         }
     }
 }
