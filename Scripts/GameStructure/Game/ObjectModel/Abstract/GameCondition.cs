@@ -48,6 +48,15 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         protected virtual void Initialise() { }
 
         /// <summary>
+        /// Override this method to returna custom name for use in the editor
+        /// </summary>
+        /// <returns></returns>
+        public string AutoName()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
         /// </summary>
         /// The base implementation returns UpdateMessage so that this will be evaluated every frame.
