@@ -401,6 +401,7 @@ namespace GameFramework.UI.Dialogs.Components
         public void FacebookShare()
         {
 #if FACEBOOK_SDK
+            Assert.IsTrue(FacebookManager.IsActive, "Please ensure that you have a FacebookManager component added to your scene.");
             FacebookManager.Instance.ShareLink();
 #endif
         }
