@@ -37,7 +37,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.Player
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
+        public override bool Evaluate()
         {
             Assert.IsTrue(GameManager.IsActive, "To use the Player Score Condition, ensure that you have a GameManager added to your scene.");
             Assert.IsNotNull(GameManager.Instance.Players, "To use the Player Score Game Condition, ensure that you have configured Players to be setup in your scene.");

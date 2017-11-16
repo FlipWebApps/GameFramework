@@ -37,7 +37,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.GameItem
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
+        public override bool Evaluate()
         {
             var gameItem = GameItem;
             if (gameItem)

@@ -18,6 +18,17 @@ GENERAL UPGRADE NOTES
 	
 VERSION UPGRADE NOTES
 
+v5.1
+- GameAction and GameCondition API improvements. Note the following changes that
+you might need to rename for:
+  InitialiseCommon() -> InitialiseInternal(Monobehaviour owner)
+  EvaluateConditionCommon(MonoBehaviour monoBehaviour) -> Evaluate()
+  EvaluateCondition(MonoBehaviour monoBehaviour) -> Evaluate()
+  PerformActionCommon(MonoBehaviour monoBehaviour, bool isStart) -> ExecuteInternal(bool isStart)
+  PerformAction(MonoBehaviour monoBehaviour, bool isStart) -> Execute(bool isStart)
+  Owner property exposed for access to containing Monobehaviour
+
+
 v5.0
 
 This version introduces the concept of conditions and actions which improves on

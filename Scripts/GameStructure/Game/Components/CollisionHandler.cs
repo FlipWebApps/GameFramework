@@ -229,9 +229,9 @@ namespace GameFramework.GameStructure.Game.Components
 
         void Start()
         {
-            GameActionHelper.InitialiseGameActions(Enter.ActionReferences);
-            GameActionHelper.InitialiseGameActions(Within.ActionReferences);
-            GameActionHelper.InitialiseGameActions(Exit.ActionReferences);
+            GameActionHelper.InitialiseGameActions(Enter.ActionReferences, this);
+            GameActionHelper.InitialiseGameActions(Within.ActionReferences, this);
+            GameActionHelper.InitialiseGameActions(Exit.ActionReferences, this);
         }
 
         #region Trigger / Collision Monobehaviour Methods
@@ -403,7 +403,7 @@ namespace GameFramework.GameStructure.Game.Components
         /// <param name="collidingGameObject"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
-            GameActionHelper.PerformActions(triggerData.ActionReferences, this, false);
+            GameActionHelper.ExecuteGameActions(triggerData.ActionReferences, false);
             triggerData.Callback.Invoke(collidingGameObject);
         }
 

@@ -92,7 +92,7 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        protected override void Execute(bool isStart)
         {
             Assert.IsNotNull(Target,
                 "Ensure that you specify a Target button when using the 'Set Button Interactable' action.");
@@ -102,7 +102,7 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
             {
                 Debug.LogWarning("Animation of Button Interactable State changes is only supported if using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.");
 #if BEAUTIFUL_TRANSITIONS
-                BeautifulTransitions.Scripts.DisplayItem.DisplayItemHelper.SetActiveAnimated(monoBehaviour, Target.gameObject, Interactable);
+                BeautifulTransitions.Scripts.DisplayItem.DisplayItemHelper.SetActiveAnimated(Owner, Target.gameObject, Interactable);
 #else
 #endif
             }

@@ -44,14 +44,21 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         [SerializeField]
         float _delay;
 
+        /// <summary>
+        /// The MonoBehaviour that contains this GameAction.
+        /// </summary>
+        protected MonoBehaviour Owner;
+
         WaitForSeconds _waitForSeconds;
 
         /// <summary>
-        /// Perform any common initialisation for all GameActions before invoking Initialise
+        /// Perform any internal initialisation for all GameActions before invoking Initialise
         /// </summary>
         /// <returns></returns>
-        public void InitialiseCommon()
+        public void InitialiseInternal(MonoBehaviour owner)
         {
+            Owner = owner;
+
             if (!Mathf.Approximately(0, Delay))
                 _waitForSeconds = new WaitForSeconds(Delay);
 
@@ -64,8 +71,40 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <returns></returns>
         protected virtual void Initialise() { }
 
+
         /// <summary>
-        /// Override this method to returna custom name for use in the editor
+        /// Perform all internal things for the GameAction before invoking PerformAction
+        /// </summary>
+        /// <returns></returns>
+        public void ExecuteInternal(bool isStart)
+        {
+            if (_waitForSeconds != null)
+                Owner.StartCoroutine(ExecuteCoroutine(isStart));
+            else
+                Execute(isStart);
+        }
+
+
+        /// <summary>
+        /// Coroutine to wait a specified number of seconds before callind PerformAction()
+        /// </summary>
+        /// <returns></returns>
+        protected System.Collections.IEnumerator ExecuteCoroutine(bool isStart)
+        {
+            yield return _waitForSeconds;
+            Execute(isStart);
+        }
+
+
+        /// <summary>
+        /// Implement this method to perform the actual action.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract void Execute(bool isStart);
+
+
+        /// <summary>
+        /// Override this method if you want to return a custom name for use in the editor
         /// </summary>
         /// <returns></returns>
         public string AutoName()
@@ -73,34 +112,6 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
             return null;
         }
 
-        /// <summary>
-        /// Perform all common things for the GameAction before invoking PerformAction
-        /// </summary>
-        /// <returns></returns>
-        public void PerformActionCommon(MonoBehaviour monoBehaviour, bool isStart)
-        {
-            if (_waitForSeconds != null)
-                monoBehaviour.StartCoroutine(ActionCoroutine(monoBehaviour, isStart));
-            else
-                PerformAction(monoBehaviour, isStart);
-        }
-
-        /// <summary>
-        /// Coroutine to wait a specified number of seconds before callind PerformAction()
-        /// </summary>
-        /// <returns></returns>
-        protected System.Collections.IEnumerator ActionCoroutine(MonoBehaviour monoBehaviour, bool isStart)
-        {
-            yield return _waitForSeconds;
-            if (monoBehaviour != null)  // check is still valid
-                PerformAction(monoBehaviour, isStart);
-        }
-
-        /// <summary>
-        /// Implement this method to perform the actual action.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract void PerformAction(MonoBehaviour monoBehaviour, bool isStart);
 
         #region IScriptableObjectContainerSyncReferences
 

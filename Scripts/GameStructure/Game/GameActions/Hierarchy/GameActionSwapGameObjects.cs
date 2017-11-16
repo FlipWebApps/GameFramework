@@ -79,12 +79,12 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        protected override void Execute(bool isStart)
         {
             if (isStart)
                 GameObjectToGameObjectAnimation.SwapImmediately(SwitchFrom, SwitchTo);
             else
-                GameObjectToGameObjectAnimation.AnimatedSwap(monoBehaviour, SwitchFrom, SwitchTo);
+                GameObjectToGameObjectAnimation.AnimatedSwap(Owner, SwitchFrom, SwitchTo);
         }
 
         #region IScriptableObjectContainerSyncReferences

@@ -72,13 +72,13 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        protected override void Execute(bool isStart)
         {
 
 #if PRO_POOLING
             if (!string.IsNullOrEmpty(PoolName))
                 global::ProPooling.PoolManager.Instance.GetFromPool(PoolName, 
-                    Location == null ? monoBehaviour.transform.position : Location.position,
+                    Location == null ? Owner.transform.position : Location.position,
                     Location == null ? Quaternion.identity : Location.rotation);
 #endif
         }

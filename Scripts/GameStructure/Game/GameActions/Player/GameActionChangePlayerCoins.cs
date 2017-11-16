@@ -55,7 +55,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Player
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        protected override void Execute(bool isStart)
         {
             Assert.IsTrue(GameManager.IsActive, "To use the Change Player Coins Action, ensure that you have a GameManager added to your scene.");
             GameManager.Instance.Player.AddCoins(Amount);

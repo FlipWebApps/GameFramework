@@ -100,9 +100,9 @@ namespace GameFramework.GameStructure.Game.Components
         /// </summary>
         protected void Start()
         {
-            GameConditionHelper.InitialiseGameConditions(_conditionReferences);
-            GameActionHelper.InitialiseGameActions(_actionReferencesConditionMet);
-            GameActionHelper.InitialiseGameActions(_actionReferencesConditionNotMet);
+            GameConditionHelper.InitialiseGameConditions(_conditionReferences, this);
+            GameActionHelper.InitialiseGameActions(_actionReferencesConditionMet, this);
+            GameActionHelper.InitialiseGameActions(_actionReferencesConditionNotMet, this);
 
             GameConditionHelper.AddListeners(_conditionReferences, EvaluateConditionChanges);
 
@@ -144,11 +144,11 @@ namespace GameFramework.GameStructure.Game.Components
 
                 if (_isConditionMet)
                 {
-                    GameActionHelper.PerformActions(_actionReferencesConditionMet, this, isStart);
+                    GameActionHelper.ExecuteGameActions(_actionReferencesConditionMet, isStart);
                 }
                 else
                 {
-                    GameActionHelper.PerformActions(_actionReferencesConditionNotMet, this, isStart);
+                    GameActionHelper.ExecuteGameActions(_actionReferencesConditionNotMet, isStart);
                 }
             }
         }

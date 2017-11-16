@@ -108,19 +108,19 @@ namespace GameFramework.GameStructure.Game
         /// Initialise gameConditions
         /// </summary>
         /// <returns></returns>
-        public static void InitialiseGameConditions(IEnumerable<GameConditionReference> gameConditionReferences)
+        public static void InitialiseGameConditions(IEnumerable<GameConditionReference> gameConditionReferences, MonoBehaviour owner)
         {
             foreach (var gameConditionReference in gameConditionReferences)
             {
                 if (gameConditionReference.IsReference)
                 {
                     if (gameConditionReference != null)
-                        gameConditionReference.ScriptableObjectReference.InitialiseCommon();
+                        gameConditionReference.ScriptableObjectReference.InitialiseInternal(owner);
                 }
                 else
                 {
                     var gameCondition = gameConditionReference.ScriptableObject;
-                    gameCondition.InitialiseCommon();
+                    gameCondition.InitialiseInternal(owner);
                 }
             }
         }
@@ -172,12 +172,12 @@ namespace GameFramework.GameStructure.Game
                 if (gameConditionReference.IsReference)
                 {
                     if (gameConditionReference != null)
-                        conditionsAreAllTrue &= gameConditionReference.ScriptableObjectReference.EvaluateConditionCommon(monoBehaviour);
+                        conditionsAreAllTrue &= gameConditionReference.ScriptableObjectReference.Evaluate();
                 }
                 else
                 {
                     var gameCondition = gameConditionReference.ScriptableObject;
-                    conditionsAreAllTrue &= gameCondition.EvaluateConditionCommon(monoBehaviour);
+                    conditionsAreAllTrue &= gameCondition.Evaluate();
                 }
             }
             return conditionsAreAllTrue;
