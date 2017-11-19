@@ -41,9 +41,9 @@ namespace GameFramework.GameStructure.Levels.Components
         /// </summary>
         public override void Start()
         {
-            Assert.IsTrue(GameManager.IsActive, "You need to add a LevelManager to your scene to be able to use ShowCoins.");
+            Assert.IsTrue(GameManager.IsActive, "You need to add a GameManager to your scene to be able to use ShowCoins.");
 
-            _level = LevelManager.Instance.Level;
+            _level = GameManager.Instance.Levels.Selected;
             base.Start();
         }
 

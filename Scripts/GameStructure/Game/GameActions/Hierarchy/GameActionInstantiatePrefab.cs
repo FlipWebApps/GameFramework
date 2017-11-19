@@ -85,8 +85,12 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// <param name="objectReferences"></param>
         public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
         {
-            if (objectReferences != null && objectReferences.Length == 1)
-                Prefab = objectReferences[0] as GameObject;
+            if (objectReferences != null) {
+                if (objectReferences.Length >= 1)
+                    Prefab = objectReferences[0] as GameObject;
+                if (objectReferences.Length >= 2)
+                    Location = objectReferences[1] as Transform;
+            }
         }
 
         /// <summary>
@@ -94,8 +98,9 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// </summary>
         public override UnityEngine.Object[] GetReferencesForContainer()
         {
-            var objectReferences = new Object[1];
+            var objectReferences = new Object[2];
             objectReferences[0] = Prefab;
+            objectReferences[1] = Location;
             return objectReferences;
         }
     }

@@ -19,56 +19,48 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.Helper;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-namespace GameFramework.Display.Placement.Components
+namespace GameFramework.GameStructure.Game.GameActions.Player
 {
     /// <summary>
-    /// Maintain a fixed distance from the specified transform
+    /// GameAction class that changes the players lives
     /// </summary>
-    [AddComponentMenu("Game Framework/Display/Placement/MoveWithTransform")]
-    [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/display/")]
-    public class MoveWithTransform : MonoBehaviour
+    [System.Serializable]
+    [ClassDetails("Player: Change Lives", "Player/Change Lives", "Increase or decrease the currently running players lives.")]
+    public class GameActionChangePlayerLives : GameAction
     {
         /// <summary>
-        /// A transform that this gameobject will follow.
+        /// An amount that specifies how many lives to change by. Put a minus value to decrease.
         /// </summary>
-        [Tooltip("A transform that this gameobject will follow.")]
-        public Transform Target;
+        public int Amount
+        {
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                _amount = value;
+            }
+        }
+        [Tooltip("An amount that specifies how many lives to change by. Put a minus value to decrease.")]
+        [SerializeField]
+        int _amount = -1;
 
         /// <summary>
-        /// The Speed with which to follow the Target.
+        /// Perform the action
         /// </summary>
-        [Tooltip("The Speed with which to follow the Target.")]
-        public float Smoothing = 5f;
-
-        public bool FreezeX = false;
-
-        public bool FreezeY = false;
-
-        public bool FreezeZ = false;
-
-        Vector3 _offset;                     // The initial offset from the target.
-
-
-        void Start ()
+        /// <returns></returns>
+        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
         {
-            // Calculate the initial offset.
-            _offset = transform.position - Target.position;
-        }
-
-
-        void FixedUpdate ()
-        {
-            if (Target != null)
-            {
-                var target = new Vector3(FreezeX ? transform.position.x : Target.position.x, 
-                    FreezeY ? transform.position.y : Target.position.y,
-                    FreezeZ ? transform.position.z : Target.position.z);
-
-                // Smoothly interpolate between the current position and target position.
-                transform.position = Vector3.Lerp(transform.position, target + _offset, Smoothing * Time.deltaTime);
-            }
+            Assert.IsTrue(GameManager.IsActive, "To use the Change Player Health Action, ensure that you have a GameManager added to your scene.");
+            Debug.Log(GameManager.Instance.Player.Lives + " " + Amount);
+            GameManager.Instance.Player.Lives += Amount;
+            Debug.Log(GameManager.Instance.Player.Lives + " " + Amount);
         }
     }
 }
