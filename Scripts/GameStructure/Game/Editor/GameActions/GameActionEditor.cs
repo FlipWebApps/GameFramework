@@ -31,6 +31,10 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
     [CustomEditor(typeof(GameAction), true)]
     public class GameActionEditor : UnityEditor.Editor
     {
+        // enum and property so we can show different options to reference 'another gameobject' such as othercollider.
+        public enum EditorModeType { General, Collier }
+        public EditorModeType EditorMode;
+
         public IScriptableObjectContainerReferences Container;
         public SerializedObject ContainerSerializedObject;
         public SerializedProperty DataProperty; // Needed to ensure configuration string gets updated.

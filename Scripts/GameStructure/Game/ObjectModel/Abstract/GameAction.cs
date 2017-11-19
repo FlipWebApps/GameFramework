@@ -45,9 +45,14 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         float _delay;
 
         /// <summary>
-        /// The MonoBehaviour that contains this GameAction.
+        /// The runtime MonoBehaviour that contains this GameAction.
         /// </summary>
         protected MonoBehaviour Owner;
+
+        /// <summary>
+        /// An optional runtime reference to 'another' Object (e.g. otherCollider for collisions).
+        /// </summary>
+        public Object OtherObject { get; set; }
 
         WaitForSeconds _waitForSeconds;
 

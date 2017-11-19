@@ -403,7 +403,7 @@ namespace GameFramework.GameStructure.Game.Components
         /// <param name="collidingGameObject"></param>
         void ProcessTriggerData(TriggerData triggerData, GameObject collidingGameObject)
         {
-            GameActionHelper.ExecuteGameActions(triggerData.ActionReferences, false);
+            GameActionHelper.ExecuteGameActions(triggerData.ActionReferences, false, collidingGameObject);
             triggerData.Callback.Invoke(collidingGameObject);
         }
 

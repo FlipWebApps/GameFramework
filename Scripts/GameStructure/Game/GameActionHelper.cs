@@ -61,23 +61,22 @@ namespace GameFramework.GameStructure.Game
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart)
+        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart, Object otherObject = null)
         {
             foreach (var actionReference in actionReferences)
             {
                 if (actionReference.IsReference)
                 {
-                    if (actionReference != null)
+                    if (actionReference.ScriptableObjectReference != null)
+                    {
+                        actionReference.ScriptableObjectReference.OtherObject = otherObject;
                         actionReference.ScriptableObjectReference.ExecuteInternal(isStart);
+                    }
                 }
                 else
                 {
                     var action = actionReference.ScriptableObject;
-                    //var actionDelayed = action as GameActionDelayed;
-
-                    //if (actionDelayed)
-                    //    actionDelayed.PerformActionCommon(monoBehaviour);
-                    //else
+                    actionReference.ScriptableObject.OtherObject = otherObject;
                     action.ExecuteInternal(isStart);
                 }
             }
