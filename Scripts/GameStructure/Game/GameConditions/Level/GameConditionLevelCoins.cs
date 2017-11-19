@@ -37,7 +37,7 @@ namespace GameFramework.GameStructure.Game.GameConditions.Level
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public override bool EvaluateCondition(MonoBehaviour monoBehaviour)
+        public override bool Evaluate()
         {
             Assert.IsTrue(GameManager.IsActive, "To use the Level Coins Condition, ensure that you have a GameManager added to your scene.");
             Assert.IsNotNull(GameManager.Instance.Levels, "To use the Level Coins Game Condition, ensure that you have configured Levels to be setup in your scene.");

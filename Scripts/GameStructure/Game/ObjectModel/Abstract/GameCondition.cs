@@ -31,21 +31,29 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
     [System.Serializable]
     public abstract class GameCondition : ScriptableObject, IScriptableObjectContainerSyncReferences
     {
+        /// <summary>
+        /// The MonoBehaviour that contains this GameAction.
+        /// </summary>
+        protected MonoBehaviour Owner;
+
 
         /// <summary>
-        /// Perform any common initialisation for all Conditions before invoking Initialise
+        /// Perform any internal initialisation for all Conditions before invoking Initialise
         /// </summary>
         /// <returns></returns>
-        public void InitialiseCommon()
+        public void InitialiseInternal(MonoBehaviour owner)
         {
+            Owner = owner;
             Initialise();
         }
+
 
         /// <summary>
         /// Override this method if you need to do any specific initialisation for the Conditions implementation.
         /// </summary>
         /// <returns></returns>
         protected virtual void Initialise() { }
+
 
         /// <summary>
         /// Override this method to returna custom name for use in the editor
@@ -55,6 +63,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         {
             return null;
         }
+
 
         /// <summary>
         /// Returns messages types that should be listened to that might indicate this condition needs reevaluating.
@@ -66,20 +75,12 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
             return new[] { typeof(UpdateMessage) };
         }
 
-        /// <summary>
-        /// Perform all common things for the Condition before invoking EvaluateCondition
-        /// </summary>
-        /// <returns></returns>
-        public bool EvaluateConditionCommon(MonoBehaviour monoBehaviour)
-        {
-            return EvaluateCondition(monoBehaviour);
-        }
 
         /// <summary>
         /// Evaluate the current condition
         /// </summary>
         /// <returns></returns>
-        public abstract bool EvaluateCondition(MonoBehaviour monoBehaviour);
+        public abstract bool Evaluate();
 
 
         #region IScriptableObjectContainerSyncReferences

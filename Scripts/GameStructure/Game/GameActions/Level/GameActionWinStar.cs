@@ -56,7 +56,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Level
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        protected override void PerformAction(MonoBehaviour monoBehaviour, bool isStart)
+        protected override void Execute(bool isStart)
         {
             Assert.IsTrue(LevelManager.IsActive, "To use the Win Star Action, ensure that you have a LevelManager added to your scene.");
             LevelManager.Instance.Level.StarWon(StarNumber, true);

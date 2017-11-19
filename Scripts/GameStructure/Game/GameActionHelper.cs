@@ -34,14 +34,14 @@ namespace GameFramework.GameStructure.Game
         /// Initialise actions
         /// </summary>
         /// <returns></returns>
-        public static void InitialiseGameActions(IEnumerable<GameActionReference> gameActionReferences)
+        public static void InitialiseGameActions(IEnumerable<GameActionReference> gameActionReferences, MonoBehaviour owner)
         {
             foreach (var actionReference in gameActionReferences)
             {
                 if (actionReference.IsReference)
                 {
-                    if (actionReference != null)
-                        actionReference.ScriptableObjectReference.InitialiseCommon();
+                    if (actionReference.ScriptableObjectReference != null)
+                        actionReference.ScriptableObjectReference.InitialiseInternal(owner);
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace GameFramework.GameStructure.Game
                     //if (actionDelayed)
                     //    actionDelayed.InitialiseCommon();
                     //else
-                    action.InitialiseCommon();
+                    action.InitialiseInternal(owner);
                 }
             }
         }
@@ -61,14 +61,14 @@ namespace GameFramework.GameStructure.Game
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        public static void PerformActions(IEnumerable<GameActionReference> actionReferences, MonoBehaviour monoBehaviour, bool isStart)
+        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart)
         {
             foreach (var actionReference in actionReferences)
             {
                 if (actionReference.IsReference)
                 {
                     if (actionReference != null)
-                        actionReference.ScriptableObjectReference.PerformActionCommon(monoBehaviour, isStart);
+                        actionReference.ScriptableObjectReference.ExecuteInternal(isStart);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace GameFramework.GameStructure.Game
                     //if (actionDelayed)
                     //    actionDelayed.PerformActionCommon(monoBehaviour);
                     //else
-                    action.PerformActionCommon(monoBehaviour, isStart);
+                    action.ExecuteInternal(isStart);
                 }
             }
         }
