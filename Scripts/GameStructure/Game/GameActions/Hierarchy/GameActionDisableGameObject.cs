@@ -30,57 +30,20 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
     /// </summary>
     [System.Serializable]
     [ClassDetails("Disable GameObject", "Hierarchy/Disable GameObject", "Disable the specified GameObject.")]
-    public class GameActionDisableGameObject : GameAction
+    public class GameActionDisableGameObject : GameActionTarget
     {
-        /// <summary>
-        /// The GameObject to disable
-        /// </summary>
-        public GameObject Target
-        {
-            get
-            {
-                return _target;
-            }
-            set
-            {
-                _target = value;
-            }
-        }
-        [Tooltip("The GameObject to disable")]
-        [SerializeField]
-        GameObject _target;
-
         /// <summary>
         /// Perform the action
         /// </summary>
         /// <returns></returns>
         protected override void Execute(bool isStart)
         {
-            Target.SetActive(false);
+            var targetFinal = GameActionHelper.ResolveTarget(TargetType, this, Target);
+            if (targetFinal == null) Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
+            if (targetFinal != null)
+            {
+                targetFinal.SetActive(false);
+            }
         }
-
-        #region IScriptableObjectContainerSyncReferences
-
-        /// <summary>
-        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
-        /// </summary>
-        /// <param name="objectReferences"></param>
-        public override void SetReferencesFromContainer(UnityEngine.Object[] objectReferences)
-        {
-            if (objectReferences != null && objectReferences.Length == 1)
-                Target = objectReferences[0] as GameObject;
-        }
-
-        /// <summary>
-        /// Workaround for ObjectReference issues with ScriptableObjects (See ScriptableObjectContainer for details)
-        /// </summary>
-        public override UnityEngine.Object[] GetReferencesForContainer()
-        {
-            var objectReferences = new Object[1];
-            objectReferences[0] = Target;
-            return objectReferences;
-        }
-
-        #endregion IScriptableObjectContainerSyncReferences
     }
 }

@@ -19,32 +19,25 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using GameFramework.GameStructure.Game.ObjectModel.Abstract;
-using GameFramework.Helper;
-using UnityEngine;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.Game.GameActions.Hierarchy;
+using UnityEditor;
+using System.Collections.Generic;
 
-namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    /// <summary>
-    /// Enable the specified GameObject
-    /// </summary>
-    [System.Serializable]
-    [ClassDetails("Enable GameObject", "Hierarchy/Enable GameObject", "Enable the specified GameObject.")]
-    public class GameActionEnableGameObject : GameActionTarget
+    [CustomEditor(typeof(GameActionInstantiatePrefab))]
+    public class GameActionInstantiatePrefabEditor : GameActionEditor
     {
         /// <summary>
-        /// Perform the action
+        /// Draw the Editor GUI
         /// </summary>
-        /// <returns></returns>
-        protected override void Execute(bool isStart)
+        protected override void DrawGUI()
         {
-            var targetFinal = GameActionHelper.ResolveTarget(TargetType, this, Target);
-            if (targetFinal == null) Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
-            if (targetFinal != null)
-            {
-                targetFinal.SetActive(true);
-            }
-        }
+            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameActionInstantiatePrefabEditor", "Consider also the Pro Pooling actions to get a performance boost from reusable items. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
 
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_delay", "_prefab" });
+            ShowTargetTypeProperty(serializedObject, "_locationTargetType", "_location", "Location");
+        }
     }
 }

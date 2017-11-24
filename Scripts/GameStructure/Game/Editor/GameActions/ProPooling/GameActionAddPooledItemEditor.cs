@@ -20,21 +20,30 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.Hierarchy;
+using GameFramework.GameStructure.Game.GameActions.ProPooling;
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
+namespace GameFramework.GameStructure.Game.Editor.GameActions.ProPooling
 {
-    [CustomEditor(typeof(GameActionEnableGameObject))]
-    public class EnableGameObjectGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(GameActionAddPooledItem))]
+    public class GameActionAddPooledItemEditor : GameActionEditor
     {
         /// <summary>
         /// Draw the Editor GUI
         /// </summary>
         protected override void DrawGUI()
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.EnableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+#if !PRO_POOLING
+            EditorGUILayout.HelpBox("Speed up your game by using the Pro Pooling asset. See the Menu | Window | Game Framework | Integrations Window for more information.", MessageType.Warning);
+            GUI.enabled = false;
+#endif
+
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_delay", "_poolName" });
+            ShowTargetTypeProperty(serializedObject, "_locationTargetType", "_location", "Location");
+
+            GUI.enabled = true;
         }
     }
 }

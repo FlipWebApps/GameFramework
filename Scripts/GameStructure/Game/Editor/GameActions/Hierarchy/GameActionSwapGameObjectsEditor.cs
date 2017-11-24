@@ -20,45 +20,25 @@
 //----------------------------------------------
 
 using GameFramework.EditorExtras.Editor;
-using GameFramework.GameStructure.Game.GameActions.UI;
-using System.Collections.Generic;
+using GameFramework.GameStructure.Game.GameActions.Hierarchy;
 using UnityEditor;
-using UnityEngine;
+using System.Collections.Generic;
 
-namespace GameFramework.GameStructure.Game.Editor.GameActions.UI
+namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    [CustomEditor(typeof(GameActionSetButtonInteractableState))]
-    public class SetButtonInteractableStateGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(GameActionSwapGameObjects))]
+    public class GameActionSwapGameObjectsEditor : GameActionEditor
     {
-        SerializedProperty _animateChangesProperty;
-
-        /// <summary>
-        /// Get a reference to properties
-        /// </summary>
-        protected override void Initialise()
-        {
-            _animateChangesProperty = serializedObject.FindProperty("_animateChanges");
-        }
-
         /// <summary>
         /// Draw the Editor GUI
         /// </summary>
         protected override void DrawGUI()
         {
-#if BEAUTIFUL_TRANSITIONS
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.SetButtonInteractableStateGameActionEditor", "To animate state changes you need to have an animation added to your button's GameObject that uses the Beautiful Transitions DisplayItem Animation Controller as a base. See the Beautiful Transitions Display Item demo and online help for further details.", HideableHelpRect);
-#else
-            EditorGUILayout.HelpBox("Make your game more professional by adding the Beautiful Transitions asset to animate Button Interactable State changes. See the Menu | Window | Game Framework | Integrations Window for more information.", MessageType.Warning);
-#endif
+            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.GameActionInstantiatePrefabEditor", "Consider also the Pro Pooling actions to get a performance boost from reusable items. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
 
-
-            EditorHelper.DrawDefaultInspector(serializedObject, new List<string>() { "m_Script", "_animateChanges" });
-
-#if !BEAUTIFUL_TRANSITIONS
-            GUI.enabled = false;
-#endif
-            EditorGUILayout.PropertyField(_animateChangesProperty);
-            GUI.enabled = true;
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_delay"});
+            ShowTargetTypeProperty(serializedObject, "_switchFromTargetType", "_switchFrom", "Switch From");
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_switchTo", "GameObjectToGameObjectAnimation" });
         }
     }
 }

@@ -22,19 +22,22 @@
 using GameFramework.EditorExtras.Editor;
 using GameFramework.GameStructure.Game.GameActions.Hierarchy;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    [CustomEditor(typeof(GameActionDisableGameObject))]
-    public class DisableGameObjectGameActionEditor : GameActionEditor
+    [CustomEditor(typeof(GameActionEnableGameObject))]
+    public class GameActionEnableGameObjectEditor : GameActionEditor
     {
         /// <summary>
         /// Draw the Editor GUI
         /// </summary>
         protected override void DrawGUI()
         {
-            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.DisableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
-            base.DrawGUI();
+            HideableHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.GameStructure.EnableGameObjectGameActionEditor", "See also the 'Swap GameObjects' action for switching between different GameObjects with optional animation. Animating / Transitioning Out of a GameObject is also supported when using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.", HideableHelpRect);
+
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_delay" });
+            ShowTargetTypeProperty(TargetTypeProperty, TargetProperty, "Target");
         }
     }
 }

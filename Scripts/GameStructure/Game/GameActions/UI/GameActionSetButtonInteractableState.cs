@@ -35,6 +35,25 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
     public class GameActionSetButtonInteractableState : GameAction
     {
         /// <summary>
+        /// What Button to target.
+        /// </summary>
+        public GameActionHelper.TargetType TargetType
+        {
+            get
+            {
+                return _targetType;
+            }
+            set
+            {
+                _targetType = value;
+            }
+        }
+        [Tooltip("What Button to target.")]
+        [SerializeField]
+        GameActionHelper.TargetType _targetType = GameActionHelper.TargetType.ThisGameObject;
+
+
+        /// <summary>
         /// The target Button
         /// </summary>
         public Button Target
@@ -88,21 +107,34 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
         [SerializeField]
         bool _animateChanges;
 
+
+        Button _cachedFinalTarget;
+
+
         /// <summary>
         /// Perform the action
         /// </summary>
         /// <returns></returns>
         protected override void Execute(bool isStart)
         {
-            Assert.IsNotNull(Target,
+            // use cached version unless target could be dynamic (TargetType.CollidingGameObject)
+            var targetFinal = _cachedFinalTarget;
+            if (targetFinal == null)
+            {
+                targetFinal = GameActionHelper.ResolveTarget<Button>(TargetType, this, Target);
+                if (TargetType != GameActionHelper.TargetType.CollidingGameObject)
+                    _cachedFinalTarget = targetFinal;
+            }
+
+            Assert.IsNotNull(targetFinal,
                 "Ensure that you specify a Target button when using the 'Set Button Interactable' action.");
 
-            Target.interactable = Interactable;
+            targetFinal.interactable = Interactable;
             if (AnimateChanges)
             {
                 Debug.LogWarning("Animation of Button Interactable State changes is only supported if using the Beautiful Transitions asset. See the Menu | Window | Game Framework | Integrations Window for more information.");
 #if BEAUTIFUL_TRANSITIONS
-                BeautifulTransitions.Scripts.DisplayItem.DisplayItemHelper.SetActiveAnimated(Owner, Target.gameObject, Interactable);
+                BeautifulTransitions.Scripts.DisplayItem.DisplayItemHelper.SetActiveAnimated(Owner, targetFinal.gameObject, Interactable);
 #else
 #endif
             }

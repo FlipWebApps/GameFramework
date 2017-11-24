@@ -50,6 +50,26 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         [SerializeField]
         GameObject _prefab;
 
+
+        /// <summary>
+        /// What target to use for the location.
+        /// </summary>
+        public GameActionHelper.TargetType LocationTargetType
+        {
+            get
+            {
+                return _locationTargetType;
+            }
+            set
+            {
+                _locationTargetType = value;
+            }
+        }
+        [Tooltip("What target to use for the location.")]
+        [SerializeField]
+        GameActionHelper.TargetType _locationTargetType = GameActionHelper.TargetType.ThisGameObject;
+
+
         /// <summary>
         /// A Transform that defines where to instantiate the prefab
         /// </summary>
@@ -74,8 +94,13 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// <returns></returns>
         protected override void Execute(bool isStart)
         {
-            if (Prefab != null && Location != null)
-                Instantiate(Prefab, Location.position, Location.rotation);
+            // use cached version unless target could be dynamic (TargetType.CollidingGameObject)
+            var transformFinal = GameActionHelper.ResolveTarget<Transform>(LocationTargetType, this, Location);
+            if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
+            if (Prefab != null && transformFinal != null)
+            {
+                    Instantiate(Prefab, Location.position, Location.rotation);
+            }
         }
 
 

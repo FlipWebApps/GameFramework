@@ -31,16 +31,17 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
     [CustomEditor(typeof(GameAction), true)]
     public class GameActionEditor : UnityEditor.Editor
     {
-        // enum and property so we can show different options to reference 'another gameobject' such as othercollider.
-        public enum EditorModeType { General, Collier }
-        public EditorModeType EditorMode;
-
+        public GameActionEditorHelper.GameActionEditorOption Options;
         public IScriptableObjectContainerReferences Container;
         public SerializedObject ContainerSerializedObject;
         public SerializedProperty DataProperty; // Needed to ensure configuration string gets updated.
         public SerializedProperty ObjectReferencesProperty;
 
         protected SerializedProperty DelayProperty;
+
+        // shortcut to common optional properties
+        protected SerializedProperty TargetTypeProperty;
+        protected SerializedProperty TargetProperty;
 
         protected Rect HideableHelpRect;    // incase anybase classed need to show help.
 
@@ -51,6 +52,10 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
         {
             _action = (GameAction)target;
             DelayProperty = serializedObject.FindProperty("_delay");
+
+            // below are optional but commonly used so we add here even though they may return null!
+            TargetTypeProperty = serializedObject.FindProperty("_targetType");
+            TargetProperty = serializedObject.FindProperty("_target");
 
             // Call an initialisation method for inheriting classes.
             Initialise();
@@ -104,5 +109,51 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
         {
             EditorHelper.DrawDefaultInspector(serializedObject, new List<string>() { "m_Script" });
         }
+
+
+        #region helper methods
+        /// <summary>
+        /// Returns whether this editor should show collider options.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsColliderEditor()
+        {
+            return (Options & GameActionEditorHelper.GameActionEditorOption.ColliderOptions) != 0;
+        }
+
+
+        /// <summary>
+        /// Helper method to show a target property based upon GameActionHelper.TargetType
+        /// </summary>
+        /// <param name="typeProperty"></param>
+        /// <param name="targetProperty"></param>
+        /// <param name="label"></param>
+        protected void ShowTargetTypeProperty(SerializedProperty typeProperty, SerializedProperty targetProperty, string label)
+        {
+            typeProperty.serializedObject.Update();
+            typeProperty.enumValueIndex = EditorGUILayout.Popup(label, typeProperty.enumValueIndex,
+                IsColliderEditor() ? GameActionEditorHelper.TargetNamesCollider : GameActionEditorHelper.TargetNames);
+            if (typeProperty.enumValueIndex == 1)
+                EditorGUILayout.PropertyField(targetProperty, new GUIContent(" ", targetProperty.tooltip));
+            typeProperty.serializedObject.ApplyModifiedProperties();
+        }
+
+
+
+        /// <summary>
+        /// Helper method to show a target property based upon GameActionHelper.TargetType
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="targetTypeProperty"></param>
+        /// <param name="targetProperty"></param>
+        /// <param name="label"></param>
+        protected void ShowTargetTypeProperty(SerializedObject obj, string targetTypePropertyName, string targetPropertyName, string label)
+        {
+            var targetTypeProperty = serializedObject.FindProperty(targetTypePropertyName);
+            var targetProperty = serializedObject.FindProperty(targetPropertyName);
+            ShowTargetTypeProperty(targetTypeProperty, targetProperty, label);
+        }
+
+        #endregion helper methods
     }
 }

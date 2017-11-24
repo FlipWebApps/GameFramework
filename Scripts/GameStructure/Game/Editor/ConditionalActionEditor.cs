@@ -91,10 +91,10 @@ namespace GameFramework.GameStructure.Game.Editor
                 ref conditionEditors, _gameConditionClassDetails, "Conditions", "Conditions that should be tested.");
 
             GameActionEditorHelper.DrawActions(serializedObject, _actionReferencesConditionMetProperty, conditionalAction.ActionReferencesConditionMet,
-                ref actionEditorsMet, _gameActionClassDetails, _actionReferencesConditionMetCallbackProperty, "Condition Met", "Actions that will be run when the condition is met");
+                ref actionEditorsMet, _gameActionClassDetails, _actionReferencesConditionMetCallbackProperty, heading: "Condition Met", tooltip: "Actions that will be run when the condition is met");
 
             GameActionEditorHelper.DrawActions(serializedObject, _actionReferencesConditionNotMetProperty, conditionalAction.ActionReferencesConditionNotMet,
-                ref actionEditorsNotMet, _gameActionClassDetails, _actionReferencesConditionNotMetCallbackProperty, "Condition Not Met", "Actions that will be run when the condition is not met");
+                ref actionEditorsNotMet, _gameActionClassDetails, _actionReferencesConditionNotMetCallbackProperty, heading: "Condition Not Met", tooltip: "Actions that will be run when the condition is not met");
         }
     }
 }

@@ -50,6 +50,26 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
         [SerializeField]
         string _poolName;
 
+
+        /// <summary>
+        /// What target to use for the location.
+        /// </summary>
+        public GameActionHelper.TargetType LocationTargetType
+        {
+            get
+            {
+                return _locationTargetType;
+            }
+            set
+            {
+                _locationTargetType = value;
+            }
+        }
+        [Tooltip("What target to use for the location.")]
+        [SerializeField]
+        GameActionHelper.TargetType _locationTargetType = GameActionHelper.TargetType.ThisGameObject;
+
+
         /// <summary>
         /// A Transform that defines where to instantiate the prefab. If blank uses the containing GameObjects transform.
         /// </summary>
@@ -77,9 +97,17 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
 
 #if PRO_POOLING
             if (!string.IsNullOrEmpty(PoolName))
-                global::ProPooling.PoolManager.Instance.GetFromPool(PoolName, 
-                    Location == null ? Owner.transform.position : Location.position,
-                    Location == null ? Quaternion.identity : Location.rotation);
+            {
+                // use cached version unless target could be dynamic (TargetType.CollidingGameObject)
+                var transformFinal = GameActionHelper.ResolveTarget<Transform>(LocationTargetType, this, Location);
+                if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
+                if (transformFinal != null)
+                {
+                    global::ProPooling.PoolManager.Instance.GetFromPool(PoolName,
+                        transformFinal.position,
+                        transformFinal.rotation);
+                }
+            }
 #endif
         }
     }

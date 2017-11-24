@@ -348,6 +348,25 @@ namespace GameFramework.EditorExtras.Editor
             obj.ApplyModifiedProperties();
             return EditorGUI.EndChangeCheck();
         }
+
+
+        /// <summary>
+        /// Draw the default inspector excluding listed objects
+        /// </summary>
+        internal static bool DrawProperties(SerializedObject obj, List<string> paths)
+        {
+            EditorGUI.BeginChangeCheck();
+            obj.Update();
+            foreach (var path in paths)
+            {
+                SerializedProperty property = obj.FindProperty(path);
+                if (property != null)
+                    EditorGUILayout.PropertyField(property, true);
+            }
+            obj.ApplyModifiedProperties();
+            return EditorGUI.EndChangeCheck();
+        }
+
         #endregion Editors
     }
 }

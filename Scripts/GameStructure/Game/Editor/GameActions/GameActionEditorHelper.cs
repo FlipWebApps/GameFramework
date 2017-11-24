@@ -35,6 +35,19 @@ namespace GameFramework.GameStructure.Game
     /// </summary>
     public class GameActionEditorHelper
     {
+        // names for possible targets.
+        public static readonly string[] TargetNames = { "This GameObject", "Specified" };
+
+        // names for possible targets with ColliderOptions set
+        public static readonly string[] TargetNamesCollider = { "This GameObject", "Specified", "Colliding GameObject" };
+
+        // enum to control different game action editor options.
+        [System.Flags]
+        public enum GameActionEditorOption {
+            None = 0,                   // No special setup - use defaults.
+            ColliderOptions = 1         // Show options for using collider
+        }
+
         const float RemoveButtonWidth = 30f;
 
         /// <summary>
@@ -50,7 +63,7 @@ namespace GameFramework.GameStructure.Game
         #region Display
 
         internal static void DrawActions(SerializedObject serializedObject, SerializedProperty actionsProperty, GameActionReference[] actionReferences, 
-            ref GameActionEditor[] actionEditors, List<ClassDetailsAttribute> classDetails, SerializedProperty callbackProperty, string heading = null, string tooltip = null)
+            ref GameActionEditor[] actionEditors, List<ClassDetailsAttribute> classDetails, SerializedProperty callbackProperty, GameActionEditorOption options = GameActionEditorOption.None, string heading = null, string tooltip = null)
         {
             if (heading != null)
             {
@@ -59,7 +72,7 @@ namespace GameFramework.GameStructure.Game
                 EditorGUILayout.Space();
             }
 
-            actionEditors = GameActionEditorHelper.CheckAndCreateSubEditors(actionEditors, actionReferences, serializedObject, actionsProperty);
+            actionEditors = GameActionEditorHelper.CheckAndCreateSubEditors(actionEditors, actionReferences, serializedObject, actionsProperty, options);
 
             if (actionsProperty.arraySize == 0)
             {
@@ -160,7 +173,7 @@ namespace GameFramework.GameStructure.Game
         /// In case of changes create sub editors
         /// </summary>
         internal static GameActionEditor[] CheckAndCreateSubEditors(GameActionEditor[] subEditors, GameActionReference[] actionReferences,
-            SerializedObject container, SerializedProperty _scriptableReferenceArrayProperty)
+            SerializedObject container, SerializedProperty _scriptableReferenceArrayProperty, GameActionEditorOption options = GameActionEditorOption.None)
         {
             // If there are the correct number of subEditors then do nothing.
             if (subEditors != null && subEditors.Length == actionReferences.Length)
@@ -179,6 +192,7 @@ namespace GameFramework.GameStructure.Game
                     UnityEditor.Editor.CreateEditor(actionReferences[i].ScriptableObject) as GameActionEditor;
                 if (subEditors[i] != null)
                 {
+                    subEditors[i].Options = options;
                     subEditors[i].Container = actionReferences[i];
                     var scriptableObjectContainer = _scriptableReferenceArrayProperty.GetArrayElementAtIndex(i);
                     subEditors[i].ContainerSerializedObject = container;

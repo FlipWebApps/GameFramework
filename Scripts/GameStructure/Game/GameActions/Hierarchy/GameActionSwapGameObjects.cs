@@ -34,6 +34,25 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
     public class GameActionSwapGameObjects : GameAction
     {
         /// <summary>
+        /// The GameObject to switch from.
+        /// </summary>
+        public GameActionHelper.TargetType SwitchFromTargetType
+        {
+            get
+            {
+                return _switchFromTargetType;
+            }
+            set
+            {
+                _switchFromTargetType = value;
+            }
+        }
+        [Tooltip("The GameObject to switch from.")]
+        [SerializeField]
+        GameActionHelper.TargetType _switchFromTargetType = GameActionHelper.TargetType.ThisGameObject;
+
+
+        /// <summary>
         /// The GameObject to switch from
         /// </summary>
         public GameObject SwitchFrom
@@ -81,10 +100,15 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         /// <returns></returns>
         protected override void Execute(bool isStart)
         {
-            if (isStart)
-                GameObjectToGameObjectAnimation.SwapImmediately(SwitchFrom, SwitchTo);
-            else
-                GameObjectToGameObjectAnimation.AnimatedSwap(Owner, SwitchFrom, SwitchTo);
+            var switchFromFinal = GameActionHelper.ResolveTarget(SwitchFromTargetType, this, SwitchFrom);
+            if (switchFromFinal == null) Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
+            if (switchFromFinal != null)
+            {
+                if (isStart)
+                    GameObjectToGameObjectAnimation.SwapImmediately(switchFromFinal, SwitchTo);
+                else
+                    GameObjectToGameObjectAnimation.AnimatedSwap(Owner, switchFromFinal, SwitchTo);
+            }
         }
 
         #region IScriptableObjectContainerSyncReferences

@@ -20,6 +20,7 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.Game.ObjectModel;
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,9 @@ namespace GameFramework.GameStructure.Game
     /// </summary>
     public class GameActionHelper
     {
+        // enum for target types
+        public enum TargetType { ThisGameObject, Specified, CollidingGameObject }
+
         /// <summary>
         /// Initialise actions
         /// </summary>
@@ -61,7 +65,7 @@ namespace GameFramework.GameStructure.Game
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart, Object otherObject = null)
+        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart, GameObject otherObject = null)
         {
             foreach (var actionReference in actionReferences)
             {
@@ -69,17 +73,54 @@ namespace GameFramework.GameStructure.Game
                 {
                     if (actionReference.ScriptableObjectReference != null)
                     {
-                        actionReference.ScriptableObjectReference.OtherObject = otherObject;
+                        actionReference.ScriptableObjectReference.OtherGameObject = otherObject;
                         actionReference.ScriptableObjectReference.ExecuteInternal(isStart);
                     }
                 }
                 else
                 {
                     var action = actionReference.ScriptableObject;
-                    actionReference.ScriptableObject.OtherObject = otherObject;
+                    actionReference.ScriptableObject.OtherGameObject = otherObject;
                     action.ExecuteInternal(isStart);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Resolve the target gameobject based upon the specified TargetType
+        /// </summary>
+        /// <param name="targetType"></param>
+        /// <param name="gameAction"></param>
+        /// <param name="specified"></param>
+        /// <returns></returns>
+        public static GameObject ResolveTarget(TargetType targetType, GameAction gameAction, GameObject specified)
+        {
+            switch (targetType)
+            {
+                case TargetType.ThisGameObject:
+                    return gameAction.Owner.gameObject;
+                case TargetType.CollidingGameObject:
+                    return gameAction.OtherGameObject;
+                case TargetType.Specified:
+                    return specified;
+            }
+            return null;
+        }
+
+
+        public static T ResolveTarget<T>(TargetType targetType, GameAction gameAction, T specified) where T : Component
+        {
+            switch (targetType)
+            {
+                case TargetType.ThisGameObject:
+                    return gameAction.Owner.gameObject.GetComponent<T>();
+                case TargetType.CollidingGameObject:
+                    return gameAction.OtherGameObject.GetComponent<T>();
+                case TargetType.Specified:
+                    return specified;
+            }
+            return null;
         }
     }
 }

@@ -32,7 +32,26 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
     public abstract class GameActionTarget : GameAction
     {
         /// <summary>
-        /// The target GameObject to act upon
+        /// What GameObject to target.
+        /// </summary>
+        public GameActionHelper.TargetType TargetType
+        {
+            get
+            {
+                return _targetType;
+            }
+            set
+            {
+                _targetType = value;
+            }
+        }
+        [Tooltip("What GameObject to target.")]
+        [SerializeField]
+        GameActionHelper.TargetType _targetType = GameActionHelper.TargetType.ThisGameObject;
+
+
+        /// <summary>
+        /// The target GameObject to act upon if using a target type mode of Specified.
         /// </summary>
         public GameObject Target
         {
@@ -45,7 +64,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
                 _target = value;
             }
         }
-        [Tooltip("The target GameObject to act upon")]
+        [Tooltip("The target GameObject to act upon if using a target type mode of Specified.")]
         [SerializeField]
         GameObject _target;
 
