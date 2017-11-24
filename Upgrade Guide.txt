@@ -28,6 +28,9 @@ you might need to rename for:
   PerformAction(MonoBehaviour monoBehaviour, bool isStart) -> Execute(bool isStart)
   Owner property exposed for access to containing Monobehaviour
 
+- GameActions are now upgraded to support new target options . Please check
+any target property is still correct in your project and if need be reselect.
+
 
 v5.0
 
