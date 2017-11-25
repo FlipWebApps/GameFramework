@@ -130,12 +130,10 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
         /// <param name="label"></param>
         protected void ShowTargetTypeProperty(SerializedProperty typeProperty, SerializedProperty targetProperty, string label)
         {
-            typeProperty.serializedObject.Update();
             typeProperty.enumValueIndex = EditorGUILayout.Popup(label, typeProperty.enumValueIndex,
                 IsColliderEditor() ? GameActionEditorHelper.TargetNamesCollider : GameActionEditorHelper.TargetNames);
             if (typeProperty.enumValueIndex == 1)
                 EditorGUILayout.PropertyField(targetProperty, new GUIContent(" ", targetProperty.tooltip));
-            typeProperty.serializedObject.ApplyModifiedProperties();
         }
 
 

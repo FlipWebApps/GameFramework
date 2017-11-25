@@ -335,8 +335,20 @@ namespace GameFramework.EditorExtras.Editor
         /// </summary>
         internal static bool DrawDefaultInspector(SerializedObject obj, List<string> excludePaths)
         {
-            EditorGUI.BeginChangeCheck();
             obj.Update();
+            var changed = DrawPropertiesWithExclusions(obj, excludePaths);
+            obj.ApplyModifiedProperties();
+            return changed;
+        }
+
+
+        /// <summary>
+        /// Draw the default inspector excluding listed objects without doing update / applyModifiedProperties on the SerializedObject
+        /// </summary>
+        /// Use this when not drwaing a complete inspector
+        internal static bool DrawPropertiesWithExclusions(SerializedObject obj, List<string> excludePaths)
+        {
+            EditorGUI.BeginChangeCheck();
             SerializedProperty iterator = obj.GetIterator();
             bool enterChildren = true;
             while (iterator.NextVisible(enterChildren))
@@ -345,10 +357,8 @@ namespace GameFramework.EditorExtras.Editor
                     EditorGUILayout.PropertyField(iterator, true);
                 enterChildren = false;
             }
-            obj.ApplyModifiedProperties();
             return EditorGUI.EndChangeCheck();
         }
-
 
         /// <summary>
         /// Draw the default inspector excluding listed objects
@@ -356,14 +366,12 @@ namespace GameFramework.EditorExtras.Editor
         internal static bool DrawProperties(SerializedObject obj, List<string> paths)
         {
             EditorGUI.BeginChangeCheck();
-            obj.Update();
             foreach (var path in paths)
             {
                 SerializedProperty property = obj.FindProperty(path);
                 if (property != null)
                     EditorGUILayout.PropertyField(property, true);
             }
-            obj.ApplyModifiedProperties();
             return EditorGUI.EndChangeCheck();
         }
 
