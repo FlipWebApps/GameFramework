@@ -65,7 +65,7 @@ namespace GameFramework.GameStructure.Game
         /// Perform the action
         /// </summary>
         /// <returns></returns>
-        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart, GameObject otherObject = null)
+        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart, GameAction.GameActionInvocationContext context)
         {
             foreach (var actionReference in actionReferences)
             {
@@ -73,19 +73,28 @@ namespace GameFramework.GameStructure.Game
                 {
                     if (actionReference.ScriptableObjectReference != null)
                     {
-                        actionReference.ScriptableObjectReference.OtherGameObject = otherObject;
+                        actionReference.ScriptableObjectReference.InvocationContext = context;
                         actionReference.ScriptableObjectReference.ExecuteInternal(isStart);
                     }
                 }
                 else
                 {
                     var action = actionReference.ScriptableObject;
-                    actionReference.ScriptableObject.OtherGameObject = otherObject;
+                    actionReference.ScriptableObject.InvocationContext = context;
                     action.ExecuteInternal(isStart);
                 }
             }
         }
 
+
+        /// <summary>
+        /// Perform the action
+        /// </summary>
+        /// <returns></returns>
+        public static void ExecuteGameActions(IEnumerable<GameActionReference> actionReferences, bool isStart)
+        {
+            ExecuteGameActions(actionReferences, isStart, new GameAction.GameActionInvocationContext());
+        }
 
         /// <summary>
         /// Resolve the target gameobject based upon the specified TargetType
@@ -101,7 +110,7 @@ namespace GameFramework.GameStructure.Game
                 case TargetType.ThisGameObject:
                     return gameAction.Owner.gameObject;
                 case TargetType.CollidingGameObject:
-                    return gameAction.OtherGameObject;
+                    return gameAction.InvocationContext.OtherGameObject;
                 case TargetType.Specified:
                     return specified;
             }
@@ -116,7 +125,7 @@ namespace GameFramework.GameStructure.Game
                 case TargetType.ThisGameObject:
                     return gameAction.Owner.gameObject.GetComponent<T>();
                 case TargetType.CollidingGameObject:
-                    return gameAction.OtherGameObject.GetComponent<T>();
+                    return gameAction.InvocationContext.OtherGameObject.GetComponent<T>();
                 case TargetType.Specified:
                     return specified;
             }

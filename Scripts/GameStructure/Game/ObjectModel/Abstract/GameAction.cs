@@ -52,7 +52,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         /// <summary>
         /// An optional runtime reference to 'another' Object, either a GameObject or Component.
         /// </summary>
-        public GameObject OtherGameObject { get; set; }
+        public GameActionInvocationContext InvocationContext { get; set; }
 
         WaitForSeconds _waitForSeconds;
 
@@ -137,5 +137,13 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
         }
 
         #endregion IScriptableObjectContainerSyncReferences
+
+        public struct GameActionInvocationContext
+        {
+            /// <summary>
+            /// An optional runtime reference to 'another' Object, either a GameObject or Component.
+            /// </summary>
+            public GameObject OtherGameObject { get; set; }
+        }
     }
 }
