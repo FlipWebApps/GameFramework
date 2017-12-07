@@ -19,6 +19,12 @@ GENERAL UPGRADE NOTES
 VERSION UPGRADE NOTES
 
 v5.1
+
+There are a few improvements relating to Game Actions that may need attention
+
+- To allow additional options, Game Actions targets are now made selectable. 
+Please review the target of any existing Game Actions is correct in your project
+
 - GameAction and GameCondition API improvements. Note the following changes that
 you might need to rename for:
   InitialiseCommon() -> InitialiseInternal(Monobehaviour owner)

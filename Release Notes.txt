@@ -12,6 +12,23 @@ In case of problems please get in contact.
 
 CHANGE LOG
 
+v5.1
+	Game Framework Core - Improvements
+	- Facebook: Assert for FacebookManager component present in GameOver
+	- GameStructure: Action / Condition AutoName method added for providing custom Editor names
+	- GameStructure: Internal GameAction and GameCondition API improvements
+	- GameStructure: Added Change Player Lives GameAction.
+	- GameStructure: Show level score / coins reference GameManager instead of LevelManager incase you don't otherwise need the latter.
+	- GameStructure: Added selectable target type for all Game Actions. Please review target is correct in your project
+	- GameStructure: Added RunGameAction component for automatically or callback running of a list of actions.
+	- Placement: MoveWithTransform allows to freeze certain axis
+
+	Game Framework Core - Fixes
+	- GameStructure: Instantiate Prefab GameAction correctly saves the referenced prefab.
+
+	BeautifulTransitions (Extras Bundle):
+	- Updated to v5.1 with additional Game Actions (see seperate release notes and upgrade guide)
+
 v5.0.1
 	Game Framework Core - Improvements
 	- Display: GetBoundsFromColliders function

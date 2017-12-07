@@ -138,7 +138,7 @@ namespace GameFramework.GameStructure.Game.ObjectModel.Abstract
 
         #endregion IScriptableObjectContainerSyncReferences
 
-        public struct GameActionInvocationContext
+        public class GameActionInvocationContext
         {
             /// <summary>
             /// An optional runtime reference to 'another' Object, either a GameObject or Component.
