@@ -99,7 +99,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
             if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
             if (Prefab != null && transformFinal != null)
             {
-                    Instantiate(Prefab, Location.position, Location.rotation);
+                    Instantiate(Prefab, transformFinal.position, transformFinal.rotation);
             }
         }
 
