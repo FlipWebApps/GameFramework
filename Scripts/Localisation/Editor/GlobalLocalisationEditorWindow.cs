@@ -62,7 +62,7 @@ namespace GameFramework.Localisation.Editor
         public static void ShowWindowNew(string key = "")
         {
             //Show existing window instance. If one doesn't exist, make one.
-            var localisationEditorWindow = 
+            var localisationEditorWindow =
             GetWindow<GlobalLocalisationEditorWindow>("Global Localisations", true);
             localisationEditorWindow._showNew = true;
         }
@@ -77,16 +77,23 @@ namespace GameFramework.Localisation.Editor
             //_redTexture = MakeColoredTexture(1, 1, new Color(1.0f, 0.0f, 0.0f, 0.1f));
             //RefreshPlayerPrefs();
 
+#if UNITY_2017_2_OR_NEWER
+            EditorApplication.playModeStateChanged += OnPlaymodeStateChanged;
+#else
             EditorApplication.playmodeStateChanged += OnPlaymodeStateChanged;
+#endif
         }
 
 
 
         void OnDisable()
         {
+#if UNITY_2017_2_OR_NEWER
+            EditorApplication.playModeStateChanged -= OnPlaymodeStateChanged;
+#else
             EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
+#endif
         }
-
 
 
         /// <summary>
@@ -96,9 +103,22 @@ namespace GameFramework.Localisation.Editor
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
                 Debug.LogWarning("TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.");
-                //EditorUtility.DisplayDialog("Save", "TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.", "Yes",
-                //    "No");
+            //EditorUtility.DisplayDialog("Save", "TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.", "Yes",
+            //    "No");
         }
+
+
+#if UNITY_2017_2_OR_NEWER
+        /// <summary>
+        /// When the playmode changes, clear the log if necessary (2017.2+ version)
+        /// </summary>
+        void OnPlaymodeStateChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+                Debug.LogWarning("TODO: Check for changes first then prompt here. For now, close the localisation window to stop showing this message.");
+        }
+#endif
+
 
         /// <summary>
         /// Draw the GUI
@@ -234,7 +254,7 @@ namespace GameFramework.Localisation.Editor
                 if (Event.current.button == 0 && Event.current.type == EventType.MouseUp)
                 {
                     if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
-                    { 
+                    {
                         SelectedKeyIndex = i;
 
                         ClearFocus();
@@ -274,12 +294,12 @@ namespace GameFramework.Localisation.Editor
                 EditorGUILayout.LabelField(languageEntry.Name, EditorStyles.boldLabel);
                 EditorGUILayout.TextArea(stringValue, GuiStyles.WordWrapStyle, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth));
 
-                    //EditorGUI.BeginChangeCheck();
-                    //stringValue = EditorGUILayout.TextArea(stringValue, EditorStyles.textArea, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth), GUILayout.MinHeight(height), GUILayout.MaxHeight(height));
-                    //if (EditorGUI.EndChangeCheck())
-                    //{
-                    //    //LocaliseText.Localisations[key][i] = stringValue;
-                    //}
+                //EditorGUI.BeginChangeCheck();
+                //stringValue = EditorGUILayout.TextArea(stringValue, EditorStyles.textArea, GUILayout.MaxWidth(EditorGUIUtility.currentViewWidth), GUILayout.MinHeight(height), GUILayout.MaxHeight(height));
+                //if (EditorGUI.EndChangeCheck())
+                //{
+                //    //LocaliseText.Localisations[key][i] = stringValue;
+                //}
             }
 
             EditorGUILayout.EndScrollView();
@@ -326,7 +346,7 @@ namespace GameFramework.Localisation.Editor
         /// </summary>
         void HandleResize(Rect dragRect, Color? resizeAreaColour = null)
         {
-            resizeAreaColour = resizeAreaColour ?? GUI.backgroundColor*0.5f;
+            resizeAreaColour = resizeAreaColour ?? GUI.backgroundColor * 0.5f;
 
             GUI.DrawTexture(dragRect, MakeColoredTexture(1, 1, resizeAreaColour.Value));
             EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);

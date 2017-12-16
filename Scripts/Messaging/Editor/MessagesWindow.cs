@@ -81,13 +81,21 @@ namespace GameFramework.Messaging.Editor
             MessageLogHandler.MessageLog = _messageLog;
 
             _messageLog.LogEntryAdded += OnLogEntryAdded;
+#if UNITY_2017_2_OR_NEWER
+            EditorApplication.playModeStateChanged += OnPlaymodeStateChanged;
+#else
             EditorApplication.playmodeStateChanged += OnPlaymodeStateChanged;
+#endif
         }
 
 
         void OnDisable()
         {
+#if UNITY_2017_2_OR_NEWER
+            EditorApplication.playModeStateChanged -= OnPlaymodeStateChanged;
+#else
             EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
+#endif
             _messageLog.LogEntryAdded -= OnLogEntryAdded;
         }
 
@@ -111,6 +119,17 @@ namespace GameFramework.Messaging.Editor
                 _messageLog.Clear();
         }
 
+
+#if UNITY_2017_2_OR_NEWER
+        /// <summary>
+        /// When the playmode changes, clear the log if necessary (2017.2+ version)
+        /// </summary>
+        void OnPlaymodeStateChanged(PlayModeStateChange state)
+        {
+            if (_messageLog.ClearOnPlay && state == PlayModeStateChange.ExitingEditMode)
+                _messageLog.Clear();
+        }
+#endif
 
         /// <summary>
         /// Draw the GUI
@@ -167,7 +186,7 @@ namespace GameFramework.Messaging.Editor
         void DrawToolbar()
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-            if(EditorHelper.ButtonTrimmed("Clear", EditorStyles.toolbarButton))
+            if (EditorHelper.ButtonTrimmed("Clear", EditorStyles.toolbarButton))
             {
                 _messageLog.Clear();
             }
@@ -199,31 +218,31 @@ namespace GameFramework.Messaging.Editor
             {
                 //if (i >= start && i <= end)
                 //{
-                    drawnLines++;
-                    var oldBackgrounColor = GUI.backgroundColor;
+                drawnLines++;
+                var oldBackgrounColor = GUI.backgroundColor;
 
-                    var s = new GUIStyle();
-                    s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
-                    GUI.backgroundColor = _selectedRow == i ? Color.blue : (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
-                    GUILayout.BeginHorizontal(s);
-                    GUILayout.Label(_messageLog.LogEntries[i].LogEntryType.ToString(), GUILayout.Width(100));
-                    GUILayout.Label(_messageLog.LogEntries[i].Time.ToShortTimeString(), GUILayout.Width(100));
-                    var text = string.IsNullOrEmpty(_messageLog.LogEntries[i].Message) ?
-                        _messageLog.LogEntries[i].MessageType :
-                        _messageLog.LogEntries[i].MessageType + " - " + _messageLog.LogEntries[i].Message;
-                    GUILayout.Label(text);
-                    GUILayout.EndHorizontal();
+                var s = new GUIStyle();
+                s.normal.background = MakeColoredTexture(1, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
+                GUI.backgroundColor = _selectedRow == i ? Color.blue : (drawnLines % 2 == 0) ? _lineColour1 : _lineColour2;
+                GUILayout.BeginHorizontal(s);
+                GUILayout.Label(_messageLog.LogEntries[i].LogEntryType.ToString(), GUILayout.Width(100));
+                GUILayout.Label(_messageLog.LogEntries[i].Time.ToShortTimeString(), GUILayout.Width(100));
+                var text = string.IsNullOrEmpty(_messageLog.LogEntries[i].Message) ?
+                    _messageLog.LogEntries[i].MessageType :
+                    _messageLog.LogEntries[i].MessageType + " - " + _messageLog.LogEntries[i].Message;
+                GUILayout.Label(text);
+                GUILayout.EndHorizontal();
 
-                    if (Event.current.button == 0 && Event.current.type == EventType.MouseUp)
+                if (Event.current.button == 0 && Event.current.type == EventType.MouseUp)
+                {
+                    if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
                     {
-                        if (GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
-                        {
-                            _newSelectedRow = i;
-                            Repaint();
-                        }
+                        _newSelectedRow = i;
+                        Repaint();
                     }
+                }
 
-                    GUI.backgroundColor = oldBackgrounColor;
+                GUI.backgroundColor = oldBackgrounColor;
                 //}   
                 //else
                 //{

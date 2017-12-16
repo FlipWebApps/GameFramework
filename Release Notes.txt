@@ -17,7 +17,7 @@ v5.0.2
 	- Facebook: Assert for FacebookManager component present in GameOver
 	- GameStructure: Action / Condition AutoName method added for providing custom Editor names
 	- GameStructure: Internal GameAction and GameCondition API improvements
-	- GameStructure: Added Change Player Lives GameAction.
+	- GameStructure: Added Change Player Lives and Destroy Gameobject GameActions.
 	- GameStructure: Show level score / coins reference GameManager instead of LevelManager incase you don't otherwise need the latter.
 	- GameStructure: Added selectable target type for all Game Actions. Please review target is correct in your project
 	- GameStructure: Added RunGameAction component for automatically or callback running of a list of actions.
@@ -25,6 +25,7 @@ v5.0.2
 
 	Game Framework Core - Fixes
 	- GameStructure: Instantiate Prefab GameAction correctly saves the referenced prefab.
+	- Fixed Unity 2017.2 deprecation warnings
 
 	BeautifulTransitions (Extras Bundle):
 	- Updated to v5.1 with additional Game Actions (see seperate release notes and upgrade guide)
