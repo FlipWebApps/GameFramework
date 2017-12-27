@@ -289,7 +289,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
                 EditorGUILayout.HelpBox("Note: Persisting of runtime changes to Bool, Vector2 and Vector3 variables is only supported with the PlayerPrefs integration. For more details see: Main Menu | Window | Game Framework | Integrations Window", MessageType.Info);
 #endif
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(_giVariablesProperty, new GUIContent("Name"), true);
+            EditorGUILayout.PropertyField(_giVariablesProperty, new GUIContent("Variables"), true);
             EditorGUI.indentLevel--;
 
             //GUILayout.BeginHorizontal();
