@@ -28,6 +28,7 @@ using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
 using System.Collections.Generic;
 using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.Localisation;
 
 namespace GameFramework.Debugging.Components.Editor {
 
@@ -36,7 +37,7 @@ namespace GameFramework.Debugging.Components.Editor {
     /// </summary>
     public class CheatFunctionsWindow : EditorWindow
     {
-        readonly string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize"};
+        readonly string[] _tabNames = {"General", "Player", "World", "Level", "Free Prize", "Localisation"};
         int _tabSelected;
         string _productId;
 
@@ -69,6 +70,9 @@ namespace GameFramework.Debugging.Components.Editor {
                     break;
                 case 4:
                     FreePrizeMenuOptions();
+                    break;
+                case 5:
+                    LocalisationMenuOptions();
                     break;
             }
         }
@@ -344,6 +348,23 @@ namespace GameFramework.Debugging.Components.Editor {
             }
             GUILayout.EndHorizontal();
         }
+
+
+        void LocalisationMenuOptions()
+        {
+            GUILayout.Label("Current language: " + GlobalLocalisation.Language, EditorStyles.boldLabel);
+            foreach (var language in GlobalLocalisation.SupportedLanguages)
+            {
+                if (GUILayout.Button(language, GUILayout.Width(150)))
+                {
+                    if (!GlobalLocalisation.TrySetAllowedLanguage(language))
+                        Debug.LogWarningFormat("Unable to set language {0}", language);
+                    //FreePrizeManager.Instance.MakePrizeAvailable();
+                }
+            }
+        }
+
+
 
         private void UpdatePlayerScore(int amount)
         {
