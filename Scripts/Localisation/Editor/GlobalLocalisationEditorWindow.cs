@@ -351,7 +351,7 @@ namespace GameFramework.Localisation.Editor
             GUI.DrawTexture(dragRect, MakeColoredTexture(1, 1, resizeAreaColour.Value));
             EditorGUIUtility.AddCursorRect(dragRect, MouseCursor.ResizeHorizontal);
 
-            if (Event.current.type == EventType.mouseDown && dragRect.Contains(Event.current.mousePosition))
+            if (Event.current.type == EventType.MouseDown && dragRect.Contains(Event.current.mousePosition))
             {
                 _isResizing = true;
             }
