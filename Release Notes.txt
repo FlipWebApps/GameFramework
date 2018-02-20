@@ -12,6 +12,16 @@ In case of problems please get in contact.
 
 CHANGE LOG
 
+v5.0.3
+	Game Framework Core - Improvements
+    - Debugging: Added localisation section to cheat functions window.
+	- GameStructure: Added Physics2D Set Rigidbody type action
+	- Misc: Remove deprecation warning from Unity 2017.3
+	- Misc: Enhancements to support Pro Pooling v3.0
+
+	Pro Pooling:
+	- Updated to v3.0 with support for spawning and many other improvements (see seperate release notes and upgrade guide)
+
 v5.0.2
 	Game Framework Core - Improvements
 	- Facebook: Assert for FacebookManager component present in GameOver
