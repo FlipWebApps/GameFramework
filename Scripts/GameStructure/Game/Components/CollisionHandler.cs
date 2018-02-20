@@ -25,6 +25,7 @@ using GameFramework.GameStructure.Levels;
 using UnityEngine;
 using GameFramework.GameStructure.Game.ObjectModel;
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.Game.Components
 {
@@ -230,6 +231,9 @@ namespace GameFramework.GameStructure.Game.Components
 
         void Start()
         {
+            if (OnlyWhenLevelRunning)
+                Assert.IsTrue(LevelManager.IsActive, string.Format("The CollisionHandler on {0} has Only When Level Running set, but no LevelManager was found. Either add one or clear this setting", name));
+
             GameActionHelper.InitialiseGameActions(Enter.ActionReferences, this);
             GameActionHelper.InitialiseGameActions(Within.ActionReferences, this);
             GameActionHelper.InitialiseGameActions(Exit.ActionReferences, this);

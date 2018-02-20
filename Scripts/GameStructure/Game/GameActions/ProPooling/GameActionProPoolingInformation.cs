@@ -19,45 +19,30 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.GameStructure.Game.ObjectModel.Abstract;
+using GameFramework.Helper;
 using UnityEngine;
 
-namespace GameFramework.Helper
+namespace GameFramework.GameStructure.Game.GameActions.ProPooling
 {
     /// <summary>
-    /// Attribute for documenting a class for use elsewhere e.g. Action Names & menu path
+    /// GameAction class to show information when Pro Pooling isn't installed.
     /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class ClassDetailsAttribute : PropertyAttribute
+    [System.Serializable]
+#if PRO_POOLING
+    [ClassDetails("Pro Pooling Information", "Pro Pooling/Pro Pooling Information", "Pro Pooling Information", true)]
+#else
+    [ClassDetails("Pro Pooling Information", "Pro Pooling/Pro Pooling Information", "Pro Pooling Information")]
+#endif
+    public class GameActionProPoolingInformation : GameAction
     {
         /// <summary>
-        /// The name of the bool field that will determine whether to hide this property
+        /// Perform the action
         /// </summary>
-        public string Name;
-        public string Path;
-        public string Tooltip;
-        public bool ExcludeFromMenu;
-
-        public System.Type ClassType;
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip = "")
+        /// <returns></returns>
+        protected override void Execute(bool isStart)
         {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = false;
-        }
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip, bool excludeFromMenu)
-        {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = excludeFromMenu;
+            // Do Nothing
         }
     }
 }
-
-
-

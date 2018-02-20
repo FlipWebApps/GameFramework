@@ -121,7 +121,7 @@ namespace GameFramework.GameStructure.Game.GameActions.UI
             var targetFinal = _cachedFinalTarget;
             if (targetFinal == null)
             {
-                targetFinal = GameActionHelper.ResolveTarget<Button>(TargetType, this, Target);
+                targetFinal = GameActionHelper.ResolveTargetComponent<Button>(TargetType, this, Target);
                 if (TargetType != GameActionHelper.TargetType.CollidingGameObject)
                     _cachedFinalTarget = targetFinal;
             }

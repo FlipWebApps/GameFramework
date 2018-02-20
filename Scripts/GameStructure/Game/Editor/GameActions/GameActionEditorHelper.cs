@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.GameStructure.Game
+namespace GameFramework.GameStructure.Game.Editor.GameActions
 {
     /// <summary>
     /// Helper class for GameAction Editors
@@ -132,10 +132,14 @@ namespace GameFramework.GameStructure.Game
                 var menu = new GenericMenu();
                 foreach (var classDetailsAttribute in classDetails)
                 {
-                    var actionType = classDetailsAttribute.ClassType;
-                    menu.AddItem(new GUIContent(classDetailsAttribute.Path), false, () => {
-                        AddAction(actionType, actionsProperty, serializedObject);
-                    });
+                    if (!classDetailsAttribute.ExcludeFromMenu)
+                    {
+                        var actionType = classDetailsAttribute.ClassType;
+                        menu.AddItem(new GUIContent(classDetailsAttribute.Path), false, () =>
+                        {
+                            AddAction(actionType, actionsProperty, serializedObject);
+                        });
+                    }
                 }
                 menu.ShowAsContext();
             }

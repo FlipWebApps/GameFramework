@@ -39,7 +39,6 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         protected override void Execute(bool isStart)
         {
             var targetFinal = GameActionHelper.ResolveTarget(TargetType, this, Target);
-            if (targetFinal == null) Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
             if (targetFinal != null)
             {
                 Destroy(targetFinal);

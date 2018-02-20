@@ -19,45 +19,23 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
-using UnityEngine;
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.Game.GameActions.Hierarchy;
+using UnityEditor;
+using System.Collections.Generic;
 
-namespace GameFramework.Helper
+namespace GameFramework.GameStructure.Game.Editor.GameActions.Hierarchy
 {
-    /// <summary>
-    /// Attribute for documenting a class for use elsewhere e.g. Action Names & menu path
-    /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class ClassDetailsAttribute : PropertyAttribute
+    [CustomEditor(typeof(GameActionDestroyGameObject))]
+    public class GameActionDestroyGameObjectEditor : GameActionEditor
     {
         /// <summary>
-        /// The name of the bool field that will determine whether to hide this property
+        /// Draw the Editor GUI
         /// </summary>
-        public string Name;
-        public string Path;
-        public string Tooltip;
-        public bool ExcludeFromMenu;
-
-        public System.Type ClassType;
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip = "")
+        protected override void DrawGUI()
         {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = false;
-        }
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip, bool excludeFromMenu)
-        {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = excludeFromMenu;
+            EditorHelper.DrawProperties(serializedObject, new List<string>() { "_delay" });
+            ShowTargetTypeProperty(TargetTypeProperty, TargetProperty, "Target");
         }
     }
 }
-
-
-

@@ -102,8 +102,9 @@ namespace GameFramework.GameStructure.Game
         /// <param name="targetType"></param>
         /// <param name="gameAction"></param>
         /// <param name="specified"></param>
+        /// <param name="warnIfNull"></param>
         /// <returns></returns>
-        public static GameObject ResolveTarget(TargetType targetType, GameAction gameAction, GameObject specified)
+        public static GameObject ResolveTarget(TargetType targetType, GameAction gameAction, GameObject specified, bool warnIfNull = true)
         {
             switch (targetType)
             {
@@ -114,11 +115,13 @@ namespace GameFramework.GameStructure.Game
                 case TargetType.Specified:
                     return specified;
             }
+            if (warnIfNull)
+                Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", gameAction.GetType().Name, gameAction.Owner.gameObject.name);
             return null;
         }
 
 
-        public static T ResolveTarget<T>(TargetType targetType, GameAction gameAction, T specified) where T : Component
+        public static T ResolveTargetComponent<T>(TargetType targetType, GameAction gameAction, T specified, bool warnIfNull = true) where T : Component
         {
             switch (targetType)
             {
@@ -129,6 +132,8 @@ namespace GameFramework.GameStructure.Game
                 case TargetType.Specified:
                     return specified;
             }
+            if (warnIfNull)
+                Debug.LogWarningFormat("No Target is specified for the action {0} on {1}", gameAction.GetType().Name, gameAction.Owner.gameObject.name);
             return null;
         }
     }

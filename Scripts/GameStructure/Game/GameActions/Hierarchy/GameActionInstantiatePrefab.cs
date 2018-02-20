@@ -95,7 +95,7 @@ namespace GameFramework.GameStructure.Game.GameActions.Hierarchy
         protected override void Execute(bool isStart)
         {
             // use cached version unless target could be dynamic (TargetType.CollidingGameObject)
-            var transformFinal = GameActionHelper.ResolveTarget<Transform>(LocationTargetType, this, Location);
+            var transformFinal = GameActionHelper.ResolveTargetComponent<Transform>(LocationTargetType, this, Location);
             if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
             if (Prefab != null && transformFinal != null)
             {

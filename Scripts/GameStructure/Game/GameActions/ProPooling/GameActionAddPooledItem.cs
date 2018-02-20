@@ -99,11 +99,11 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
             if (!string.IsNullOrEmpty(PoolName))
             {
                 // use cached version unless target could be dynamic (TargetType.CollidingGameObject)
-                var transformFinal = GameActionHelper.ResolveTarget<Transform>(LocationTargetType, this, Location);
+                var transformFinal = GameActionHelper.ResolveTargetComponent<Transform>(LocationTargetType, this, Location);
                 if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
                 if (transformFinal != null)
                 {
-                    global::ProPooling.PoolManager.Instance.GetFromPool(PoolName,
+                    global::ProPooling.GlobalPools.Instance.Spawn(PoolName,
                         transformFinal.position,
                         transformFinal.rotation);
                 }

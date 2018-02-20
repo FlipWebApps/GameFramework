@@ -19,45 +19,27 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using GameFramework.EditorExtras.Editor;
+using GameFramework.GameStructure.Game.GameActions.ProPooling;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.Helper
+namespace GameFramework.GameStructure.Game.Editor.GameActions.ProPooling
 {
-    /// <summary>
-    /// Attribute for documenting a class for use elsewhere e.g. Action Names & menu path
-    /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class ClassDetailsAttribute : PropertyAttribute
+    [CustomEditor(typeof(GameActionProPoolingInformation))]
+    public class GameActionProPoolingInformationEditor : GameActionEditor
     {
         /// <summary>
-        /// The name of the bool field that will determine whether to hide this property
+        /// Draw the Editor GUI
         /// </summary>
-        public string Name;
-        public string Path;
-        public string Tooltip;
-        public bool ExcludeFromMenu;
-
-        public System.Type ClassType;
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip = "")
+        protected override void DrawGUI()
         {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = false;
-        }
-
-        // Use this for initialization
-        public ClassDetailsAttribute(string name, string path, string tooltip, bool excludeFromMenu)
-        {
-            Name = name;
-            Path = path;
-            Tooltip = tooltip;
-            ExcludeFromMenu = excludeFromMenu;
+#if !PRO_POOLING
+            EditorGUILayout.HelpBox("Speed up your game and increase productivity by using the Pro Pooling asset.\n\nThe following actions are included with the asset:\n\nStart Spawner\nStop Spawner\nPause Spawner\nResume Spawner\nSpawn\n\nSee the Menu | Window | Game Framework | Integrations Window for more information.", MessageType.Warning);
+#else   
+            EditorGUILayout.HelpBox("Pro Pooling is Installed so this information action is not needed. Please remove.", MessageType.Warning);
+#endif
         }
     }
 }
-
-
-
