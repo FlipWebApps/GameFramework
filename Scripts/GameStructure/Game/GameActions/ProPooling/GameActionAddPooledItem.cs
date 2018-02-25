@@ -103,7 +103,7 @@ namespace GameFramework.GameStructure.Game.GameActions.ProPooling
                 if (transformFinal == null) Debug.LogWarningFormat("No Target Location is specified for the action {0} on {1}", GetType().Name, Owner.gameObject.name);
                 if (transformFinal != null)
                 {
-                    global::ProPooling.GlobalPools.Instance.Spawn(PoolName,
+                    global::ProPooling.Components.GlobalPools.Instance.Spawn(PoolName,
                         transformFinal.position,
                         transformFinal.rotation);
                 }
