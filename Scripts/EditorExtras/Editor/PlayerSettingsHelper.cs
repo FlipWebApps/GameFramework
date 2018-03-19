@@ -19,6 +19,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //----------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -53,13 +54,13 @@ namespace GameFramework.EditorExtras.Editor
         {
             if (!IsScriptingDefineSet(value)) return;
 
-            foreach (BuildTargetGroup target in System.Enum.GetValues(typeof(BuildTargetGroup)))
+            foreach (BuildTargetGroup group in System.Enum.GetValues(typeof(BuildTargetGroup)))
             {
-                if (target == BuildTargetGroup.Unknown) continue;
-                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(target).Split(';');
+                if (!IsValid(group)) continue;
+                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(';');
                 var list = new List<string>(defines);
                 list.Remove(value);
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(target, string.Join(";", list.ToArray()));
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", list.ToArray()));
             }
         }
 
@@ -72,14 +73,46 @@ namespace GameFramework.EditorExtras.Editor
         {
             if (IsScriptingDefineSet(name)) return;
 
-            foreach (BuildTargetGroup target in System.Enum.GetValues(typeof(BuildTargetGroup)))
+            foreach (BuildTargetGroup group in System.Enum.GetValues(typeof(BuildTargetGroup)))
             {
-                if (target == BuildTargetGroup.Unknown) continue;
-                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(target).Split(';');
+                if (!IsValid(group)) continue;
+                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(';');
                 var list = new List<string>(defines);
                 list.Add(name);
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(target, string.Join(";", list.ToArray()));
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", list.ToArray()));
             }
+        }
+
+
+        /// <summary>
+        /// Returns whether the specified BuildTargetGroup is valid
+        /// </summary>
+        /// Some groups are deprecated and so we don't want to set these to avoid errors.
+        /// <param name="group"></param>
+        /// <returns></returns>
+        static bool IsValid(BuildTargetGroup group)
+        {
+            if (group == BuildTargetGroup.Unknown || IsObsolete(group)) return false;
+
+            // Additional checks incase not correctly marked as obsolete by Unity.
+            //#if UNITY_5_3
+            //            if ((int)group == 15) return false;
+            //#endif
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Tese whether the specified enum valid is marked as obsolete.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        static bool IsObsolete(System.Enum value)
+        {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            var attributes = fieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), false);
+            return attributes.Length > 0;
         }
         #endregion Scripting Defines
     }
