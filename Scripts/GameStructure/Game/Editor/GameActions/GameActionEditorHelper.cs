@@ -54,6 +54,20 @@ namespace GameFramework.GameStructure.Game.Editor.GameActions
         /// Get class details for all GameActions
         /// </summary>
         /// <returns></returns>
+        internal static List<ClassDetailsAttribute> GameActionClassDetails
+        {
+            get {
+                if (_gameActionClassDetails == null)
+                    _gameActionClassDetails = EditorHelper.FindTypesClassDetails(typeof(GameAction));
+                return _gameActionClassDetails;
+            }
+        }
+        static List<ClassDetailsAttribute> _gameActionClassDetails;
+
+        /// <summary>
+        /// Get class details for all GameActions
+        /// </summary>
+        /// <returns></returns>
         internal static List<ClassDetailsAttribute> FindTypesClassDetails()
         {
             return EditorHelper.FindTypesClassDetails(typeof(GameAction));
