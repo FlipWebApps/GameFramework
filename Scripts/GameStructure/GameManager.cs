@@ -64,6 +64,8 @@ namespace GameFramework.GameStructure
         /// </summary>
         public enum GameItemSetupMode { None, Automatic, FromResources, Specified, MasterWithOverrides }
 
+        const string VariablesPrefix = "GV.";
+
         // Inspector Values
         #region General 
 
@@ -634,6 +636,9 @@ namespace GameFramework.GameStructure
 
             MyDebug.Log(sb.ToString());
 
+            // Variables
+            Variables.Load(VariablesPrefix, SecurePreferences);
+
             // audio related properties
             BackGroundAudioVolume = 1;              // default if nothing else is set.
             EffectAudioVolume = 1;                  // default if nothing else is set.
@@ -864,6 +869,8 @@ namespace GameFramework.GameStructure
 
             PreferencesFactory.SetFloat("BackGroundAudioVolume", BackGroundAudioVolume, false);
             PreferencesFactory.SetFloat("EffectAudioVolume", EffectAudioVolume, false);
+
+            Variables.UpdatePlayerPrefs(VariablesPrefix, SecurePreferences);
 
             PreferencesFactory.Save();
         }
