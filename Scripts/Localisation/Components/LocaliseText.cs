@@ -24,6 +24,7 @@ using GameFramework.Messaging.Components.AbstractClasses;
 using UnityEngine;
 using GameFramework.Localisation.Messages;
 using UnityEngine.Events;
+using GameFramework.Debugging;
 
 namespace GameFramework.Localisation.Components
 {
@@ -36,7 +37,6 @@ namespace GameFramework.Localisation.Components
     /// <summary>
     /// Localises a Text field based upon the given Key
     /// </summary>
-    [RequireComponent(typeof(UnityEngine.UI.Text))]
     [AddComponentMenu("Game Framework/Localisation/Localise Text")]
     [HelpURL("http://www.flipwebapps.com/unity-assets/game-framework/localisation/")]
     public class LocaliseText : RunOnMessage<LocalisationChangedMessage>
@@ -68,7 +68,14 @@ namespace GameFramework.Localisation.Components
             {
                 if (string.IsNullOrEmpty(value)) return;
 
-                _textComponent.text = value;
+                if (_textComponent != null)
+                    _textComponent.text = value;
+#if TEXTMESH_PRO
+                if (_textMeshProUGUI != null)
+                    _textMeshProUGUI.text = value;
+                if (_textMeshPro != null)
+                    _textMeshPro.text = value;
+#endif
             }
         }
 
@@ -78,6 +85,10 @@ namespace GameFramework.Localisation.Components
         public string PreLocaliseValue { get; set; }
 
         UnityEngine.UI.Text _textComponent;
+#if TEXTMESH_PRO
+        TMPro.TextMeshProUGUI _textMeshProUGUI;
+        TMPro.TextMeshPro _textMeshPro;
+#endif
 
         /// <summary>
         /// setup
@@ -85,11 +96,32 @@ namespace GameFramework.Localisation.Components
         public override void Awake()
         {
             _textComponent = GetComponent<UnityEngine.UI.Text>();
+#if TEXTMESH_PRO
+            if (_textComponent == null) {
+                _textMeshProUGUI = GetComponent<TMPro.TextMeshProUGUI>();
+                if (_textMeshProUGUI == null) {
+                    _textMeshPro = GetComponent<TMPro.TextMeshPro>();
+                    if (_textMeshPro == null)
+                        MyDebug.LogErrorF("LocaliseText: No text or TextMesh Pro component found on {0}", gameObject.name);
+                }
+            }
+#else
+            if (_textComponent == null)
+                Debug.LogErrorFormat("LocaliseText: No text component found on {0}", gameObject.name);
+#endif
+
 
             // If no localization key has been specified, use the text value as the key
             if (string.IsNullOrEmpty(Key))
             {
-                Key = _textComponent.text;
+                if (_textComponent != null)
+                    Key = _textComponent.text;
+#if TEXTMESH_PRO
+                if (_textMeshProUGUI != null)
+                    Key = _textMeshProUGUI.text;
+                if (_textMeshPro != null)
+                    Key = _textMeshPro.text;
+#endif
             }
             base.Awake();
         }
