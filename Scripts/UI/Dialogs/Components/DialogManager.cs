@@ -133,11 +133,12 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="sprite"></param>
         /// <param name="doneCallback"></param>
         /// <param name="dialogButtons"></param>
+        /// <param name="buttonText"></param>
         /// <returns></returns>
-        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok)
+        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok, LocalisableText[]  = null)
         {
             var dialogInstance = Create(prefabName);
-            dialogInstance.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons);
+            dialogInstance.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons, buttonText: buttonText);
             return dialogInstance;
         }
 
