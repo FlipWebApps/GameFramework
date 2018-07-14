@@ -26,6 +26,7 @@ using GameFramework.GameStructure;
 using UnityEngine;
 using UnityEngine.Assertions;
 using GameFramework.Preferences;
+using GameFramework.Localisation.ObjectModel;
 
 namespace GameFramework.UI.Dialogs.Components
 {
@@ -135,7 +136,7 @@ namespace GameFramework.UI.Dialogs.Components
         /// <param name="dialogButtons"></param>
         /// <param name="buttonText"></param>
         /// <returns></returns>
-        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok, LocalisableText[]  = null)
+        public DialogInstance Show(string prefabName = null, string title = null, string titleKey = null, string text = null, string textKey = null, string text2 = null, string text2Key = null, Sprite sprite = null, Action<DialogInstance> doneCallback = null, DialogInstance.DialogButtonsType dialogButtons = DialogInstance.DialogButtonsType.Ok, LocalisableText[] buttonText = null)
         {
             var dialogInstance = Create(prefabName);
             dialogInstance.Show(title, titleKey, text, textKey, text2, text2Key, sprite, doneCallback, dialogButtons: dialogButtons, buttonText: buttonText);
