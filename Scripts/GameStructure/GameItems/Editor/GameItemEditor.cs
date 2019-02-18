@@ -70,9 +70,15 @@ namespace GameFramework.GameStructure.GameItems.Editor
                 draggedObject => draggedObject is Sprite,
                 draggedObject => AddNewSprite(draggedObject as Sprite));
 
+#if UNITY_2018_3_OR_NEWER
+            CheckDragAndDrop(_prefabDropRect,
+                draggedObject => draggedObject is GameObject && PrefabUtility.GetPrefabAssetType(draggedObject) != PrefabAssetType.NotAPrefab,
+                draggedObject => AddNewPrefab(draggedObject as GameObject));
+#else
             CheckDragAndDrop(_prefabDropRect,
                 draggedObject => draggedObject is GameObject && PrefabUtility.GetPrefabType(draggedObject) != PrefabType.None,
                 draggedObject => AddNewPrefab(draggedObject as GameObject));
+#endif
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -319,7 +325,7 @@ namespace GameFramework.GameStructure.GameItems.Editor
             //var propLocalisedSprite = newElement.FindPropertyRelative("LocalisableSprite._localisedObjects");
             //propLocalisedSprite.arraySize = 0;
         }
-        #region Drag and Drop
+#region Drag and Drop
         Rect DrawDropRect(string title)
         {
             GUILayout.Space(2f);
@@ -377,6 +383,6 @@ namespace GameFramework.GameStructure.GameItems.Editor
             }
         }
 
-        #endregion Drag and Drop
+#endregion Drag and Drop
     }
 }

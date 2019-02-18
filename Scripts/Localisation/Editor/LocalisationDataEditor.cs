@@ -46,6 +46,7 @@ namespace GameFramework.Localisation.Editor
         int _entriesDefaultRowHeight = 16;
         string _newKey;
         public List<EntryReference> _entryReferenceList;
+        int _indexForFocus; // for focus on an item after adding.
 
         // Languages tab variables
         Rect _languagesHelpRect;
@@ -122,7 +123,8 @@ namespace GameFramework.Localisation.Editor
 
         #region Entries
 
-        protected void DrawEntries() {
+        protected void DrawEntries()
+        {
             _entriesHelpRect = EditorHelper.ShowHideableHelpBox("GameFramework.LocalisationEditorWindow.Entries", "Entries contain a set of unique tags that identify the text that you want to localise. You can further associate different translations with these tags for the different languages that you have setup.", _entriesHelpRect);
 
             // filter
@@ -217,12 +219,24 @@ namespace GameFramework.Localisation.Editor
                                 EditorGUILayout.LabelField(_targetLocalisationData.Languages[li].Name,
                                     GUILayout.Width(100));
                                 EditorGUI.BeginChangeCheck();
+
+                                // Set the internal name of the textfield so we can focus
+                                if (_indexForFocus == i)
+                                    GUI.SetNextControlName("FocusTextField");
+
                                 var lang = EditorGUILayout.TextArea(localisationEntry.Languages[li], GuiStyles.WordWrapStyle, GUILayout.Width(Screen.width - 100 - 60 - 50));
                                 if (EditorGUI.EndChangeCheck())
                                 {
                                     Undo.RecordObject(_targetLocalisationData, "Edit Localisation Entry");
                                     localisationEntry.Languages[li] = lang;
                                     _targetChanged = true;
+                                }
+
+                                // And focus if needs be
+                                if (_indexForFocus == i)
+                                {
+                                    EditorGUI.FocusTextInControl("FocusTextField");
+                                    _indexForFocus = -1;
                                 }
 
                                 // TODO: Move to a callback so we don't block the UI
@@ -236,21 +250,22 @@ namespace GameFramework.Localisation.Editor
                                         {
                                             var sourceText = localisationEntry.Languages[0];
                                             string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-                                                         + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + WWW.EscapeURL(sourceText);
+                                                         + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(sourceText);
                                             var wwwForm = new WWWForm();
                                             wwwForm.AddField("username", "");
                                             //var headers = new Dictionary<string, string>();
                                             wwwForm.headers.Add("content-type", "application/json");
-                                            var www = new WWW(url, wwwForm);
+                                            var www = UnityEngine.Networking.UnityWebRequest.Post(url, wwwForm);
+                                            www.SendWebRequest();
                                             while (!www.isDone) ;
-                                            if (www.error != null)
+                                            if (www.isNetworkError || www.isHttpError)
                                             {
                                                 Debug.LogError(www.error);
                                             }
                                             else
                                             {
-                                                Debug.Log("Google Translate Response:" + www.text);
-                                                var json = ObjectModel.Internal.SimpleJSON.JSONNode.Parse(www.text);
+                                                Debug.Log("Google Translate Response:" + www.downloadHandler.text);
+                                                var json = ObjectModel.Internal.SimpleJSON.JSONNode.Parse(www.downloadHandler.text);
                                                 if (json != null)
                                                 {
                                                     var translation = "";
@@ -270,7 +285,7 @@ namespace GameFramework.Localisation.Editor
                                                     localisationEntry.Languages[li] = translation;
                                                     _targetChanged = true;
                                                 }
-                                                else 
+                                                else
                                                     Debug.LogError("Unable to parse json response");
                                             }
                                         }
@@ -494,7 +509,7 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndHorizontal();
 
             // delay deleting to avoid editor issues.
-            if (languageForDeleting != null && 
+            if (languageForDeleting != null &&
                 EditorUtility.DisplayDialog("Delete Language?", string.Format("Are you sure you want to delete the language '{0}'?\n\nDeleting this language will also delete all translations for this language from the list of entries.", languageForDeleting), "Yes", "No"))
             {
                 Undo.RecordObject(_targetLocalisationData, "Delete Language");
