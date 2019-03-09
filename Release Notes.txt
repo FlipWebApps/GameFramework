@@ -12,6 +12,29 @@ In case of problems please get in contact.
 
 CHANGE LOG
 
+v5.0.4
+	Game Framework Core - Improvements / Fixes
+	- Updated minimum tested version to Unity 2017.1
+	- Removed networking components due to deprecation and future removal by Unity - copy from an older version if needed
+	- Fixes for Unity 2018.3 deprecation warnings
+	- Dialog: Added button text option to Dialog Show method.
+	- Dialog: Added validation callback for dialogs
+	- EditorExtras: Fix for warning when setting scripting defines (Integration Window / Startup)
+	- GameStructure: Fix for correct initialisation, Loading and Saving of Global Variables.
+	- Localisation: Added support for Text Mesh Pro
+
+	BeautifulTransitions (Extras Bundle):
+	- Updated to v5.1.2 with additional wipe textures and various bug fixes
+
+	Prefs Editor (Extras Bundle): 
+	- Updated to v2.2.1
+
+	Pro Pooling (Extras Bundle) updated to v3.1.1 that includes:
+	- Pools: Added progressive filling of the pools
+	- Pools: Allow recycling of oldest item when limits reached
+	- Spawner: Added Lifecycle Events and GameActions to Spawner Component
+	- Spawner: Added looping and bursts
+
 v5.0.3
 	Game Framework Core - Improvements
     - Debugging: Added localisation section to cheat functions window.

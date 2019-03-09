@@ -18,7 +18,11 @@ GENERAL UPGRADE NOTES
 	
 VERSION UPGRADE NOTES
 
-v5.1
+v5.0.4
+
+Networking functionality is removed due to being deprecated and removed by Unity. If you need this functionality please copy out from and older versions
+
+v5.0.1
 
 There are a few improvements relating to Game Actions that may need attention
 
