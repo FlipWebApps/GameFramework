@@ -249,23 +249,42 @@ namespace GameFramework.Localisation.Editor
                                         if (!string.IsNullOrEmpty(targetCode))
                                         {
                                             var sourceText = localisationEntry.Languages[0];
+#if UNITY_2017_3_OR_NEWER
+                                            var escapedSourceText = UnityEngine.Networking.UnityWebRequest.EscapeURL(sourceText);
+#else
+                                            var escapedSourceText = WWW.EscapeURL(sourceText);
+#endif
                                             string url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="
-                                                         + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + UnityEngine.Networking.UnityWebRequest.EscapeURL(sourceText);
+                                                         + sourceCode + "&tl=" + targetCode + "&dt=t&q=" + escapedSourceText;
                                             var wwwForm = new WWWForm();
                                             wwwForm.AddField("username", "");
                                             //var headers = new Dictionary<string, string>();
                                             wwwForm.headers.Add("content-type", "application/json");
+#if UNITY_2017_2_OR_NEWER
                                             var www = UnityEngine.Networking.UnityWebRequest.Post(url, wwwForm);
                                             www.SendWebRequest();
+#else
+                                            var www = new WWW(url, wwwForm);
+#endif
+
                                             while (!www.isDone) ;
+#if UNITY_2017_2_OR_NEWER
                                             if (www.isNetworkError || www.isHttpError)
+#else
+                                            if (www.error != null)
+#endif
                                             {
                                                 Debug.LogError(www.error);
                                             }
                                             else
                                             {
-                                                Debug.Log("Google Translate Response:" + www.downloadHandler.text);
-                                                var json = ObjectModel.Internal.SimpleJSON.JSONNode.Parse(www.downloadHandler.text);
+#if UNITY_2017_2_OR_NEWER
+                                                var text = www.downloadHandler.text;
+#else
+                                                var text = www.text;
+#endif
+                                                Debug.Log("Google Translate Response:" + text);
+                                                var json = ObjectModel.Internal.SimpleJSON.JSONNode.Parse(text);
                                                 if (json != null)
                                                 {
                                                     var translation = "";
@@ -440,9 +459,9 @@ namespace GameFramework.Localisation.Editor
             public string Key; // a reference that can be used for looking up items from the original collection.
         }
 
-        #endregion Entries
+#endregion Entries
 
-        #region Languages
+#region Languages
 
         protected void DrawLanguages()
         {
@@ -526,9 +545,9 @@ namespace GameFramework.Localisation.Editor
             _targetChanged = true;
         }
 
-        #endregion Languages
+#endregion Languages
 
-        #region Tools
+#region Tools
 
         protected void DrawTools()
         {
@@ -570,6 +589,6 @@ namespace GameFramework.Localisation.Editor
             EditorGUILayout.EndVertical();
         }
 
-        #endregion Tools
+#endregion Tools
     }
 }
