@@ -37,6 +37,7 @@ namespace GameFramework.GameFramework.Editor {
         Texture2D _adMobIcon;
         Texture2D _facebookIcon;
         Texture2D _playMakerIcon;
+        Texture2D _textMeshIcon;
         Vector2 _messageLogScrollPosition;
 
         // Add menu item
@@ -58,6 +59,7 @@ namespace GameFramework.GameFramework.Editor {
             _adMobIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\AdMob.png", typeof(Texture2D)) as Texture2D;
             _facebookIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\Facebook.png", typeof(Texture2D)) as Texture2D;
             _playMakerIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\PlayMaker.png", typeof(Texture2D)) as Texture2D;
+            _textMeshIcon = AssetDatabase.LoadAssetAtPath(@"Assets\FlipWebApps\GameFramework\Sprites\Integrations\TextMeshPro.jpg", typeof(Texture2D)) as Texture2D;
         }
 
         void OnGUI()
@@ -77,6 +79,7 @@ namespace GameFramework.GameFramework.Editor {
             ShowAsset("Facebook", "FACEBOOK_SDK", "https://developers.facebook.com/docs/unity/", "Facebook support for WebGL, Android and iOS.\n\nEnables Facebook support components and functionality in GameFramework", "Download", @"Assets\FacebookSDK", _facebookIcon);
             ShowAsset("Google Mobile Ads (AdMob)", "GOOGLE_ADS", "https://github.com/googleads/googleads-mobile-unity", "Serve Google Mobile Ads on Android and iOS apps.\n\nAdds google mobile ads support to GameFramework", "Download", @"Assets\GoogleMobileAds", _adMobIcon);
             ShowAsset("PlayMaker", "PLAYMAKER", "https://www.assetstore.unity3d.com/#!/content/368?aid=1011lGnE", "Combine the power of Game Framework and PlayMaker.\n\nPlaymaker integration requires the third party PlayMaker asset and the Game Framework PlayMaker Extensions that is available either as a seperate download or included in the Game Framework Extras Bundle.", "Asset Store (Play Maker)", @"Assets\PlayMaker", _playMakerIcon, true);
+            ShowAsset("Text Mesh Pro", "TEXTMESH_PRO", "https://www.assetstore.unity3d.com/en/#!/content/84126", "A replacement for Unity's UI Text & Text Mesh with lots of new features adn improved performance. Import from the asset store or use the package mangager in Unity 2018.2 or later.", "Download", null, _textMeshIcon);
 
             GUILayout.Label("Asset developers - contact us to get your asset listed here!");
 

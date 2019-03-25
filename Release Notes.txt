@@ -22,6 +22,7 @@ v5.0.4
 	- EditorExtras: Fix for warning when setting scripting defines (Integration Window / Startup)
 	- GameStructure: Fix for correct initialisation, Loading and Saving of Global Variables.
 	- Localisation: Added support for Text Mesh Pro
+	- Integrations: Added TextMesh Pro to the supported integrations window
 
 	BeautifulTransitions (Extras Bundle):
 	- Updated to v5.1.2 with additional wipe textures and various bug fixes
