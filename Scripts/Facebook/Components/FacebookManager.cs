@@ -580,7 +580,7 @@ namespace GameFramework.Facebook.Components
                 contentURL = new Uri(FacebookManager.Instance.ShareLinkUrl);
             }
 
-            FB.ShareLink(contentURL, callback: ShareLinkCallback;
+            FB.ShareLink(contentURL, callback: ShareLinkCallback);
         }
 
 
