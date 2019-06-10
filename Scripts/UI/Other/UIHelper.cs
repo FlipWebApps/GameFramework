@@ -134,7 +134,7 @@ namespace GameFramework.UI.Other
         public static void SetTextOnChildGameObject(GameObject thisGameObject, string childObjectName1, string childObjectName2, string text, bool includeInactive = false)
         {
             throw new Exception("This method doesn't seem to work as expected due to internal Unity workings.");
-            //GameObject childGameObject1 = UnityHelper.GetChildNamedGameObject (thisGameObject, childObjectName1, includeInactive);
+            //GameObject childGameObject1 = GameObjectHelper.GetChildNamedGameObject (thisGameObject, childObjectName1, includeInactive);
             //MyDebug.NotNull(childGameObject1);
             //SetUILabelTextOnChildGameObject(childGameObject1, childObjectName2, text, includeInactive);
         }

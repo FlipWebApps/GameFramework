@@ -580,20 +580,36 @@ namespace GameFramework.Facebook.Components
 
 
         /// <summary>
-        /// Do the actual share
+        /// Do the actual share. See the definition of ShareLink for fallback values incase of nulls being passed.
         /// </summary>
         /// <param name="contentURL"></param>
         /// <param name="contentTitle"></param>
         /// <param name="contentDescription"></param>
         /// <param name="photoURL"></param>
+        /// Note that From Graph API 2.9? title, description and photoURL are no longer used.
         void ShareLinkInternal(Uri contentURL, string contentTitle,
                     string contentDescription, Uri photoURL)
         {
+            if (contentURL == null)
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(FacebookManager.Instance.PostLink), "FacebookManager.ShareLinkInternal: FacebookManager.Instance.PostLink is null or empty and no contentURL passed");
+                contentURL = new Uri(FacebookManager.Instance.PostLink);
+            }
+            if (contentTitle == null)
+                contentTitle = GlobalLocalisation.FormatText("Facebook.Share.Caption", GameManager.Instance.GameName);
+            if (contentDescription == null)
+                contentDescription = GlobalLocalisation.FormatText("Facebook.Share.Description", GameManager.Instance.GameName);
+            if (photoURL == null && !string.IsNullOrEmpty(FacebookManager.Instance.PostPicture))
+                photoURL = new Uri(FacebookManager.Instance.PostPicture);
+
+            Assert.IsNotNull(contentTitle, "FacebookManager.ShareLinkInternal: contentTitle is null");
+            Assert.IsNotNull(contentDescription, "FacebookManager.ShareLinkInternal: contentDescription is null");
+
             FB.ShareLink(
-                contentURL: contentURL != null ? contentURL : new Uri( FacebookManager.Instance.PostLink),
-                contentTitle: contentTitle != null ? contentTitle : LocaliseText.Format("Facebook.Share.Caption", GameManager.Instance.GameName),
-                contentDescription: contentDescription != null ? contentDescription : LocaliseText.Format("Facebook.Share.Description", GameManager.Instance.GameName),
-                photoURL: photoURL != null ? photoURL : new Uri(FacebookManager.Instance.PostPicture),
+                contentURL: contentURL,
+                contentTitle: contentTitle,
+                contentDescription: contentDescription,
+                photoURL: photoURL,
                 callback: ShareLinkCallback
                 );
         }
