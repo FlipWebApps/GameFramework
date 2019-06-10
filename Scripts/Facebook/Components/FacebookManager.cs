@@ -91,14 +91,9 @@ namespace GameFramework.Facebook.Components
         /// <summary>
         /// Whether to try and obtain the Email permission when connectiong
         /// </summary>
-        [Tooltip("")]
-        public string PostLink;
-
-        /// <summary>
-        /// Whether to try and obtain the Email permission when connectiong
-        /// </summary>
-        [Tooltip("")]
-        public string PostPicture;
+        [Header("ShareLink")]
+        [Tooltip("(optional) A default url when calling ShareLink if nothing else is specifed.")]
+        public string ShareLinkUrl;
 
         #endregion Inspector properties
 
@@ -516,25 +511,21 @@ namespace GameFramework.Facebook.Components
         /// </summary>
         /// Many of the parameters are optional and will be set to default values if not specified (see parameter arguments).
         /// <param name="contentURL">Content url. If not specified then uses FacebookManager.Instance.PostLink</param>
-        /// <param name="contentTitle">The content title. If not specified then uses localisation key Facebook.Share.Caption</param>
-        /// <param name="contentDescription">The content description. If not specified then uses localisation key Facebook.Share.Description</param>
-        /// <param name="photoURL">Photo url. If not specified then uses FacebookManager.Instance.PostPicture</param>
         /// <param name="autoLogin">Whether to automatically login to Facebook if not already done so.</param>
         /// <returns>true if the show process was started, flase if not logged in and not auto logging in either.</returns>
-        public bool ShareLink(Uri contentURL = null, string contentTitle = null,
-                        string contentDescription = null, Uri photoURL = null, bool autoLogin = true)
+        public bool ShareLink(Uri contentURL = null, bool autoLogin = true)
         {
             // if already logged in then just share the link otherwise check for auto login.
             if (IsLoggedIn)
             {
-                ShareLinkInternal(contentURL, contentTitle, contentDescription, photoURL);
+                ShareLinkInternal(contentURL);
                 return true;
             }
             else { 
                 // try and auto login if specified, otherwise just return false.
                 if (autoLogin)
                 {
-                    FacebookShareLinkHandler postHandler = new FacebookShareLinkHandler() { contentURL = contentURL, contentDescription = contentDescription, contentTitle = contentTitle, photoURL = photoURL };
+                    FacebookShareLinkHandler postHandler = new FacebookShareLinkHandler() { contentURL = contentURL };
                     GameManager.SafeAddListener<FacebookLoginMessage>(postHandler.LoginHandler);
                     if (!IsUserDataLoaded)
                         Login();
@@ -558,9 +549,6 @@ namespace GameFramework.Facebook.Components
         class FacebookShareLinkHandler
         {
             public Uri contentURL = null;
-            public string contentTitle;
-            public string contentDescription;
-            public Uri photoURL = null;
 
             public bool LoginHandler(BaseMessage message)
             {
@@ -568,7 +556,7 @@ namespace GameFramework.Facebook.Components
                 GameManager.SafeRemoveListener<FacebookLoginMessage>(LoginHandler);
                 if (facebookLoginMessage.Result == FacebookLoginMessage.ResultType.OK)
                 {
-                    FacebookManager.Instance.ShareLinkInternal(contentURL, contentTitle, contentDescription, photoURL);
+                    FacebookManager.Instance.ShareLinkInternal(contentURL);
                 }
                 else
                 {
@@ -583,35 +571,16 @@ namespace GameFramework.Facebook.Components
         /// Do the actual share. See the definition of ShareLink for fallback values incase of nulls being passed.
         /// </summary>
         /// <param name="contentURL"></param>
-        /// <param name="contentTitle"></param>
-        /// <param name="contentDescription"></param>
-        /// <param name="photoURL"></param>
         /// Note that From Graph API 2.9? title, description and photoURL are no longer used.
-        void ShareLinkInternal(Uri contentURL, string contentTitle,
-                    string contentDescription, Uri photoURL)
+        void ShareLinkInternal(Uri contentURL)
         {
             if (contentURL == null)
             {
-                Assert.IsFalse(string.IsNullOrEmpty(FacebookManager.Instance.PostLink), "FacebookManager.ShareLinkInternal: FacebookManager.Instance.PostLink is null or empty and no contentURL passed");
-                contentURL = new Uri(FacebookManager.Instance.PostLink);
+                Assert.IsFalse(string.IsNullOrEmpty(FacebookManager.Instance.ShareLinkUrl), "FacebookManager.ShareLinkInternal: FacebookManager.Instance.PostLink is null or empty and no contentURL passed");
+                contentURL = new Uri(FacebookManager.Instance.ShareLinkUrl);
             }
-            if (contentTitle == null)
-                contentTitle = GlobalLocalisation.FormatText("Facebook.Share.Caption", GameManager.Instance.GameName);
-            if (contentDescription == null)
-                contentDescription = GlobalLocalisation.FormatText("Facebook.Share.Description", GameManager.Instance.GameName);
-            if (photoURL == null && !string.IsNullOrEmpty(FacebookManager.Instance.PostPicture))
-                photoURL = new Uri(FacebookManager.Instance.PostPicture);
 
-            Assert.IsNotNull(contentTitle, "FacebookManager.ShareLinkInternal: contentTitle is null");
-            Assert.IsNotNull(contentDescription, "FacebookManager.ShareLinkInternal: contentDescription is null");
-
-            FB.ShareLink(
-                contentURL: contentURL,
-                contentTitle: contentTitle,
-                contentDescription: contentDescription,
-                photoURL: photoURL,
-                callback: ShareLinkCallback
-                );
+            FB.ShareLink(contentURL, callback: ShareLinkCallback;
         }
 
 
