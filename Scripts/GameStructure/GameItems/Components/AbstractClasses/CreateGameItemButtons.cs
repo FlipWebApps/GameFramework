@@ -20,6 +20,9 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
+using GameFramework.GameStructure.Worlds.Messages;
+using GameFramework.Messaging;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
@@ -64,11 +67,43 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
         [SerializeField]
         bool _clickToUnlock;
 
+        Stack<GameObject> _buttonGameObjects = new Stack<GameObject>();
+
         /// <summary>
         /// Create and add all buttons
         /// </summary>
         public void Awake()
         {
+            CreateButtons();
+
+            // react to changes - TODO currently hardcoded for worlds to test.
+            GameManager.Messenger.AddListener<WorldChangedMessage>(OnSelectionChangedMessage);
+        }
+
+        // Unsubscribe from messages 
+        void OnDestroy()
+        {
+            GameManager.Messenger.RemoveListener<WorldChangedMessage>(OnSelectionChangedMessage);
+        }
+
+        // Our listener that is called whenever a message is received
+        bool OnSelectionChangedMessage(BaseMessage message)
+        {
+            //var worldChangedMessage = message as WorldChangedMessage;
+            CreateButtons();
+            return true;
+        }
+
+
+        void CreateButtons()
+        {
+            // first delete any old buttons
+            while (_buttonGameObjects.Count != 0)
+            {
+                var buttonGameObject = _buttonGameObjects.Pop();
+                Destroy(buttonGameObject);
+            }
+
             var button = Prefab.GetComponent<TGameItemButton>();
 #if UNITY_EDITOR
             // prefab values will get overwritten if running in editor mode so save and restore.
@@ -88,6 +123,7 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
             {
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);
+                _buttonGameObjects.Push(newObject);
             }
 
 #if UNITY_EDITOR
