@@ -20,7 +20,6 @@
 //----------------------------------------------
 
 using GameFramework.GameStructure.GameItems.ObjectModel;
-using GameFramework.GameStructure.Worlds.Messages;
 using GameFramework.Messaging;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,27 +68,31 @@ namespace GameFramework.GameStructure.GameItems.Components.AbstractClasses
 
         Stack<GameObject> _buttonGameObjects = new Stack<GameObject>();
 
+
         /// <summary>
         /// Create and add all buttons
         /// </summary>
-        public void Awake()
+        protected virtual void Awake()
         {
             CreateButtons();
-
-            // react to changes - TODO currently hardcoded for worlds to test.
-            GameManager.Messenger.AddListener<WorldChangedMessage>(OnSelectionChangedMessage);
         }
 
-        // Unsubscribe from messages 
-        void OnDestroy()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void OnDestroy()
         {
-            GameManager.Messenger.RemoveListener<WorldChangedMessage>(OnSelectionChangedMessage);
         }
 
-        // Our listener that is called whenever a message is received
-        bool OnSelectionChangedMessage(BaseMessage message)
+
+        /// <summary>
+        /// A listener that can be used to update the values when the display needs updating
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        protected bool OnMessageCreateButtons(BaseMessage message)
         {
-            //var worldChangedMessage = message as WorldChangedMessage;
             CreateButtons();
             return true;
         }
