@@ -22,6 +22,7 @@
 using GameFramework.GameStructure.GameItems.Components.AbstractClasses;
 using GameFramework.GameStructure.GameItems.ObjectModel;
 using GameFramework.GameStructure.Levels.ObjectModel;
+using GameFramework.GameStructure.Worlds.Messages;
 using UnityEngine;
 
 namespace GameFramework.GameStructure.Levels.Components
@@ -37,6 +38,33 @@ namespace GameFramework.GameStructure.Levels.Components
         {
             ClickUnlockedSceneToLoad = "Game";
         }
+
+
+        #region Unity Lifecycle
+
+        /// <summary>
+        /// Create and add all buttons
+        /// </summary>
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // react to changes to world selection to recreate buttons
+            GameManager.Messenger.AddListener<WorldChangedMessage>(OnMessageCreateButtons);
+        }
+
+
+        /// <summary>
+        /// Unsubscribe from world change messages 
+        /// </summary>        
+        protected override void OnDestroy()
+        {
+            if (GameManager.IsActive)
+                GameManager.Messenger.RemoveListener<WorldChangedMessage>(OnMessageCreateButtons);
+        }
+
+        #endregion Unity Lifecycle
+
 
         /// <summary>
         /// Return a GameItemManager that this works upon.
