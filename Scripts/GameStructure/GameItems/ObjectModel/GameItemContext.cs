@@ -120,6 +120,11 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
         #endregion Editor Parameters
 
         /// <summary>
+        /// Reference to GameItem from loop incase we need to reference this when the loop has ended.
+        /// </summary>
+        GameItem _fromLoopCached;
+
+        /// <summary>
         /// Method for getting the context mode taking into consideration following of references
         /// </summary>
         /// <returns></returns>
@@ -166,8 +171,13 @@ namespace GameFramework.GameStructure.GameItems.ObjectModel
             {
                 var gameItemManager = iBaseGameItemManager;
                 Assert.IsNotNull(gameItemManager, "GameItemManager not found. When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObjectName);
-                Assert.IsNotNull(gameItemManager.BaseEnumeratorCurrent, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObjectName);
-                return gameItemManager.BaseEnumeratorCurrent;
+                Assert.IsTrue(gameItemManager.BaseEnumeratorCurrent != null || context._fromLoopCached != null, "When using a GameItemContext reference mode of FromLoop ensure that it is placed within a looping scope.\nGameobject: " + gameObjectName);
+
+                // if there a looping item then cache for later use when the enumerator ends.
+                if (gameItemManager.BaseEnumeratorCurrent != null)
+                    context._fromLoopCached = gameItemManager.BaseEnumeratorCurrent;
+
+                return context._fromLoopCached;
             }
             else if (context.ContextMode == GameItemContext.ContextModeType.Reference)
             {
