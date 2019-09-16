@@ -39,5 +39,40 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         {
                 GameManager.SafeQueueMessage(new LevelChangedMessage(newSelection, oldSelection));
         }
+
+
+        /// <summary>
+        /// Return the total star won count for all levels contained within this world.
+        /// </summary>
+        public int StarsWon
+        {
+            get
+            {
+                var starsWonCount = 0;
+                foreach (var level in Items)
+                {
+                    starsWonCount += level.StarsWonCount;
+                }
+                return starsWonCount;
+            }
+        }
+
+
+        /// <summary>
+        /// Return the total star count for all levels contained within this world.
+        /// </summary>
+        public int StarsTotal
+        {
+            get
+            {
+                var starsTotalCount = 0;
+                foreach (var level in Items)
+                {
+                    starsTotalCount += level.StarsTotalCount;
+                }
+
+                return starsTotalCount;
+            }
+        }
     }
 }

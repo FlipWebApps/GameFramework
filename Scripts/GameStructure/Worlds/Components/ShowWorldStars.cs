@@ -67,7 +67,7 @@ namespace GameFramework.GameStructure.Worlds.Components
             if (GameItem != null)
             {
                 var world = GameItem as World;
-                _textComponent.text = Text.FormatValue(world.LevelStarsTotalCount, world.LevelStarWonCount);
+                _textComponent.text = Text.FormatValue(world.StarsTotal, world.StarsWon);
             }
         }
 

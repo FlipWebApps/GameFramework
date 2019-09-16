@@ -306,7 +306,7 @@ namespace GameFramework.GameStructure.Levels
                     GameOver(false, ShowGameOverDialogDelay);
 
                 // check for gameover (win) conditions.
-                if ((GameWonWhenAllStarsGot && Level.StarTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon) ||
+                if ((GameWonWhenAllStarsGot && Level.StarsTotalCount == Level.StarsWonCount && StartStarsWon != Level.StarsWon) ||
                     GameWonWhenTargetScoreReached && Level.Score >= Level.ScoreTarget ||
                     GameWonWhenTargetCoinsReached && Level.Coins >= Level.CoinTarget)
                     GameOver(true, ShowGameOverDialogDelay);

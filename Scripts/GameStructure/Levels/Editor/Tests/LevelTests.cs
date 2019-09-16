@@ -77,7 +77,7 @@ namespace GameFramework.GameStructure.Levels
             Assert.AreEqual(false, gameItem.IsUnlocked, "IsUnlocked not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
 
-            Assert.AreEqual(3, gameItem.StarTotalCount, "StarTotalCount not set correctly");
+            Assert.AreEqual(3, gameItem.StarsTotalCount, "StarTotalCount not set correctly");
             Assert.AreEqual(10, gameItem.Star1Target, "Star1Target not set correctly");
             Assert.AreEqual(15, gameItem.Star2Target, "Star2Target not set correctly");
             Assert.AreEqual(20, gameItem.Star3Target, "Star3Target not set correctly");
@@ -123,7 +123,7 @@ namespace GameFramework.GameStructure.Levels
             Assert.AreEqual(false, gameItem.IsUnlocked, "IsUnlocked not set correctly");
             Assert.AreEqual(false, gameItem.IsUnlockedAnimationShown, "IsUnlockedAnimationShown not set correctly");
 
-            Assert.AreEqual(3, gameItem.StarTotalCount, "StarTotalCount not set correctly");
+            Assert.AreEqual(3, gameItem.StarsTotalCount, "StarTotalCount not set correctly");
             Assert.AreEqual(10, gameItem.Star1Target, "Star1Target not set correctly");
             Assert.AreEqual(15, gameItem.Star2Target, "Star2Target not set correctly");
             Assert.AreEqual(20, gameItem.Star3Target, "Star3Target not set correctly");

@@ -553,6 +553,39 @@ namespace GameFramework.GameStructure
 
 
         /// <summary>
+        /// Returns the total number of stars won in all Levels for all Worlds
+        /// </summary>
+        public int StarsWon
+        {
+            get
+            {
+                if (Instance.Worlds != null)
+                    return Instance.Worlds.StarsWon;
+                else if (Instance.Levels != null)
+                    return Instance.Levels.StarsWon;
+                else
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// Returns the total number of stars possible in all Levels for all Worlds
+        /// </summary>
+        public int StarsTotal
+        {
+            get
+            {
+                if (Instance.Worlds != null)
+                    return Instance.Worlds.StarsTotal;
+                else if (Instance.Levels != null)
+                    return Instance.Levels.StarsTotal;
+                else
+                    return 0;
+            }
+        }
+
+
+        /// <summary>
         /// Get an IBaseGameItemManager for the specified GameItemType
         /// </summary>
         /// <param name="gameItemType"></param>
