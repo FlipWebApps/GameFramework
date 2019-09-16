@@ -21,17 +21,16 @@
 
 using GameFramework.GameStructure.Game.ObjectModel.Abstract;
 using GameFramework.Helper;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace GameFramework.GameStructure.Game.GameConditions.Game
 {
     /// <summary>
-    /// GameCondition for testing if the game is unlocked.
+    /// Testing the total number of stars available for all levels within all worlds
     /// </summary>
     [System.Serializable]
-    [ClassDetails("Game: Is Unlocked", "Game/Is Unlocked", "Testing if the game is unlocked.")]
-    public class GameConditionGameIsUnlocked : GameConditionBool
+    [ClassDetails("Game: Stars Total", "Game/Stars Total", "Testing the total number of stars available for all levels within all worlds.")]
+    public class GameConditionStarsTotal : GameConditionInt
     {
         /// <summary>
         /// Evaluate the current condition
@@ -39,8 +38,8 @@ namespace GameFramework.GameStructure.Game.GameConditions.Game
         /// <returns></returns>
         public override bool Evaluate()
         {
-            Assert.IsTrue(GameManager.IsActive, "To use the Level Coins Condition, ensure that you have a GameManager added to your scene.");
-            return GameManager.Instance.IsUnlocked == Value;
+            Assert.IsTrue(GameManager.IsActive, "To use the Game Stars Total Condition, ensure that you have a GameManager added to your scene.");
+            return GameConditionHelper.CompareNumbers(GameManager.Instance.StarsTotal, Comparison, Value);
         }
     }
 }

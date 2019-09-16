@@ -39,5 +39,40 @@ namespace GameFramework.GameStructure.Worlds.ObjectModel
         {
                 GameManager.SafeQueueMessage(new WorldChangedMessage(newSelection, oldSelection));
         }
+
+
+        /// <summary>
+        /// Return the total star won count for all worlds contained within this GameItemManager.
+        /// </summary>
+        public int StarsWon
+        {
+            get
+            {
+                var starsWonCount = 0;
+                foreach (var world in Items)
+                {
+                    starsWonCount += world.StarsWon;
+                }
+                return starsWonCount;
+            }
+        }
+
+
+        /// <summary>
+        /// Return the total star count for all worlds contained within this GameItemManager.
+        /// </summary>
+        public int StarsTotal
+        {
+            get
+            {
+                var starsTotalCount = 0;
+                foreach (var world in Items)
+                {
+                    starsTotalCount += world.StarsTotal;
+                }
+
+                return starsTotalCount;
+            }
+        }
     }
 }

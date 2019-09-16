@@ -59,7 +59,7 @@ namespace GameFramework.GameStructure.Levels.Components
         {
             Assert.IsTrue(LevelManager.IsActive, "You need to add a LevelManager to your scene to be able to use CreateStarIcons.");
 
-            for (int i = 1; i <= (UseLevelStarCount ? LevelManager.Instance.Level.StarTotalCount : Stars); i++)
+            for (int i = 1; i <= (UseLevelStarCount ? LevelManager.Instance.Level.StarsTotalCount : Stars); i++)
             {
                 var newObject = Instantiate(Prefab);
                 newObject.transform.SetParent(transform, false);

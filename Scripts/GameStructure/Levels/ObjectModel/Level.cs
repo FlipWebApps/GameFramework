@@ -39,7 +39,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
         /// <summary>
         /// The total number of stars that can be gotten.
         /// </summary>
-        public int StarTotalCount
+        public int StarsTotalCount
         {
             get
             {
@@ -232,7 +232,7 @@ namespace GameFramework.GameStructure.Levels.ObjectModel
             get
             {
                 var starsWon = 0;
-                for (var i = 1; i < StarTotalCount + 1; i++)
+                for (var i = 1; i < StarsTotalCount + 1; i++)
                 {
                     if (IsStarWon(i))
                         starsWon++;
