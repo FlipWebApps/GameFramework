@@ -12,6 +12,10 @@ In case of problems please get in contact.
 
 CHANGE LOG
 
+v5.0.5
+	- Fixes for deprecation warnings in Unity 2019.3
+	- Minimum tested version bumped to 2018.4 (but will likely work with certain older versions)
+
 v5.0.4
 	Game Framework Core - Improvements / Fixes
 	- Updated minimum tested version to Unity 2017.1
